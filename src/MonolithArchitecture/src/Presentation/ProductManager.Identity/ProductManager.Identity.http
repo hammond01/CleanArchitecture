@@ -1,0 +1,6 @@
+@ProductManager.Identity_HostAddress = http://localhost:5103
+
+GET {{ProductManager.Identity_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
