@@ -10,4 +10,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\ProductManager.Application\ProductManager.Application.csproj"/>
+  </ItemGroup>
+
 </Project>
