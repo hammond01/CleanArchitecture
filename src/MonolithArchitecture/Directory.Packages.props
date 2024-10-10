@@ -1,5 +1,7 @@
 <Project>
   <ItemGroup>
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+    <PackageVersion Include="MediatR" Version="12.4.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 </Project>

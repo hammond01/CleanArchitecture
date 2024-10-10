@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.CrossCuttingConcerns\ProductManager.CrossCuttingConcerns.csproj"/>
+  </ItemGroup>
+
 </Project>
