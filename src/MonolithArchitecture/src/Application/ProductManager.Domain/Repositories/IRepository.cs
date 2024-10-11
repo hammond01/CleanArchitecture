@@ -3,4 +3,4 @@
 public interface IRepository
 {
     Task Get(CancellationToken cancellationToken);
-}  
+}
