@@ -1,6 +1,6 @@
 ﻿namespace ProductManager.Persistence;
 
-public class Class1
+public class ApplicationDbContext
 {
-
+    
 }
