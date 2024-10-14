@@ -1,11 +1,12 @@
-﻿namespace ProductManager.Persistence;
+﻿using System.Data;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using ProductManager.Domain.Repositories;
+namespace ProductManager.Persistence;
 
-public class ProductManagerContext : DbContext
+public class ProductManagerContext : DbContext, IUnitOfWork, IDataProtectionKeyContext
 {
-    public ProductManagerContext()
-    {
-    }
-
+    private IDbContextTransaction _dbContextTransaction = null!;
     public ProductManagerContext(DbContextOptions<ProductManagerContext> options)
         : base(options)
     {
@@ -64,6 +65,27 @@ public class ProductManagerContext : DbContext
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     public virtual DbSet<Territory> Territories { get; set; }
+    // ReSharper disable once UnassignedGetOnlyAutoProperty
+    public DbSet<DataProtectionKey> DataProtectionKeys
+    {
+        get;
+    }
+
+    public async Task<IDisposable> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
+        CancellationToken cancellationToken = default)
+    {
+        _dbContextTransaction = await Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+        return _dbContextTransaction;
+    }
+    public async Task<IDisposable> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
+        String? lockName = null,
+        CancellationToken cancellationToken = default)
+    {
+        _dbContextTransaction = await Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+        return _dbContextTransaction;
+    }
+    public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+        => await _dbContextTransaction.CommitAsync(cancellationToken);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
