@@ -59,16 +59,16 @@ public class Employee
     public string? PhotoPath { get; set; }
 
     [InverseProperty("ReportsToNavigation")]
-    public virtual ICollection<Employee> InverseReportsToNavigation { get; set; } = new List<Employee>();
+    public ICollection<Employee> InverseReportsToNavigation { get; set; } = new List<Employee>();
 
     [InverseProperty("Employee")]
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 
     [ForeignKey("ReportsTo")]
     [InverseProperty("InverseReportsToNavigation")]
-    public virtual Employee? ReportsToNavigation { get; set; }
+    public Employee? ReportsToNavigation { get; set; }
 
     [ForeignKey("EmployeeId")]
     [InverseProperty("Employees")]
-    public virtual ICollection<Territory> Territories { get; set; } = new List<Territory>();
+    public ICollection<Territory> Territories { get; set; } = new List<Territory>();
 }

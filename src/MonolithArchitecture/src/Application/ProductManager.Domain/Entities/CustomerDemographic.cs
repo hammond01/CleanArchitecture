@@ -12,5 +12,5 @@ public class CustomerDemographic
 
     [ForeignKey("CustomerTypeId")]
     [InverseProperty("CustomerTypes")]
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
+    public ICollection<Customer> Customers { get; set; } = new List<Customer>();
 }

@@ -15,9 +15,9 @@ public class Territory
 
     [ForeignKey("RegionId")]
     [InverseProperty("Territories")]
-    public virtual Region Region { get; set; } = null!;
+    public Region Region { get; set; } = null!;
 
     [ForeignKey("TerritoryId")]
     [InverseProperty("Territories")]
-    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+    public ICollection<Employee> Employees { get; set; } = new List<Employee>();
 }

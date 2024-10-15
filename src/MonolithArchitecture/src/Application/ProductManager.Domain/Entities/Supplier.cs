@@ -42,5 +42,5 @@ public class Supplier
     public string? HomePage { get; set; }
 
     [InverseProperty("Supplier")]
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }

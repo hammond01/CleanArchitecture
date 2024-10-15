@@ -55,16 +55,16 @@ public class Order
 
     [ForeignKey("CustomerId")]
     [InverseProperty("Orders")]
-    public virtual Customer? Customer { get; set; }
+    public Customer? Customer { get; set; }
 
     [ForeignKey("EmployeeId")]
     [InverseProperty("Orders")]
-    public virtual Employee? Employee { get; set; }
+    public Employee? Employee { get; set; }
 
     [InverseProperty("Order")]
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     [ForeignKey("ShipVia")]
     [InverseProperty("Orders")]
-    public virtual Shipper? ShipViaNavigation { get; set; }
+    public Shipper? ShipViaNavigation { get; set; }
 }

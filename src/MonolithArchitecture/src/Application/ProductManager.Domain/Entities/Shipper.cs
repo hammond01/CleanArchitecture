@@ -13,5 +13,5 @@ public class Shipper
     public string? Phone { get; set; }
 
     [InverseProperty("ShipViaNavigation")]
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public  ICollection<Order> Orders { get; set; } = new List<Order>();
 }

@@ -36,12 +36,12 @@ public class Product
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
-    public virtual Category? Category { get; set; }
+    public Category? Category { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     [ForeignKey("SupplierId")]
     [InverseProperty("Products")]
-    public virtual Supplier? Supplier { get; set; }
+    public Supplier? Supplier { get; set; }
 }
