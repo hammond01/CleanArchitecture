@@ -8,8 +8,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.ApplicationConfigureServices()
-    .AddMessageHandlers();
+builder.Services.ApplicationConfigureServices();
+builder.Services.AddMessageHandlers();
 
 var app = builder.Build();
 
