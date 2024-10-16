@@ -1,8 +1,4 @@
-﻿using System.Reflection;
-using ProductManager.Application.Common.Commands;
-using ProductManager.Application.Common.Queries;
-using ProductManager.CrossCuttingConcerns.ExtensionMethods;
-namespace ProductManager.Application.Decorators;
+﻿namespace ProductManager.Application.Decorators;
 
 internal static class Mappings
 {

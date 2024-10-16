@@ -16,6 +16,9 @@ public sealed class Category
     [Column(TypeName = "image")]
     public byte[]? Picture { get; set; }
 
+    [StringLength(100)]
+    public string? PictureLink { get; set; }
+
     [InverseProperty("Category")]
     public ICollection<Product> Products { get; set; } = new List<Product>();
 }

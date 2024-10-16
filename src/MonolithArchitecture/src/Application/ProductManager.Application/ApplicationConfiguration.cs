@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
-using ProductManager.Application.Common;
-namespace ProductManager.Application;
+﻿namespace ProductManager.Application;
 
 public static class ApplicationConfiguration
 {
@@ -11,6 +8,7 @@ public static class ApplicationConfiguration
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
+        services.AddAutoMapper(typeof(MappingProfile));
         return services;
     }
 

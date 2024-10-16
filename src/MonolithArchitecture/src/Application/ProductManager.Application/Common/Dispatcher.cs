@@ -1,6 +1,4 @@
-﻿using ProductManager.Application.Common.Commands;
-using ProductManager.Application.Common.Queries;
-namespace ProductManager.Application.Common;
+﻿namespace ProductManager.Application.Common;
 
 public class Dispatcher
 {
@@ -17,9 +15,7 @@ public class Dispatcher
         var handlerType = type.MakeGenericType(typeArgs);
 
         dynamic handler = _serviceProvider.GetService(handlerType)!;
-        Task<T> result = handler.HandleAsync((dynamic)query, cancellationToken);
-
-        return await result;
+        return await handler.HandleAsync((dynamic)query, cancellationToken);
     }
     public async Task<T> DispatchAsync<T>(ICommand<T> command, CancellationToken cancellationToken = default)
     {
