@@ -1,4 +1,5 @@
 ﻿using ProductManager.Application;
+using ProductManager.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +8,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
 builder.Services.ApplicationConfigureServices();
 builder.Services.AddMessageHandlers();
 

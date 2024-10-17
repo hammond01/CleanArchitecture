@@ -12,11 +12,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design"/>
     <PackageReference Include="Swashbuckle.AspNetCore"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\ProductManager.Application\ProductManager.Application.csproj"/>
+    <ProjectReference Include="..\..\Infrastructure\ProductManager.Persistence\ProductManager.Persistence.csproj"/>
   </ItemGroup>
 
 </Project>
