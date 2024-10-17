@@ -1,13 +1,12 @@
 ﻿using System.Data;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using ProductManager.Domain.Repositories;
 namespace ProductManager.Persistence;
 
-public class ProductManagerContext : DbContext, IUnitOfWork, IDataProtectionKeyContext
+public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyContext
 {
     private IDbContextTransaction _dbContextTransaction = null!;
-    public ProductManagerContext(DbContextOptions<ProductManagerContext> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
@@ -66,10 +65,7 @@ public class ProductManagerContext : DbContext, IUnitOfWork, IDataProtectionKeyC
 
     public virtual DbSet<Territory> Territories { get; set; }
     // ReSharper disable once UnassignedGetOnlyAutoProperty
-    public DbSet<DataProtectionKey> DataProtectionKeys
-    {
-        get;
-    }
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
     public async Task<IDisposable> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
         CancellationToken cancellationToken = default)

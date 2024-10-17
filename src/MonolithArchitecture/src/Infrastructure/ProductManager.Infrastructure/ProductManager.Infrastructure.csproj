@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.CrossCuttingConcerns\ProductManager.CrossCuttingConcerns.csproj"/>
+  </ItemGroup>
+
 </Project>
