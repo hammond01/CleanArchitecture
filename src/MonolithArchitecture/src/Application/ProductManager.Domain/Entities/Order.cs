@@ -8,12 +8,8 @@
 [Index("ShipPostalCode", Name = "ShipPostalCode")]
 [Index("ShippedDate", Name = "ShippedDate")]
 [Index("ShipVia", Name = "ShippersOrders")]
-public class Order
+public class Order : Entity<int>
 {
-    [Key]
-    [Column("OrderID")]
-    public int OrderId { get; set; }
-
     [Column("CustomerID")]
     [StringLength(5)]
     public string? CustomerId { get; set; }

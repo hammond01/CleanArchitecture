@@ -1,11 +1,7 @@
 ﻿namespace ProductManager.Domain.Entities;
 
-public class Shipper
+public class Shipper : Entity<int>
 {
-    [Key]
-    [Column("ShipperID")]
-    public int ShipperId { get; set; }
-
     [StringLength(40)]
     public string CompanyName { get; set; } = null!;
 
@@ -13,5 +9,5 @@ public class Shipper
     public string? Phone { get; set; }
 
     [InverseProperty("ShipViaNavigation")]
-    public  ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

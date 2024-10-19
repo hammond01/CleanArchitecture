@@ -17,7 +17,7 @@ public class CategoryRepository : ICategoryRepository
     }
     public async Task<ApiResponse> GetCategoryAsync(int id)
     {
-        var response = await _context.Categories.FirstOrDefaultAsync(x => x.CategoryId == id);
+        var response = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
         if (response == null)
         {
             return new ApiResponse(404, "Category not found");

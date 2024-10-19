@@ -2,12 +2,8 @@
 
 [Index("CompanyName", Name = "CompanyName")]
 [Index("PostalCode", Name = "PostalCode")]
-public class Supplier
+public class Supplier : Entity<int>
 {
-    [Key]
-    [Column("SupplierID")]
-    public int SupplierId { get; set; }
-
     [StringLength(40)]
     public string CompanyName { get; set; } = null!;
 
@@ -38,7 +34,6 @@ public class Supplier
     [StringLength(24)]
     public string? Fax { get; set; }
 
-    [Column(TypeName = "ntext")]
     public string? HomePage { get; set; }
 
     [InverseProperty("Supplier")]

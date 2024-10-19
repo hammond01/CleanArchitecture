@@ -43,8 +43,4 @@ public class Customer
 
     [InverseProperty("Customer")]
     public ICollection<Order> Orders { get; set; } = new List<Order>();
-
-    [ForeignKey("CustomerId")]
-    [InverseProperty("Customers")]
-    public ICollection<CustomerDemographic> CustomerTypes { get; set; } = new List<CustomerDemographic>();
 }

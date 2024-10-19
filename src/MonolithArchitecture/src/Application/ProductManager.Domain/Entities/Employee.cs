@@ -2,12 +2,8 @@
 
 [Index("LastName", Name = "LastName")]
 [Index("PostalCode", Name = "PostalCode")]
-public class Employee
+public class Employee : Entity<int>
 {
-    [Key]
-    [Column("EmployeeID")]
-    public int EmployeeId { get; set; }
-
     [StringLength(20)]
     public string LastName { get; set; } = null!;
 
@@ -68,7 +64,5 @@ public class Employee
     [InverseProperty("InverseReportsToNavigation")]
     public Employee? ReportsToNavigation { get; set; }
 
-    [ForeignKey("EmployeeId")]
-    [InverseProperty("Employees")]
-    public ICollection<Territory> Territories { get; set; } = new List<Territory>();
+    public ICollection<EmployeeTerritory> EmployeeTerritories { get; set; } = new List<EmployeeTerritory>();
 }

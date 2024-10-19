@@ -6,12 +6,8 @@
 [Index("OrderId", Name = "OrdersOrder_Details")]
 [Index("ProductId", Name = "ProductID")]
 [Index("ProductId", Name = "ProductsOrder_Details")]
-public class OrderDetail
+public class OrderDetail : Entity<int>
 {
-    [Key]
-    [Column("OrderID")]
-    public int OrderId { get; set; }
-
     [Key]
     [Column("ProductID")]
     public int ProductId { get; set; }

@@ -1,12 +1,7 @@
 ﻿namespace ProductManager.Domain.Entities;
 
-public class Territory
+public class Territory : Entity<string>
 {
-    [Key]
-    [Column("TerritoryID")]
-    [StringLength(20)]
-    public string TerritoryId { get; set; } = null!;
-
     [StringLength(50)]
     public string TerritoryDescription { get; set; } = null!;
 
@@ -17,7 +12,5 @@ public class Territory
     [InverseProperty("Territories")]
     public Region Region { get; set; } = null!;
 
-    [ForeignKey("TerritoryId")]
-    [InverseProperty("Territories")]
-    public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+    public ICollection<EmployeeTerritory> EmployeeTerritories { get; set; } = new List<EmployeeTerritory>();
 }

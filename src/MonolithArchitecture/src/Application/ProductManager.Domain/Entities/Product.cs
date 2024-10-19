@@ -5,12 +5,8 @@
 [Index("ProductName", Name = "ProductName")]
 [Index("SupplierId", Name = "SupplierID")]
 [Index("SupplierId", Name = "SuppliersProducts")]
-public class Product
+public class Product : Entity<int>
 {
-    [Key]
-    [Column("ProductID")]
-    public int ProductId { get; set; }
-
     [StringLength(40)]
     public string ProductName { get; set; } = null!;
 
