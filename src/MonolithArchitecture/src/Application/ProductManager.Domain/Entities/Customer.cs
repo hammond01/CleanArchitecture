@@ -4,13 +4,8 @@
 [Index("CompanyName", Name = "CompanyName")]
 [Index("PostalCode", Name = "PostalCode")]
 [Index("Region", Name = "Region")]
-public class Customer
+public class Customer : Entity<string>
 {
-    [Key]
-    [Column("CustomerID")]
-    [StringLength(5)]
-    public string CustomerId { get; set; } = null!;
-
     [StringLength(40)]
     public string CompanyName { get; set; } = null!;
 

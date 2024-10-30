@@ -1,0 +1,10 @@
+﻿global using ProductManager.Application;
+global using ProductManager.Persistence;
+global using static Microsoft.AspNetCore.Http.StatusCodes;
+global using System.Text;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.IdentityModel.Tokens;
+global using ProductManager.Constants.AuthorizationDefinitions;
+global using ProductManager.Infrastructure.Storage;
+global using SolidTemplate.Constants.ConfigurationOptions;

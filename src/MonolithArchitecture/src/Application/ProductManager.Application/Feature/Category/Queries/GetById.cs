@@ -2,11 +2,11 @@
 
 public record GetCategoryById : IQuery<ApiResponse>
 {
-    public GetCategoryById(Int32 merchantId)
+    public GetCategoryById(string merchantId)
     {
         MerchantId = merchantId;
     }
-    public int MerchantId { get; set; }
+    public string MerchantId { get; set; }
 }
 public class GetCategoryByIdHandler : IQueryHandler<GetCategoryById, ApiResponse>
 {

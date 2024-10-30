@@ -1,7 +1,7 @@
 ﻿namespace ProductManager.Domain.Entities;
 
 [Table("Region")]
-public class Region : Entity<int>
+public class Region : Entity<string>
 {
     [StringLength(50)]
     public string RegionDescription { get; set; } = null!;

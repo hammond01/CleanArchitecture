@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProductManager.Application.Common;
 using ProductManager.Application.Feature.Category.Queries;
 using ProductManager.Domain.Common;
@@ -14,8 +15,9 @@ public class CategoryController : ControllerBase
         _dispatcher = dispatcher;
     }
     [HttpGet]
+    [Authorize]
     public async Task<ApiResponse> GetCategories() => await _dispatcher.DispatchAsync(new GetCategories());
 
     [HttpGet("{id}")]
-    public async Task<ApiResponse> GetCategory(int id) => await _dispatcher.DispatchAsync(new GetCategoryById(id));
+    public async Task<ApiResponse> GetCategory(string id) => await _dispatcher.DispatchAsync(new GetCategoryById(id));
 }

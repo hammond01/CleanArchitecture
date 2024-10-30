@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Persistence.Repositories;
+﻿using ProductManager.Shared.DTOs.CategoryDto;
+namespace ProductManager.Persistence.Repositories;
 
 public class CategoryRepository : ICategoryRepository
 {
@@ -15,7 +16,7 @@ public class CategoryRepository : ICategoryRepository
         var categories = _mapper.Map<List<GetCategoryDto>>(response);
         return new ApiResponse(200, "", categories);
     }
-    public async Task<ApiResponse> GetCategoryAsync(int id)
+    public async Task<ApiResponse> GetCategoryAsync(string id)
     {
         var response = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
         if (response == null)
