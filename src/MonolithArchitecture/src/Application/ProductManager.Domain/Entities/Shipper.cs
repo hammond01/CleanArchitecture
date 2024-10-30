@@ -1,6 +1,6 @@
 ﻿namespace ProductManager.Domain.Entities;
 
-public class Shipper : Entity<int>
+public class Shipper : Entity<string>
 {
     [StringLength(40)]
     public string CompanyName { get; set; } = null!;

@@ -1,7 +1,4 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-namespace ProductManager.Persistence;
+﻿namespace ProductManager.Persistence;
 
 public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyContext
 {
@@ -52,90 +49,20 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Customer>(entity =>
-        {
-            entity.Property(e => e.CustomerId).IsFixedLength();
-        });
-
-        modelBuilder.Entity<Order>(entity =>
-        {
-            entity.Property(e => e.CustomerId).IsFixedLength();
-            entity.Property(e => e.Freight).HasDefaultValue(0m);
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Orders).HasConstraintName("FK_Orders_Customers");
-
-            entity.HasOne(d => d.Employee).WithMany(p => p.Orders).HasConstraintName("FK_Orders_Employees");
-
-            entity.HasOne(d => d.ShipViaNavigation).WithMany(p => p.Orders).HasConstraintName("FK_Orders_Shippers");
-        });
-
-        modelBuilder.Entity<OrderDetail>(entity =>
-        {
-            entity.HasKey(e => new
+        modelBuilder.Entity<EmployeeTerritory>()
+            .HasKey(et => new
             {
-                e.Id, e.ProductId
-            }).HasName("PK_Order_Details");
-
-            entity.Property(e => e.Quantity).HasDefaultValue((short)1);
-
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Order_Details_Orders");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.OrderDetails)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Order_Details_Products");
-        });
-
-        modelBuilder.Entity<Product>(entity =>
-        {
-            entity.Property(e => e.ReorderLevel).HasDefaultValue((short)0);
-            entity.Property(e => e.UnitPrice).HasDefaultValue(0m);
-            entity.Property(e => e.UnitsInStock).HasDefaultValue((short)0);
-            entity.Property(e => e.UnitsOnOrder).HasDefaultValue((short)0);
-
-            entity.HasOne(d => d.Category).WithMany(p => p.Products).HasConstraintName("FK_Products_Categories");
-
-            entity.HasOne(d => d.Supplier).WithMany(p => p.Products).HasConstraintName("FK_Products_Suppliers");
-        });
-
-        modelBuilder.Entity<Region>(entity =>
-        {
-            entity.HasKey(e => e.Id).IsClustered(false);
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.RegionDescription).IsFixedLength();
-        });
-
-        modelBuilder.Entity<Employee>(entity =>
-        {
-            entity.HasOne(d => d.ReportsToNavigation).WithMany(p => p.InverseReportsToNavigation)
-                .HasConstraintName("FK_Employees_Employees");
-            entity.HasMany(e => e.EmployeeTerritories)
-                .WithOne(et => et.Employee)
-                .HasForeignKey(et => et.EmployeeId);
-        });
-
-        modelBuilder.Entity<Territory>(entity =>
-        {
-            entity.HasKey(e => e.Id).IsClustered(false);
-
-            entity.Property(e => e.TerritoryDescription).IsFixedLength();
-
-            entity.HasOne(d => d.Region).WithMany(p => p.Territories)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Territories_Region");
-
-            entity.HasMany(t => t.EmployeeTerritories)
-                .WithOne(et => et.Territory)
-                .HasForeignKey(et => et.TerritoryId);
-        });
-        modelBuilder.Entity<EmployeeTerritory>(entity =>
-        {
-            entity.HasKey(e => new
-            {
-                e.EmployeeId, e.TerritoryId
+                et.EmployeeId, et.TerritoryId
             });
-        });
+
+        modelBuilder.Entity<EmployeeTerritory>()
+            .HasOne(et => et.Employee)
+            .WithMany(e => e.EmployeeTerritories)
+            .HasForeignKey(et => et.EmployeeId);
+
+        modelBuilder.Entity<EmployeeTerritory>()
+            .HasOne(et => et.Territory)
+            .WithMany(t => t.EmployeeTerritories)
+            .HasForeignKey(et => et.TerritoryId);
     }
 }

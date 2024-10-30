@@ -2,7 +2,7 @@
 
 public interface ITrackable
 {
-    byte[] RowVersion { get; set; }
+    int RowId { get; set; }
 
     DateTimeOffset CreatedDateTime { get; set; }
 

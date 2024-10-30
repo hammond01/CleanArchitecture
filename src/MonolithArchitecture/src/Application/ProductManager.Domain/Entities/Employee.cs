@@ -2,7 +2,7 @@
 
 [Index("LastName", Name = "LastName")]
 [Index("PostalCode", Name = "PostalCode")]
-public class Employee : Entity<int>
+public class Employee : Entity<string>
 {
     [StringLength(20)]
     public string LastName { get; set; } = null!;
@@ -54,15 +54,12 @@ public class Employee : Entity<int>
     [StringLength(255)]
     public string? PhotoPath { get; set; }
 
-    [InverseProperty("ReportsToNavigation")]
-    public ICollection<Employee> InverseReportsToNavigation { get; set; } = new List<Employee>();
-
     [InverseProperty("Employee")]
     public ICollection<Order> Orders { get; set; } = new List<Order>();
 
-    [ForeignKey("ReportsTo")]
-    [InverseProperty("InverseReportsToNavigation")]
-    public Employee? ReportsToNavigation { get; set; }
+    // [ForeignKey("ReportsTo")]
+    // [InverseProperty("InverseReportsToNavigation")]
+    // public Employee? ReportsToNavigation { get; set; }
 
     public ICollection<EmployeeTerritory> EmployeeTerritories { get; set; } = new List<EmployeeTerritory>();
 }

@@ -5,16 +5,16 @@
 [Index("ProductName", Name = "ProductName")]
 [Index("SupplierId", Name = "SupplierID")]
 [Index("SupplierId", Name = "SuppliersProducts")]
-public class Product : Entity<int>
+public class Product : Entity<string>
 {
     [StringLength(40)]
     public string ProductName { get; set; } = null!;
 
     [Column("SupplierID")]
-    public int? SupplierId { get; set; }
+    public string? SupplierId { get; set; }
 
     [Column("CategoryID")]
-    public int? CategoryId { get; set; }
+    public string? CategoryId { get; set; }
 
     [StringLength(20)]
     public string? QuantityPerUnit { get; set; }

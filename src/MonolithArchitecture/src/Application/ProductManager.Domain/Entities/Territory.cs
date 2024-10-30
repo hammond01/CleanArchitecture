@@ -6,7 +6,7 @@ public class Territory : Entity<string>
     public string TerritoryDescription { get; set; } = null!;
 
     [Column("RegionID")]
-    public int RegionId { get; set; }
+    public string RegionId { get; set; } = default!;
 
     [ForeignKey("RegionId")]
     [InverseProperty("Territories")]
