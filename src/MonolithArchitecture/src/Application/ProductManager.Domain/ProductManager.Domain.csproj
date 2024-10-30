@@ -8,7 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper"/>
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ObjectCloner.Extensions"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj"/>
   </ItemGroup>
 
 </Project>

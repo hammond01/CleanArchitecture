@@ -8,14 +8,13 @@
 [Index("ShipPostalCode", Name = "ShipPostalCode")]
 [Index("ShippedDate", Name = "ShippedDate")]
 [Index("ShipVia", Name = "ShippersOrders")]
-public class Order : Entity<int>
+public class Order : Entity<string>
 {
     [Column("CustomerID")]
-    [StringLength(5)]
     public string? CustomerId { get; set; }
 
     [Column("EmployeeID")]
-    public int? EmployeeId { get; set; }
+    public string? EmployeeId { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? OrderDate { get; set; }
@@ -26,7 +25,7 @@ public class Order : Entity<int>
     [Column(TypeName = "datetime")]
     public DateTime? ShippedDate { get; set; }
 
-    public int? ShipVia { get; set; }
+    public string? ShipVia { get; set; }
 
     [Column(TypeName = "money")]
     public decimal? Freight { get; set; }

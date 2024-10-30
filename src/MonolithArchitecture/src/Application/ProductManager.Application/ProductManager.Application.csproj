@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.CrossCuttingConcerns\ProductManager.CrossCuttingConcerns.csproj"/>
+    <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj"/>
     <ProjectReference Include="..\ProductManager.Domain\ProductManager.Domain.csproj"/>
   </ItemGroup>
 

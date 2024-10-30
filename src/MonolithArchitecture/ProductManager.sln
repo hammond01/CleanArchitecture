@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManager.Api", "src\Presentation\ProductManager.Api\ProductManager.Api.csproj", "{0A62CED1-E975-4973-B210-49F0AF7C47E4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManager.Identity", "src\Presentation\ProductManager.Identity\ProductManager.Identity.csproj", "{13C11CBC-42F8-4E28-A555-2BDCA3C59FEA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB07BEB4-D582-478C-98D0-63186F1BFCAC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -30,14 +28,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Clean.sh = Clean.sh
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
-		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCuttingConcerns", "CrossCuttingConcerns", "{1A954718-90ED-4AB9-A5BB-BD7BB2173241}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{1A954718-90ED-4AB9-A5BB-BD7BB2173241}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.CrossCuttingConcerns", "src\CrossCuttingConcerns\ProductManager.CrossCuttingConcerns\ProductManager.CrossCuttingConcerns.csproj", "{87C1E557-E074-49A3-AF04-EEFCAC8F97D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Shared", "src\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj", "{87C1E557-E074-49A3-AF04-EEFCAC8F97D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCuttingConcerns.Constants", "src\CrossCuttingConcerns\CrossCuttingConcerns.Constants\CrossCuttingConcerns.Constants.csproj", "{E5EF3095-855D-419C-BD42-A3744CABCA2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Constants", "src\CrossCuttingConcerns\ProductManager.Constants\ProductManager.Constants.csproj", "{E5EF3095-855D-419C-BD42-A3744CABCA2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +62,6 @@ Global
 		{0A62CED1-E975-4973-B210-49F0AF7C47E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A62CED1-E975-4973-B210-49F0AF7C47E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A62CED1-E975-4973-B210-49F0AF7C47E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{13C11CBC-42F8-4E28-A555-2BDCA3C59FEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{13C11CBC-42F8-4E28-A555-2BDCA3C59FEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13C11CBC-42F8-4E28-A555-2BDCA3C59FEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{13C11CBC-42F8-4E28-A555-2BDCA3C59FEA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87C1E557-E074-49A3-AF04-EEFCAC8F97D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87C1E557-E074-49A3-AF04-EEFCAC8F97D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87C1E557-E074-49A3-AF04-EEFCAC8F97D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -90,7 +83,6 @@ Global
 		{0DBA7E40-9C37-4037-9D0F-0E59C6B715DB} = {4C6EBB09-2BB6-43B5-B9FF-4D0339DA22AA}
 		{7DB118A8-B133-4E5C-8BA2-0A434E7C4D4C} = {BC44EA12-EF7F-499C-9FCF-F55718C83674}
 		{0A62CED1-E975-4973-B210-49F0AF7C47E4} = {7DB118A8-B133-4E5C-8BA2-0A434E7C4D4C}
-		{13C11CBC-42F8-4E28-A555-2BDCA3C59FEA} = {7DB118A8-B133-4E5C-8BA2-0A434E7C4D4C}
 		{1A954718-90ED-4AB9-A5BB-BD7BB2173241} = {BC44EA12-EF7F-499C-9FCF-F55718C83674}
 		{87C1E557-E074-49A3-AF04-EEFCAC8F97D2} = {1A954718-90ED-4AB9-A5BB-BD7BB2173241}
 		{E5EF3095-855D-419C-BD42-A3744CABCA2C} = {1A954718-90ED-4AB9-A5BB-BD7BB2173241}

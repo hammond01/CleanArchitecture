@@ -6,11 +6,11 @@
 [Index("OrderId", Name = "OrdersOrder_Details")]
 [Index("ProductId", Name = "ProductID")]
 [Index("ProductId", Name = "ProductsOrder_Details")]
-public class OrderDetail : Entity<int>
+public class OrderDetail : Entity<string>
 {
     [Key]
     [Column("ProductID")]
-    public int ProductId { get; set; }
+    public string ProductId { get; set; } = default!;
 
     [Column(TypeName = "money")]
     public decimal UnitPrice { get; set; }
