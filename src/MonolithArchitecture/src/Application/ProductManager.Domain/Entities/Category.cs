@@ -1,11 +1,12 @@
 ﻿namespace ProductManager.Domain.Entities;
 
 [Index("CategoryName", Name = "CategoryName")]
-public sealed class Category : Entity<int>
+public sealed class Category : Entity<string>
 {
     [StringLength(15)]
     public string CategoryName { get; set; } = null!;
 
+    [StringLength(250)]
     public string? Description { get; set; }
 
     [Column(TypeName = "image")]

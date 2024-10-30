@@ -9,4 +9,7 @@ global using AutoMapper;
 global using ProductManager.Domain.DTOs.CategoryDto;
 global using ProductManager.Domain.Entities;
 global using ProductManager.Application.Common.Commands;
-global using ProductManager.CrossCuttingConcerns.ExtensionMethods;
+global using ProductManager.Shared.ExtensionMethods;
+global using ProductManager.Shared.DTOs.UserDto;
+global using System.Security.Claims;
+global using ProductManager.Domain.DTOs.AdminDto;

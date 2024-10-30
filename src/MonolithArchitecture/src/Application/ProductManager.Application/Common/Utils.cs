@@ -1,6 +1,4 @@
-﻿using ProductManager.Application.Common.Commands;
-using ProductManager.Application.Common.Queries;
-namespace ProductManager.Application.Common;
+﻿namespace ProductManager.Application.Common;
 
 internal static class Utils
 {

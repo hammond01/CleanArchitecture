@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Application;
+﻿using ProductManager.Application.Common.Services;
+namespace ProductManager.Application;
 
 public static class ApplicationConfiguration
 {
@@ -9,10 +10,12 @@ public static class ApplicationConfiguration
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
         services.AddAutoMapper(typeof(MappingProfile));
+        services.AddMessageHandlers();
+        services.RegisterService();
         return services;
     }
 
-    public static IServiceCollection AddMessageHandlers(this IServiceCollection services)
+    private static IServiceCollection AddMessageHandlers(this IServiceCollection services)
     {
         services.AddScoped<Dispatcher>();
         var assembly = Assembly.GetExecutingAssembly();
@@ -39,5 +42,11 @@ public static class ApplicationConfiguration
         }
 
         return services;
+    }
+
+    private static IServiceCollection RegisterService(this IServiceCollection service)
+    {
+        service.AddScoped<UserService>();
+        return service;
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Application.Decorators;
+﻿using ProductManager.Shared.DTOs.CategoryDto;
+namespace ProductManager.Application.Decorators;
 
 public class MappingProfile : Profile
 {

@@ -7,17 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Humanizer.Core"/>
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
-
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\ProductManager.Domain\ProductManager.Domain.csproj"/>
+    <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.Constants\ProductManager.Constants.csproj"/>
+    <ProjectReference Include="..\ProductManager.Infrastructure\ProductManager.Infrastructure.csproj"/>
   </ItemGroup>
-
 
 </Project>
