@@ -7,7 +7,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
         : base(options)
     {
     }
-    public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Categories> Categories { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }
 

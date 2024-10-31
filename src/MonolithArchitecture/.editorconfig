@@ -1,12 +1,16 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
 root = true
-###############################
-# Core EditorConfig Options   #
-###############################
-# All files
+
 [*]
 indent_style = space
-
-# Microsoft .NET properties
+indent_size = 4
+end_of_line = crlf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = false
+indent_style = space
 csharp_indent_braces = false
 csharp_new_line_before_open_brace = all
 csharp_preferred_modifier_order = protected, internal, private, public, file, new, sealed, override, virtual, abstract, static, async, extern, unsafe, volatile, readonly, required:suggestion
@@ -145,7 +149,7 @@ dotnet_style_prefer_conditional_expression_over_return = true:silent
 ###############################
 # Style Definitions
 dotnet_naming_style.pascal_case_style.capitalization = pascal_case
-# Use PascalCase for constant fields  
+# Use PascalCase for constant fields
 dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols = constant_fields
 dotnet_naming_rule.constant_fields_should_be_pascal_case.style = pascal_case_style
