@@ -7,7 +7,6 @@ public class DatabaseInitializer : IDatabaseInitializer
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<ApplicationUser> _userManager;
 
-
     public DatabaseInitializer(ApplicationIdentityDbContext context, UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager, EntityPermissions entityPermissions)
     {
@@ -26,11 +25,10 @@ public class DatabaseInitializer : IDatabaseInitializer
     {
         await EnsureRoleAsync(DefaultRoleNames.Administrator, null);
 
-        await CreateUserAsync(DefaultUserNames.Administrator, "admin123", "Admin", "Template", "admin@template.com",
-        "+84 (123) 456-7890", new[]
-        {
+        await CreateUserAsync(DefaultUserNames.Administrator, "admin123", "Admin", "Template", "admin@template.com", "+84 (123) 456-7890",
+        [
             DefaultRoleNames.Administrator
-        });
+        ]);
 
         var adminRole = await _roleManager.FindByNameAsync(DefaultRoleNames.Administrator);
         var allClaims = _entityPermissions.GetAllPermissionValues().Distinct();

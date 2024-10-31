@@ -3,7 +3,8 @@ namespace ProductManager.Application;
 
 public static class ApplicationConfiguration
 {
-    public static IServiceCollection ApplicationConfigureServices(this IServiceCollection services)
+    public static IServiceCollection ApplicationConfigureServices(this IServiceCollection services,
+        Action<Type, Type, ServiceLifetime>? configureInterceptor = null)
     {
         services.AddMediatR(configuration =>
         {
@@ -12,6 +13,7 @@ public static class ApplicationConfiguration
         services.AddAutoMapper(typeof(MappingProfile));
         services.AddMessageHandlers();
         services.RegisterService();
+        services.AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
         return services;
     }
 

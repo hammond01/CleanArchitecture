@@ -2,7 +2,7 @@
 namespace ProductManager.Domain.Events;
 
 public class EntityDeletedEvent<T> : IDomainEvent
-    where T : Entity<int>
+    where T : Entity<string>
 {
     public EntityDeletedEvent(T entity, DateTime eventDateTime)
     {

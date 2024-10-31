@@ -1,15 +1,11 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using ProductManager.Application.Feature.Identity.Commands;
-using ProductManager.Domain.Common;
 using ProductManager.Shared.DTOs.UserDto;
-using Dispatcher=ProductManager.Application.Common.Dispatcher;
 namespace ProductManager.Api.Controllers;
 
 [Microsoft.AspNetCore.Components.Route("api/[controller]")]
 [ApiController]
-public class IdentityController : ControllerBase
+public class IdentityController : ConBase
 {
     private readonly Dispatcher _dispatcher;
     public IdentityController(Dispatcher dispatcher)
@@ -17,7 +13,7 @@ public class IdentityController : ControllerBase
         _dispatcher = dispatcher;
     }
 
-    [HttpPost("login")]
+    [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(Status204NoContent)]
     [ProducesResponseType(Status401Unauthorized)]
@@ -25,13 +21,13 @@ public class IdentityController : ControllerBase
         ? await _dispatcher.DispatchAsync(new UserLoginCommand(parameters))
         : new ApiResponse(Status400BadRequest, "InvalidData");
 
-    [HttpPost("refresh-token")]
+    [HttpPost]
     public async Task<ApiResponse> RefreshToken([FromBody] RefreshTokenDto request)
         => ModelState.IsValid
             ? await _dispatcher.DispatchAsync(new UserRefreshTokenCommand(request.AccessToken, request.RefreshToken))
             : new ApiResponse(Status400BadRequest, "InvalidData");
 
-    [HttpPost("register")]
+    [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(Status200OK)]
     [ProducesResponseType(Status400BadRequest)]
@@ -39,7 +35,7 @@ public class IdentityController : ControllerBase
         ? await _dispatcher.DispatchAsync(new UserCreateCommand(parameters))
         : new ApiResponse(Status400BadRequest, "InvalidData");
 
-    [HttpPost("confirm-email")]
+    [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(Status200OK)]
     [ProducesResponseType(Status400BadRequest)]
@@ -47,7 +43,7 @@ public class IdentityController : ControllerBase
         ? await _dispatcher.DispatchAsync(new UserConfirmEmailCommand(parameters))
         : new ApiResponse(Status400BadRequest, "InvalidData");
 
-    [HttpPost("logout")]
+    [HttpPost]
     [ProducesResponseType(Status204NoContent)]
     [ProducesResponseType(Status400BadRequest)]
     public async Task<ApiResponse> Logout(ClaimsPrincipal parameters) => ModelState.IsValid

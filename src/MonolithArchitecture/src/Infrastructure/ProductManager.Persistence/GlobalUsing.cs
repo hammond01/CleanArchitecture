@@ -2,7 +2,6 @@
 global using ProductManager.Domain.Entities;
 global using AutoMapper;
 global using ProductManager.Domain.Common;
-global using ProductManager.Domain.DTOs.CategoryDto;
 global using ProductManager.Domain.Repositories;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;

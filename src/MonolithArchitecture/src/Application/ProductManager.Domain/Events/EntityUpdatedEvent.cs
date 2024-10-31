@@ -2,7 +2,7 @@
 namespace ProductManager.Domain.Events;
 
 public class EntityUpdatedEvent<T> : IDomainEvent
-    where T : Entity<int>
+    where T : Entity<string>
 {
     public EntityUpdatedEvent(T entity, DateTime eventDateTime)
     {

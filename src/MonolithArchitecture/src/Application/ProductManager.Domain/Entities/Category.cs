@@ -1,7 +1,7 @@
 ﻿namespace ProductManager.Domain.Entities;
 
 [Index("CategoryName", Name = "CategoryName")]
-public sealed class Category : Entity<string>
+public class Categories : Entity<string>
 {
     [StringLength(15)]
     public string CategoryName { get; set; } = null!;

@@ -32,7 +32,7 @@ public class Product : Entity<string>
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
-    public Category? Category { get; set; }
+    public Categories? Category { get; set; }
 
     [InverseProperty("Product")]
     public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
