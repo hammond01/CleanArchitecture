@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using ProductManager.Application.Common;
-using ProductManager.Application.Feature.Category.Queries;
-using ProductManager.Domain.Common;
-namespace ProductManager.Api.Controllers;
+﻿namespace ProductManager.Api.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-public class CategoryController : ControllerBase
+public class CategoryController : ConBase
 {
     private readonly Dispatcher _dispatcher;
     public CategoryController(Dispatcher dispatcher)
@@ -15,9 +8,14 @@ public class CategoryController : ControllerBase
         _dispatcher = dispatcher;
     }
     [HttpGet]
-    [Authorize]
-    public async Task<ApiResponse> GetCategories() => await _dispatcher.DispatchAsync(new GetCategories());
+    public async Task<ApiResponse> GetCategories()
+        => await _dispatcher.DispatchAsync(new GetCategories());
 
     [HttpGet("{id}")]
-    public async Task<ApiResponse> GetCategory(string id) => await _dispatcher.DispatchAsync(new GetCategoryById(id));
+    public async Task<ApiResponse> GetCategory(string id)
+        => await _dispatcher.DispatchAsync(new GetCategoryById(id));
+
+    [HttpPost]
+    public async Task<ApiResponse> CreateCategory([FromBody] CreateCategoryDto createCategoryDto)
+        => await _dispatcher.DispatchAsync(new CreateCategoryCommand(createCategoryDto));
 }

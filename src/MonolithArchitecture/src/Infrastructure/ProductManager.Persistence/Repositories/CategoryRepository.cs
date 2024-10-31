@@ -35,7 +35,7 @@ public class CategoryRepository : ICategoryRepository
             {
                 return new ApiResponse(404, "Category already exists");
             }
-            var category = _mapper.Map<Category>(createCategoryDto);
+            var category = _mapper.Map<Categories>(createCategoryDto);
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
             return new ApiResponse(200, "Category created successfully");

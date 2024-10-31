@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Domain.DTOs.CategoryDto;
+﻿namespace ProductManager.Shared.DTOs.CategoryDto;
 
 public class UpdateCategoryDto
 {

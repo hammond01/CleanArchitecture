@@ -1,15 +1,13 @@
-﻿using ProductManager.Domain.Events;
-using ProductManager.Shared.Exceptions;
-namespace ProductManager.Application.Common.Services;
+﻿namespace ProductManager.Application.Common.Services;
 
 public class CrudService<T> : ICrudService<T>
-    where T : Entity<int>
+    where T : Entity<string>
 {
     private readonly Dispatcher _dispatcher;
-    private readonly IRepository<T, int> _repository;
+    private readonly IRepository<T, string> _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CrudService(IRepository<T, int> repository, Dispatcher dispatcher)
+    public CrudService(IRepository<T, string> repository, Dispatcher dispatcher)
     {
         _unitOfWork = repository.UnitOfWork;
         _repository = repository;
@@ -18,12 +16,6 @@ public class CrudService<T> : ICrudService<T>
 
     public Task<List<T>> GetAsync(CancellationToken cancellationToken = default)
         => _repository.ToListAsync(_repository.GetQueryableSet());
-
-    public Task<T?> GetByIdAsync(Int32 id, CancellationToken cancellationToken = default)
-    {
-        ValidationException.Requires(id != 0, "Invalid Id");
-        return _repository.FirstOrDefaultAsync(_repository.GetQueryableSet().Where(x => x.Id == id));
-    }
 
     public async Task AddOrUpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
@@ -56,5 +48,11 @@ public class CrudService<T> : ICrudService<T>
         _repository.Delete(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         await _dispatcher.DispatchAsync(new EntityDeletedEvent<T>(entity, DateTime.UtcNow), cancellationToken);
+    }
+
+    public Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    {
+        ValidationException.Requires(id != string.Empty, "Invalid Id");
+        return _repository.FirstOrDefaultAsync(_repository.GetQueryableSet().Where(x => x.Id == id));
     }
 }
