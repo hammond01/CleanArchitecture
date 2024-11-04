@@ -1,8 +1,8 @@
 ﻿namespace ProductManager.Domain.Entities;
 
-public class AuditLog : Entity<Guid>
+public class AuditLog : Entity<string>
 {
-    public Guid UserId { get; set; }
+    public string UserId { get; set; } = default!;
 
     public string Action { get; set; } = default!;
 
