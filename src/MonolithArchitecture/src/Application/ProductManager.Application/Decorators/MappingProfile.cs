@@ -1,5 +1,4 @@
-﻿using ProductManager.Shared.DTOs.CategoryDto;
-namespace ProductManager.Application.Decorators;
+﻿namespace ProductManager.Application.Decorators;
 
 public class MappingProfile : Profile
 {
@@ -7,5 +6,6 @@ public class MappingProfile : Profile
     {
         CreateMap<GetCategoryDto, Categories>().ReverseMap();
         CreateMap<CreateCategoryDto, Categories>().ReverseMap();
+        CreateMap<UpdateCategoryDto, Categories>().ReverseMap();
     }
 }
