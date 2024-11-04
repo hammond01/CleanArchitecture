@@ -16,6 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ObjectCloner.Extensions"/>
+    <PackageReference Include="Ulid"/>
   </ItemGroup>
 
   <ItemGroup>

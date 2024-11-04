@@ -13,6 +13,17 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntit
     private DbSet<TEntity> DbSet => _dbContext.Set<TEntity>();
     public IUnitOfWork UnitOfWork => _dbContext;
     public IQueryable<TEntity> GetQueryableSet() => _dbContext.Set<TEntity>();
+    public async Task AddOrUpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    {
+        if (entity.Id != null && entity.Id.Equals(default(TKey)))
+        {
+            await AddAsync(entity, cancellationToken);
+        }
+        else
+        {
+            await UpdateAsync(entity, cancellationToken);
+        }
+    }
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         entity.CreatedDateTime = _dateTimeProvider.OffsetNow;

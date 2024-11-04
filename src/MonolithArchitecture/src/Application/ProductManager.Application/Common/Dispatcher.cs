@@ -1,15 +1,25 @@
-﻿using ProductManager.Domain.Events;
-namespace ProductManager.Application.Common;
+﻿namespace ProductManager.Application.Common;
 
 public class Dispatcher
 {
     // ReSharper disable once CollectionNeverUpdated.Local
-    private readonly List<Type> _eventHandlers = [];
+    private static readonly List<Type> _eventHandlers = [];
     private readonly IServiceProvider _serviceProvider;
-
     public Dispatcher(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
+    }
+    public static void RegisterEventHandlers(Assembly assembly, IServiceCollection services)
+    {
+        var types = assembly.GetTypes()
+            .Where(x => x.GetInterfaces().Any(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)))
+            .ToList();
+
+        foreach (var type in types)
+        {
+            services.AddTransient(type);
+        }
+        _eventHandlers.AddRange(types);
     }
     public async Task<T> DispatchAsync<T>(IQuery<T> query, CancellationToken cancellationToken = default)
     {

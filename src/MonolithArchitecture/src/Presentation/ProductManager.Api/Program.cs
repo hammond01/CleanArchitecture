@@ -5,6 +5,7 @@
     builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
     builder.Services.AddIdentityPersistence(builder.Configuration.GetConnectionString("IDENTITY")!);
     builder.Services.ApplicationConfigureServices();
+    builder.Services.InfrastructureConfigureServices();
     builder.Services.Configure<IdentityConfig>(builder.Configuration.GetSection(IdentityConfig.ConfigName));
 
     var audience = builder.Configuration["IdentityConfig:AUDIENCE"];

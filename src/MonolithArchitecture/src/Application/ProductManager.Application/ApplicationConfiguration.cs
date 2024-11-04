@@ -3,8 +3,7 @@ namespace ProductManager.Application;
 
 public static class ApplicationConfiguration
 {
-    public static IServiceCollection ApplicationConfigureServices(this IServiceCollection services,
-        Action<Type, Type, ServiceLifetime>? configureInterceptor = null)
+    public static IServiceCollection ApplicationConfigureServices(this IServiceCollection services)
     {
         services.AddMediatR(configuration =>
         {
@@ -17,7 +16,7 @@ public static class ApplicationConfiguration
         return services;
     }
 
-    private static IServiceCollection AddMessageHandlers(this IServiceCollection services)
+    private static void AddMessageHandlers(this IServiceCollection services)
     {
         services.AddScoped<Dispatcher>();
         var assembly = Assembly.GetExecutingAssembly();
@@ -43,12 +42,8 @@ public static class ApplicationConfiguration
             }
         }
 
-        return services;
+        Dispatcher.RegisterEventHandlers(assembly, services);
     }
 
-    private static IServiceCollection RegisterService(this IServiceCollection service)
-    {
-        service.AddScoped<UserService>();
-        return service;
-    }
+    private static void RegisterService(this IServiceCollection service) => service.AddScoped<UserService>();
 }

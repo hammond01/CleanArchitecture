@@ -30,6 +30,8 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
     public virtual DbSet<Territory> Territories { get; set; }
 
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
+    public virtual DbSet<OutboxEvent> OutboxEvents { get; set; }
+
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 

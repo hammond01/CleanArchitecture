@@ -8,10 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Humanizer.Core"/>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Application\ProductManager.Domain\ProductManager.Domain.csproj"/>
     <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj"/>
   </ItemGroup>
 
