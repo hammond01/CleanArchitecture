@@ -1,27 +1,28 @@
 ﻿using ProductManager.Application.Common.Services;
 namespace ProductManager.Application.Feature.Category.Queries;
 
-public record GetCategoryById : IQuery<ApiResponse>
+public record GetCategoryByIdQuery : IQuery<ApiResponse>
 {
-    public GetCategoryById(string merchantId)
+    public GetCategoryByIdQuery(string categoryId)
     {
-        MerchantId = merchantId;
+        CategoryId = categoryId;
     }
-    public string MerchantId { get; set; }
+    public string CategoryId { get; set; }
 }
-public class GetCategoryByIdHandler : IQueryHandler<GetCategoryById, ApiResponse>
+public class GetCategoryByIdHandler : IQueryHandler<GetCategoryByIdQuery, ApiResponse>
 {
-    private readonly ICategoryRepository _categoryRepository;
-    private readonly CrudService<Categories> _categoryService;
-    public GetCategoryByIdHandler(ICategoryRepository categoryRepository, CrudService<Categories> categoryService)
+    private readonly ICrudService<Categories> _categoryService;
+    private readonly IMapper _mapper;
+    public GetCategoryByIdHandler(ICrudService<Categories> categoryService, IMapper mapper)
     {
-        _categoryRepository = categoryRepository;
         _categoryService = categoryService;
+        _mapper = mapper;
     }
 
-    public async Task<ApiResponse> HandleAsync(GetCategoryById request, CancellationToken cancellationToken)
+    public async Task<ApiResponse> HandleAsync(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var response = await _categoryService.GetByIdAsync(request.MerchantId, cancellationToken);
+        var categories = await _categoryService.GetByIdAsync(request.CategoryId, cancellationToken);
+        var response = _mapper.Map<GetCategoryDto>(categories);
         return new ApiResponse(200, "Get Category by Id successfully", response);
     }
 }

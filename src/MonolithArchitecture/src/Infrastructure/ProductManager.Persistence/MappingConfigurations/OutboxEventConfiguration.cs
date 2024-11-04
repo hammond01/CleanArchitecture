@@ -6,7 +6,6 @@ public class OutboxEventConfiguration : IEntityTypeConfiguration<OutboxEvent>
     public void Configure(EntityTypeBuilder<OutboxEvent> builder)
     {
         builder.ToTable("OutboxEvents");
-        builder.Property(x => x.Id).HasDefaultValueSql("newsequentialid()");
         builder.HasIndex(x => x.Published);
         builder.HasIndex(x => x.CreatedDateTime);
     }

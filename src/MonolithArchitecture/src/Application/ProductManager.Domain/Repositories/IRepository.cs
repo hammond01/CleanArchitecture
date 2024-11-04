@@ -5,7 +5,6 @@ public interface IRepository<TEntity, TKey> where TEntity : Entity<TKey>
 {
     IUnitOfWork UnitOfWork { get; }
     IQueryable<TEntity> GetQueryableSet();
-    Task AddOrUpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
