@@ -15,3 +15,4 @@ global using ProductManager.Domain.Common;
 global using ProductManager.Shared.DTOs.CategoryDto;
 global using ProductManager.Application.Feature.Category.Commands;
 global using ProductManager.Application.Feature.Category.Queries;
+global using ProductManager.Infrastructure;
