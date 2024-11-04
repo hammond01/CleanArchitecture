@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.Constants\ProductManager.Constants.csproj"/>
     <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj"/>
+    <ProjectReference Include="..\..\Infrastructure\ProductManager.Persistence\ProductManager.Persistence.csproj"/>
     <ProjectReference Include="..\ProductManager.Domain\ProductManager.Domain.csproj"/>
   </ItemGroup>
 
