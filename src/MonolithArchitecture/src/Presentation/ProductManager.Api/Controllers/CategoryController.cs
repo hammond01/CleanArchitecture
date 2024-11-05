@@ -40,6 +40,13 @@ public class CategoryController : ConBase
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetCategoryByIdQuery(id));
         var category = _mapper.Map<Categories>(apiResponse.Result);
+        if (category == null)
+        {
+            return new ApiResponse
+            {
+                StatusCode = 404, Message = "Category not found"
+            };
+        }
         return await _dispatcher.DispatchAsync(new DeleteCategoryCommand(category));
     }
 }
