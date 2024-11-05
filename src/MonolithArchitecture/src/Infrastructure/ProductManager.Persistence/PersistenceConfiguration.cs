@@ -47,7 +47,6 @@ public static class PersistenceConfiguration
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
-        services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
         services.AddScoped(typeof(IUnitOfWork),
         implementationFactory: serviceProvider => serviceProvider.GetRequiredService<ApplicationDbContext>());
 

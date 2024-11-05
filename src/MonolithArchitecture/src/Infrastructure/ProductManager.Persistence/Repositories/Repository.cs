@@ -23,7 +23,14 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntit
         entity.UpdatedDateTime = _dateTimeProvider.OffsetNow;
         return Task.CompletedTask;
     }
-    public void Delete(TEntity entity) => DbSet.Remove(entity);
+    public void Delete(TEntity entity)
+    {
+        var entityToDelete = DbSet.Find(entity.Id);
+        if (entityToDelete != null)
+        {
+            DbSet.Remove(entityToDelete);
+        }
+    }
     public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> query) => query.FirstOrDefaultAsync();
     public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> query) => query.SingleOrDefaultAsync();
     public Task<List<T>> ToListAsync<T>(IQueryable<T> query) => query.ToListAsync();
