@@ -2,7 +2,7 @@
 
 [Index("CompanyName", Name = "CompanyName")]
 [Index("PostalCode", Name = "PostalCode")]
-public class Supplier : Entity<string>
+public class Suppliers : Entity<string>
 {
     [StringLength(40)]
     public string CompanyName { get; set; } = null!;

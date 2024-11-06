@@ -39,5 +39,5 @@ public class Product : Entity<string>
 
     [ForeignKey("SupplierId")]
     [InverseProperty("Products")]
-    public Supplier? Supplier { get; set; }
+    public Suppliers? Supplier { get; set; }
 }

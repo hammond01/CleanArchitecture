@@ -1,5 +1,4 @@
-﻿using ProductManager.Domain.DTOs.AdminDto;
-namespace ProductManager.Domain.Repositories;
+﻿namespace ProductManager.Domain.Repositories;
 
 public interface IAdminRepository
 {

@@ -1,5 +1,4 @@
-﻿using ProductManager.Domain.Entities;
-namespace ProductManager.Domain.Events;
+﻿namespace ProductManager.Domain.Events;
 
 public class EntityDeletedEvent<T> : IDomainEvent
     where T : Entity<string>

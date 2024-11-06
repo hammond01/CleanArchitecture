@@ -25,7 +25,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
 
     public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
 
-    public virtual DbSet<Supplier> Suppliers { get; set; }
+    public virtual DbSet<Suppliers> Suppliers { get; set; }
 
     public virtual DbSet<Territory> Territories { get; set; }
 

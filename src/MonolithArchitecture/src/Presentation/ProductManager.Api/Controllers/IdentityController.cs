@@ -1,6 +1,3 @@
-using System.Security.Claims;
-using ProductManager.Application.Feature.Identity.Commands;
-using ProductManager.Shared.DTOs.UserDto;
 namespace ProductManager.Api.Controllers;
 
 [Microsoft.AspNetCore.Components.Route("api/[controller]")]
