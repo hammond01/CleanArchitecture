@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using ProductManager.Domain.Entities;
-namespace ProductManager.Api.Controllers;
+﻿namespace ProductManager.Api.Controllers;
 
 public class CategoryController : ConBase
 {
@@ -13,11 +11,19 @@ public class CategoryController : ConBase
     }
     [HttpGet]
     public async Task<ApiResponse> GetCategories()
-        => await _dispatcher.DispatchAsync(new GetCategories());
+    {
+        var data = await _dispatcher.DispatchAsync(new GetCategories());
+        data.Result = _mapper.Map<List<GetCategoryDto>>(data.Result);
+        return data;
+    }
 
     [HttpGet("{id}")]
     public async Task<ApiResponse> GetCategory(string id)
-        => await _dispatcher.DispatchAsync(new GetCategoryByIdQuery(id));
+    {
+        var data = await _dispatcher.DispatchAsync(new GetCategoryByIdQuery(id));
+        data.Result = _mapper.Map<GetCategoryDto>(data.Result);
+        return data;
+    }
 
     [HttpPost]
     public async Task<ApiResponse> CreateCategory([FromBody] CreateCategoryDto createCategoryDto)
