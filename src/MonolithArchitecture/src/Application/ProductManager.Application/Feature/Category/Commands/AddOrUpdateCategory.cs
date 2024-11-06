@@ -1,7 +1,4 @@
-﻿using System.Data;
-using ProductManager.Application.Common.Services;
-using ProductManager.Persistence.Extensions;
-namespace ProductManager.Application.Feature.Category.Commands;
+﻿namespace ProductManager.Application.Feature.Category.Commands;
 
 public class AddOrUpdateCategoryCommand : ICommand<ApiResponse>
 {

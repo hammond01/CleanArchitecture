@@ -1,5 +1,4 @@
-﻿using ProductManager.Shared.DTOs.UserDto;
-namespace ProductManager.Application.Feature.Identity.Commands;
+﻿namespace ProductManager.Application.Feature.Identity.Commands;
 
 public class UserCreateCommand : ICommand<ApiResponse>
 {

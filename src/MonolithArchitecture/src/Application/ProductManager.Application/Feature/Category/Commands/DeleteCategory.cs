@@ -1,5 +1,4 @@
-﻿using ProductManager.Application.Common.Services;
-namespace ProductManager.Application.Feature.Category.Commands;
+﻿namespace ProductManager.Application.Feature.Category.Commands;
 
 public class DeleteCategoryCommand : ICommand<ApiResponse>
 {
