@@ -1,5 +1,4 @@
-﻿using ProductManager.Application.Common.Services;
-namespace ProductManager.Application.Feature.Category.Queries;
+﻿namespace ProductManager.Application.Feature.Category.Queries;
 
 public record GetCategoryByIdQuery : IQuery<ApiResponse>
 {

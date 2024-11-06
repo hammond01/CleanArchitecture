@@ -15,3 +15,8 @@ global using ProductManager.Domain.Entities;
 global using ProductManager.Domain.Events;
 global using ProductManager.Shared.Exceptions;
 global using ProductManager.Shared.DTOs.CategoryDto;
+global using ProductManager.Application.Common.Services;
+global using ProductManager.Constants;
+global using ProductManager.Domain.Identity;
+global using ProductManager.Persistence.Extensions;
+global using System.Data;

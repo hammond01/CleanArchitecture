@@ -1,8 +1,4 @@
-﻿using ProductManager.Application.Common.Services;
-using ProductManager.Constants;
-using ProductManager.Domain.Identity;
-using ProductManager.Persistence.Extensions;
-namespace ProductManager.Application.Feature.Category.EventHandlers;
+﻿namespace ProductManager.Application.Feature.Category.EventHandlers;
 
 public class CategoryUpdatedEventHandler : IDomainEventHandler<EntityUpdatedEvent<Categories>>
 {

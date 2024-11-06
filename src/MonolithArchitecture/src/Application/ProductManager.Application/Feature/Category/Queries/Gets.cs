@@ -1,5 +1,4 @@
-﻿using ProductManager.Application.Common.Services;
-namespace ProductManager.Application.Feature.Category.Queries;
+﻿namespace ProductManager.Application.Feature.Category.Queries;
 
 public record GetCategories : IQuery<ApiResponse>;
 internal class GetsCategoryHandler : IQueryHandler<GetCategories, ApiResponse>
