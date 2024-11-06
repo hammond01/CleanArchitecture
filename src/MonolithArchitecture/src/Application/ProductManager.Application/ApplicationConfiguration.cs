@@ -1,5 +1,4 @@
-﻿using ProductManager.Application.Common.Services;
-namespace ProductManager.Application;
+﻿namespace ProductManager.Application;
 
 public static class ApplicationConfiguration
 {
