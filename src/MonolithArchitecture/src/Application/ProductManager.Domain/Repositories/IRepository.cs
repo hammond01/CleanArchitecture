@@ -1,5 +1,4 @@
-﻿using ProductManager.Domain.Entities;
-namespace ProductManager.Domain.Repositories;
+﻿namespace ProductManager.Domain.Repositories;
 
 public interface IRepository<TEntity, TKey> where TEntity : Entity<TKey>
 {

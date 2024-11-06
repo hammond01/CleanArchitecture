@@ -7,4 +7,5 @@ global using System.Security.Claims;
 global using ProductManager.Domain.Common;
 global using ProductManager.Shared.DTOs.UserDto;
 global using Microsoft.AspNetCore.Identity;
-global using ProductManager.Shared.DTOs.CategoryDto;
+global using ProductManager.Domain.Entities;
+global using ProductManager.Domain.DTOs.AdminDto;
