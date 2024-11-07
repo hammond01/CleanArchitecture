@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
 
-    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Products> Products { get; set; }
 
     public virtual DbSet<Region> Regions { get; set; }
 

@@ -16,5 +16,5 @@ public class Categories : Entity<string>
     public string? PictureLink { get; set; }
 
     [InverseProperty("Category")]
-    public ICollection<Product> Products { get; set; } = new List<Product>();
+    public ICollection<Products> Products { get; set; } = new List<Products>();
 }

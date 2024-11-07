@@ -25,5 +25,5 @@ public class OrderDetail : Entity<string>
 
     [ForeignKey("ProductId")]
     [InverseProperty("OrderDetails")]
-    public Product Product { get; set; } = null!;
+    public Products Products { get; set; } = null!;
 }
