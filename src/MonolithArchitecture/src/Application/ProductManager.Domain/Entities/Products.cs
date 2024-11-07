@@ -5,7 +5,7 @@
 [Index("ProductName", Name = "ProductName")]
 [Index("SupplierId", Name = "SupplierID")]
 [Index("SupplierId", Name = "SuppliersProducts")]
-public class Product : Entity<string>
+public class Products : Entity<string>
 {
     [StringLength(40)]
     public string ProductName { get; set; } = null!;
