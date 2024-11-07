@@ -37,5 +37,5 @@ public class Suppliers : Entity<string>
     public string? HomePage { get; set; }
 
     [InverseProperty("Supplier")]
-    public ICollection<Product> Products { get; set; } = new List<Product>();
+    public ICollection<Products> Products { get; set; } = new List<Products>();
 }
