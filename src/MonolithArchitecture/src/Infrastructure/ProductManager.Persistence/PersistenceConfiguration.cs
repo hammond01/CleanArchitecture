@@ -37,7 +37,6 @@ public static class PersistenceConfiguration
 
         services.AddScoped<IIdentityRepository, IdentityRepository>();
         services.AddScoped<IAdminRepository, AdminRepository>();
-        services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         services.AddScoped<IdentityExtension>();
         services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
