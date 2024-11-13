@@ -13,4 +13,8 @@ public class EventTypeConstants
     public const string SupplierCreated = "SUPPLIER_CREATED";
     public const string SupplierUpdated = "SUPPLIER_UPDATED";
     public const string SupplierDeleted = "SUPPLIER_DELETED";
+
+    public const string OrderCreated = "ORDER_CREATED";
+    public const string OrderUpdated = "ORDER_UPDATED";
+    public const string OrderDeleted = "ORDER_DELETED";
 }
