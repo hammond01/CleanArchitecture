@@ -24,3 +24,6 @@ global using ProductManager.Shared.DTOs.SupplierDto;
 global using System.Security.Claims;
 global using ProductManager.Application.Feature.Identity.Commands;
 global using ProductManager.Shared.DTOs.UserDto;
+global using ProductManager.Application.Feature.Orders.Command;
+global using ProductManager.Application.Feature.Orders.Queries;
+global using ProductManager.Shared.DTOs.OrderDto;
