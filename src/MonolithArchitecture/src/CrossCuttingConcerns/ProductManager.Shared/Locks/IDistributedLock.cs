@@ -2,7 +2,7 @@
 
 public interface IDistributedLock : IDisposable
 {
-    IDistributedLockScope Acquire(string lockName);
+    IDistributedLockScope? Acquire(string lockName);
 
-    IDistributedLockScope TryAcquire(string lockName);
+    IDistributedLockScope? TryAcquire(string lockName);
 }
