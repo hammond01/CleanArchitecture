@@ -18,4 +18,8 @@
     <ProjectReference Include="..\ProductManager.Infrastructure\ProductManager.Infrastructure.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Locks\"/>
+  </ItemGroup>
+
 </Project>
