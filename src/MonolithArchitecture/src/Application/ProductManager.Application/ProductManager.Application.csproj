@@ -26,4 +26,8 @@
     <ProjectReference Include="..\ProductManager.Domain\ProductManager.Domain.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Feature\AuditLogEntries\DTOs\"/>
+  </ItemGroup>
+
 </Project>
