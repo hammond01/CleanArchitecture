@@ -1,6 +1,6 @@
 ﻿namespace ProductManager.Persistence;
 
-public class ApplicationIdentityDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationIdentityDbContext : DbContext
 {
     public ApplicationIdentityDbContext(DbContextOptions<ApplicationIdentityDbContext> options)
         : base(options)
