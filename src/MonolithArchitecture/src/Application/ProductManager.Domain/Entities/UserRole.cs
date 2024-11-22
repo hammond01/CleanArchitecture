@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ClassifiedAds.Domain.Entities;
+﻿namespace ProductManager.Domain.Entities;
 
 public class UserRole : Entity<Guid>
 {
@@ -8,7 +6,7 @@ public class UserRole : Entity<Guid>
 
     public Guid RoleId { get; set; }
 
-    public User User { get; set; }
+    public User User { get; set; } = default!;
 
-    public Role Role { get; set; }
+    public Role Role { get; set; } = default!;
 }
