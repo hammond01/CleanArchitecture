@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace ClassifiedAds.Domain.Entities;
+﻿namespace ProductManager.Domain.Entities;
 
 public class UserClaim : Entity<Guid>
 {
-    public string Type { get; set; }
-    public string Value { get; set; }
-
-    public User User { get; set; }
+    public string Type { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
+    public User User { get; set; } = default!;
 }
