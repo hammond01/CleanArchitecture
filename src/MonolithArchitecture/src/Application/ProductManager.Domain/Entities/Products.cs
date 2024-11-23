@@ -34,7 +34,7 @@ public class Products : Entity<string>
     [InverseProperty("Products")]
     public Categories? Category { get; set; }
 
-    [InverseProperty("Product")]
+    [InverseProperty("Products")]
     public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     [ForeignKey("SupplierId")]
