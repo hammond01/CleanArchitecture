@@ -39,8 +39,6 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
 
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
-    public virtual DbSet<Claim> Claims { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<RoleClaim> RoleClaims { get; set; }
