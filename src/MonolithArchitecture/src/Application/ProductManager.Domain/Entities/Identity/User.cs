@@ -1,6 +1,6 @@
-﻿namespace ProductManager.Domain.Entities;
+﻿namespace ProductManager.Domain.Entities.Identity;
 
-public class ApplicationUser : IdentityUser
+public class User : IdentityUser<Guid>
 {
     [MaxLength(64)]
     public string FirstName { get; set; } = string.Empty;
@@ -9,4 +9,6 @@ public class ApplicationUser : IdentityUser
     public string LastName { get; set; } = string.Empty;
 
     public string FullName => $"{FirstName} {LastName}";
+
+    public IList<Role> Roles { get; set; } = [];
 }

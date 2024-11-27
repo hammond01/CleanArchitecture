@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Domain.Repositories;
+﻿using ProductManager.Domain.Entities.Identity;
+namespace ProductManager.Domain.Repositories;
 
 public class UserQueryOptions
 {
