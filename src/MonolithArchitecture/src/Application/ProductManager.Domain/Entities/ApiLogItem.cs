@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Domain.Entities;
+﻿using ProductManager.Domain.Entities.Identity;
+namespace ProductManager.Domain.Entities;
 
 public class ApiLogItem
 {
@@ -35,5 +36,5 @@ public class ApiLogItem
 
     public Guid? ApplicationUserId { get; set; }
 
-    public ApplicationUser ApplicationUser { get; set; } = default!;
+    public User User { get; set; } = default!;
 }

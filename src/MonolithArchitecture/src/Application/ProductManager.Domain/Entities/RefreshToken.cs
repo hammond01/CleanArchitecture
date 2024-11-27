@@ -9,7 +9,7 @@ public class RefreshToken
     [StringLength(250)]
     public string Token { get; set; } = default!;
     [StringLength(250)]
-    public string UserId { get; set; } = default!;
+    public Guid UserId { get; set; }
     public DateTime Expires { get; set; }
     public bool IsExpired => DateTime.UtcNow >= Expires;
     public DateTime Created { get; set; }
