@@ -35,15 +35,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<UserRole> UserRoles { get; set; }
-
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-
-    public virtual DbSet<Role> Roles { get; set; }
-
-    public virtual DbSet<RoleClaim> RoleClaims { get; set; }
-
-    public virtual DbSet<UserClaim> UserClaims { get; set; }
 
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
@@ -55,7 +47,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
         return _dbContextTransaction;
     }
     public async Task<IDisposable> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
-        String? lockName = null,
+        string? lockName = null,
         CancellationToken cancellationToken = default)
     {
         _dbContextTransaction = await Database.BeginTransactionAsync(isolationLevel, cancellationToken);

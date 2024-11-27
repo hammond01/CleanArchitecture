@@ -9,7 +9,7 @@ public class UserQueryOptions
     public bool IncludeTokens { get; set; }
     public bool AsNoTracking { get; set; }
 }
-public interface IUserRepository : IRepository<User, Guid>
+public interface IUserRepository
 {
     IQueryable<User> Get(UserQueryOptions queryOptions);
 }
