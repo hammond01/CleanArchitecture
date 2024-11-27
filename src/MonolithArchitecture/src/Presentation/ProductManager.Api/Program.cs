@@ -2,8 +2,8 @@
 {
     builder.Services.AddControllers();
     builder.Services.AddSwaggerGen();
+
     builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
-    builder.Services.AddIdentityPersistence(builder.Configuration.GetConnectionString("IDENTITY")!);
     builder.Services.ApplicationConfigureServices();
     builder.Services.InfrastructureConfigureServices();
     builder.Services.Configure<IdentityConfig>(builder.Configuration.GetSection(IdentityConfig.ConfigName));
@@ -45,26 +45,24 @@
 }
 
 var app = builder.Build();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-    using (var serviceScope =
-           ((IApplicationBuilder)app).ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-    {
-        var databaseInitializer = serviceScope.ServiceProvider.GetService<IDatabaseInitializer>();
-        databaseInitializer?.SeedAsync().Wait();
-    }
-    app.UseHttpsRedirection();
-
-    app.UseAuthentication();
-
-    app.UseAuthorization();
-
-    app.MapControllers();
-
-    app.Run();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+using (var serviceScope =
+       ((IApplicationBuilder)app).ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var databaseInitializer = serviceScope.ServiceProvider.GetService<IDatabaseInitializer>();
+    databaseInitializer?.SeedAsync().Wait();
+}
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
