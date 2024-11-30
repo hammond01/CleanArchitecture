@@ -1,6 +1,10 @@
-﻿namespace ProductManager.Persistence;
+﻿using ProductManager.Domain.Entities.Identity;
+namespace ProductManager.Persistence;
 
-public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyContext
+public class ApplicationDbContext :
+    IdentityDbContext<User, IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>, UserRole, IdentityUserLogin<Guid>,
+        IdentityRoleClaim<Guid>,
+        IdentityUserToken<Guid>>, IUnitOfWork, IDataProtectionKeyContext
 {
     private IDbContextTransaction _dbContextTransaction = null!;
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -33,10 +37,7 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
 
     public virtual DbSet<OutboxEvent> OutboxEvents { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
-
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
@@ -58,6 +59,13 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
+        {
+            entity.HasKey(e => new
+            {
+                e.LoginProvider, e.ProviderKey
+            });
+        });
         modelBuilder.Entity<EmployeeTerritory>()
             .HasKey(et => new
             {
@@ -73,5 +81,34 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IDataProtectionKeyCo
             .HasOne(et => et.Territory)
             .WithMany(t => t.EmployeeTerritories)
             .HasForeignKey(et => et.TerritoryId);
+
+        ConfigureIdentityTableNames(modelBuilder);
+    }
+
+    private static void ConfigureIdentityTableNames(ModelBuilder builder)
+    {
+        builder.Entity<User>()
+            .HasMany(e => e.Roles);
+
+        builder.Entity<UserRole>()
+            .ToTable("UserRoles");
+
+        builder.Entity<IdentityUserLogin<Guid>>()
+            .ToTable("UserLogins");
+
+        builder.Entity<IdentityUserToken<Guid>>()
+            .ToTable("UserTokens");
+
+        builder.Entity<IdentityRoleClaim<Guid>>()
+            .ToTable("RoleClaims");
+
+        builder.Entity<IdentityUserClaim<Guid>>()
+            .ToTable("UserClaims");
+
+        builder.Entity<User>()
+            .ToTable("Users");
+
+        builder.Entity<Role>()
+            .ToTable("Roles");
     }
 }

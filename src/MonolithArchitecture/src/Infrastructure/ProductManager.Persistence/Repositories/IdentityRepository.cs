@@ -1,4 +1,5 @@
-﻿using ProductManager.Shared.DTOs.UserDto;
+﻿using ProductManager.Domain.Entities.Identity;
+using ProductManager.Shared.DTOs.UserDto;
 namespace ProductManager.Persistence.Repositories;
 
 public class IdentityRepository : IIdentityRepository
@@ -9,11 +10,11 @@ public class IdentityRepository : IIdentityRepository
     private readonly IdentityExtension _identityExtension;
     private readonly ILogger<IdentityRepository> _logger;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<User> _userManager;
     public IdentityRepository(IDatabaseInitializer databaseInitializer, EntityPermissions entityPermissions,
-        ILogger<IdentityRepository> logger, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager, IdentityExtension identityExtension)
+        ILogger<IdentityRepository> logger, RoleManager<IdentityRole> roleManager, UserManager<User> userManager,
+        SignInManager<User> signInManager, IdentityExtension identityExtension)
     {
         _databaseInitializer = databaseInitializer;
         _entityPermissions = entityPermissions;
@@ -207,7 +208,7 @@ public class IdentityRepository : IIdentityRepository
             return new ApiResponse(404, "User already exists.");
         }
 
-        var newUser = new ApplicationUser
+        var newUser = new User
         {
             UserName = parameters.UserName,
             FirstName = parameters.FirstName,

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using ProductManager.Domain.Entities.Identity;
 using ProductManager.Shared.DTOs.UserDto;
 namespace ProductManager.Persistence.Repositories;
 
@@ -8,11 +9,11 @@ public class AdminRepository : IAdminRepository
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<AdminRepository> _logger;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
     public AdminRepository(EntityPermissions entityPermissions, ILogger<AdminRepository> logger,
         RoleManager<IdentityRole> roleManager,
-        UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
+        UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
     {
         _entityPermissions = entityPermissions;
         _logger = logger;
@@ -185,7 +186,7 @@ public class AdminRepository : IAdminRepository
                 LastName = applicationUser.LastName,
                 UserName = applicationUser.UserName,
                 Email = applicationUser.Email,
-                UserId = new Guid(applicationUser.Id),
+                UserId = applicationUser.Id,
                 Roles = await _userManager.GetRolesAsync(applicationUser).ConfigureAwait(true) as List<string>
             });
         }
@@ -298,7 +299,7 @@ public class AdminRepository : IAdminRepository
         }
         return new ApiResponse(200, $"Role {roleDto.Name} updated", roleDto);
     }
-    public async Task<ApiResponse> AdminDeleteRoleAsync(String name)
+    public async Task<ApiResponse> AdminDeleteRoleAsync(string name)
     {
 
         var users = await _userManager.GetUsersInRoleAsync(name);

@@ -1,13 +1,14 @@
-﻿namespace ProductManager.Persistence;
+﻿using ProductManager.Domain.Entities.Identity;
+namespace ProductManager.Persistence;
 
 public class DatabaseInitializer : IDatabaseInitializer
 {
-    private readonly ApplicationIdentityDbContext _context;
+    private readonly ApplicationDbContext _context;
     private readonly EntityPermissions _entityPermissions;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<User> _userManager;
 
-    public DatabaseInitializer(ApplicationIdentityDbContext context, UserManager<ApplicationUser> userManager,
+    public DatabaseInitializer(ApplicationDbContext context, UserManager<User> userManager,
         RoleManager<IdentityRole> roleManager, EntityPermissions entityPermissions)
     {
         _context = context;
@@ -25,7 +26,8 @@ public class DatabaseInitializer : IDatabaseInitializer
     {
         await EnsureRoleAsync(DefaultRoleNames.Administrator, null);
 
-        await CreateUserAsync(DefaultUserNames.Administrator, "admin123", "Admin", "Template", "admin@template.com", "+84 (123) 456-7890",
+        await CreateUserAsync(DefaultUserNames.Administrator, "admin123", "Admin", "Template", "admin@template.com",
+        "+84 (123) 456-7890",
         [
             DefaultRoleNames.Administrator
         ]);
@@ -34,7 +36,7 @@ public class DatabaseInitializer : IDatabaseInitializer
         var allClaims = _entityPermissions.GetAllPermissionValues().Distinct();
         var roleClaims = (await _roleManager.GetClaimsAsync(adminRole!)).Select(c => c.Value).ToList();
 
-        var enumerable = allClaims as String[] ?? allClaims.ToArray();
+        var enumerable = allClaims as string[] ?? allClaims.ToArray();
         var newClaims = enumerable.Except(roleClaims);
         foreach (var claim in newClaims)
         {
@@ -84,8 +86,8 @@ public class DatabaseInitializer : IDatabaseInitializer
     }
 
 
-    private async Task CreateUserAsync(String userName, String password, String firstName, String lastName,
-        String email, String phoneNumber, String[]? roles = null)
+    private async Task CreateUserAsync(string userName, string password, string firstName, string lastName,
+        string email, string phoneNumber, string[]? roles = null)
     {
         var applicationUser = _userManager.FindByNameAsync(userName).Result;
 
@@ -93,7 +95,7 @@ public class DatabaseInitializer : IDatabaseInitializer
         {
             return;
         }
-        applicationUser = new ApplicationUser
+        applicationUser = new User
         {
             UserName = userName,
             Email = email,
