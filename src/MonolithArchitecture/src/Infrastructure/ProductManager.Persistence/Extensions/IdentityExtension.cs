@@ -2,10 +2,10 @@
 
 public class IdentityExtension
 {
-    private readonly ApplicationIdentityDbContext _context;
+    private readonly ApplicationDbContext _context;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IdentityConfig _identityConfig;
-    public IdentityExtension(IDateTimeProvider dateTimeProvider, ApplicationIdentityDbContext context,
+    public IdentityExtension(IDateTimeProvider dateTimeProvider, ApplicationDbContext context,
         IOptions<IdentityConfig> identityConfig)
     {
         _dateTimeProvider = dateTimeProvider;
@@ -19,7 +19,7 @@ public class IdentityExtension
         Created = _dateTimeProvider.UtcNow
     };
 
-    public async Task SaveRefreshTokenAsync(string userId, RefreshToken refreshToken)
+    public async Task SaveRefreshTokenAsync(Guid userId, RefreshToken refreshToken)
     {
         refreshToken.UserId = userId;
         await _context.RefreshTokens.AddAsync(refreshToken);
@@ -50,7 +50,7 @@ public class IdentityExtension
 
         return principal;
     }
-    public async Task<bool> ValidateRefreshTokenAsync(string userId, string refreshToken)
+    public async Task<bool> ValidateRefreshTokenAsync(Guid userId, string refreshToken)
     {
         var storedToken = await _context.RefreshTokens
             .Where(t => t.UserId == userId && t.Token == refreshToken)
