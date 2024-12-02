@@ -8,11 +8,11 @@ public class AdminRepository : IAdminRepository
     private readonly EntityPermissions _entityPermissions;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<AdminRepository> _logger;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly UserManager<User> _userManager;
 
     public AdminRepository(EntityPermissions entityPermissions, ILogger<AdminRepository> logger,
-        RoleManager<IdentityRole> roleManager,
+        RoleManager<Role> roleManager,
         UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
     {
         _entityPermissions = entityPermissions;
@@ -240,7 +240,7 @@ public class AdminRepository : IAdminRepository
             return new ApiResponse(Status400BadRequest, "Role already exists");
         }
 
-        var result = await _roleManager.CreateAsync(new IdentityRole(roleDto.Name));
+        var result = await _roleManager.CreateAsync(new Role(roleDto.Name));
 
         if (!result.Succeeded)
         {

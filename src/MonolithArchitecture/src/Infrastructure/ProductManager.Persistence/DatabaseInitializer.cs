@@ -5,11 +5,11 @@ public class DatabaseInitializer : IDatabaseInitializer
 {
     private readonly ApplicationDbContext _context;
     private readonly EntityPermissions _entityPermissions;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly UserManager<User> _userManager;
 
     public DatabaseInitializer(ApplicationDbContext context, UserManager<User> userManager,
-        RoleManager<IdentityRole> roleManager, EntityPermissions entityPermissions)
+        RoleManager<Role> roleManager, EntityPermissions entityPermissions)
     {
         _context = context;
         _userManager = userManager;
@@ -60,7 +60,8 @@ public class DatabaseInitializer : IDatabaseInitializer
     {
         if (await _roleManager.FindByNameAsync(roleName) == null)
         {
-            var role = new IdentityRole(roleName);
+            var role = new Role(roleName);
+
             var result = await _roleManager.CreateAsync(role);
 
             if (!result.Succeeded)
