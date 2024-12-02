@@ -9,11 +9,11 @@ public class IdentityRepository : IIdentityRepository
     private readonly EntityPermissions _entityPermissions;
     private readonly IdentityExtension _identityExtension;
     private readonly ILogger<IdentityRepository> _logger;
-    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
     public IdentityRepository(IDatabaseInitializer databaseInitializer, EntityPermissions entityPermissions,
-        ILogger<IdentityRepository> logger, RoleManager<IdentityRole> roleManager, UserManager<User> userManager,
+        ILogger<IdentityRepository> logger, RoleManager<Role> roleManager, UserManager<User> userManager,
         SignInManager<User> signInManager, IdentityExtension identityExtension)
     {
         _databaseInitializer = databaseInitializer;
