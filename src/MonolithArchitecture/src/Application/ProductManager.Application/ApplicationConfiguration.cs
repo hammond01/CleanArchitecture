@@ -9,6 +9,7 @@ public static class ApplicationConfiguration
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
         services.AddAutoMapper(typeof(MappingProfile));
+        services.AddScoped<UserService>();
         services.AddMessageHandlers();
         services.RegisterService();
         services.AddScoped(typeof(ICrudService<>), typeof(CrudService<>));

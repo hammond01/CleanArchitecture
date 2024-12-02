@@ -1,6 +1,7 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
     builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
@@ -42,27 +43,35 @@
         options.Lockout.MaxFailedAccessAttempts = 10;
         options.Lockout.AllowedForNewUsers = true;
     });
+
+    builder.Configuration
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", false, true)
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+        .AddEnvironmentVariables();
 }
 
 var app = builder.Build();
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+    using (var serviceScope =
+           ((IApplicationBuilder)app).ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+    {
+        var databaseInitializer = serviceScope.ServiceProvider.GetService<IDatabaseInitializer>();
+        databaseInitializer?.SeedAsync().Wait();
+    }
+    app.UseHttpsRedirection();
+
+    app.UseAuthentication();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+
 }
-using (var serviceScope =
-       ((IApplicationBuilder)app).ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-{
-    var databaseInitializer = serviceScope.ServiceProvider.GetService<IDatabaseInitializer>();
-    databaseInitializer?.SeedAsync().Wait();
-}
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
