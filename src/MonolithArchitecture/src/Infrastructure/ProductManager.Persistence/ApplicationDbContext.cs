@@ -1,16 +1,13 @@
 ﻿using ProductManager.Domain.Entities.Identity;
 namespace ProductManager.Persistence;
 
-public class ApplicationDbContext :
-    IdentityDbContext<User, IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>, UserRole, IdentityUserLogin<Guid>,
-        IdentityRoleClaim<Guid>,
-        IdentityUserToken<Guid>>, IUnitOfWork, IDataProtectionKeyContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<User, Role, Guid, IdentityUserClaim<Guid>, UserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>,
+            IdentityUserToken<Guid>>(options),
+        IUnitOfWork, IDataProtectionKeyContext
 {
     private IDbContextTransaction _dbContextTransaction = null!;
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
+
     public virtual DbSet<Categories> Categories { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }
@@ -37,6 +34,8 @@ public class ApplicationDbContext :
 
     public virtual DbSet<OutboxEvent> OutboxEvents { get; set; }
 
+    public virtual DbSet<ApiLogItem> ApiLogs { get; set; }
+
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
@@ -59,13 +58,8 @@ public class ApplicationDbContext :
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
-        {
-            entity.HasKey(e => new
-            {
-                e.LoginProvider, e.ProviderKey
-            });
-        });
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<EmployeeTerritory>()
             .HasKey(et => new
             {
@@ -82,13 +76,19 @@ public class ApplicationDbContext :
             .WithMany(t => t.EmployeeTerritories)
             .HasForeignKey(et => et.TerritoryId);
 
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
         ConfigureIdentityTableNames(modelBuilder);
     }
 
     private static void ConfigureIdentityTableNames(ModelBuilder builder)
     {
         builder.Entity<User>()
-            .HasMany(e => e.Roles);
+            .HasMany(e => e.Roles)
+            .WithMany(e => e.Users).UsingEntity<UserRole>(
+            configureRight: l => l.HasOne<Role>().WithMany().HasForeignKey(e => e.RoleId),
+            configureLeft: r => r.HasOne<User>().WithMany().HasForeignKey(e => e.UserId)
+            );
 
         builder.Entity<UserRole>()
             .ToTable("UserRoles");
