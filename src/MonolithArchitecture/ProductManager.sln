@@ -36,6 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Shared", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Constants", "src\CrossCuttingConcerns\ProductManager.Constants\ProductManager.Constants.csproj", "{E5EF3095-855D-419C-BD42-A3744CABCA2C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UIs", "UIs", "{3AE4868D-3514-4537-929D-3071E530C9F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Blazor", "src\Presentation\UIs\ProductManager.Blazor\ProductManager.Blazor.csproj", "{A2BF3280-4983-4F67-9289-BBF6AE798A61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +74,10 @@ Global
 		{E5EF3095-855D-419C-BD42-A3744CABCA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5EF3095-855D-419C-BD42-A3744CABCA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5EF3095-855D-419C-BD42-A3744CABCA2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2BF3280-4983-4F67-9289-BBF6AE798A61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2BF3280-4983-4F67-9289-BBF6AE798A61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2BF3280-4983-4F67-9289-BBF6AE798A61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2BF3280-4983-4F67-9289-BBF6AE798A61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +94,8 @@ Global
 		{1A954718-90ED-4AB9-A5BB-BD7BB2173241} = {BC44EA12-EF7F-499C-9FCF-F55718C83674}
 		{87C1E557-E074-49A3-AF04-EEFCAC8F97D2} = {1A954718-90ED-4AB9-A5BB-BD7BB2173241}
 		{E5EF3095-855D-419C-BD42-A3744CABCA2C} = {1A954718-90ED-4AB9-A5BB-BD7BB2173241}
+		{3AE4868D-3514-4537-929D-3071E530C9F0} = {7DB118A8-B133-4E5C-8BA2-0A434E7C4D4C}
+		{A2BF3280-4983-4F67-9289-BBF6AE798A61} = {3AE4868D-3514-4537-929D-3071E530C9F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C969E28-A5A7-4916-9E82-C3ADE21AED92}
