@@ -3,7 +3,7 @@
 [Index("CategoryName", Name = "CategoryName")]
 public class Categories : Entity<string>
 {
-    [StringLength(15)]
+    [StringLength(150)]
     public string CategoryName { get; set; } = null!;
 
     [StringLength(250)]
