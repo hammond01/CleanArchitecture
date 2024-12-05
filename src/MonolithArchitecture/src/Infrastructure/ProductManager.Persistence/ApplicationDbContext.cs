@@ -8,8 +8,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     private IDbContextTransaction _dbContextTransaction = null!;
 
-    public virtual DbSet<Categories> Categories { get; set; }
-
     public virtual DbSet<Customer> Customers { get; set; }
 
     public virtual DbSet<Employee> Employees { get; set; }
