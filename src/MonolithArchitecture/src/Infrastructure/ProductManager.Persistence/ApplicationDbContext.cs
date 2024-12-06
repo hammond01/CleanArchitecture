@@ -24,8 +24,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
 
-    public virtual DbSet<Suppliers> Suppliers { get; set; }
-
     public virtual DbSet<Territory> Territories { get; set; }
 
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
