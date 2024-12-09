@@ -1,4 +1,5 @@
-﻿using ProductManager.Domain.Entities.Identity;
+﻿using ProductManager.Constants.ApiResponseConstants;
+using ProductManager.Domain.Entities.Identity;
 using ProductManager.Shared.DTOs.UserDto;
 namespace ProductManager.Persistence.Repositories;
 
@@ -37,7 +38,7 @@ public class IdentityRepository : IIdentityRepository
             {
                 _logger.LogInformation("Two factor authentication required for user " + parameters.UserName);
 
-                return new ApiResponse(Status401Unauthorized, "Two factor authentication required")
+                return new ApiResponse(Status401Unauthorized, IdentityMessage.RequiresTwoFactor)
                 {
                     Result = new LoginResponseModel
                     {
@@ -49,13 +50,13 @@ public class IdentityRepository : IIdentityRepository
             if (result.IsLockedOut)
             {
                 _logger.LogInformation("User Locked out: " + parameters.UserName);
-                return new ApiResponse(Status401Unauthorized, "LockedUser");
+                return new ApiResponse(Status401Unauthorized, IdentityMessage.IsLockedOut);
             }
 
             if (result.IsNotAllowed)
             {
                 _logger.LogInformation($"User {parameters.UserName} not allowed to log in, because email is not confirmed");
-                return new ApiResponse(Status401Unauthorized, "EmailNotConfirmed");
+                return new ApiResponse(Status401Unauthorized, IdentityMessage.IsNotAllowed);
             }
 
             if (result.Succeeded)
@@ -110,15 +111,15 @@ public class IdentityRepository : IIdentityRepository
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token), RefreshToken = refreshToken.Token
                 };
-                return new ApiResponse(Status200OK, "LoginSuccess", loginResponse);
+                return new ApiResponse(Status200OK, IdentityMessage.LoginSuccess, loginResponse);
             }
             _logger.LogInformation($"Invalid Password for user {parameters.UserName}");
-            return new ApiResponse(Status401Unauthorized, "LoginFailed");
+            return new ApiResponse(Status401Unauthorized, IdentityMessage.LoginFailed);
         }
         catch (Exception ex)
         {
             _logger.LogError($"Login Failed: {ex.GetBaseException().Message}");
-            return new ApiResponse(Status500InternalServerError, "LoginFailed");
+            return new ApiResponse(Status500InternalServerError, IdentityMessage.LoginFailed);
         }
     }
     public async Task<ApiResponse> RefreshToken(string token, string refreshToken)
@@ -129,7 +130,7 @@ public class IdentityRepository : IIdentityRepository
         var user = await _userManager.FindByNameAsync(userName!);
         if (user == null || !await _identityExtension.ValidateRefreshTokenAsync(user.Id, refreshToken))
         {
-            return new ApiResponse(Status401Unauthorized, "Invalid refresh token");
+            return new ApiResponse(Status401Unauthorized, IdentityMessage.InvalidRefreshToken);
         }
 
         var authClaims = new List<Claim>
@@ -184,7 +185,7 @@ public class IdentityRepository : IIdentityRepository
         {
             Token = new JwtSecurityTokenHandler().WriteToken(newJwtToken), RefreshToken = newRefreshToken.Token
         };
-        return new ApiResponse(Status200OK, "TokenRefreshed", response);
+        return new ApiResponse(Status200OK, IdentityMessage.TokenRefreshed, response);
     }
     public async Task<ApiResponse> Logout(ClaimsPrincipal authenticatedUser)
     {
@@ -192,20 +193,20 @@ public class IdentityRepository : IIdentityRepository
         {
             await _signInManager.SignOutAsync();
         }
-        return new ApiResponse(Status200OK, "Logout Successful");
+        return new ApiResponse(Status200OK, IdentityMessage.LogoutSuccess);
     }
     public async Task<ApiResponse> Register(RegisterRequest parameters)
     {
         if (string.IsNullOrWhiteSpace(parameters.UserName) ||
             string.IsNullOrWhiteSpace(parameters.Password))
         {
-            return new ApiResponse(404, "Username and password are required.");
+            return new ApiResponse(404, IdentityMessage.UserNameAndPassRequired);
         }
 
         var existingUser = await _userManager.FindByNameAsync(parameters.UserName);
         if (existingUser != null)
         {
-            return new ApiResponse(404, "User already exists.");
+            return new ApiResponse(404, IdentityMessage.UserAlreadyExists);
         }
 
         var newUser = new User
@@ -219,10 +220,10 @@ public class IdentityRepository : IIdentityRepository
         var result = await _userManager.CreateAsync(newUser, parameters.Password);
         if (result.Succeeded)
         {
-            return new ApiResponse(200, "User registered successfully.");
+            return new ApiResponse(200, IdentityMessage.RegisteredSuccess);
         }
         var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-        return new ApiResponse(404, $"Registration failed: {errors}");
+        return new ApiResponse(404, $"{IdentityMessage.RegisteredFailed}{errors}");
     }
     public async Task<ApiResponse> ConfirmEmail(ConfirmEmailDto parameters)
     {
@@ -231,12 +232,12 @@ public class IdentityRepository : IIdentityRepository
         if (user == null)
         {
             _logger.LogInformation($"The user {parameters.UserId} doesn't exist");
-            return new ApiResponse(Status404NotFound, "The user doesn't exist");
+            return new ApiResponse(Status404NotFound, IdentityMessage.UserDoesNotExist);
         }
 
         if (user.EmailConfirmed)
         {
-            return new ApiResponse(Status200OK, "EmailVerificationSuccessful");
+            return new ApiResponse(Status200OK, IdentityMessage.EmailVerificationSuccessful);
         }
         var token = parameters.Token;
         var result = await _userManager.ConfirmEmailAsync(user, token);
@@ -252,6 +253,6 @@ public class IdentityRepository : IIdentityRepository
         await _userManager.AddClaimAsync(user,
         new Claim(ApplicationClaimTypes.EmailVerified, ClaimValues.TrueString, ClaimValueTypes.Boolean));
 
-        return new ApiResponse(Status200OK, "EmailVerificationSuccessful");
+        return new ApiResponse(Status200OK, IdentityMessage.EmailVerificationSuccessful);
     }
 }
