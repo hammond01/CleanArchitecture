@@ -27,11 +27,11 @@ internal class AddOrUpdateProductHandler : ICommandHandler<AddOrUpdateProductCom
                 command.Products.Id = UlidExtension.Generate();
                 await _crudService.AddAsync(command.Products, cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                return new ApiResponse(201, "Product created successfully");
+                return new ApiResponse(201, CRUDMessage.CreateSuccess);
             }
             await _crudService.UpdateAsync(command.Products, cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            return new ApiResponse(200, "Product updated successfully");
+            return new ApiResponse(200, CRUDMessage.UpdateSuccess);
         }
     }
 }

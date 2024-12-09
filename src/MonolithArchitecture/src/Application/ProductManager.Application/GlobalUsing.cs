@@ -20,3 +20,4 @@ global using ProductManager.Constants;
 global using ProductManager.Domain.Identity;
 global using ProductManager.Persistence.Extensions;
 global using System.Data;
+global using ProductManager.Constants.ApiResponseConstants;

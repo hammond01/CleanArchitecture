@@ -27,11 +27,11 @@ internal class AddOrUpdateSupplierCommandHandler : ICommandHandler<AddOrUpdateSu
                 command.Supplier.Id = UlidExtension.Generate();
                 await _supplierService.AddAsync(command.Supplier, cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                return new ApiResponse(201, "Supplier created successfully");
+                return new ApiResponse(201, CRUDMessage.CreateSuccess);
             }
             await _supplierService.UpdateAsync(command.Supplier, cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            return new ApiResponse(200, "Supplier updated successfully");
+            return new ApiResponse(200, CRUDMessage.UpdateSuccess);
         }
     }
 }
