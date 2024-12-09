@@ -23,7 +23,7 @@ public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryComman
 
         return new ApiResponse
         {
-            Message = "Category deleted successfully"
+            Message = CRUDMessage.DeleteSuccess
         };
     }
 }

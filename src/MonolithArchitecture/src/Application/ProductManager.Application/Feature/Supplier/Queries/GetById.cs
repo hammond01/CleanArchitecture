@@ -20,6 +20,6 @@ public class GetSupplierByIdHandler : IQueryHandler<GetSupplierByIdQuery, ApiRes
     {
         var categories = await _crudService.GetByIdAsync(request.SupplierId, cancellationToken);
         return categories == null ? new ApiResponse(404, "No data found.")
-            : new ApiResponse(200, "Get data by Id successfully", categories);
+            : new ApiResponse(200, CRUDMessage.GetSuccess, categories);
     }
 }

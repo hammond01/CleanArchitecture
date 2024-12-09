@@ -11,6 +11,6 @@ internal class GetsSupplierHandler : IQueryHandler<GetSuppliers, ApiResponse>
     public async Task<ApiResponse> HandleAsync(GetSuppliers query, CancellationToken cancellationToken = default)
     {
         var response = await _crudService.GetAsync(cancellationToken);
-        return new ApiResponse(200, "Get suppliers successfully", response);
+        return new ApiResponse(200, CRUDMessage.GetSuccess, response);
     }
 }
