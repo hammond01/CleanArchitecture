@@ -24,7 +24,7 @@ public class DeleteSupplierCommandHandler : ICommandHandler<DeleteSupplierComman
 
         return new ApiResponse
         {
-            Message = "Supplier deleted successfully"
+            Message = CRUDMessage.DeleteSuccess
         };
     }
 }

@@ -23,7 +23,7 @@ public class DeleteProductCommandHandler : ICommandHandler<DeleteProductCommand,
 
         return new ApiResponse
         {
-            Message = "Product deleted successfully"
+            Message = CRUDMessage.DeleteSuccess
         };
     }
 }

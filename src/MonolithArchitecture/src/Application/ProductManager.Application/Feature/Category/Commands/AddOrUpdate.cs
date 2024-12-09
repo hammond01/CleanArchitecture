@@ -27,11 +27,11 @@ internal class AddOrUpdateCategoryHandler : ICommandHandler<AddOrUpdateCategoryC
                 command.Categories.Id = UlidExtension.Generate();
                 await _categoryService.AddAsync(command.Categories, cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                return new ApiResponse(201, "Category created successfully");
+                return new ApiResponse(201, CRUDMessage.CreateSuccess);
             }
             await _categoryService.UpdateAsync(command.Categories, cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            return new ApiResponse(200, "Category updated successfully");
+            return new ApiResponse(200, CRUDMessage.UpdateSuccess);
         }
     }
 }

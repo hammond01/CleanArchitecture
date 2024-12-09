@@ -24,7 +24,7 @@ public class DeleteOrderCommandHandler : ICommandHandler<DeleteOrderCommand, Api
 
         return new ApiResponse
         {
-            Message = "Order deleted successfully"
+            Message = CRUDMessage.DeleteSuccess
         };
     }
 }
