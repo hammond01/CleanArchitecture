@@ -1,6 +1,5 @@
 ﻿global using Microsoft.EntityFrameworkCore;
 global using ProductManager.Domain.Entities;
-global using AutoMapper;
 global using ProductManager.Domain.Common;
 global using ProductManager.Domain.Repositories;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,8 +20,8 @@ global using Microsoft.Extensions.Logging;
 global using ProductManager.Shared.DateTimes;
 global using ProductManager.Domain.DTOs.AdminDto;
 global using SolidTemplate.Constants.ConfigurationOptions;
-global using ProductManager.Infrastructure.DateTimes;
 global using System.Security.Cryptography;
 global using System.Text;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
