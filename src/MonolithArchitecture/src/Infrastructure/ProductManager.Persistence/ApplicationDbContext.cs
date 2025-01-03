@@ -8,8 +8,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     private IDbContextTransaction _dbContextTransaction = null!;
 
-    public virtual DbSet<Customer> Customers { get; set; }
-
     public virtual DbSet<Employee> Employees { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
@@ -18,17 +16,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public virtual DbSet<Products> Products { get; set; }
 
-    public virtual DbSet<Region> Regions { get; set; }
-
-    public virtual DbSet<Shipper> Shippers { get; set; }
-
     public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
 
-    public virtual DbSet<Territory> Territories { get; set; }
-
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
-
-    public virtual DbSet<OutboxEvent> OutboxEvents { get; set; }
 
     public virtual DbSet<ApiLogItem> ApiLogs { get; set; }
 

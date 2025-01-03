@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-namespace ProductManager.Persistence.MappingConfigurations;
+﻿namespace ProductManager.Persistence.MappingConfigurations;
 
 public class CategoryConfiguration : IEntityTypeConfiguration<Categories>
 {
