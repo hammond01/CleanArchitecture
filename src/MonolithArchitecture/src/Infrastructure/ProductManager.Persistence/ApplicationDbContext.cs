@@ -7,12 +7,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         IUnitOfWork, IDataProtectionKeyContext
 {
     private IDbContextTransaction _dbContextTransaction = null!;
-
-    public virtual DbSet<Employee> Employees { get; set; }
-
-    public virtual DbSet<Products> Products { get; set; }
-
-    public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
@@ -36,25 +30,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<EmployeeTerritory>()
-            .HasKey(et => new
-            {
-                et.EmployeeId, et.TerritoryId
-            });
-
-        modelBuilder.Entity<EmployeeTerritory>()
-            .HasOne(et => et.Employee)
-            .WithMany(e => e.EmployeeTerritories)
-            .HasForeignKey(et => et.EmployeeId);
-
-        modelBuilder.Entity<EmployeeTerritory>()
-            .HasOne(et => et.Territory)
-            .WithMany(t => t.EmployeeTerritories)
-            .HasForeignKey(et => et.TerritoryId);
-
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-
         ConfigureIdentityTableNames(modelBuilder);
     }
 
