@@ -10,10 +10,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public virtual DbSet<Employee> Employees { get; set; }
 
-    public virtual DbSet<Order> Orders { get; set; }
-
-    public virtual DbSet<OrderDetail> OrderDetails { get; set; }
-
     public virtual DbSet<Products> Products { get; set; }
 
     public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
@@ -21,7 +17,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public virtual DbSet<AuditLog> AuditLogs { get; set; }
 
     public virtual DbSet<ApiLogItem> ApiLogs { get; set; }
-
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
