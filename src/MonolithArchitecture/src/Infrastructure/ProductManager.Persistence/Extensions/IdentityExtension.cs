@@ -2,28 +2,28 @@
 
 public class IdentityExtension
 {
-    private readonly ApplicationDbContext _context;
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IdentityConfig _identityConfig;
-    public IdentityExtension(IDateTimeProvider dateTimeProvider, ApplicationDbContext context,
-        IOptions<IdentityConfig> identityConfig)
+    private readonly IRepository<RefreshToken, string> _refreshTokenRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    public IdentityExtension(IDateTimeProvider dateTimeProvider, IOptions<IdentityConfig> identityConfig,
+        IRepository<RefreshToken, string> refreshTokenRepository, IUnitOfWork unitOfWork)
     {
         _dateTimeProvider = dateTimeProvider;
-        _context = context;
+        _refreshTokenRepository = refreshTokenRepository;
+        _unitOfWork = unitOfWork;
         _identityConfig = identityConfig.Value;
     }
     public RefreshToken GenerateRefreshToken() => new RefreshToken
     {
-        Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-        Expires = _dateTimeProvider.UtcNow.AddDays(7),
-        Created = _dateTimeProvider.UtcNow
+        Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)), Expires = _dateTimeProvider.UtcNow.AddDays(7)
     };
 
     public async Task SaveRefreshTokenAsync(Guid userId, RefreshToken refreshToken)
     {
         refreshToken.UserId = userId;
-        // await _context.RefreshTokens.AddAsync(refreshToken);
-        await _context.SaveChangesAsync();
+        await _refreshTokenRepository.AddAsync(refreshToken);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -50,14 +50,12 @@ public class IdentityExtension
 
         return principal;
     }
-    public static async Task<bool> ValidateRefreshTokenAsync(Guid userId, string refreshToken)
+    public async Task<bool> ValidateRefreshTokenAsync(Guid userId, string refreshToken)
     {
-        // var storedToken = await _context.RefreshTokens
-        //     .Where(t => t.UserId == userId && t.Token == refreshToken)
-        //     .FirstOrDefaultAsync();
-        // return storedToken is { IsExpired: false, Revoked: null };
-        await Task.Delay(100);
-        return true;
+        var storedToken = await _refreshTokenRepository.GetQueryableSet()
+            .Where(t => t.UserId == userId && t.Token == refreshToken)
+            .FirstOrDefaultAsync();
+        return storedToken is { IsExpired: false, Revoked: null };
     }
 
     public JwtSecurityToken GenerateJwtToken(List<Claim> claims)
