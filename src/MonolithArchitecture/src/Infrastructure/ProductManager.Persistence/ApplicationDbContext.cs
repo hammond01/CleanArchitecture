@@ -7,7 +7,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         IUnitOfWork, IDataProtectionKeyContext
 {
     private IDbContextTransaction _dbContextTransaction = null!;
-    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
