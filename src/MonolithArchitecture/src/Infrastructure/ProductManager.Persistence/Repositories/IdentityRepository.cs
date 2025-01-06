@@ -128,7 +128,7 @@ public class IdentityRepository : IIdentityRepository
         var userName = principal.Identity!.Name;
 
         var user = await _userManager.FindByNameAsync(userName!);
-        if (user == null || !await IdentityExtension.ValidateRefreshTokenAsync(user.Id, refreshToken))
+        if (user == null || !await _identityExtension.ValidateRefreshTokenAsync(user.Id, refreshToken))
         {
             return new ApiResponse(Status401Unauthorized, IdentityMessage.InvalidRefreshToken);
         }
