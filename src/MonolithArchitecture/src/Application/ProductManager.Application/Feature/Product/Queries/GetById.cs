@@ -18,7 +18,7 @@ public class GetProductByIdHandler : IQueryHandler<GetProductByIdQuery, ApiRespo
 
     public async Task<ApiResponse> HandleAsync(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
-        var categories = await _crudService.GetByIdAsync(request.ProductId, cancellationToken);
+        var categories = await _crudService.GetByIdAsync(request.ProductId);
         return categories == null ? new ApiResponse(404, "No data found.")
             : new ApiResponse(200, "Get data by Id successfully", categories);
     }

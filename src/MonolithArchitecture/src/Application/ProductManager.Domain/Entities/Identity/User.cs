@@ -1,5 +1,4 @@
-﻿using ProductManager.Domain.Enum;
-namespace ProductManager.Domain.Entities.Identity;
+﻿namespace ProductManager.Domain.Entities.Identity;
 
 public class User : IdentityUser<Guid>
 {

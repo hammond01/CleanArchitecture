@@ -9,3 +9,6 @@ global using ProductManager.Shared.DTOs.UserDto;
 global using Microsoft.AspNetCore.Identity;
 global using ProductManager.Domain.Entities;
 global using ProductManager.Domain.DTOs.AdminDto;
+global using ProductManager.Domain.Entities.Identity;
+global using System.Text.Json.Serialization;
+global using ProductManager.Domain.Enum;

@@ -1,5 +1,4 @@
-﻿using ProductManager.Domain.Entities.Identity;
-namespace ProductManager.Domain.Identity;
+﻿namespace ProductManager.Domain.Identity;
 
 public interface IPasswordHasher
 {

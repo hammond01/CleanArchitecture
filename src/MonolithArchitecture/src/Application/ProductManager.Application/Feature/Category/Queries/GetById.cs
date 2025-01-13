@@ -18,7 +18,7 @@ public class GetCategoryByIdHandler : IQueryHandler<GetCategoryByIdQuery, ApiRes
 
     public async Task<ApiResponse> HandleAsync(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var categories = await _categoryService.GetByIdAsync(request.CategoryId, cancellationToken);
+        var categories = await _categoryService.GetByIdAsync(request.CategoryId);
         return categories == null ? new ApiResponse(404, "No data found.")
             : new ApiResponse(200, "Get data by Id successfully", categories);
     }

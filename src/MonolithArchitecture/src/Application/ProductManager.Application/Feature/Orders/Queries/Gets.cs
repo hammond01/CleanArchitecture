@@ -10,7 +10,7 @@ internal class GetsOrderHandler : IQueryHandler<GetOrders, ApiResponse>
     }
     public async Task<ApiResponse> HandleAsync(GetOrders query, CancellationToken cancellationToken = default)
     {
-        var response = await _crudService.GetAsync(cancellationToken);
+        var response = await _crudService.GetAsync();
         return new ApiResponse(200, "Get suppliers successfully", response);
     }
 }

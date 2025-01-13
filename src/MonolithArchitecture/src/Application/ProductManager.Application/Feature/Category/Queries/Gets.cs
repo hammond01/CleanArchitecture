@@ -10,7 +10,7 @@ internal class GetsCategoryHandler : IQueryHandler<GetCategories, ApiResponse>
     }
     public async Task<ApiResponse> HandleAsync(GetCategories query, CancellationToken cancellationToken = default)
     {
-        var response = await _categoryService.GetAsync(cancellationToken);
+        var response = await _categoryService.GetAsync();
         return new ApiResponse(200, "Get categories successfully", response);
     }
 }
