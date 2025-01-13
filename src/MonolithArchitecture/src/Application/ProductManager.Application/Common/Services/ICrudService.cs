@@ -2,9 +2,9 @@
 
 public interface ICrudService<T>
 {
-    Task<List<T>> GetAsync(CancellationToken cancellationToken = default);
+    Task<List<T>> GetAsync();
 
-    Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+    Task<T?> GetByIdAsync(string id);
 
     Task AddAsync(T entity, CancellationToken cancellationToken = default);
 

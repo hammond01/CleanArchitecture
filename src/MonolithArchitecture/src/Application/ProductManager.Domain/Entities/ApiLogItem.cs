@@ -1,5 +1,4 @@
-﻿using ProductManager.Domain.Entities.Identity;
-namespace ProductManager.Domain.Entities;
+﻿namespace ProductManager.Domain.Entities;
 
 public class ApiLogItem
 {
