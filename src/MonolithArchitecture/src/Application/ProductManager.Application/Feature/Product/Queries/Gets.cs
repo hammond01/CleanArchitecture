@@ -10,7 +10,7 @@ internal class GetsProductsHandler : IQueryHandler<GetProducts, ApiResponse>
     }
     public async Task<ApiResponse> HandleAsync(GetProducts query, CancellationToken cancellationToken = default)
     {
-        var response = await _crudService.GetAsync(cancellationToken);
+        var response = await _crudService.GetAsync();
         return new ApiResponse(200, "Get product successfully", response);
     }
 }

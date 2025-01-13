@@ -14,7 +14,7 @@ public class CrudService<T> : ICrudService<T>
         _dispatcher = dispatcher;
     }
 
-    public Task<List<T>> GetAsync(CancellationToken cancellationToken = default)
+    public Task<List<T>> GetAsync()
         => _repository.ToListAsync(_repository.GetQueryableSet());
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
@@ -38,7 +38,7 @@ public class CrudService<T> : ICrudService<T>
         await _dispatcher.DispatchAsync(new EntityDeletedEvent<T>(entity, DateTime.UtcNow), cancellationToken);
     }
 
-    public async Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<T?> GetByIdAsync(string id)
     {
         ValidationException.Requires(id != string.Empty, "Invalid Id");
         return await _repository.FirstOrDefaultAsync(_repository.GetQueryableSet().Where(x => x.Id == id));

@@ -3,16 +3,16 @@
 internal class HandlerFactory
 {
     private readonly List<Func<object, Type, IServiceProvider, object>> _handlerFactoriesPipeline =
-        new List<Func<object, Type, IServiceProvider, object>>();
+        [];
 
     public HandlerFactory(Type type)
     {
         AddHandlerFactory(type);
         AddDecoratedFactories(type);
     }
-    public Object? Create(IServiceProvider provider, Type handlerInterfaceType)
+    public object? Create(IServiceProvider provider, Type handlerInterfaceType)
     {
-        Object? currentHandler = null;
+        object? currentHandler = null;
         foreach (var handlerFactory in _handlerFactoriesPipeline)
         {
             currentHandler = handlerFactory(currentHandler!, handlerInterfaceType, provider);
@@ -49,6 +49,7 @@ internal class HandlerFactory
     private void AddHandlerFactory(Type handlerType, object attribute = null!)
     {
         _handlerFactoriesPipeline.Add(CreateHandler);
+        return;
 
         object CreateHandler(object decoratingHandler, Type interfaceType, IServiceProvider provider)
         {
@@ -79,7 +80,7 @@ internal class HandlerFactory
                 return current;
             }
 
-            if (parameterType == attribute?.GetType())
+            if (parameterType == attribute.GetType())
             {
                 return attribute;
             }
