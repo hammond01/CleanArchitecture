@@ -25,3 +25,7 @@ global using System.Text;
 global using Microsoft.Extensions.Options;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Data.SqlClient;
+global using ProductManager.Shared.Locks;
+global using ProductManager.Shared.Exceptions;
+global using Microsoft.EntityFrameworkCore.Migrations;

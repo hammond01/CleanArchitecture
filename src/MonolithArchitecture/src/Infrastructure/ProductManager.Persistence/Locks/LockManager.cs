@@ -1,7 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using ProductManager.Shared.Exceptions;
-using ProductManager.Shared.Locks;
-namespace ProductManager.Persistence.Locks;
+﻿namespace ProductManager.Persistence.Locks;
 
 public class LockManager : ILockManager
 {
