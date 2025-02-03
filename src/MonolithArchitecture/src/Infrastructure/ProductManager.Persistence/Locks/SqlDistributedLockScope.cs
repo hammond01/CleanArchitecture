@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using ProductManager.Shared.Locks;
-namespace ProductManager.Persistence.Locks;
+﻿namespace ProductManager.Persistence.Locks;
 
 public class SqlDistributedLockScope : IDistributedLockScope
 {

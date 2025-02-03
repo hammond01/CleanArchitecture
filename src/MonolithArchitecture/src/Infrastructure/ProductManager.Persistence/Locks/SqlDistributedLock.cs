@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using ProductManager.Shared.Locks;
-namespace ProductManager.Persistence.Locks;
+﻿namespace ProductManager.Persistence.Locks;
 
 public class SqlDistributedLock : IDistributedLock
 {
@@ -64,7 +62,9 @@ public class SqlDistributedLock : IDistributedLock
 
         returnValue = command.Parameters.Add(new SqlParameter
         {
-            ParameterName = "Result", DbType = DbType.Int32, Direction = ParameterDirection.Output
+            ParameterName = "Result",
+            DbType = DbType.Int32,
+            Direction = ParameterDirection.Output
         });
         command.CommandText =
             $@"IF APPLOCK_MODE('public', @Resource, @LockOwner) != 'NoLock' {(HasTransaction ? " OR APPLOCK_MODE('public', @Resource, 'Session') != 'NoLock'" : string.Empty)}
