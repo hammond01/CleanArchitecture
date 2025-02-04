@@ -1,0 +1,15 @@
+@inherits LayoutComponentBase
+<BootstrapBlazorRoot>
+    <Layout SideWidth="0" TabDefaultUrl="/auth/change-password"
+            AdditionalAssemblies="new[] { GetType().Assembly }" class="">
+        <Main>
+            <CascadingValue Value="this" IsFixed="true">
+                @Body
+            </CascadingValue>
+        </Main>
+        <NotFound>
+            <p>Sorry, there's nothing at this address.</p>
+        </NotFound>
+    </Layout>
+
+</BootstrapBlazorRoot>
