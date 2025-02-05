@@ -4,17 +4,6 @@
     box-sizing: border-box;
 }
 
-body {
-    background: #f6f5f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    height: 96vh;
-    margin: -20px 0 50px;
-}
-
 h1 {
     font-weight: bold;
     margin: 0;
@@ -28,7 +17,7 @@ p {
     font-size: 14px;
     font-weight: 100;
     line-height: 20px;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     margin: 20px 0 30px;
 }
 
@@ -97,10 +86,10 @@ input {
     overflow: hidden;
     width: 768px;
     max-width: 100%;
-    min-height: 480px;
-    top: 25%;
+    min-height: 550px;
+    top: 35%;
 }
-
+ 
 .form-container {
     position: absolute;
     top: 0;

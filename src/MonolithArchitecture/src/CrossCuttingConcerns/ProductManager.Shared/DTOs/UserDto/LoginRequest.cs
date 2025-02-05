@@ -2,8 +2,8 @@
 
 public class LoginRequest : AccountFormModel
 {
-    public required string UserName { get; set; }
+    public required string UserName { get; set; } = string.Empty;
 
     [DataType(DataType.Password)]
-    public required string Password { get; set; }
+    public required string Password { get; set; } = string.Empty;
 }
