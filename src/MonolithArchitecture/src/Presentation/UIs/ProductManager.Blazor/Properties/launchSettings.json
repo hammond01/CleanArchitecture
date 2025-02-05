@@ -10,14 +10,14 @@
     "profiles": {
         "IIS Express": {
             "commandName": "IISExpress",
-            "launchBrowser": true,
+            "launchBrowser": false,
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
         },
         "ProductManager.Blazor": {
             "commandName": "Project",
-            "launchBrowser": true,
+            "launchBrowser": false,
             "applicationUrl": "http://localhost:5201",
             "environmentVariables": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
