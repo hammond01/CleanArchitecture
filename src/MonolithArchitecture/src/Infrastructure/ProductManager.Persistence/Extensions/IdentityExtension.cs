@@ -66,7 +66,7 @@ public class IdentityExtension
         return new JwtSecurityToken(
         _identityConfig.ISSUER,
         _identityConfig.AUDIENCE,
-        expires: _dateTimeProvider.UtcNow.AddMinutes(5),
+        expires: _dateTimeProvider.UtcNow.AddHours(12),
         claims: claims,
         signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha256));
     }
