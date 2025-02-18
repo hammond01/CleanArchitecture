@@ -5,7 +5,6 @@ namespace ProductManager.Persistence.Repositories;
 
 public class IdentityRepository : IIdentityRepository
 {
-
     private readonly IDatabaseInitializer _databaseInitializer;
     private readonly EntityPermissions _entityPermissions;
     private readonly IdentityExtension _identityExtension;
@@ -185,6 +184,10 @@ public class IdentityRepository : IIdentityRepository
         {
             Token = new JwtSecurityTokenHandler().WriteToken(newJwtToken), RefreshToken = newRefreshToken.Token
         };
+
+        // Revoked refresh tokens to be used
+        await _identityExtension.RevokeRefreshTokenAsync(refreshToken);
+
         return new ApiResponse(Status200OK, IdentityMessage.TokenRefreshed, response);
     }
     public async Task<ApiResponse> Logout(ClaimsPrincipal authenticatedUser)

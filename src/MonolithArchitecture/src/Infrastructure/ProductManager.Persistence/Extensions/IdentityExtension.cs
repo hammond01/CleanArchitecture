@@ -16,11 +16,13 @@ public class IdentityExtension
     }
     public RefreshToken GenerateRefreshToken() => new RefreshToken
     {
-        Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)), Expires = _dateTimeProvider.UtcNow.AddDays(7)
+        Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+        Expires = _dateTimeProvider.OffsetUtcNow.DateTime.AddDays(7)
     };
 
     public async Task SaveRefreshTokenAsync(Guid userId, RefreshToken refreshToken)
     {
+        refreshToken.Id = UlidExtension.Generate();
         refreshToken.UserId = userId;
         await _refreshTokenRepository.AddAsync(refreshToken);
         await _unitOfWork.SaveChangesAsync();
@@ -66,8 +68,20 @@ public class IdentityExtension
         return new JwtSecurityToken(
         _identityConfig.ISSUER,
         _identityConfig.AUDIENCE,
-        expires: _dateTimeProvider.UtcNow.AddHours(12),
+        expires: _dateTimeProvider.OffsetUtcNow.DateTime.AddHours(12),
         claims: claims,
         signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha256));
+    }
+
+    public async Task RevokeRefreshTokenAsync(string refreshToken)
+    {
+        var storedToken = await _refreshTokenRepository.GetQueryableSet()
+            .Where(t => t.Token == refreshToken)
+            .FirstOrDefaultAsync();
+        if (storedToken != null)
+        {
+            storedToken.Revoked = _dateTimeProvider.OffsetUtcNow.DateTime;
+        }
+        await _unitOfWork.SaveChangesAsync();
     }
 }

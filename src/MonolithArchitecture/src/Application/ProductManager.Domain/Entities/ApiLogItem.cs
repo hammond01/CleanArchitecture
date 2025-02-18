@@ -6,7 +6,7 @@ public class ApiLogItem
     public long Id { get; set; }
 
     [Required(ErrorMessage = "FieldRequired")]
-    public DateTime RequestTime { get; set; }
+    public DateTimeOffset RequestTime { get; set; }
 
     [Required(ErrorMessage = "FieldRequired")]
     public long ResponseMillis { get; set; }

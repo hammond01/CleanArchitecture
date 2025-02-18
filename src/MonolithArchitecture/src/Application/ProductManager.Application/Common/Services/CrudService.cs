@@ -21,21 +21,21 @@ public class CrudService<T> : ICrudService<T>
     {
         await _repository.AddAsync(entity, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        await _dispatcher.DispatchAsync(new EntityCreatedEvent<T>(entity, DateTime.UtcNow), cancellationToken);
+        await _dispatcher.DispatchAsync(new EntityCreatedEvent<T>(entity, DateTimeOffset.UtcNow), cancellationToken);
     }
 
     public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
     {
         await _repository.UpdateAsync(entity, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        await _dispatcher.DispatchAsync(new EntityUpdatedEvent<T>(entity, DateTime.UtcNow), cancellationToken);
+        await _dispatcher.DispatchAsync(new EntityUpdatedEvent<T>(entity, DateTimeOffset.UtcNow), cancellationToken);
     }
 
     public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
     {
         _repository.Delete(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        await _dispatcher.DispatchAsync(new EntityDeletedEvent<T>(entity, DateTime.UtcNow), cancellationToken);
+        await _dispatcher.DispatchAsync(new EntityDeletedEvent<T>(entity, DateTimeOffset.UtcNow), cancellationToken);
     }
 
     public async Task<T?> GetByIdAsync(string id)
