@@ -2,8 +2,7 @@
 
 internal class HandlerFactory
 {
-    private readonly List<Func<object, Type, IServiceProvider, object>> _handlerFactoriesPipeline =
-        [];
+    private readonly List<Func<object, Type, IServiceProvider, object>> _handlerFactoriesPipeline = [];
 
     public HandlerFactory(Type type)
     {
@@ -11,15 +10,8 @@ internal class HandlerFactory
         AddDecoratedFactories(type);
     }
     public object? Create(IServiceProvider provider, Type handlerInterfaceType)
-    {
-        object? currentHandler = null;
-        foreach (var handlerFactory in _handlerFactoriesPipeline)
-        {
-            currentHandler = handlerFactory(currentHandler!, handlerInterfaceType, provider);
-        }
-
-        return currentHandler;
-    }
+        => _handlerFactoriesPipeline.Aggregate<Func<object, Type, IServiceProvider, object>?, object?>(null,
+        func: (current, handlerFactory) => handlerFactory!(current!, handlerInterfaceType, provider));
 
     private void AddDecoratedFactories(Type type)
     {
@@ -40,10 +32,7 @@ internal class HandlerFactory
                 continue;
             }
 
-            if (decoratorHandlerType != null!)
-            {
-                AddHandlerFactory(decoratorHandlerType, attribute);
-            }
+            AddHandlerFactory(decoratorHandlerType, attribute);
         }
     }
     private void AddHandlerFactory(Type handlerType, object attribute = null!)
@@ -66,7 +55,8 @@ internal class HandlerFactory
             return handler;
         }
     }
-    private static object[] GetParameters(IEnumerable<ParameterInfo> parameterInfos, object current, object attribute,
+
+    private static object[] GetParameters(IEnumerable<ParameterInfo> parameterInfos, object current, object? attribute,
         IServiceProvider provider)
     {
         return parameterInfos.Select(GetParameter).ToArray();
@@ -80,7 +70,7 @@ internal class HandlerFactory
                 return current;
             }
 
-            if (parameterType == attribute.GetType())
+            if (parameterType == attribute?.GetType())
             {
                 return attribute;
             }
