@@ -113,15 +113,14 @@ public class DatabaseInitializer : IDatabaseInitializer
             throw new Exception(result.Errors.First().Description);
         }
 
-        result = _userManager.AddClaimsAsync(applicationUser, new[]
-        {
+        result = _userManager.AddClaimsAsync(applicationUser, [
             new Claim(ClaimTypes.Name, userName),
             new Claim(ClaimTypes.GivenName, firstName),
             new Claim(ClaimTypes.Surname, lastName),
             new Claim(ClaimTypes.Email, email),
             new Claim(ApplicationClaimTypes.EmailVerified, ClaimValues.TrueString, ClaimValueTypes.Boolean),
             new Claim(ClaimTypes.HomePhone, phoneNumber)
-        }).Result;
+        ]).Result;
 
         if (!result.Succeeded)
         {
@@ -164,6 +163,5 @@ public class DatabaseInitializer : IDatabaseInitializer
         {
             await _userManager.DeleteAsync(user);
         }
-
     }
 }

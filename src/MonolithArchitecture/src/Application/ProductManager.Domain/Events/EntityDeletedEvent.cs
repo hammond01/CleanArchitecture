@@ -3,7 +3,7 @@
 public class EntityDeletedEvent<T> : IDomainEvent
     where T : Entity<string>
 {
-    public EntityDeletedEvent(T entity, DateTime eventDateTime)
+    public EntityDeletedEvent(T entity, DateTimeOffset eventDateTime)
     {
         Entity = entity;
         EventDateTime = eventDateTime;
@@ -11,5 +11,5 @@ public class EntityDeletedEvent<T> : IDomainEvent
 
     public T Entity { get; }
 
-    public DateTime EventDateTime { get; }
+    public DateTimeOffset EventDateTime { get; }
 }

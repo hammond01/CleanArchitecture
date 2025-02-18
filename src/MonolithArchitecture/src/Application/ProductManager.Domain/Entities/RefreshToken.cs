@@ -7,8 +7,8 @@ public class RefreshToken : Entity<string>
     public string Token { get; set; } = default!;
     [StringLength(250)]
     public Guid UserId { get; set; }
-    public DateTime Expires { get; set; }
-    public bool IsExpired => DateTime.UtcNow >= Expires;
-    public DateTime? Revoked { get; set; }
+    public DateTimeOffset Expires { get; set; }
+    public bool IsExpired => DateTimeOffset.UtcNow >= Expires;
+    public DateTimeOffset? Revoked { get; set; }
     public bool IsActive => Revoked == null && !IsExpired;
 }
