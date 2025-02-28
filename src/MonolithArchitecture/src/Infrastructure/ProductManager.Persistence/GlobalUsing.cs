@@ -18,7 +18,6 @@ global using ProductManager.Persistence.Extensions;
 global using System.IdentityModel.Tokens.Jwt;
 global using Microsoft.Extensions.Logging;
 global using ProductManager.Shared.DateTimes;
-global using ProductManager.Domain.DTOs.AdminDto;
 global using SolidTemplate.Constants.ConfigurationOptions;
 global using System.Security.Cryptography;
 global using System.Text;

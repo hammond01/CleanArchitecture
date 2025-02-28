@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Domain.DTOs.AdminDto;
+﻿namespace ProductManager.Shared.DTOs.AdminDto;
 
 public class RoleDto
 {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using ProductManager.Domain.Entities.Identity;
+using ProductManager.Shared.DTOs.AdminDto;
 using ProductManager.Shared.DTOs.UserDto;
 namespace ProductManager.Persistence.Repositories;
 
