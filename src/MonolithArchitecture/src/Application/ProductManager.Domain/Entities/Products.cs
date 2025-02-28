@@ -11,10 +11,10 @@ public class Products : Entity<string>
     public string ProductName { get; set; } = null!;
 
     [Column("SupplierID")]
-    public string? SupplierId { get; set; }
+    public string SupplierId { get; set; } = null!;
 
     [Column("CategoryID")]
-    public string? CategoryId { get; set; }
+    public string CategoryId { get; set; } = null!;
 
     [StringLength(20)]
     public string? QuantityPerUnit { get; set; }
@@ -32,12 +32,12 @@ public class Products : Entity<string>
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
-    public Categories? Category { get; set; }
+    public Categories Category { get; set; } = null!;
 
     [InverseProperty("Products")]
     public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     [ForeignKey("SupplierId")]
     [InverseProperty("Products")]
-    public Suppliers? Supplier { get; set; }
+    public Suppliers Supplier { get; set; } = null!;
 }
