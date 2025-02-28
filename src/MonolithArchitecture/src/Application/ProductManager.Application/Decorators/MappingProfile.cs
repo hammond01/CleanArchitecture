@@ -1,6 +1,4 @@
-﻿using ProductManager.Shared.DTOs.OrderDto;
-using ProductManager.Shared.DTOs.SupplierDto;
-namespace ProductManager.Application.Decorators;
+﻿namespace ProductManager.Application.Decorators;
 
 public class MappingProfile : Profile
 {
@@ -17,5 +15,9 @@ public class MappingProfile : Profile
         CreateMap<GetOrderDto, Order>().ReverseMap();
         CreateMap<CreateOrderDto, Order>().ReverseMap();
         CreateMap<UpdateOrderDto, Order>().ReverseMap();
+
+        CreateMap<GetProductDto, Products>().ReverseMap();
+        CreateMap<CreateProductDto, Products>().ReverseMap();
+        CreateMap<UpdateProductDto, Products>().ReverseMap();
     }
 }

@@ -27,3 +27,6 @@ global using ProductManager.Shared.DTOs.UserDto;
 global using ProductManager.Application.Feature.Orders.Command;
 global using ProductManager.Application.Feature.Orders.Queries;
 global using ProductManager.Shared.DTOs.OrderDto;
+global using ProductManager.Application.Feature.Product.Commands;
+global using ProductManager.Application.Feature.Product.Queries;
+global using ProductManager.Shared.DTOs.ProductDto;

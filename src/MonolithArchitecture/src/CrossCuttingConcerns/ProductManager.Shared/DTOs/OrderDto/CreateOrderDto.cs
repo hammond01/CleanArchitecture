@@ -6,11 +6,11 @@ public class CreateOrderDto
 
     public string? EmployeeId { get; set; }
 
-    public DateTime? OrderDate { get; set; }
+    public DateTimeOffset? OrderDate { get; set; }
 
-    public DateTime? RequiredDate { get; set; }
+    public DateTimeOffset? RequiredDate { get; set; }
 
-    public DateTime? ShippedDate { get; set; }
+    public DateTimeOffset? ShippedDate { get; set; }
 
     public string? ShipVia { get; set; }
 
