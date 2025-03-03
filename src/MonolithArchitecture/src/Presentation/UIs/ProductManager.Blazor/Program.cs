@@ -1,4 +1,6 @@
 ﻿using ProductManager.Blazor.Configuration;
+using ProductManager.Blazor.Services;
+using ProductManager.Blazor.Services.Impl;
 namespace ProductManager.Blazor;
 
 public class Program
@@ -31,6 +33,10 @@ public class Program
         builder.Services.AddTableDemoDataService();
 
         builder.Services.Configure<HubOptions>(option => option.MaximumReceiveMessageSize = null);
+
+
+        // Add Scoped Services
+        builder.Services.AddScoped<IIdentityServices, IdentityServices>();
 
         var app = builder.Build();
 
