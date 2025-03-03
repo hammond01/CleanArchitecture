@@ -1,13 +1,14 @@
 ﻿namespace ProductManager.Blazor.Components.Authentication;
 
-public partial class LoginPage : ComponentBase
+public partial class LoginAndRegister : ComponentBase
 {
     private LoginRequest LoginRequest
     {
         get;
     } = new LoginRequest
     {
-        UserName = "", Password = ""
+        UserName = "",
+        Password = ""
     };
 
     private RegisterRequest RegisterRequest
