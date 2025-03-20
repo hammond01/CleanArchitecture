@@ -16,6 +16,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ObjectCloner.Extensions"/>
+    <PackageReference Include="Serilog"/>
+    <PackageReference Include="Serilog.AspNetCore"/>
+    <PackageReference Include="Serilog.Enrichers.Environment"/>
+    <PackageReference Include="Serilog.Exceptions"/>
     <PackageReference Include="Ulid"/>
   </ItemGroup>
 

@@ -9,14 +9,22 @@ public class CurrentWebUser : ICurrentUser
         _context = context;
     }
 
-    public bool IsAuthenticated => _context.HttpContext.User.Identity is { IsAuthenticated: true };
+    public bool IsAuthenticated => _context.HttpContext?.User.Identity is { IsAuthenticated: true };
+    public string UserName
+    {
+        get
+        {
+            var userName = _context.HttpContext?.User.FindFirst(ClaimTypes.Name)?.Value;
+            return userName ?? string.Empty;
+        }
+    }
 
     public string UserId
     {
         get
         {
-            var userId = _context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                         ?? _context.HttpContext.User.FindFirst("sub")?.Value;
+            var userId = _context.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                         ?? _context.HttpContext?.User.FindFirst("sub")?.Value;
             return userId ?? string.Empty;
         }
     }
