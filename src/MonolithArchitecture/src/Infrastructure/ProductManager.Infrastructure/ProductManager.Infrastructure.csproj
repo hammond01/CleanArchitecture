@@ -10,9 +10,10 @@
     <PackageReference Include="Humanizer.Core"/>
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
+    <PackageReference Include="Microsoft.Data.SqlClient"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions"/>
   </ItemGroup>
 
   <ItemGroup>
