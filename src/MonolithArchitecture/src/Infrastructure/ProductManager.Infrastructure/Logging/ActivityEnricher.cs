@@ -2,7 +2,6 @@
  * https://github.com/serilog/serilog-aspnetcore/issues/207
  *
  */
-using System.Diagnostics;
 namespace ProductManager.Infrastructure.Logging;
 
 internal static class ActivityExtensions

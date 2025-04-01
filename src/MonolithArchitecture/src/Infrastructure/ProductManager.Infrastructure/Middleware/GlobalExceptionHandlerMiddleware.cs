@@ -1,12 +1,5 @@
-﻿using System.Diagnostics;
-using System.Net;
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using ProductManager.Infrastructure.Logging;
-using ProductManager.Shared.Exceptions;
+﻿using System.Text.Json.Serialization;
+using ProductManager.Shared.Logging;
 namespace ProductManager.Infrastructure.Middleware;
 
 /// <summary>
@@ -14,12 +7,13 @@ namespace ProductManager.Infrastructure.Middleware;
 /// </summary>
 public class GlobalExceptionHandlerMiddleware
 {
-    private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
+    private readonly ILogger _logger;
     private readonly RequestDelegate _next;
     private readonly GlobalExceptionHandlerMiddlewareOptions _options;
 
-    public GlobalExceptionHandlerMiddleware(RequestDelegate next,
-        ILogger<GlobalExceptionHandlerMiddleware> logger,
+    public GlobalExceptionHandlerMiddleware(
+        RequestDelegate next,
+        ILogger logger,
         GlobalExceptionHandlerMiddlewareOptions options)
     {
         _next = next;
@@ -35,121 +29,94 @@ public class GlobalExceptionHandlerMiddleware
         }
         catch (Exception ex)
         {
-            var response = context.Response;
-            response.ContentType = "application/problem+json";
-
-            var problemDetails = new ProblemDetails
-            {
-                Detail = GetErrorMessage(ex)
-            };
-
-            problemDetails.Extensions.Add("message", GetErrorMessage(ex));
-            if (Activity.Current != null)
-            {
-                problemDetails.Extensions.Add("traceId", Activity.Current.GetTraceId());
-            }
-
-            switch (ex)
-            {
-                case NotFoundException:
-                    problemDetails.Status = (int)HttpStatusCode.NotFound;
-                    problemDetails.Title = "Not Found";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4";
-                    break;
-
-                case ValidationException:
-                    problemDetails.Status = (int)HttpStatusCode.BadRequest;
-                    problemDetails.Title = "Bad Request";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1";
-                    break;
-
-                case UnauthorizedAccessException:
-                    problemDetails.Status = (int)HttpStatusCode.Forbidden;// 403 Forbidden
-                    problemDetails.Title = "Access Denied";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3";
-                    break;
-
-                case HttpRequestException { StatusCode: HttpStatusCode.Unauthorized }:
-                    problemDetails.Status = (int)HttpStatusCode.Unauthorized;
-                    problemDetails.Title = "Unauthorized";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1";
-                    break;
-
-                case HttpRequestException { StatusCode: HttpStatusCode.RequestTimeout }:
-                    problemDetails.Status = (int)HttpStatusCode.RequestTimeout;
-                    problemDetails.Title = "Request Timeout";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.7";
-                    break;
-
-                case HttpRequestException:
-                    problemDetails.Status = (int)HttpStatusCode.BadGateway;
-                    problemDetails.Title = "Oracle Bad Gateway";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.3";
-                    break;
-
-                case OperationCanceledException:
-                    problemDetails.Status = (int)HttpStatusCode.RequestTimeout;
-                    problemDetails.Title = "Operation Canceled";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.7";
-                    break;
-
-                case TimeoutException:
-                    problemDetails.Status = (int)HttpStatusCode.GatewayTimeout;
-                    problemDetails.Title = "Request Timeout";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.5";
-                    break;
-
-                case DbUpdateException:
-                    problemDetails.Status = (int)HttpStatusCode.Conflict;// 409 Conflict
-                    problemDetails.Title = "Database Update Error";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.8";
-                    break;
-
-                case SqlException:
-                    problemDetails.Status = (int)HttpStatusCode.InternalServerError;
-                    problemDetails.Title = "Database Error";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1";
-                    break;
-
-                default:
-                    _logger.LogError(ex, "[{Ticks}-{ThreadId}]", DateTime.UtcNow.Ticks, Environment.CurrentManagedThreadId);
-                    problemDetails.Status = (int)HttpStatusCode.InternalServerError;
-                    problemDetails.Title = "Internal Server Error";
-                    problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1";
-                    break;
-            }
-
-            response.StatusCode = problemDetails.Status.Value;
-
-            var result = JsonSerializer.Serialize(problemDetails);
-            await response.WriteAsync(result);
+            await HandleExceptionAsync(context, ex);
         }
     }
 
-    private static string GetErrorMessage(Exception ex) => ex.Message;
-    // if (ex is ValidationException)
-    // {
-    //     return ex.Message;
-    // }
-    //
-    // return _options.DetailLevel switch
-    // {
-    //     GlobalExceptionDetailLevel.None => "An internal exception has occurred.",
-    //     GlobalExceptionDetailLevel.Message => ex.Message,
-    //     GlobalExceptionDetailLevel.StackTrace => ex.StackTrace,
-    //     GlobalExceptionDetailLevel.ToString => ex.ToString(),
-    //     _ => "An internal exception has occurred."
-    // };
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        var response = context.Response;
+        response.ContentType = "application/json";
+
+        var statusCode = GetStatusCode(exception);
+        var errorResponse = new ApiResponseException
+        {
+            Success = false, StatusCode = statusCode, Message = GetErrorMessage(exception), Errors = GetErrors(exception)
+        };
+
+        // Log exception with structured data
+        _logger.LogError("An error occurred: {Message} | Path: {Path} | Method: {Method} | StatusCode: {StatusCode}",
+        exception.Message,
+        context.Request.Path,
+        context.Request.Method,
+        statusCode
+        );
+
+        response.StatusCode = statusCode;
+        await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+    }
+
+    private static int GetStatusCode(Exception ex) => ex switch
+    {
+        ValidationException => (int)HttpStatusCode.BadRequest,
+        NotFoundException => (int)HttpStatusCode.NotFound,
+        UnauthorizedException => (int)HttpStatusCode.Unauthorized,
+        _ => (int)HttpStatusCode.InternalServerError
+    };
+
+    private static string GetErrorMessage(Exception ex) => ex switch
+    {
+        ValidationException => "Validation Error",
+        NotFoundException => "Not Found",
+        UnauthorizedException => "Unauthorized",
+        _ => "Internal Server Error"
+    };
+
+    private List<string> GetErrors(Exception ex)
+    {
+        var errors = new List<string>();
+
+        switch (ex)
+        {
+            case ValidationException validationEx:
+                errors.Add(validationEx.Message);
+                break;
+            case NotFoundException notFoundEx:
+                errors.Add(notFoundEx.Message);
+                break;
+            case UnauthorizedException unauthorizedEx:
+                errors.Add(unauthorizedEx.Message);
+                break;
+            default:
+                if (_options.DetailLevel != GlobalExceptionDetailLevel.None)
+                {
+                    errors.Add(ex.Message);
+                }
+                break;
+        }
+
+        return errors;
+    }
 }
 public class GlobalExceptionHandlerMiddlewareOptions
 {
-    public GlobalExceptionDetailLevel DetailLevel { get; set; }
+    public GlobalExceptionDetailLevel DetailLevel { get; set; } = GlobalExceptionDetailLevel.Message;
 }
 public enum GlobalExceptionDetailLevel
 {
     None,
-    Message,
-    StackTrace,
-    ToString,
-    Throw
+    Message
+}
+public class ApiResponseException
+{
+    [JsonPropertyName("success")]
+    public bool Success { get; set; }
+    [JsonPropertyName("statusCode")]
+    public int StatusCode { get; set; }
+    [JsonPropertyName("message")]
+    public string Message { get; set; } = string.Empty;
+    [JsonPropertyName("isSuccessStatusCode")]
+    public bool IsSuccessStatusCode => StatusCode is >= 200 and < 300;
+    [JsonPropertyName("errors")]
+    public List<string> Errors { get; set; } = [];
 }

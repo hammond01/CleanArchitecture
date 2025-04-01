@@ -30,3 +30,8 @@ global using ProductManager.Shared.DTOs.OrderDto;
 global using ProductManager.Application.Feature.Product.Commands;
 global using ProductManager.Application.Feature.Product.Queries;
 global using ProductManager.Shared.DTOs.ProductDto;
+global using ILogger=ProductManager.Shared.Logging.ILogger;
+global using ProductManager.API.Logging;
+global using ProductManager.Infrastructure.Middleware;
+global using ProductManager.Shared.Logging;
+global using Serilog;
