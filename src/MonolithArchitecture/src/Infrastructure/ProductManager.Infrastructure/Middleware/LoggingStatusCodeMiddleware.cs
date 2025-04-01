@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ProductManager.Shared.Logging;
 namespace ProductManager.Infrastructure.Middleware;
 
 public class LoggingStatusCodeMiddleware
 {
-    private readonly ILogger<LoggingStatusCodeMiddleware> _logger;
+    private readonly ILogger _logger;
     private readonly RequestDelegate _next;
 
-    public LoggingStatusCodeMiddleware(RequestDelegate next, ILogger<LoggingStatusCodeMiddleware> logger)
+    public LoggingStatusCodeMiddleware(RequestDelegate next, ILogger logger)
     {
         _next = next;
         _logger = logger;

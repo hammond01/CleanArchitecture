@@ -50,7 +50,8 @@ public class OrderController : ConBase
         {
             return new ApiResponse
             {
-                StatusCode = 404, Message = "Order not found"
+                StatusCode = 404,
+                Message = "Order not found"
             };
         }
         return await _dispatcher.DispatchAsync(new DeleteOrderCommand(category));
