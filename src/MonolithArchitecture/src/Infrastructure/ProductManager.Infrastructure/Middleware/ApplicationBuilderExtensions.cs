@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-namespace ProductManager.Infrastructure.Middleware;
+﻿namespace ProductManager.Infrastructure.Middleware;
 
 /// <summary>
 ///     Register the global exception handler middleware.

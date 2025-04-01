@@ -1,14 +1,17 @@
 ﻿var builder = WebApplication.CreateBuilder(args);
 {
+    // Configure logging
+    builder.Services.AddLoggingConfiguration();
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-
     builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
     builder.Services.ApplicationConfigureServices();
     builder.Services.InfrastructureConfigureServices();
     builder.Services.Configure<IdentityConfig>(builder.Configuration.GetSection(IdentityConfig.ConfigName));
+    builder.Services.AddSingleton<ILogger, ConsoleLogger>();
 
+    builder.Host.UseSerilog();
     var audience = builder.Configuration["IdentityConfig:AUDIENCE"];
     var issUser = builder.Configuration["IdentityConfig:ISSUER"];
     var key = builder.Configuration["IdentityConfig:SECRET"];
@@ -53,6 +56,12 @@
 
 var app = builder.Build();
 {
+    // Add Serilog request logging
+    app.UseSerilogRequestLogging(options =>
+    {
+        options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+    });
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
@@ -64,6 +73,8 @@ var app = builder.Build();
         var databaseInitializer = serviceScope.ServiceProvider.GetService<IDatabaseInitializer>();
         databaseInitializer?.SeedAsync().Wait();
     }
+
+    app.UseGlobalExceptionHandlerMiddleware();
     app.UseHttpsRedirection();
 
     app.UseAuthentication();
@@ -72,6 +83,8 @@ var app = builder.Build();
 
     app.MapControllers();
 
-    app.Run();
+    // Ensure any buffered events are sent at shutdown
+    app.Lifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
+    app.Run();
 }
