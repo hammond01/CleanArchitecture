@@ -1,19 +1,27 @@
-﻿namespace ProductManager.Api.Controllers;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using ProductManager.Application.Common;
+using ProductManager.Application.Feature.Supplier.Commands;
+using ProductManager.Application.Feature.Supplier.Queries;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Entities;
+using ProductManager.Shared.DTOs.SupplierDto;
+namespace ProductManager.Api.Controllers;
 
 public class SupplierController : ConBase
 {
     private readonly Dispatcher _dispatcher;
-    private readonly IMapper _mapper;
-    public SupplierController(Dispatcher dispatcher, IMapper mapper)
+
+    public SupplierController(Dispatcher dispatcher)
     {
         _dispatcher = dispatcher;
-        _mapper = mapper;
     }
+
     [HttpGet]
     public async Task<ApiResponse> GetSuppliers()
     {
         var data = await _dispatcher.DispatchAsync(new GetSuppliers());
-        data.Result = _mapper.Map<List<GetSupplierDto>>(data.Result);
+        data.Result = ((List<Suppliers>)data.Result).Adapt<List<GetSupplierDto>>();
         return data;
     }
 
@@ -21,14 +29,14 @@ public class SupplierController : ConBase
     public async Task<ApiResponse> GetSupplier(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
-        data.Result = _mapper.Map<GetSupplierDto>(data.Result);
+        data.Result = ((Suppliers)data.Result).Adapt<GetSupplierDto>();
         return data;
     }
 
     [HttpPost]
     public async Task<ApiResponse> CreateSupplier([FromBody] CreateSupplierDto createSupplierDto)
     {
-        var data = _mapper.Map<Suppliers>(createSupplierDto);
+        var data = createSupplierDto.Adapt<Suppliers>();
         return await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(data));
     }
 
@@ -36,9 +44,9 @@ public class SupplierController : ConBase
     public async Task<ApiResponse> UpdateSupplier(string id, [FromBody] UpdateSupplierDto updateSupplierDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
-        var category = _mapper.Map<Suppliers>(apiResponse.Result);
-        _mapper.Map(updateSupplierDto, category);
-        return await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(category));
+        var supplier = (Suppliers)apiResponse.Result;
+        updateSupplierDto.Adapt(supplier);
+        return await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(supplier));
     }
 
     [HttpDelete("{id}")]
@@ -49,7 +57,7 @@ public class SupplierController : ConBase
         {
             return apiResponse;
         }
-        var category = _mapper.Map<Suppliers>(apiResponse.Result);
-        return await _dispatcher.DispatchAsync(new DeleteSupplierCommand(category));
+        var supplier = (Suppliers)apiResponse.Result;
+        return await _dispatcher.DispatchAsync(new DeleteSupplierCommand(supplier));
     }
 }

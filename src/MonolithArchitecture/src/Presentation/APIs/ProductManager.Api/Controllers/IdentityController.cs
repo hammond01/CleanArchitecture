@@ -1,3 +1,11 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ProductManager.Application.Feature.Identity.Commands;
+using ProductManager.Domain.Common;
+using ProductManager.Shared.DTOs.UserDto;
+using static Microsoft.AspNetCore.Http.StatusCodes;
+using Dispatcher=ProductManager.Application.Common.Dispatcher;
 namespace ProductManager.Api.Controllers;
 
 [Microsoft.AspNetCore.Components.Route("api/[controller]")]
