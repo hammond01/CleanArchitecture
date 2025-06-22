@@ -1,4 +1,10 @@
-﻿namespace ProductManager.Application;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using ProductManager.Application.Common;
+using ProductManager.Application.Common.Services;
+using ProductManager.Application.Decorators;
+
+namespace ProductManager.Application;
 
 public static class ApplicationConfiguration
 {
@@ -7,8 +13,9 @@ public static class ApplicationConfiguration
         services.AddMediatR(configuration =>
         {
             configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-        });
-        services.AddAutoMapper(typeof(MappingProfile));
+        });        // Configure Mapster
+        MappingConfig.ConfigureMappings();
+
         services.AddScoped<UserService>();
         services.AddMessageHandlers();
         services.RegisterService();

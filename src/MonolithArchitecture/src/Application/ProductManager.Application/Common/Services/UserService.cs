@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Application.Common.Services;
+﻿using ProductManager.Domain.Repositories;
+
+namespace ProductManager.Application.Common.Services;
 
 public class UserService
 {
