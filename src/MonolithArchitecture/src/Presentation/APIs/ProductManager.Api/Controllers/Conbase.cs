@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Api.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+namespace ProductManager.Api.Controllers;
 
 [ApiController]
 [Route("v1/[controller]/[action]")]
