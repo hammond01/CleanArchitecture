@@ -1,19 +1,27 @@
-﻿namespace ProductManager.Api.Controllers;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using ProductManager.Application.Common;
+using ProductManager.Application.Feature.Orders.Command;
+using ProductManager.Application.Feature.Orders.Queries;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Entities;
+using ProductManager.Shared.DTOs.OrderDto;
+namespace ProductManager.Api.Controllers;
 
 public class OrderController : ConBase
 {
     private readonly Dispatcher _dispatcher;
-    private readonly IMapper _mapper;
-    public OrderController(Dispatcher dispatcher, IMapper mapper)
+
+    public OrderController(Dispatcher dispatcher)
     {
         _dispatcher = dispatcher;
-        _mapper = mapper;
     }
+
     [HttpGet]
     public async Task<ApiResponse> GetOrders()
     {
         var data = await _dispatcher.DispatchAsync(new GetOrders());
-        data.Result = _mapper.Map<List<GetOrderDto>>(data.Result);
+        data.Result = ((List<Order>)data.Result).Adapt<List<GetOrderDto>>();
         return data;
     }
 
@@ -21,14 +29,14 @@ public class OrderController : ConBase
     public async Task<ApiResponse> GetOrder(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
-        data.Result = _mapper.Map<GetOrderDto>(data.Result);
+        data.Result = ((Order)data.Result).Adapt<GetOrderDto>();
         return data;
     }
 
     [HttpPost]
     public async Task<ApiResponse> CreateOrder([FromBody] CreateOrderDto createOrderDto)
     {
-        var data = _mapper.Map<Order>(createOrderDto);
+        var data = createOrderDto.Adapt<Order>();
         return await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(data));
     }
 
@@ -36,24 +44,15 @@ public class OrderController : ConBase
     public async Task<ApiResponse> UpdateOrder(string id, [FromBody] UpdateOrderDto updateOrderDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
-        var category = _mapper.Map<Order>(apiResponse.Result);
-        _mapper.Map(updateOrderDto, category);
-        return await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(category));
+        var order = (Order)apiResponse.Result;
+        updateOrderDto.Adapt(order);
+        return await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(order));
     }
-
     [HttpDelete("{id}")]
     public async Task<ApiResponse> DeleteOrder(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
-        var category = _mapper.Map<Order>(apiResponse.Result);
-        if (category == null)
-        {
-            return new ApiResponse
-            {
-                StatusCode = 404,
-                Message = "Order not found"
-            };
-        }
-        return await _dispatcher.DispatchAsync(new DeleteOrderCommand(category));
+        var order = (Order)apiResponse.Result;
+        return await _dispatcher.DispatchAsync(new DeleteOrderCommand(order));
     }
 }
