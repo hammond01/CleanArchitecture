@@ -1,4 +1,8 @@
-﻿namespace ProductManager.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+namespace ProductManager.Domain.Entities;
 
 [Index("CategoryName", Name = "CategoryName")]
 public class Categories : Entity<string>

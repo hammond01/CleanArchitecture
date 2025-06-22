@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Domain.Events;
+﻿using ProductManager.Domain.Entities;
+
+namespace ProductManager.Domain.Events;
 
 public class EntityCreatedEvent<T> : IDomainEvent
     where T : Entity<string>

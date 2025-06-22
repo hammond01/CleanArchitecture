@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Domain.Enum;
+﻿using System.Text.Json.Serialization;
+
+namespace ProductManager.Domain.Enum;
 
 [JsonConverter(typeof(JsonStringEnumConverter<Gender>))]
 public enum Gender
