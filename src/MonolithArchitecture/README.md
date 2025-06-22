@@ -6,7 +6,16 @@
 
 A modern e-commerce product management system built with **Clean Architecture** principles using **.NET 8**, **Entity Framework Core**, and **Blazor**. This monolithic application demonstrates enterprise-level patterns including **CQRS**, **Repository Pattern**, **Unit of Work**, and **Domain-Driven Design (DDD)**.
 
-> **Project Status**: This is an active development project implementing Clean Architecture patterns. Some features like comprehensive testing, health checks, and Swagger documentation are planned for future implementation.
+> **Project Status**: This is an active development project implementing Clean Architecture patterns with **explicit using directives** for better code clarity and dependency management. Some features like comprehensive testing, health checks, and Swagger documentation are planned for future implementation.
+
+## 🆕 Recent Updates
+
+### Code Quality Improvements (Latest)
+- ✅ **Removed Global Usings**: Transitioned from `GlobalUsing.cs` files to explicit using directives across all projects
+- ✅ **Enhanced Code Clarity**: Each file now explicitly declares its dependencies for better readability
+- ✅ **Improved Maintainability**: Easier dependency tracking and better IDE IntelliSense support
+- ✅ **Added Action Logging**: Comprehensive request/response logging with `ActionLoggingFilter`
+- ✅ **Enhanced Audit Trail**: Improved audit logging with `ActionLogService` and database persistence
 
 ## 🏗️ Architecture Overview
 
@@ -61,7 +70,7 @@ src/
 1. **Clone the repository**
 
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/hammond01/CleanArchitecture.git
     cd ProductManager
     ```
 
@@ -118,6 +127,7 @@ src/
 -   **Unit of Work** - Transaction management
 -   **Domain-Driven Design (DDD)** - Business logic organization
 -   **Dependency Injection** - IoC container
+-   **Explicit Dependency Management** - No global usings for better code clarity
 
 ### Key Libraries
 
@@ -142,6 +152,10 @@ src/
 ### Technical Features
 
 -   🔐 **Identity Framework** - Authentication & authorization
+-   📝 **Explicit Using Directives** - Clear dependency management without global usings
+-   📊 **Enhanced Audit Logging** - Comprehensive tracking with ActionLogService and database persistence
+-   📊 **API Request Logging** - Detailed request/response logging with ApiRequestLoggingMiddleware
+-   🎯 **Action Logging Filter** - Automatic logging of controller actions and performance metrics
 -   📝 **Audit Logging** - Track system changes via AuditLogEntry
 -   📊 **API Logging** - Request/response logging with ApiLogItem
 -   🏥 **Health Checks** - Application monitoring (planned)
@@ -197,13 +211,20 @@ internal class AddOrUpdateProductHandler : ICommandHandler<AddOrUpdateProductCom
 -   **Repository Implementations**: Data access logic
 -   **Migrations**: Database schema changes
 -   **Configurations**: Entity mappings
+-   **Services**: 
+    - `ActionLogService`: Persist action logs to database
+    - `LockManager`: Distributed locking implementation
 
 #### Infrastructure (`ProductManager.Infrastructure`)
 
 -   **External Services**: Third-party integrations
--   **Caching**: Redis/Memory cache
--   **File Storage**: Blob/File system
--   **Email Services**: SMTP configuration
+-   **Middleware**: Request/response pipeline components
+    - `ActionLoggingFilter`: Automatic action logging and performance tracking
+    - `ApiRequestLoggingMiddleware`: Comprehensive request/response logging
+    - `GlobalExceptionHandlerMiddleware`: Centralized error handling
+-   **Identity Services**: User authentication and authorization
+-   **Logging Services**: Structured logging with Serilog
+-   **DateTime Providers**: Abstracted time services for testing
 
 ### Presentation Layer
 
@@ -220,6 +241,41 @@ internal class AddOrUpdateProductHandler : ICommandHandler<AddOrUpdateProductCom
 -   **Services**: UI business logic
 -   **Models**: View models
 -   **wwwroot**: Static assets
+
+## 🔧 Code Quality & Architecture Standards
+
+### Explicit Using Directives
+This project has been migrated from global usings to explicit using directives for:
+- **Better Code Clarity**: Each file explicitly declares its dependencies
+- **Improved IDE Support**: Enhanced IntelliSense and navigation
+- **Easier Dependency Tracking**: Clear understanding of what each file needs
+- **Better Maintainability**: Easier to refactor and understand code dependencies
+
+### Example of Explicit Using Directives:
+```csharp
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using ProductManager.Application.Common.Commands;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Entities;
+using ProductManager.Domain.Repositories;
+
+namespace ProductManager.Application.Feature.Product.Commands
+{
+    public class AddOrUpdateProductCommand : ICommand<ApiResponse>
+    {
+        public Products Products { get; set; }
+    }
+}
+```
+
+### Logging & Monitoring
+- **Action Logging**: Automatic logging of all controller actions with performance metrics
+- **Request/Response Logging**: Detailed HTTP request and response logging
+- **Audit Trail**: Comprehensive audit logging for data changes
+- **Structured Logging**: Serilog integration with structured logging patterns
 
 ## 🔧 Configuration
 
@@ -334,7 +390,7 @@ Based on the current controllers in the project:
 -   `GET /api/Supplier` - Supplier management endpoints
 -   `GET /api/Order` - Order management endpoints
 -   `POST /api/Identity` - Identity/Authentication endpoints
--   `GET /api/TestLog` - Test logging endpoint
+-   `GET /api/Logs` - System logs and audit trail endpoints
 
 ## 🤝 Contributing
 
@@ -348,9 +404,12 @@ Based on the current controllers in the project:
 
 -   Follow **C# coding conventions**
 -   Use **meaningful names** for variables and methods
+-   **Explicit using directives** - No global usings
 -   Write **unit tests** for new features
 -   Update **documentation** as needed
 -   Follow **SOLID principles**
+-   Implement **proper logging** for new features
+-   Use **structured logging** patterns with Serilog
 
 ## 📝 License
 
@@ -358,7 +417,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 👥 Authors
 
--   **Your Name** - _Initial work_ - [YourProfile](https://github.com/yourprofile)
+-   **Hammond** - _Initial work_ - [Hammond](https://github.com/hammond01/CleanArchitecture)
 
 ## 🙏 Acknowledgments
 
