@@ -1,4 +1,10 @@
-﻿namespace ProductManager.Blazor.Components.Pages;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
+using BootstrapBlazor.Components;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
+using ProductManager.Blazor.Data;
+namespace ProductManager.Blazor.Components.Pages;
 
 /// <summary>
 /// </summary>
