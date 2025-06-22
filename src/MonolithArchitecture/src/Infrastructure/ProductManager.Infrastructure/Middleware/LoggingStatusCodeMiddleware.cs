@@ -1,4 +1,6 @@
-﻿using ProductManager.Shared.Logging;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using ProductManager.Shared.Logging;
 namespace ProductManager.Infrastructure.Middleware;
 
 public class LoggingStatusCodeMiddleware
