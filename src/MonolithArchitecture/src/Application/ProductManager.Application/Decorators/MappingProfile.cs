@@ -1,27 +1,37 @@
-﻿namespace ProductManager.Application.Decorators;
+﻿using Mapster;
+using ProductManager.Domain.Entities;
+using ProductManager.Shared.DTOs.CategoryDto;
+using ProductManager.Shared.DTOs.SupplierDto;
+using ProductManager.Shared.DTOs.OrderDto;
+using ProductManager.Shared.DTOs.ProductDto;
 
-public class MappingProfile : Profile
+namespace ProductManager.Application.Decorators;
+
+public static class MappingConfig
 {
-    public MappingProfile()
+    public static void ConfigureMappings()
     {
-        CreateMap<GetCategoryDto, Categories>().ReverseMap();
-        CreateMap<CreateCategoryDto, Categories>().ReverseMap();
-        CreateMap<UpdateCategoryDto, Categories>().ReverseMap();
+        // Category mappings
+        TypeAdapterConfig<Categories, GetCategoryDto>.NewConfig();
+        TypeAdapterConfig<CreateCategoryDto, Categories>.NewConfig();
+        TypeAdapterConfig<UpdateCategoryDto, Categories>.NewConfig();
 
-        CreateMap<GetSupplierDto, Suppliers>().ReverseMap();
-        CreateMap<CreateSupplierDto, Suppliers>().ReverseMap();
-        CreateMap<UpdateSupplierDto, Suppliers>().ReverseMap();
+        // Supplier mappings
+        TypeAdapterConfig<Suppliers, GetSupplierDto>.NewConfig();
+        TypeAdapterConfig<CreateSupplierDto, Suppliers>.NewConfig();
+        TypeAdapterConfig<UpdateSupplierDto, Suppliers>.NewConfig();
 
-        CreateMap<GetOrderDto, Order>().ReverseMap();
-        CreateMap<CreateOrderDto, Order>().ReverseMap();
-        CreateMap<UpdateOrderDto, Order>().ReverseMap();
+        // Order mappings
+        TypeAdapterConfig<Order, GetOrderDto>.NewConfig();
+        TypeAdapterConfig<CreateOrderDto, Order>.NewConfig();
+        TypeAdapterConfig<UpdateOrderDto, Order>.NewConfig();
 
-        CreateMap<GetProductDto, Products>().ReverseMap()
-            .ForMember(destinationMember: dest => dest.CategoryName,
-            memberOptions: opt => opt.MapFrom(src => src.Category.CategoryName))
-            .ForMember(destinationMember: dest => dest.SupplierName,
-            memberOptions: opt => opt.MapFrom(src => src.Supplier.CompanyName));
-        CreateMap<CreateProductDto, Products>().ReverseMap();
-        CreateMap<UpdateProductDto, Products>().ReverseMap();
+        // Product mappings with custom logic
+        TypeAdapterConfig<Products, GetProductDto>.NewConfig()
+            .Map(dest => dest.CategoryName, src => src.Category.CategoryName)
+            .Map(dest => dest.SupplierName, src => src.Supplier.CompanyName);
+
+        TypeAdapterConfig<CreateProductDto, Products>.NewConfig();
+        TypeAdapterConfig<UpdateProductDto, Products>.NewConfig();
     }
 }

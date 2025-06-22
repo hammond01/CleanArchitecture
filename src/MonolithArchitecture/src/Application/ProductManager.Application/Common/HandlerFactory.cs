@@ -1,4 +1,9 @@
-﻿namespace ProductManager.Application.Common;
+﻿using System.Reflection;
+using ProductManager.Application.Common.Commands;
+using ProductManager.Application.Common.Queries;
+using ProductManager.Application.Decorators;
+using ProductManager.Shared.ExtensionMethods;
+namespace ProductManager.Application.Common;
 
 internal class HandlerFactory
 {
