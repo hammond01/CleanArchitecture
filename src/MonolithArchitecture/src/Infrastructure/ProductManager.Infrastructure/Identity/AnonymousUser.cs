@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Infrastructure.Identity;
+﻿using ProductManager.Domain.Identity;
+namespace ProductManager.Infrastructure.Identity;
 
 public class AnonymousUser : ICurrentUser
 {

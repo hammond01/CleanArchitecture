@@ -1,5 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using ProductManager.Shared.Logging;
+﻿using System.Net;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using ProductManager.Shared.Exceptions;
 namespace ProductManager.Infrastructure.Middleware;
 
 /// <summary>
@@ -7,13 +11,13 @@ namespace ProductManager.Infrastructure.Middleware;
 /// </summary>
 public class GlobalExceptionHandlerMiddleware
 {
-    private readonly ILogger _logger;
+    private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
     private readonly RequestDelegate _next;
     private readonly GlobalExceptionHandlerMiddlewareOptions _options;
 
     public GlobalExceptionHandlerMiddleware(
         RequestDelegate next,
-        ILogger logger,
+        ILogger<GlobalExceptionHandlerMiddleware> logger,
         GlobalExceptionHandlerMiddlewareOptions options)
     {
         _next = next;

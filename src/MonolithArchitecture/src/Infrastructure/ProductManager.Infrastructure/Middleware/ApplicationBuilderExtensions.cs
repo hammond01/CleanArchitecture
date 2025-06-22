@@ -1,4 +1,5 @@
-﻿namespace ProductManager.Infrastructure.Middleware;
+﻿using Microsoft.AspNetCore.Builder;
+namespace ProductManager.Infrastructure.Middleware;
 
 /// <summary>
 ///     Register the global exception handler middleware.
@@ -6,7 +7,7 @@
 public static class ApplicationBuilderExtensions
 {
     public static IApplicationBuilder UseGlobalExceptionHandlerMiddleware(this IApplicationBuilder app,
-        GlobalExceptionHandlerMiddlewareOptions options = default!)
+        GlobalExceptionHandlerMiddlewareOptions? options = default!)
     {
         options ??= new GlobalExceptionHandlerMiddlewareOptions();
         app.UseMiddleware<GlobalExceptionHandlerMiddleware>(options);
