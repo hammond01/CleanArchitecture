@@ -1,4 +1,11 @@
-﻿namespace ProductManager.Application.Feature.Product.Queries;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using ProductManager.Application.Common.Queries;
+using ProductManager.Application.Common.Services;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Entities;
+
+namespace ProductManager.Application.Feature.Product.Queries;
 
 public record GetProducts : IQuery<ApiResponse>;
 internal class GetsProductsHandler : IQueryHandler<GetProducts, ApiResponse>
