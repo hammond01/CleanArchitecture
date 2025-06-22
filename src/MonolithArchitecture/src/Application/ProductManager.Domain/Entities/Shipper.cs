@@ -1,4 +1,7 @@
-﻿namespace ProductManager.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ProductManager.Domain.Entities;
 
 public class Shipper : Entity<string>
 {

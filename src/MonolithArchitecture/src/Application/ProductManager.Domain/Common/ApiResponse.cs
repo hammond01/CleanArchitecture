@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Domain.Common;
+﻿using System.Runtime.Serialization;
+
+namespace ProductManager.Domain.Common;
 
 [Serializable]
 [DataContract]
