@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Infrastructure.DateTimes;
+﻿using Microsoft.Extensions.DependencyInjection;
+using ProductManager.Shared.DateTimes;
+namespace ProductManager.Infrastructure.DateTimes;
 
 public static class DateTimeProviderExtensions
 {

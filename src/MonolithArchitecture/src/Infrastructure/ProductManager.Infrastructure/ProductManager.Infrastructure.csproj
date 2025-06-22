@@ -14,9 +14,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks"/>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions"/>
-  </ItemGroup>
-
-  <ItemGroup>
+  </ItemGroup>  <ItemGroup>
     <ProjectReference Include="..\..\Application\ProductManager.Domain\ProductManager.Domain.csproj"/>
     <ProjectReference Include="..\..\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj"/>
   </ItemGroup>
