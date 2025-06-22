@@ -1,4 +1,7 @@
-﻿namespace ProductManager.Shared.DTOs;
+﻿using System.Reflection;
+using ObjectCloner.Extensions;
+
+namespace ProductManager.Shared.DTOs;
 
 public abstract class BaseDto : IMementoDto
 {

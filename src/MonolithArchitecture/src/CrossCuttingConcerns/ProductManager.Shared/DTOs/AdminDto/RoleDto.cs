@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Shared.DTOs.AdminDto;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProductManager.Shared.DTOs.AdminDto;
 
 public class RoleDto
 {

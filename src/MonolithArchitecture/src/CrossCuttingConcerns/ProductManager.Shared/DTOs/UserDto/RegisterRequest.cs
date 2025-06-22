@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Shared.DTOs.UserDto;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProductManager.Shared.DTOs.UserDto;
 
 public class RegisterRequest
 {
