@@ -1,4 +1,12 @@
-﻿namespace ProductManager.Application.Feature.Product.Commands;
+﻿using System.Data;
+using ProductManager.Application.Common.Commands;
+using ProductManager.Application.Common.Services;
+using ProductManager.Constants.ApiResponseConstants;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Entities;
+using ProductManager.Domain.Repositories;
+using ProductManager.Persistence.Extensions;
+namespace ProductManager.Application.Feature.Product.Commands;
 
 public class AddOrUpdateProductCommand : ICommand<ApiResponse>
 {
