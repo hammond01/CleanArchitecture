@@ -1,7 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using ProductManager.Constants.AuthorizationDefinitions;
+using ProductManager.Domain.Common;
 using ProductManager.Domain.Entities.Identity;
+using ProductManager.Domain.Repositories;
+using ProductManager.Persistence.Extensions;
 using ProductManager.Shared.DTOs.AdminDto;
 using ProductManager.Shared.DTOs.UserDto;
+using ProductManager.Shared.Permission;
+using static Microsoft.AspNetCore.Http.StatusCodes;
 namespace ProductManager.Persistence.Repositories;
 
 public class AdminRepository : IAdminRepository
