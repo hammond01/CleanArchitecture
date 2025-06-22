@@ -1,4 +1,7 @@
-﻿namespace ProductManager.Application.Feature.Admin.Commands;
+﻿using ProductManager.Application.Common.Commands;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Repositories;
+namespace ProductManager.Application.Feature.Admin.Commands;
 
 public class AdminDeleteRoleCommand : ICommand<ApiResponse>
 {
