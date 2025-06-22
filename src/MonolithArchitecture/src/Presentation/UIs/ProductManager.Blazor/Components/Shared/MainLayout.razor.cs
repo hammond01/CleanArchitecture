@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Blazor.Components.Shared;
+﻿using BootstrapBlazor.Components;
+using Microsoft.AspNetCore.Components.Routing;
+namespace ProductManager.Blazor.Components.Shared;
 
 /// <summary>
 /// </summary>

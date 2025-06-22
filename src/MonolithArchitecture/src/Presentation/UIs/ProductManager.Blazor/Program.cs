@@ -1,4 +1,10 @@
-﻿using ProductManager.Blazor.Configuration;
+﻿using System.Text;
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using ProductManager.Blazor.Components;
+using ProductManager.Blazor.Configuration;
+using ProductManager.Blazor.Data;
 using ProductManager.Blazor.Services;
 using ProductManager.Blazor.Services.Impl;
 namespace ProductManager.Blazor;

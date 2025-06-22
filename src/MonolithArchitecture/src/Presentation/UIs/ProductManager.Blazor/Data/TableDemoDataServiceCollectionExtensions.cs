@@ -1,4 +1,8 @@
-﻿namespace ProductManager.Blazor.Data;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
+using BootstrapBlazor.Components;
+using Microsoft.Extensions.Localization;
+namespace ProductManager.Blazor.Data;
 
 /// <summary>
 ///     BootstrapBlazor 服务扩展类

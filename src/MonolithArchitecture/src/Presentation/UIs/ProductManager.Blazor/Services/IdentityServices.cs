@@ -1,4 +1,5 @@
 using ProductManager.Blazor.Services.Impl;
+using ProductManager.Shared.DTOs.UserDto;
 using Console=System.Console;
 
 namespace ProductManager.Blazor.Services;
