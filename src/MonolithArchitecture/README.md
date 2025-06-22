@@ -122,7 +122,7 @@ src/
 ### Key Libraries
 
 -   **MediatR** (12.4.1) - CQRS implementation
--   **AutoMapper** (13.0.1) - Object mapping
+-   **Mapster** (7.4.0) - Fast object mapping
 -   **Serilog** (4.2.0) - Structured logging
 -   **Identity Framework** - Authentication & authorization
 -   **Swashbuckle** - API documentation

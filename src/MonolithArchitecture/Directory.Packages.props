@@ -1,6 +1,6 @@
-<Project>
-  <ItemGroup>
-    <PackageVersion Include="AutoMapper" Version="13.0.1"/>
+<Project>  <ItemGroup>
+    <PackageVersion Include="Mapster" Version="7.4.0"/>
+    <PackageVersion Include="Mapster.DependencyInjection" Version="1.0.1"/>
     <PackageVersion Include="Blazored.LocalStorage" Version="4.5.0"/>
     <PackageVersion Include="BootstrapBlazor.Analyzers" Version="1.0.0"/>
     <PackageVersion Include="BootstrapBlazor.MaterialDesign" Version="9.0.1"/>
@@ -28,6 +28,7 @@
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.11"/>
     <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="8.0.10"/>
     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="8.0.10"/>
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2"/>
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6"/>
     <PackageVersion Include="NSwag.AspNetCore" Version="14.2.0"/>
     <PackageVersion Include="ObjectCloner.Extensions" Version="2.0.1"/>
