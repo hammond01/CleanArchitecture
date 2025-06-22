@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProductManager.Domain.Entities;
+using ProductManager.Persistence.Extensions;
 namespace ProductManager.Persistence.MappingConfigurations;
 
 public class SupplierConfiguration : IEntityTypeConfiguration<Suppliers>

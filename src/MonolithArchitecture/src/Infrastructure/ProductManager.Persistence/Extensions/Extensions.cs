@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
 namespace ProductManager.Persistence.Extensions;
 
 public static class Extensions
