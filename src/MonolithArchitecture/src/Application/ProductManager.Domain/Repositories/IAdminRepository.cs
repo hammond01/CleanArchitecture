@@ -1,4 +1,9 @@
-﻿namespace ProductManager.Domain.Repositories;
+﻿using System.Security.Claims;
+using ProductManager.Domain.Common;
+using ProductManager.Shared.DTOs.AdminDto;
+using ProductManager.Shared.DTOs.UserDto;
+
+namespace ProductManager.Domain.Repositories;
 
 public interface IAdminRepository
 {

@@ -5,9 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="AutoMapper"/>
+    <PackageReference Include="Mapster"/>
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions"/>
