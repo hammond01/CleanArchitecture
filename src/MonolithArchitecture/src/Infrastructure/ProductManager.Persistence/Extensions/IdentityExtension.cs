@@ -1,4 +1,15 @@
-﻿namespace ProductManager.Persistence.Extensions;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using ProductManager.Domain.Entities;
+using ProductManager.Domain.Repositories;
+using ProductManager.Shared.DateTimes;
+using SolidTemplate.Constants.ConfigurationOptions;
+namespace ProductManager.Persistence.Extensions;
 
 public class IdentityExtension
 {

@@ -1,4 +1,15 @@
-﻿using ProductManager.Domain.Entities.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using ProductManager.Domain.Entities.Identity;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Repositories;
+using ProductManager.Infrastructure.Storage;
+using ProductManager.Persistence.Extensions;
+using ProductManager.Persistence.Repositories;
+using ProductManager.Persistence.Services;
+using ProductManager.Shared.Permission;
+
 namespace ProductManager.Persistence;
 
 public static class PersistenceConfiguration
@@ -11,9 +22,10 @@ public static class PersistenceConfiguration
             .AddDefaultTokenProviders();
 
         services.AddScoped<IIdentityRepository, IdentityRepository>();
-        services.AddScoped<IAdminRepository, AdminRepository>();
+        services.AddScoped<IAdminRepository, AdminRepository>(); services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
 
-        services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
+        // Register logging service
+        services.AddScoped<IActionLogService, ActionLogService>();
 
         services.AddSingleton<EntityPermissions>();
         services.AddScoped<IdentityExtension>();

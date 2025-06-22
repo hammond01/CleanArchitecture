@@ -1,4 +1,10 @@
-﻿using ProductManager.Domain.Entities.Identity;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ProductManager.Constants.AuthorizationDefinitions;
+using ProductManager.Domain.Entities.Identity;
+using ProductManager.Infrastructure.Storage;
+using ProductManager.Shared.Permission;
 namespace ProductManager.Persistence;
 
 public class DatabaseInitializer : IDatabaseInitializer

@@ -1,4 +1,8 @@
-﻿namespace ProductManager.Persistence.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductManager.Domain.Entities;
+using ProductManager.Domain.Repositories;
+using ProductManager.Shared.DateTimes;
+namespace ProductManager.Persistence.Repositories;
 
 public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : Entity<TKey>
 {

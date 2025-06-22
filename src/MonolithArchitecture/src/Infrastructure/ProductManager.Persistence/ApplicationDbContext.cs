@@ -1,4 +1,12 @@
-﻿using ProductManager.Domain.Entities.Identity;
+﻿using System.Data;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using ProductManager.Domain.Entities;
+using ProductManager.Domain.Entities.Identity;
+using ProductManager.Domain.Repositories;
 namespace ProductManager.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -7,8 +15,21 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         IUnitOfWork, IDataProtectionKeyContext
 {
     private IDbContextTransaction _dbContextTransaction = null!;
+
     // ReSharper disable once UnassignedGetOnlyAutoProperty
     public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
+
+    // Business Entities
+    public DbSet<Products> Products { get; set; } = null!;
+    public DbSet<Categories> Categories { get; set; } = null!;
+    public DbSet<Suppliers> Suppliers { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<Customer> Customers { get; set; } = null!;
+    public DbSet<Employee> Employees { get; set; } = null!;
+
+    // Logging Entities
+    public DbSet<ApiLogItem> ApiLogs { get; set; } = null!;
+    public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
     public async Task<IDisposable> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
         CancellationToken cancellationToken = default)

@@ -1,4 +1,10 @@
-﻿namespace ProductManager.Persistence.Locks;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using ProductManager.Shared.DateTimes;
+using ProductManager.Shared.Exceptions;
+using ProductManager.Shared.Locks;
+namespace ProductManager.Persistence.Locks;
 
 public class LockManager : ILockManager
 {

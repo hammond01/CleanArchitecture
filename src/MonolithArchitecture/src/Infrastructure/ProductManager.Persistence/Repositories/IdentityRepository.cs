@@ -1,7 +1,18 @@
-﻿using ProductManager.Constants.ApiResponseConstants;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using ProductManager.Constants.ApiResponseConstants;
+using ProductManager.Constants.AuthorizationDefinitions;
+using ProductManager.Domain.Common;
 using ProductManager.Domain.Entities.Identity;
+using ProductManager.Domain.Repositories;
+using ProductManager.Infrastructure.Storage;
+using ProductManager.Persistence.Extensions;
 using ProductManager.Shared.DTOs.AdminDto;
 using ProductManager.Shared.DTOs.UserDto;
+using ProductManager.Shared.Permission;
+using static Microsoft.AspNetCore.Http.StatusCodes;
 namespace ProductManager.Persistence.Repositories;
 
 public class IdentityRepository : IIdentityRepository

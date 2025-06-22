@@ -1,4 +1,7 @@
-﻿namespace ProductManager.Persistence.MappingConfigurations;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProductManager.Domain.Entities;
+namespace ProductManager.Persistence.MappingConfigurations;
 
 public class ProductsConfiguration : IEntityTypeConfiguration<Products>
 {
