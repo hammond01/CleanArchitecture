@@ -1,4 +1,8 @@
-﻿namespace ProductManager.Application.Feature.Admin.Queries;
+﻿using ProductManager.Application.Common.Queries;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Repositories;
+
+namespace ProductManager.Application.Feature.Admin.Queries;
 
 public record AdminGetPermissionsQuery : IQuery<ApiResponse>;
 internal class AdminGetPermissionsHandler : IQueryHandler<AdminGetPermissionsQuery, ApiResponse>
