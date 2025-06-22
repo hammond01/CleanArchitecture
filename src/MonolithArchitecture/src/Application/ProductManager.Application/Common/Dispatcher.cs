@@ -1,4 +1,15 @@
-﻿namespace ProductManager.Application.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using ProductManager.Application.Common.Commands;
+using ProductManager.Application.Common.Queries;
+using ProductManager.Domain.Events;
+
+namespace ProductManager.Application.Common;
 
 public class Dispatcher
 {

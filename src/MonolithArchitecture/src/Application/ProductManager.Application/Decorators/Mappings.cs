@@ -1,4 +1,12 @@
-﻿namespace ProductManager.Application.Decorators;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using ProductManager.Application.Common.Commands;
+using ProductManager.Application.Common.Queries;
+using ProductManager.Shared.ExtensionMethods;
+
+namespace ProductManager.Application.Decorators;
 
 internal static class Mappings
 {
