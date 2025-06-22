@@ -1,8 +1,11 @@
-﻿namespace ProductManager.Application.Feature.Identity.Commands;
+﻿using ProductManager.Application.Common.Commands;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Repositories;
+namespace ProductManager.Application.Feature.Identity.Commands;
 
 public class UserRefreshTokenCommand : ICommand<ApiResponse>
 {
-    public UserRefreshTokenCommand(String accessToken, String refreshToken)
+    public UserRefreshTokenCommand(string accessToken, string refreshToken)
     {
         AccessToken = accessToken;
         RefreshToken = refreshToken;
