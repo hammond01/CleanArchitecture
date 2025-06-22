@@ -1,4 +1,8 @@
-﻿namespace ProductManager.Application.Feature.Identity.Commands;
+﻿using System.Security.Claims;
+using ProductManager.Application.Common.Commands;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Repositories;
+namespace ProductManager.Application.Feature.Identity.Commands;
 
 public class UserLogOutCommand : ICommand<ApiResponse>
 {
