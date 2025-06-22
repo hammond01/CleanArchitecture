@@ -1,4 +1,12 @@
-﻿namespace ProductManager.Application.Feature.Product.EventHandlers;
+﻿using ProductManager.Application.Common.Services;
+using ProductManager.Constants;
+using ProductManager.Domain.Entities;
+using ProductManager.Domain.Events;
+using ProductManager.Domain.Identity;
+using ProductManager.Domain.Repositories;
+using ProductManager.Persistence.Extensions;
+using ProductManager.Shared.ExtensionMethods;
+namespace ProductManager.Application.Feature.Product.EventHandlers;
 
 public class ProductUpdatedEventHandler : IDomainEventHandler<EntityUpdatedEvent<Products>>
 {
