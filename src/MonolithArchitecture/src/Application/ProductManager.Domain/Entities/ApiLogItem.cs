@@ -1,12 +1,14 @@
-﻿namespace ProductManager.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using ProductManager.Domain.Entities.Identity;
+
+namespace ProductManager.Domain.Entities;
 
 public class ApiLogItem
 {
     [Key]
     public long Id { get; set; }
-
     [Required(ErrorMessage = "FieldRequired")]
-    public DateTimeOffset RequestTime { get; set; }
+    public DateTime RequestTime { get; set; }
 
     [Required(ErrorMessage = "FieldRequired")]
     public long ResponseMillis { get; set; }
@@ -22,9 +24,7 @@ public class ApiLogItem
     public string Path { get; set; } = default!;
 
     [MaxLength(2048)]
-    public string QueryString { get; set; } = default!;
-
-    [MaxLength(256)]
+    public string QueryString { get; set; } = default!; [MaxLength(256)]
     public string RequestBody { get; set; } = default!;
 
     [MaxLength(256)]
@@ -35,5 +35,8 @@ public class ApiLogItem
 
     public Guid? ApplicationUserId { get; set; }
 
-    public User User { get; set; } = default!;
+    [Required]
+    public Guid UserId { get; set; }
+
+    public User? User { get; set; }
 }

@@ -1,4 +1,9 @@
-﻿namespace ProductManager.Domain.Entities.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+using ProductManager.Domain.Enum;
+
+namespace ProductManager.Domain.Entities.Identity;
 
 public class User : IdentityUser<Guid>
 {

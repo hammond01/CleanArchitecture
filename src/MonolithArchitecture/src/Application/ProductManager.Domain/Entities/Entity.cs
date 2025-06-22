@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ProductManager.Domain.Entities;
 
 public abstract class Entity<TKey> : IHasKey<TKey>, ITrackable
 {
