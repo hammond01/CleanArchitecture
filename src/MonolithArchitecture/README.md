@@ -3,6 +3,9 @@
 [![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
+[![GitHub](https://img.shields.io/badge/GitHub-hammond01/CleanArchitecture-blue.svg)](https://github.com/hammond01/CleanArchitecture)
+[![Stars](https://img.shields.io/github/stars/hammond01/CleanArchitecture?style=social)](https://github.com/hammond01/CleanArchitecture/stargazers)
+[![Forks](https://img.shields.io/github/forks/hammond01/CleanArchitecture?style=social)](https://github.com/hammond01/CleanArchitecture/network/members)
 
 A modern e-commerce product management system built with **Clean Architecture** principles using **.NET 8**, **Entity Framework Core**, and **Blazor**. This monolithic application demonstrates enterprise-level patterns including **CQRS**, **Repository Pattern**, **Unit of Work**, and **Domain-Driven Design (DDD)**.
 
@@ -11,11 +14,12 @@ A modern e-commerce product management system built with **Clean Architecture** 
 ## 🆕 Recent Updates
 
 ### Code Quality Improvements (Latest)
-- ✅ **Removed Global Usings**: Transitioned from `GlobalUsing.cs` files to explicit using directives across all projects
-- ✅ **Enhanced Code Clarity**: Each file now explicitly declares its dependencies for better readability
-- ✅ **Improved Maintainability**: Easier dependency tracking and better IDE IntelliSense support
-- ✅ **Added Action Logging**: Comprehensive request/response logging with `ActionLoggingFilter`
-- ✅ **Enhanced Audit Trail**: Improved audit logging with `ActionLogService` and database persistence
+
+-   ✅ **Removed Global Usings**: Transitioned from `GlobalUsing.cs` files to explicit using directives across all projects
+-   ✅ **Enhanced Code Clarity**: Each file now explicitly declares its dependencies for better readability
+-   ✅ **Improved Maintainability**: Easier dependency tracking and better IDE IntelliSense support
+-   ✅ **Added Action Logging**: Comprehensive request/response logging with `ActionLoggingFilter`
+-   ✅ **Enhanced Audit Trail**: Improved audit logging with `ActionLogService` and database persistence
 
 ## 🏗️ Architecture Overview
 
@@ -71,7 +75,7 @@ src/
 
     ```bash
     git clone https://github.com/hammond01/CleanArchitecture.git
-    cd ProductManager
+    cd CleanArchitecture/src/MonolithArchitecture
     ```
 
 2. **Restore NuGet packages**
@@ -211,17 +215,17 @@ internal class AddOrUpdateProductHandler : ICommandHandler<AddOrUpdateProductCom
 -   **Repository Implementations**: Data access logic
 -   **Migrations**: Database schema changes
 -   **Configurations**: Entity mappings
--   **Services**: 
-    - `ActionLogService`: Persist action logs to database
-    - `LockManager`: Distributed locking implementation
+-   **Services**:
+    -   `ActionLogService`: Persist action logs to database
+    -   `LockManager`: Distributed locking implementation
 
 #### Infrastructure (`ProductManager.Infrastructure`)
 
 -   **External Services**: Third-party integrations
 -   **Middleware**: Request/response pipeline components
-    - `ActionLoggingFilter`: Automatic action logging and performance tracking
-    - `ApiRequestLoggingMiddleware`: Comprehensive request/response logging
-    - `GlobalExceptionHandlerMiddleware`: Centralized error handling
+    -   `ActionLoggingFilter`: Automatic action logging and performance tracking
+    -   `ApiRequestLoggingMiddleware`: Comprehensive request/response logging
+    -   `GlobalExceptionHandlerMiddleware`: Centralized error handling
 -   **Identity Services**: User authentication and authorization
 -   **Logging Services**: Structured logging with Serilog
 -   **DateTime Providers**: Abstracted time services for testing
@@ -245,13 +249,16 @@ internal class AddOrUpdateProductHandler : ICommandHandler<AddOrUpdateProductCom
 ## 🔧 Code Quality & Architecture Standards
 
 ### Explicit Using Directives
+
 This project has been migrated from global usings to explicit using directives for:
-- **Better Code Clarity**: Each file explicitly declares its dependencies
-- **Improved IDE Support**: Enhanced IntelliSense and navigation
-- **Easier Dependency Tracking**: Clear understanding of what each file needs
-- **Better Maintainability**: Easier to refactor and understand code dependencies
+
+-   **Better Code Clarity**: Each file explicitly declares its dependencies
+-   **Improved IDE Support**: Enhanced IntelliSense and navigation
+-   **Easier Dependency Tracking**: Clear understanding of what each file needs
+-   **Better Maintainability**: Easier to refactor and understand code dependencies
 
 ### Example of Explicit Using Directives:
+
 ```csharp
 using System;
 using System.Threading;
@@ -272,10 +279,11 @@ namespace ProductManager.Application.Feature.Product.Commands
 ```
 
 ### Logging & Monitoring
-- **Action Logging**: Automatic logging of all controller actions with performance metrics
-- **Request/Response Logging**: Detailed HTTP request and response logging
-- **Audit Trail**: Comprehensive audit logging for data changes
-- **Structured Logging**: Serilog integration with structured logging patterns
+
+-   **Action Logging**: Automatic logging of all controller actions with performance metrics
+-   **Request/Response Logging**: Detailed HTTP request and response logging
+-   **Audit Trail**: Comprehensive audit logging for data changes
+-   **Structured Logging**: Serilog integration with structured logging patterns
 
 ## 🔧 Configuration
 
@@ -417,7 +425,14 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 👥 Authors
 
--   **Hammond** - _Initial work_ - [Hammond](https://github.com/hammond01/CleanArchitecture)
+-   **Hammond** - _Initial work & Project Maintainer_ - [GitHub Profile](https://github.com/hammond01)
+-   **Project Repository** - [CleanArchitecture](https://github.com/hammond01/CleanArchitecture)
+
+### 📧 Contact
+
+-   **GitHub**: [@hammond01](https://github.com/hammond01)
+-   **Email**: Hieutruonghoang01@gmail.com
+-   **Project Issues**: [GitHub Issues](https://github.com/hammond01/CleanArchitecture/issues)
 
 ## 🙏 Acknowledgments
 
@@ -428,10 +443,18 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🔗 Useful Links
 
+### Project Resources
+-   **Main Repository**: [CleanArchitecture](https://github.com/hammond01/CleanArchitecture)
+-   **Issues & Bug Reports**: [GitHub Issues](https://github.com/hammond01/CleanArchitecture/issues)
+-   **Feature Requests**: [GitHub Discussions](https://github.com/hammond01/CleanArchitecture/discussions)
+-   **Latest Releases**: [GitHub Releases](https://github.com/hammond01/CleanArchitecture/releases)
+
+### Documentation & Learning
 -   [Clean Architecture Guide](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)
 -   [.NET 8 Documentation](https://docs.microsoft.com/en-us/dotnet/)
 -   [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/)
 -   [Blazor Documentation](https://docs.microsoft.com/en-us/aspnet/core/blazor/)
+-   [MediatR Documentation](https://github.com/jbogard/MediatR)
 
 ---
 
