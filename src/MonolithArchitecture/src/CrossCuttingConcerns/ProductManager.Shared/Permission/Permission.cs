@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Shared.Permission;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProductManager.Shared.Permission;
 
 public static class Permissions
 {

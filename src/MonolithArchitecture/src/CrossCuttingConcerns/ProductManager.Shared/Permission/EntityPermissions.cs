@@ -1,3 +1,7 @@
+using System.Collections.ObjectModel;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+
 namespace ProductManager.Shared.Permission;
 
 public class EntityPermissions
