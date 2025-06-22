@@ -1,4 +1,8 @@
-﻿namespace ProductManager.Application.Feature.Orders.Queries;
+﻿using ProductManager.Application.Common.Queries;
+using ProductManager.Application.Common.Services;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Entities;
+namespace ProductManager.Application.Feature.Orders.Queries;
 
 public record GetOrders : IQuery<ApiResponse>;
 internal class GetsOrderHandler : IQueryHandler<GetOrders, ApiResponse>
