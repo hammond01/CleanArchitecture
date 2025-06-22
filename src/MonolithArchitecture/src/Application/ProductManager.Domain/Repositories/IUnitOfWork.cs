@@ -1,4 +1,6 @@
-﻿namespace ProductManager.Domain.Repositories;
+﻿using System.Data;
+
+namespace ProductManager.Domain.Repositories;
 
 public interface IUnitOfWork
 {
