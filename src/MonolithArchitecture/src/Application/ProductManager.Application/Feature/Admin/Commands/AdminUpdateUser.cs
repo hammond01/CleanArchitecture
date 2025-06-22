@@ -1,4 +1,8 @@
-﻿namespace ProductManager.Application.Feature.Admin.Commands;
+﻿using ProductManager.Application.Common.Commands;
+using ProductManager.Domain.Common;
+using ProductManager.Domain.Repositories;
+using ProductManager.Shared.DTOs.UserDto;
+namespace ProductManager.Application.Feature.Admin.Commands;
 
 public class AdminUpdateUserCommand : ICommand<ApiResponse>
 {
