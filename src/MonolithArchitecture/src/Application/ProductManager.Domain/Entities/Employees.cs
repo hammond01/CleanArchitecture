@@ -6,7 +6,7 @@ namespace ProductManager.Domain.Entities;
 
 [Index("LastName", Name = "LastName")]
 [Index("PostalCode", Name = "PostalCode")]
-public class Employee : Entity<string>
+public class Employees : Entity<string>
 {
     [StringLength(20)]
     public string LastName { get; set; } = null!;

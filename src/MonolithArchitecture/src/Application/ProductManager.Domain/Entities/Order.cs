@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-
 namespace ProductManager.Domain.Entities;
 
 [Index("CustomerId", Name = "CustomerID")]
@@ -54,11 +53,11 @@ public class Order : Entity<string>
 
     [ForeignKey("CustomerId")]
     [InverseProperty("Orders")]
-    public Customer? Customer { get; set; }
+    public Customers? Customer { get; set; }
 
     [ForeignKey("EmployeeId")]
     [InverseProperty("Orders")]
-    public Employee? Employee { get; set; }
+    public Employees? Employee { get; set; }
 
     [InverseProperty("Order")]
     public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
