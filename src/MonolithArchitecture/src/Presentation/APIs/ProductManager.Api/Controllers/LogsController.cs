@@ -195,7 +195,8 @@ public class LogsController : ControllerBase
         var topEndpoints = await apiLogsQuery
             .GroupBy(x => new
             {
-                x.Method, x.Path
+                x.Method,
+                x.Path
             })
             .Select(g => new
             {
@@ -211,7 +212,10 @@ public class LogsController : ControllerBase
         {
             ApiLogs = apiLogStats ?? new
             {
-                TotalRequests = 0, SuccessfulRequests = 0, ErrorRequests = 0, AverageResponseTime = 0.0
+                TotalRequests = 0,
+                SuccessfulRequests = 0,
+                ErrorRequests = 0,
+                AverageResponseTime = 0.0
             },
             ActionLogs = actionLogStats ?? new
             {
