@@ -23,8 +23,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Categories> Categories { get; set; } = null!;
     public DbSet<Suppliers> Suppliers { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
-    public DbSet<Customer> Customers { get; set; } = null!;
-    public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<Customers> Customers { get; set; } = null!;
+    public DbSet<Employees> Employees { get; set; } = null!;
 
     // Logging Entities
     public DbSet<ApiLogItem> ApiLogs { get; set; } = null!;
