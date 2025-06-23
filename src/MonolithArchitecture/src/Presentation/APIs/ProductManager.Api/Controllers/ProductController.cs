@@ -20,7 +20,7 @@ public class ProductController : ConBase
     }
     [HttpGet]
     [LogAction("Get all products")]
-    public async Task<ApiResponse> GetProducts()
+    public async Task<ApiResponse> Get()
     {
         _logger.LogInformation("🔍 Getting all products");
         var data = await _dispatcher.DispatchAsync(new GetProducts());
@@ -31,7 +31,7 @@ public class ProductController : ConBase
 
     [HttpGet("{id}")]
     [LogAction("Get product by ID")]
-    public async Task<ApiResponse> GetProduct(string id)
+    public async Task<ApiResponse> Get(string id)
     {
         _logger.LogInformation("🔍 Getting product with ID: {ProductId}", id);
         var data = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
@@ -42,7 +42,7 @@ public class ProductController : ConBase
 
     [HttpPost]
     [LogAction("Create new product")]
-    public async Task<ApiResponse> CreateProduct([FromBody] CreateProductDto createProductDto)
+    public async Task<ApiResponse> Post([FromBody] CreateProductDto createProductDto)
     {
         _logger.LogInformation("➕ Creating new product: {ProductName}", createProductDto.ProductName);
         var data = createProductDto.Adapt<Products>();
@@ -53,7 +53,7 @@ public class ProductController : ConBase
 
     [HttpPut("{id}")]
     [LogAction("Update product")]
-    public async Task<ApiResponse> UpdateProduct(string id, [FromBody] UpdateProductDto updateProductDto)
+    public async Task<ApiResponse> Put(string id, [FromBody] UpdateProductDto updateProductDto)
     {
         _logger.LogInformation("✏️ Updating product with ID: {ProductId}", id);
         var apiResponse = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
@@ -66,7 +66,7 @@ public class ProductController : ConBase
 
     [HttpDelete("{id}")]
     [LogAction("Delete product")]
-    public async Task<ApiResponse> DeleteProduct(string id)
+    public async Task<ApiResponse> Delete(string id)
     {
         _logger.LogInformation("🗑️ Deleting product with ID: {ProductId}", id);
         var apiResponse = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));

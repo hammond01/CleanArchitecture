@@ -16,9 +16,8 @@ public class CategoryController : ConBase
     {
         _dispatcher = dispatcher;
     }
-
     [HttpGet]
-    public async Task<ApiResponse> GetCategories()
+    public async Task<ApiResponse> Get()
     {
         var data = await _dispatcher.DispatchAsync(new GetCategories());
         data.Result = ((List<Categories>)data.Result).Adapt<List<GetCategoryDto>>();
@@ -26,7 +25,7 @@ public class CategoryController : ConBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ApiResponse> GetCategory(string id)
+    public async Task<ApiResponse> Get(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetCategoryByIdQuery(id));
         data.Result = ((Categories)data.Result).Adapt<GetCategoryDto>();
@@ -34,14 +33,14 @@ public class CategoryController : ConBase
     }
 
     [HttpPost]
-    public async Task<ApiResponse> CreateCategory([FromBody] CreateCategoryDto createCategoryDto)
+    public async Task<ApiResponse> Post([FromBody] CreateCategoryDto createCategoryDto)
     {
         var data = createCategoryDto.Adapt<Categories>();
         return await _dispatcher.DispatchAsync(new AddOrUpdateCategoryCommand(data));
     }
 
     [HttpPut("{id}")]
-    public async Task<ApiResponse> UpdateCategory(string id, [FromBody] UpdateCategoryDto updateCategoryDto)
+    public async Task<ApiResponse> Put(string id, [FromBody] UpdateCategoryDto updateCategoryDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetCategoryByIdQuery(id));
         var category = (Categories)apiResponse.Result;
@@ -49,7 +48,7 @@ public class CategoryController : ConBase
         return await _dispatcher.DispatchAsync(new AddOrUpdateCategoryCommand(category));
     }
     [HttpDelete("{id}")]
-    public async Task<ApiResponse> DeleteCategory(string id)
+    public async Task<ApiResponse> Delete(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetCategoryByIdQuery(id));
         var category = (Categories)apiResponse.Result;
