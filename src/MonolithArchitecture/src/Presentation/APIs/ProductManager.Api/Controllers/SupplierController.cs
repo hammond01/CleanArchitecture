@@ -16,9 +16,8 @@ public class SupplierController : ConBase
     {
         _dispatcher = dispatcher;
     }
-
     [HttpGet]
-    public async Task<ApiResponse> GetSuppliers()
+    public async Task<ApiResponse> Get()
     {
         var data = await _dispatcher.DispatchAsync(new GetSuppliers());
         data.Result = ((List<Suppliers>)data.Result).Adapt<List<GetSupplierDto>>();
@@ -26,7 +25,7 @@ public class SupplierController : ConBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ApiResponse> GetSupplier(string id)
+    public async Task<ApiResponse> Get(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
         data.Result = ((Suppliers)data.Result).Adapt<GetSupplierDto>();
@@ -34,14 +33,14 @@ public class SupplierController : ConBase
     }
 
     [HttpPost]
-    public async Task<ApiResponse> CreateSupplier([FromBody] CreateSupplierDto createSupplierDto)
+    public async Task<ApiResponse> Post([FromBody] CreateSupplierDto createSupplierDto)
     {
         var data = createSupplierDto.Adapt<Suppliers>();
         return await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(data));
     }
 
     [HttpPut("{id}")]
-    public async Task<ApiResponse> UpdateSupplier(string id, [FromBody] UpdateSupplierDto updateSupplierDto)
+    public async Task<ApiResponse> Put(string id, [FromBody] UpdateSupplierDto updateSupplierDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
         var supplier = (Suppliers)apiResponse.Result;
@@ -50,7 +49,7 @@ public class SupplierController : ConBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ApiResponse> DeleteSupplier(string id)
+    public async Task<ApiResponse> Delete(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
         if (apiResponse.IsSuccessStatusCode == false)

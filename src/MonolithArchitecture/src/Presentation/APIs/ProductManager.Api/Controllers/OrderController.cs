@@ -16,9 +16,8 @@ public class OrderController : ConBase
     {
         _dispatcher = dispatcher;
     }
-
     [HttpGet]
-    public async Task<ApiResponse> GetOrders()
+    public async Task<ApiResponse> Get()
     {
         var data = await _dispatcher.DispatchAsync(new GetOrders());
         data.Result = ((List<Order>)data.Result).Adapt<List<GetOrderDto>>();
@@ -26,7 +25,7 @@ public class OrderController : ConBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ApiResponse> GetOrder(string id)
+    public async Task<ApiResponse> Get(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
         data.Result = ((Order)data.Result).Adapt<GetOrderDto>();
@@ -34,14 +33,14 @@ public class OrderController : ConBase
     }
 
     [HttpPost]
-    public async Task<ApiResponse> CreateOrder([FromBody] CreateOrderDto createOrderDto)
+    public async Task<ApiResponse> Post([FromBody] CreateOrderDto createOrderDto)
     {
         var data = createOrderDto.Adapt<Order>();
         return await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(data));
     }
 
     [HttpPut("{id}")]
-    public async Task<ApiResponse> UpdateOrder(string id, [FromBody] UpdateOrderDto updateOrderDto)
+    public async Task<ApiResponse> Put(string id, [FromBody] UpdateOrderDto updateOrderDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
         var order = (Order)apiResponse.Result;
@@ -49,7 +48,7 @@ public class OrderController : ConBase
         return await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(order));
     }
     [HttpDelete("{id}")]
-    public async Task<ApiResponse> DeleteOrder(string id)
+    public async Task<ApiResponse> Delete(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
         var order = (Order)apiResponse.Result;
