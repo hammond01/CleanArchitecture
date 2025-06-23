@@ -6,7 +6,7 @@ public class Lock
 
     public string EntityName { get; set; } = default!;
 
-    public string OwnerId { get; set; } = default!;
+    public string? OwnerId { get; set; }
 
     public DateTimeOffset? AcquiredDateTime { get; set; }
 
