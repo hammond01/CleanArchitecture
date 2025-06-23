@@ -1,10 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using ProductManager.Application.Common.Queries;
+﻿using ProductManager.Application.Common.Queries;
 using ProductManager.Application.Common.Services;
 using ProductManager.Domain.Common;
 using ProductManager.Domain.Entities;
-
 namespace ProductManager.Application.Feature.Category.Queries;
 
 public record GetCategories : IQuery<ApiResponse>;
