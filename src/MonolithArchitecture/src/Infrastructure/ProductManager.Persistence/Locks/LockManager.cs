@@ -16,10 +16,9 @@ public class LockManager : ILockManager
         _dbContext = dbContext;
         _dateTimeProvider = dateTimeProvider;
     }
-
     public bool AcquireLock(string entityName, string entityId, string ownerId, TimeSpan expirationIn)
     {
-        CreateLock(entityName, entityId);
+        CreateLock(entityName, entityId, ownerId);
 
         if (ExtendLock(entityName, entityId, ownerId, expirationIn))
         {
@@ -134,22 +133,22 @@ public class LockManager : ILockManager
             throw new CouldNotAcquireLockException();
         }
     }
-
-    private void CreateLock(string entityName, string entityId)
+    private void CreateLock(string entityName, string entityId, string ownerId)
     {
         var sql = @"
             merge into
                 [dbo].[Locks] with (holdlock) t
             using
-                (values (@entityName, @entityId)) s([EntityName], [EntityId])
+                (values (@entityName, @entityId, @ownerId)) s([EntityName], [EntityId], [OwnerId])
             on
                 t.[EntityName] = s.[EntityName] and t.[EntityId] = s.[EntityId]
             when not matched then
-                insert ([EntityName], [EntityId]) values (s.[EntityName], s.[EntityId]);
+                insert ([EntityName], [EntityId], [OwnerId]) values (s.[EntityName], s.[EntityId], s.[OwnerId]);
             ";
 
         _dbContext.Database.ExecuteSqlRaw(sql,
         new SqlParameter("entityName", entityName),
-        new SqlParameter("entityId", entityId));
+        new SqlParameter("entityId", entityId),
+        new SqlParameter("ownerId", ownerId));
     }
 }

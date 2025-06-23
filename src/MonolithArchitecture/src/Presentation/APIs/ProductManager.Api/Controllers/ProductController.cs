@@ -5,6 +5,7 @@ using ProductManager.Application.Feature.Product.Commands;
 using ProductManager.Application.Feature.Product.Queries;
 using ProductManager.Domain.Common;
 using ProductManager.Domain.Entities;
+using ProductManager.Infrastructure.Middleware;
 using ProductManager.Shared.DTOs.ProductDto;
 namespace ProductManager.Api.Controllers;
 
@@ -50,8 +51,8 @@ public class ProductController : ConBase
         _logger.LogInformation("✅ Product created with status: {StatusCode}", result.StatusCode);
         return result;
     }
-
     [HttpPut("{id}")]
+    [EntityLock("Product", "{id}", 30)] // Explicit lock for Product entity with 30-second timeout
     [LogAction("Update product")]
     public async Task<ApiResponse> Put(string id, [FromBody] UpdateProductDto updateProductDto)
     {

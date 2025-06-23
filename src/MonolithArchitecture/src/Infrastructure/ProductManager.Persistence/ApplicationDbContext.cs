@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ProductManager.Domain.Entities;
 using ProductManager.Domain.Entities.Identity;
 using ProductManager.Domain.Repositories;
+using ProductManager.Persistence.Locks;
 namespace ProductManager.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -15,9 +17,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         IUnitOfWork, IDataProtectionKeyContext
 {
     private IDbContextTransaction _dbContextTransaction = null!;
-
-    // ReSharper disable once UnassignedGetOnlyAutoProperty
-    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
     // Business Entities
     public DbSet<Products> Products { get; set; } = null!;
@@ -31,6 +30,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ApiLogItem> ApiLogs { get; set; } = null!;
     public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
+
     public async Task<IDisposable> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
         CancellationToken cancellationToken = default)
     {
@@ -38,10 +39,21 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         return _dbContextTransaction;
     }
     public async Task<IDisposable> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted,
-        string? lockName = null,
-        CancellationToken cancellationToken = default)
+        string? lockName = null, CancellationToken cancellationToken = default)
     {
         _dbContextTransaction = await Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+
+        var sqlLock = new SqlDistributedLock((_dbContextTransaction.GetDbTransaction() as SqlTransaction)!);
+        if (lockName == null)
+        {
+            return _dbContextTransaction;
+        }
+        var lockScope = sqlLock.Acquire(lockName);
+        if (lockScope == null)
+        {
+            throw new Exception($"Could not acquire lock: {lockName}");
+        }
+
         return _dbContextTransaction;
     }
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)

@@ -9,7 +9,7 @@ public class SqlDistributedLockScope : IDistributedLockScope
     private readonly string _lockName;
     private readonly SqlTransaction? _transaction;
 
-    public SqlDistributedLockScope(SqlConnection connection, SqlTransaction transaction, string lockName)
+    public SqlDistributedLockScope(SqlConnection connection, SqlTransaction? transaction, string lockName)
     {
         _connection = connection;
         _transaction = transaction;

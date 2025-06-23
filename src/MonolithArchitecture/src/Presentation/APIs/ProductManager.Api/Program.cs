@@ -126,6 +126,9 @@ var app = builder.Build();
     // Add API request logging middleware (logs all requests to a database)
     app.UseMiddleware<ApiRequestLoggingMiddleware>();
 
+    // Add automatic entity locking middleware for PUT/DELETE operations
+    app.UseMiddleware<AutoEntityLockMiddleware>();
+
     app.UseHttpsRedirection();
 
     app.UseAuthentication();
