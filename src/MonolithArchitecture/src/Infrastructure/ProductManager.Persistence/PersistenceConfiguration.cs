@@ -9,6 +9,8 @@ using ProductManager.Persistence.Extensions;
 using ProductManager.Persistence.Repositories;
 using ProductManager.Persistence.Services;
 using ProductManager.Shared.Permission;
+using ProductManager.Shared.Locks;
+using ProductManager.Persistence.Locks;
 
 namespace ProductManager.Persistence;
 
@@ -26,6 +28,9 @@ public static class PersistenceConfiguration
 
         // Register logging service
         services.AddScoped<IActionLogService, ActionLogService>();
+
+        // Register lock manager
+        services.AddScoped<ILockManager, LockManager>();
 
         services.AddSingleton<EntityPermissions>();
         services.AddScoped<IdentityExtension>();
