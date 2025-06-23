@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
-namespace ProductManager.Domain.Entities;
+namespace ProductManager.Shared.DTOs.CustomerDto;
 
-[Index("City", Name = "City")]
-[Index("CompanyName", Name = "CompanyName")]
-[Index("PostalCode", Name = "PostalCode")]
-[Index("Region", Name = "Region")]
-public class Customer : Entity<string>
+public class CreateCustomerDto
 {
+    [Required]
+    [StringLength(5)]
+    public string Id { get; set; } = default!;
+
+    [Required]
     [StringLength(40)]
-    public string CompanyName { get; set; } = null!;
+    public string CompanyName { get; set; } = default!;
 
     [StringLength(30)]
     public string? ContactName { get; set; }
@@ -39,7 +38,4 @@ public class Customer : Entity<string>
 
     [StringLength(24)]
     public string? Fax { get; set; }
-
-    [InverseProperty("Customer")]
-    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

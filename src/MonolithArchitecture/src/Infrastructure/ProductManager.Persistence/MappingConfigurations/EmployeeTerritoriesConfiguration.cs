@@ -12,7 +12,7 @@ public class EmployeeTerritoriesConfiguration : IEntityTypeConfiguration<Employe
         {
             x.EmployeeId, x.TerritoryId
         });
-        builder.HasOne(et => et.Employee)
+        builder.HasOne(et => et.Employees)
             .WithMany(e => e.EmployeeTerritories)
             .HasForeignKey(et => et.EmployeeId);
         builder.HasOne(et => et.Territory)
