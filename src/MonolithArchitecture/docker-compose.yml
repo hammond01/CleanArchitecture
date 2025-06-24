@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+    productmanager-api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "5000:8080"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__SQL=Data Source=sqlserver;Initial Catalog=ProductManager;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true
+            - ConnectionStrings__IDENTITY=Data Source=sqlserver;Initial Catalog=ProductManager.Identity;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=true
+            - IdentityConfig__SECRET=your-super-secret-key-that-is-at-least-32-characters-long
+            - IdentityConfig__ISSUER=ProductManager
+            - IdentityConfig__AUDIENCE=ProductManager-Users
+        depends_on:
+            - sqlserver
+        networks:
+            - productmanager-network
+
+    sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=YourStrong@Passw0rd
+            - MSSQL_PID=Express
+        ports:
+            - "1433:1433"
+        volumes:
+            - sqlserver-data:/var/opt/mssql
+        networks:
+            - productmanager-network
+
+    # Optional: SQL Server Management Studio via web
+    sqlserver-web:
+        image: adminer
+        restart: always
+        ports:
+            - "8080:8080"
+        networks:
+            - productmanager-network
+
+volumes:
+    sqlserver-data:
+
+networks:
+    productmanager-network:
+        driver: bridge

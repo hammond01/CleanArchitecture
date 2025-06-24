@@ -51,11 +51,9 @@ builder.Host.UseSerilog();
     builder.Services.AddSwaggerVersioning();    // Add Health Checks
     builder.Services.AddHealthChecks()
         .AddCheck<DatabaseHealthCheck>("database")
-        .AddCheck<ApplicationHealthCheck>("application");
-
-    builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
+        .AddCheck<ApplicationHealthCheck>("application"); builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
     builder.Services.ApplicationConfigureServices();
-    builder.Services.InfrastructureConfigureServices();
+    builder.Services.InfrastructureConfigureServices(builder.Configuration);
     builder.Services.Configure<IdentityConfig>(builder.Configuration.GetSection(IdentityConfig.ConfigName));
     var audience = builder.Configuration["IdentityConfig:AUDIENCE"];
     var issUser = builder.Configuration["IdentityConfig:ISSUER"];
@@ -193,7 +191,8 @@ var app = builder.Build();
     {
         Log.Information("🔴 ProductManager API shutting down...");
         Log.CloseAndFlush();
-    });
-
-    app.Run();
+    }); app.Run();
 }
+
+// Make Program class accessible for integration tests
+public partial class Program { }
