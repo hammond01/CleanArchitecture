@@ -1,5 +1,6 @@
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning; // Add versioning
 using ProductManager.Application.Common;
 using ProductManager.Application.Feature.Customer.Commands;
 using ProductManager.Application.Feature.Customer.Queries;
@@ -13,8 +14,10 @@ namespace ProductManager.Api.Controllers;
 ///     Customer management endpoints with full CRUD operations
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
-public class CustomerController : ConBase
+[ApiVersion("1.0")]
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+public class CustomerController : ControllerBase
 {
     private readonly Dispatcher _dispatcher;
     private readonly ILogger<CustomerController> _logger;

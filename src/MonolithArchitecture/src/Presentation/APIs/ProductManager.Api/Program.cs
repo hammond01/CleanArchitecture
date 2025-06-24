@@ -8,9 +8,11 @@ using ProductManager.Infrastructure;
 using ProductManager.Infrastructure.Middleware;
 using ProductManager.Infrastructure.Storage;
 using ProductManager.Persistence;
+using ProductManager.Api.Versioning; // Add this for API versioning
 using Serilog;
 using Serilog.Events;
 using SolidTemplate.Constants.ConfigurationOptions;
+using ProductManager.Infrastructure.HealthChecks;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog first
@@ -43,7 +45,14 @@ builder.Host.UseSerilog();
         options.Filters.Add<ActionLoggingFilter>();
     });
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+
+    // Add API Versioning Configuration
+    builder.Services.AddApiVersioningConfiguration();
+    builder.Services.AddSwaggerVersioning();    // Add Health Checks
+    builder.Services.AddHealthChecks()
+        .AddCheck<DatabaseHealthCheck>("database")
+        .AddCheck<ApplicationHealthCheck>("application");
+
     builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
     builder.Services.ApplicationConfigureServices();
     builder.Services.InfrastructureConfigureServices();
@@ -109,10 +118,46 @@ var app = builder.Build();
     // Log startup
     Log.Information("🚀 ProductManager API starting up...");
 
+    // Configure Health Check endpoints
+    app.UseHealthChecks("/health");
+    app.UseHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+    {
+        Predicate = check => check.Tags.Contains("ready")
+    });
+    app.UseHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+    {
+        Predicate = _ => false
+    });
+
+    // Add detailed health check endpoint for development
     if (app.Environment.IsDevelopment())
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseHealthChecks("/health/detailed", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+        {
+            ResponseWriter = async (context, report) =>
+            {
+                context.Response.ContentType = "application/json";
+                var result = System.Text.Json.JsonSerializer.Serialize(new
+                {
+                    status = report.Status.ToString(),
+                    checks = report.Entries.Select(entry => new
+                    {
+                        name = entry.Key,
+                        status = entry.Value.Status.ToString(),
+                        exception = entry.Value.Exception?.Message,
+                        duration = entry.Value.Duration.ToString(),
+                        data = entry.Value.Data
+                    })
+                });
+                await context.Response.WriteAsync(result);
+            }
+        });
+    }
+
+    if (app.Environment.IsDevelopment())
+    {
+        // Use versioned Swagger configuration
+        app.UseSwaggerVersioning();
         Log.Information("📚 Swagger UI available at /swagger");
     }
     using (var serviceScope =
