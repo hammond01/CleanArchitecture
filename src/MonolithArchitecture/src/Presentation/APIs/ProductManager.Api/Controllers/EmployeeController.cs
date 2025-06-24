@@ -1,5 +1,6 @@
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning; // Add versioning
 using ProductManager.Application.Common;
 using ProductManager.Application.Feature.Employee.Commands;
 using ProductManager.Application.Feature.Employee.Queries;
@@ -11,7 +12,11 @@ namespace ProductManager.Api.Controllers;
 /// <summary>
 ///     Employee management controller - provides CRUD operations for employees
 /// </summary>
-public class EmployeeController : ConBase
+[ApiController]
+[ApiVersion("1.0")]
+[ApiVersion("2.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
+public class EmployeeController : ControllerBase
 {
     private readonly Dispatcher _dispatcher;
 
