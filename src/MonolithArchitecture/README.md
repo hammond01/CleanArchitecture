@@ -180,6 +180,7 @@ The project includes comprehensive testing infrastructure:
 -   ✅ Unit Tests: 2/2 passing (100%)
 -   ✅ Integration Tests: 1/2 passing (GET endpoint functional, POST requires test data setup)
     dotnet run --project src/Presentation/UIs/ProductManager.Blazor
+
     ```
 
     ```
@@ -463,8 +464,8 @@ ENTRYPOINT ["dotnet", "ProductManager.Api.dll"]
 
 Once the application is running, you can access:
 
--   **Swagger UI**: `https://localhost:5001/swagger` (when configured)
--   **API Endpoints**: `https://localhost:5001/api`
+-   **Swagger UI**: `http://localhost:5151/swagger`
+-   **API Endpoints**: `http://localhost:5151/api`
 
 ### Available API Endpoints
 
