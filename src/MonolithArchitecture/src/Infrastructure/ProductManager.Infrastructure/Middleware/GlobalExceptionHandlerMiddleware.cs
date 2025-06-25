@@ -40,6 +40,17 @@ public class GlobalExceptionHandlerMiddleware
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var response = context.Response;
+
+        // Check if the response has already started - if so, we can't modify it
+        if (response.HasStarted)
+        {
+            _logger.LogError("Cannot handle exception - response has already started: {Message} | Path: {Path} | Method: {Method}",
+                exception.Message,
+                context.Request.Path,
+                context.Request.Method);
+            return;
+        }
+
         response.ContentType = "application/json";
 
         var statusCode = GetStatusCode(exception);
@@ -57,7 +68,15 @@ public class GlobalExceptionHandlerMiddleware
         );
 
         response.StatusCode = statusCode;
-        await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+
+        try
+        {
+            await response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+        }
+        catch (InvalidOperationException ioEx)
+        {
+            _logger.LogError("Failed to write error response - response stream is not writable: {Message}", ioEx.Message);
+        }
     }
 
     private static int GetStatusCode(Exception ex) => ex switch
