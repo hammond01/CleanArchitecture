@@ -44,7 +44,7 @@ public class CrudService<T> : ICrudService<T>
 
     public async Task<T?> GetByIdAsync(string id)
     {
-        ValidationException.Requires(id != string.Empty, "Invalid Id");
+        ValidationException.Requires(!string.IsNullOrEmpty(id), "Invalid Id");
         return await _repository.FirstOrDefaultAsync(_repository.GetQueryableSet().Where(x => x.Id == id));
     }
 }
