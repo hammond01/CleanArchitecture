@@ -28,8 +28,8 @@ public static class MappingConfig
 
         // Product mappings with custom logic
         TypeAdapterConfig<Products, GetProductDto>.NewConfig()
-            .Map(dest => dest.CategoryName, src => src.Category.CategoryName)
-            .Map(dest => dest.SupplierName, src => src.Supplier.CompanyName);
+            .Map(dest => dest.CategoryName, src => src.Category != null ? src.Category.CategoryName : string.Empty)
+            .Map(dest => dest.SupplierName, src => src.Supplier != null ? src.Supplier.CompanyName : string.Empty);
 
         TypeAdapterConfig<CreateProductDto, Products>.NewConfig();
         TypeAdapterConfig<UpdateProductDto, Products>.NewConfig();
