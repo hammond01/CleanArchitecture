@@ -15,7 +15,7 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Suppliers>
         {
             new Suppliers
             {
-                Id = UlidExtension.Generate(),
+                Id = "01JH179GGZ7FAHZ0DNFYNZ18YX",
                 CompanyName = "Tech Supplies Co.",
                 ContactName = "John Doe",
                 ContactTitle = "Sales Manager",
@@ -30,7 +30,7 @@ public class SupplierConfiguration : IEntityTypeConfiguration<Suppliers>
             },
             new Suppliers
             {
-                Id = UlidExtension.Generate(),
+                Id = "01JH179GGZ7FAHZ0DNFYNZ19FG",
                 CompanyName = "Mobile Accessories Inc.",
                 ContactName = "Jane Smith",
                 ContactTitle = "CEO",
