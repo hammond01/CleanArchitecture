@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FluentAssertions;
 using System.Net.Http.Json;
 using ProductManager.Shared.DTOs.ProductDto;
+using ProductManager.IntegrationTests;
 using Xunit;
 
 namespace ProductManager.IntegrationTests.Controllers;
@@ -34,8 +35,8 @@ public class ProductControllerTests : IClassFixture<WebApplicationFactory<Progra
         var productDto = new CreateProductDto
         {
             ProductName = "Test Product",
-            CategoryId = "test-category",
-            SupplierId = "test-supplier",
+            CategoryId = "01JH179GGG9BN2V8SS9RG70QNG", // Valid category ID from seeded data (Mobile Phones)
+            SupplierId = "01JH179GGZ7FAHZ0DNFYNZ19FG", // Valid supplier ID from seeded data (Tech Supplies Co.)
             UnitPrice = 100.00m,
             UnitsInStock = 50
         };        // Act
