@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductManager.Persistence;
 
@@ -11,9 +12,11 @@ using ProductManager.Persistence;
 namespace ProductManager.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250626154439_FixCategorySeeds")]
+    partial class FixCategorySeeds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,7 +316,7 @@ namespace ProductManager.Persistence.Migrations
                         {
                             Id = "01JH179GGG9BN2V8SS9RG70QNG",
                             CategoryName = "Mobile Phones",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 887, DateTimeKind.Unspecified).AddTicks(4498), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 44, 38, 446, DateTimeKind.Unspecified).AddTicks(7030), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Category for the latest mobile phones",
                             RowId = 0
                         },
@@ -321,7 +324,7 @@ namespace ProductManager.Persistence.Migrations
                         {
                             Id = "01JH179GGG9BN2V8SS9RG70QPX",
                             CategoryName = "Accessories",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 887, DateTimeKind.Unspecified).AddTicks(4534), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 44, 38, 446, DateTimeKind.Unspecified).AddTicks(7081), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Category for accessories such as cases, chargers, cables",
                             RowId = 0
                         },
@@ -329,7 +332,7 @@ namespace ProductManager.Persistence.Migrations
                         {
                             Id = "01JH179GGG9BN2V8SS9RG70QRS",
                             CategoryName = "SIM Cards",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 887, DateTimeKind.Unspecified).AddTicks(4537), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 44, 38, 446, DateTimeKind.Unspecified).AddTicks(7083), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Category for SIM cards and promotional plans",
                             RowId = 0
                         },
@@ -337,7 +340,7 @@ namespace ProductManager.Persistence.Migrations
                         {
                             Id = "01JH179GGG9BN2V8SS9RG70QTU",
                             CategoryName = "Repair Services",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 887, DateTimeKind.Unspecified).AddTicks(4539), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 44, 38, 446, DateTimeKind.Unspecified).AddTicks(7086), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Category for professional phone repair services",
                             RowId = 0
                         },
@@ -345,7 +348,7 @@ namespace ProductManager.Persistence.Migrations
                         {
                             Id = "01JH179GGG9BN2V8SS9RG70QVW",
                             CategoryName = "Extended Warranty",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 887, DateTimeKind.Unspecified).AddTicks(4547), new TimeSpan(0, 7, 0, 0, 0)),
+                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 44, 38, 446, DateTimeKind.Unspecified).AddTicks(7088), new TimeSpan(0, 7, 0, 0, 0)),
                             Description = "Category for extended warranty packages",
                             RowId = 0
                         });
@@ -916,53 +919,6 @@ namespace ProductManager.Persistence.Migrations
                     b.HasIndex(new[] { "SupplierId" }, "SuppliersProducts");
 
                     b.ToTable("Products", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "01JH179GH01234567890ABCDEF",
-                            CategoryId = "01JH179GGG9BN2V8SS9RG70QNG",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 892, DateTimeKind.Unspecified).AddTicks(8463), new TimeSpan(0, 7, 0, 0, 0)),
-                            Discontinued = false,
-                            ProductName = "iPhone 15 Pro",
-                            QuantityPerUnit = "1 unit",
-                            ReorderLevel = (short)10,
-                            RowId = 0,
-                            SupplierId = "01JH179GGZ7FAHZ0DNFYNZ19FG",
-                            UnitPrice = 999.99m,
-                            UnitsInStock = (short)50,
-                            UnitsOnOrder = (short)0
-                        },
-                        new
-                        {
-                            Id = "01JH179GH01234567890GHIJKL",
-                            CategoryId = "01JH179GGG9BN2V8SS9RG70QNG",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 892, DateTimeKind.Unspecified).AddTicks(8497), new TimeSpan(0, 7, 0, 0, 0)),
-                            Discontinued = false,
-                            ProductName = "Samsung Galaxy S24",
-                            QuantityPerUnit = "1 unit",
-                            ReorderLevel = (short)5,
-                            RowId = 0,
-                            SupplierId = "01JH179GGZ7FAHZ0DNFYNZ18YX",
-                            UnitPrice = 899.99m,
-                            UnitsInStock = (short)30,
-                            UnitsOnOrder = (short)0
-                        },
-                        new
-                        {
-                            Id = "01JH179GH01234567890MNOPQR",
-                            CategoryId = "01JH179GGG9BN2V8SS9RG70QPX",
-                            CreatedDateTime = new DateTimeOffset(new DateTime(2025, 6, 26, 22, 48, 40, 892, DateTimeKind.Unspecified).AddTicks(8501), new TimeSpan(0, 7, 0, 0, 0)),
-                            Discontinued = false,
-                            ProductName = "Wireless Charger",
-                            QuantityPerUnit = "1 unit",
-                            ReorderLevel = (short)20,
-                            RowId = 0,
-                            SupplierId = "01JH179GGZ7FAHZ0DNFYNZ19FG",
-                            UnitPrice = 49.99m,
-                            UnitsInStock = (short)100,
-                            UnitsOnOrder = (short)0
-                        });
                 });
 
             modelBuilder.Entity("ProductManager.Domain.Entities.RefreshToken", b =>
@@ -1031,28 +987,28 @@ namespace ProductManager.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "01JYPETHSYG7WHV6Z8S451D92C",
+                            Id = "01JYPEK51PSVS88TQRWAQN0DN1",
                             CreatedDateTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             RegionDescription = "Ha Noi",
                             RowId = 0
                         },
                         new
                         {
-                            Id = "01JYPETHSY2Z3V3R1K8RWQD9AE",
+                            Id = "01JYPEK51P217B652XJ9BEB6HV",
                             CreatedDateTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             RegionDescription = "Ho Chi Minh City",
                             RowId = 0
                         },
                         new
                         {
-                            Id = "01JYPETHSYXNCKNKZJEXZT6A0M",
+                            Id = "01JYPEK51PJMK278810XSA2MDZ",
                             CreatedDateTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             RegionDescription = "Can Tho",
                             RowId = 0
                         },
                         new
                         {
-                            Id = "01JYPETHSYJCC3QFMW3EZ73XSW",
+                            Id = "01JYPEK51P7FCDKYK54XRXB3YJ",
                             CreatedDateTime = new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             RegionDescription = "Nha Trang",
                             RowId = 0
