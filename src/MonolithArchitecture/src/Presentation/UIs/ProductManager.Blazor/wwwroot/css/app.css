@@ -1,59 +1,62 @@
 ﻿:root {
     --bb-header-color: #e0e0e0;
     --bb-header-bg: #702cf8;
-}
 
-.layout {
-    --bb-layout-header-background: var(--bb-header-bg);
-    --bb-layout-sidebar-banner-background: var(--bb-header-bg);
-    --bb-layout-header-color: var(--bb-header-color);
-    --bb-layout-title-color: var(--bb-header-color);
-}
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
 
-.layout-header {
-    border-bottom: 1px solid var(--bs-border-color);
-}
+    .layout {
+        --bb-layout-header-background: var(--bb-header-bg);
+        --bb-layout-sidebar-banner-background: var(--bb-header-bg);
+        --bb-layout-header-color: var(--bb-header-color);
+        --bb-layout-title-color: var(--bb-header-color);
+    }
+
+    .layout-header {
+        border-bottom: 1px solid var(--bs-border-color);
+    }
 
     .layout-header .widget {
         margin-right: 2rem;
     }
 
-.layout-banner {
-    border-bottom: 1px solid var(--bs-border-color);
-}
+    .layout-banner {
+        border-bottom: 1px solid var(--bs-border-color);
+    }
 
     .layout-banner .layout-logo {
         border: 1px solid var(--bb-header-color);
     }
 
-.layout-side {
-    border-right: 1px solid var(--bs-border-color);
-}
+    .layout-side {
+        border-right: 1px solid var(--bs-border-color);
+    }
 
-.layout-footer {
-    border-top: 1px solid var(--bs-border-color);
-}
+    .layout-footer {
+        border-top: 1px solid var(--bs-border-color);
+    }
 
-.dropdown-logout {
-    --bb-logout-text-color: var(--bb-header-color);
-}
+    .dropdown-logout {
+        --bb-logout-text-color: var(--bb-header-color);
+    }
 
-.logout-avatar {
-    border-radius: 50%;
-}
+    .logout-avatar {
+        border-radius: 50%;
+    }
 
-.dropdown-user img {
-    border-radius: 50%;
-}
+    .dropdown-user img {
+        border-radius: 50%;
+    }
 
-.layout-drawer {
-    padding: 6px;
-    cursor: pointer;
-}
+    .layout-drawer {
+        padding: 6px;
+        cursor: pointer;
+    }
 
-.widget {
-    --bb-widget-toggle-color: var(--bb-header-color);
-}
+    .widget {
+        --bb-widget-toggle-color: var(--bb-header-color);
+    }
 
     .widget .dropdown-menu {
         --bs-dropdown-min-width: 16rem;
@@ -84,58 +87,58 @@
         min-width: 100px;
     }
 
-        .widget .dropdown-item > div:not(.progress):last-child {
-            width: calc(100% - 40px);
-        }
+    .widget .dropdown-item>div:not(.progress):last-child {
+        width: calc(100% - 40px);
+    }
 
-        .widget .dropdown-item.active,
-        .widget .dropdown-item:active {
-            color: inherit;
-        }
+    .widget .dropdown-item.active,
+    .widget .dropdown-item:active {
+        color: inherit;
+    }
 
-        .widget .dropdown-item:not(:nth-of-type(odd)):active {
-            background-color: inherit;
-        }
+    .widget .dropdown-item:not(:nth-of-type(odd)):active {
+        background-color: inherit;
+    }
 
     .widget .progress {
         height: 7px;
     }
 
-.table-cell img {
-    width: 46px;
-    border-radius: var(--bs-border-radius);
-}
+    .table-cell img {
+        width: 46px;
+        border-radius: var(--bs-border-radius);
+    }
 
-.table-cell .progress {
-    height: 6px;
-    margin-top: .5rem;
-}
+    .table-cell .progress {
+        height: 6px;
+        margin-top: .5rem;
+    }
 
-.user-demo-address {
-    margin-top: .25rem;
-    font-size: 86%;
-    color: #c0c4cc;
-}
+    .user-demo-address {
+        margin-top: .25rem;
+        font-size: 86%;
+        color: #c0c4cc;
+    }
 
-.table-demo {
-    height: calc(100% - 56px);
-}
+    .table-demo {
+        height: calc(100% - 56px);
+    }
 
-.table-users-demo {
-    height: calc(100vh - 162px);
-}
+    .table-users-demo {
+        height: calc(100vh - 162px);
+    }
 
-.table-users {
-    height: calc(100% - 93px);
-}
+    .table-users {
+        height: calc(100% - 93px);
+    }
 
-.cell-label {
-    line-height: 35px;
-}
+    .cell-label {
+        line-height: 35px;
+    }
 
-.menu {
-    --bb-menu-active-color: #702cf8;
-    --bb-menu-bar-bg: #702cf8;
-    --bb-menu-item-hover-bg: #702cf8;
-    --bb-menu-item-hover-color: #fff;
-}
+    .menu {
+        --bb-menu-active-color: #702cf8;
+        --bb-menu-bar-bg: #702cf8;
+        --bb-menu-item-hover-bg: #702cf8;
+        --bb-menu-item-hover-color: #fff;
+    }

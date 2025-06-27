@@ -41,11 +41,7 @@ public sealed partial class MainLayout
         {
             new MenuItem
             {
-                Text = "Back to Component Library", Icon = "fa-solid fa-fw fa-home", Url = "https://www.blazor.zone/components"
-            },
-            new MenuItem
-            {
-                Text = "Index", Icon = "fa-solid fa-fw fa-flag", Url = "/", Match = NavLinkMatch.All
+                Text = "Dash board", Icon = "fa-solid fa-fw fa-home", Url = "/", Match = NavLinkMatch.All
             },
             new MenuItem
             {
