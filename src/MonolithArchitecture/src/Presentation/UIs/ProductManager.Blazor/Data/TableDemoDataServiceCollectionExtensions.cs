@@ -5,12 +5,12 @@ using Microsoft.Extensions.Localization;
 namespace ProductManager.Blazor.Data;
 
 /// <summary>
-///     BootstrapBlazor 服务扩展类
+///     BootstrapBlazor service extension class
 /// </summary>
 public static class TableDemoDataServiceCollectionExtensions
 {
     /// <summary>
-    ///     增加 PetaPoco 数据库操作服务
+    ///     Add table demo data service
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
@@ -21,7 +21,7 @@ public static class TableDemoDataServiceCollectionExtensions
     }
 }
 /// <summary>
-///     演示网站示例数据注入服务实现类
+///     Demo website sample data injection service implementation class
 /// </summary>
 internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : DataServiceBase<TModel> where TModel : class, new()
 {
