@@ -4,10 +4,9 @@
 
 <h1>Table - Fixed Tab Page</h1>
 
-<Table TItem="Foo" IsPagination="true" PageItemsSource="PageItemsSource" class="table-demo"
-       IsStriped="true" IsBordered="true" ShowSkeleton="true" IsMultipleSelect="true"
-       ShowToolbar="true" ShowSearch="true" ShowExtendButtons="true"
-       AutoGenerateColumns="true" EditMode="EditMode.Popup">
+<Table TItem="Foo" IsPagination="true" PageItemsSource="PageItemsSource" class="table-demo" IsStriped="true"
+    IsBordered="true" ShowSkeleton="true" IsMultipleSelect="true" ShowToolbar="true" ShowSearch="true"
+    ShowExtendButtons="true" AutoGenerateColumns="true" EditMode="EditMode.Popup">
     <TableColumns>
         <TableColumn @bind-Field="@context.Hobby" Items="GetHobbys(context)" />
     </TableColumns>
