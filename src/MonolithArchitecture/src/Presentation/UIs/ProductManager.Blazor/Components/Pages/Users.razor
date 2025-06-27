@@ -7,8 +7,8 @@
 
     <p>Read-only data - Change the number of items per page to experience the fixed header functionality</p>
 
-    <Table TItem="Foo" IsPagination="true" PageItemsSource="@PageItemsSource" RenderMode="TableRenderMode.Table" IsFixedHeader="true" class="table-users"
-           IsStriped="true" IsBordered="true" OnQueryAsync="OnQueryAsync">
+    <Table TItem="Foo" IsPagination="true" PageItemsSource="@PageItemsSource" RenderMode="TableRenderMode.Table"
+        IsFixedHeader="true" class="table-users" IsStriped="true" IsBordered="true" OnQueryAsync="OnQueryAsync">
         <TableColumns>
             <TableColumn @bind-Field="@context.Name" Width="260">
                 <Template Context="value">
