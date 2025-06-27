@@ -18,7 +18,7 @@ public partial class Users
     private IStringLocalizer<Foo>? Localizer { get; set; }
 
     /// <summary>
-    ///     获得/设置 分页配置数据源
+    ///     Get/Set pagination configuration data source
     /// </summary>
     private static IEnumerable<int> PageItemsSource => new[]
     {
@@ -42,7 +42,7 @@ public partial class Users
 
     private Task<QueryData<Foo>> OnQueryAsync(QueryPageOptions options)
     {
-        // 此处代码实战中不可用，仅仅为演示而写防止数据全部被删除
+        // This code is not usable in production, only written for demonstration to prevent all data from being deleted
         if (Items == null || !Items.Any())
         {
             Items = Foo.GenerateFoo(Localizer, 23).ToList();
@@ -50,7 +50,7 @@ public partial class Users
 
         var items = Items;
         var isSearched = false;
-        // 处理高级查询
+        // Handle advanced query
         if (options.SearchModel is Foo model)
         {
             if (!string.IsNullOrEmpty(model.Name))
@@ -68,11 +68,11 @@ public partial class Users
 
         if (options.Searches.Any())
         {
-            // 针对 SearchText 进行模糊查询
+            // Perform fuzzy search on SearchText
             items = items.Where(options.Searches.GetFilterFunc<Foo>(FilterLogic.Or));
         }
 
-        // 过滤
+        // Filter
         var isFiltered = false;
         if (options.Filters.Any())
         {
@@ -80,11 +80,11 @@ public partial class Users
             isFiltered = true;
         }
 
-        // 排序
+        // Sort
         var isSorted = false;
         if (!string.IsNullOrEmpty(options.SortName))
         {
-            // 外部未进行排序，内部自动进行排序处理
+            // No external sorting, automatic internal sorting
             var invoker = SortLambdaCache.GetOrAdd(typeof(Foo), valueFactory: key => LambdaExtensions.GetSortLambda<Foo>().Compile());
             items = invoker(items, options.SortName, options.SortOrder);
             isSorted = true;

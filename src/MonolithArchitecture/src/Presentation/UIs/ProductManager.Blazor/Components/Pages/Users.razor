@@ -1,11 +1,11 @@
 ﻿@page "/users"
-@attribute [TabItemOption(Text = "花名册")]
-<PageTitle>花名册</PageTitle>
+@attribute [TabItemOption(Text = "User Directory")]
+<PageTitle>User Directory</PageTitle>
 
 <div class="page-user">
-    <h1>花名册</h1>
+    <h1>User Directory</h1>
 
-    <p>只读数据 - 更改每页显示数量体验固定表头功能</p>
+    <p>Read-only data - Change the number of items per page to experience the fixed header functionality</p>
 
     <Table TItem="Foo" IsPagination="true" PageItemsSource="@PageItemsSource" RenderMode="TableRenderMode.Table" IsFixedHeader="true" class="table-users"
            IsStriped="true" IsBordered="true" OnQueryAsync="OnQueryAsync">
