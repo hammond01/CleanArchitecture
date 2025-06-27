@@ -21,7 +21,7 @@ public static class TableDemoDataServiceCollectionExtensions
     }
 }
 /// <summary>
-///     演示网站示例数据注入服务实现类
+///     Demo website sample data injection service implementation class
 /// </summary>
 internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : DataServiceBase<TModel> where TModel : class, new()
 {
@@ -33,13 +33,13 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
     private List<TModel>? Items { get; set; }
 
     /// <summary>
-    ///     查询操作方法
+    ///     Query operation method
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
     public override Task<QueryData<TModel>> QueryAsync(QueryPageOptions options)
     {
-        // 此处代码实战中不可用，仅仅为演示而写防止数据全部被删除
+        // This code is not usable in production, written only for demonstration to prevent all data from being deleted
         if (Items == null || Items.Count == 0)
         {
             Items = Foo.GenerateFoo(localizer).Cast<TModel>().ToList();
@@ -47,7 +47,7 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
 
         var items = Items.AsEnumerable();
         var isSearched = false;
-        // 处理高级查询
+        // Handle advanced queries
         if (options.SearchModel is Foo model)
         {
             if (!string.IsNullOrEmpty(model.Name))
@@ -67,11 +67,11 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
 
         if (options.Searches.Count != 0)
         {
-            // 针对 SearchText 进行模糊查询
+            // Perform fuzzy query based on SearchText
             items = items.Where(options.Searches.GetFilterFunc<TModel>(FilterLogic.Or));
         }
 
-        // 过滤
+        // Filter
         var isFiltered = false;
         if (options.Filters.Count != 0)
         {
@@ -79,11 +79,11 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
             isFiltered = true;
         }
 
-        // 排序
+        // Sort
         var isSorted = false;
         if (!string.IsNullOrEmpty(options.SortName))
         {
-            // 外部未进行排序，内部自动进行排序处理
+            // External sorting not performed, internal automatic sorting handling
             var invoker = SortLambdaCache.GetOrAdd(typeof(Foo),
             valueFactory: key => LambdaExtensions.GetSortLambda<TModel>().Compile());
             items = invoker(items, options.SortName, options.SortOrder);
