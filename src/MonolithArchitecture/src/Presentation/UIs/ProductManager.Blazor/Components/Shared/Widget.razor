@@ -1,7 +1,7 @@
 ﻿<DropdownWidget class="px-3">
     <DropdownWidgetItem Icon="fa-regular fa-envelope" BadgeNumber="4">
         <HeaderTemplate>
-            <span>您有 4 个未读消息</span>
+            <span>You have 4 unread messages</span>
         </HeaderTemplate>
         <BodyTemplate>
             @for (var index = 0; index < 4; index++)
@@ -21,12 +21,12 @@
             }
         </BodyTemplate>
         <FooterTemplate>
-            <a href="#" @onclick:preventDefault>查看所有消息</a>
+            <a href="#" @onclick:preventDefault>View All Messages</a>
         </FooterTemplate>
     </DropdownWidgetItem>
     <DropdownWidgetItem Icon="fa-regular fa-bell" BadgeNumber="10" HeaderColor="Color.Success" BadgeColor="Color.Warning">
         <HeaderTemplate>
-            <span>您有 10 个未读通知</span>
+            <span>You have 10 unread notifications</span>
         </HeaderTemplate>
         <BodyTemplate>
             @for (var index = 0; index < 10; index++)
@@ -38,12 +38,12 @@
             }
         </BodyTemplate>
         <FooterTemplate>
-            <a href="#" @onclick:preventDefault>查看所有通知</a>
+            <a href="#" @onclick:preventDefault>View All Notifications</a>
         </FooterTemplate>
     </DropdownWidgetItem>
     <DropdownWidgetItem Icon="fa-regular fa-flag" BadgeNumber="9" HeaderColor="Color.Danger" BadgeColor="Color.Danger">
         <HeaderTemplate>
-            <span>您有 3 个任务</span>
+            <span>You have 3 tasks</span>
         </HeaderTemplate>
         <BodyTemplate>
             <a href="#" class="dropdown-item" @onclick:preventDefault>
@@ -69,7 +69,7 @@
             </a>
         </BodyTemplate>
         <FooterTemplate>
-            <a href="#" @onclick:preventDefault>查看所有任务</a>
+            <a href="#" @onclick:preventDefault>View All Tasks</a>
         </FooterTemplate>
     </DropdownWidgetItem>
 </DropdownWidget>

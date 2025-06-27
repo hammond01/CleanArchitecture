@@ -26,7 +26,7 @@ public sealed partial class MainLayout
     private List<MenuItem>? Menus { get; set; }
 
     /// <summary>
-    ///     OnInitialized 方法
+    ///     OnInitialized method
     /// </summary>
     protected override void OnInitialized()
     {
@@ -41,7 +41,7 @@ public sealed partial class MainLayout
         {
             new MenuItem
             {
-                Text = "返回组件库", Icon = "fa-solid fa-fw fa-home", Url = "https://www.blazor.zone/components"
+                Text = "Back to Component Library", Icon = "fa-solid fa-fw fa-home", Url = "https://www.blazor.zone/components"
             },
             new MenuItem
             {
@@ -61,7 +61,7 @@ public sealed partial class MainLayout
             },
             new MenuItem
             {
-                Text = "花名册", Icon = "fa-solid fa-fw fa-users", Url = "/users"
+                Text = "User Directory", Icon = "fa-solid fa-fw fa-users", Url = "/users"
             }
         };
 

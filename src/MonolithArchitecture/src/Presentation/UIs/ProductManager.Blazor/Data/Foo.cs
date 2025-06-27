@@ -13,58 +13,58 @@ public class Foo
 {
 
     private static readonly Random random = new Random();
-    // 列头信息支持 Display DisplayName 两种标签
+    // Column header information supports both Display and DisplayName tags
 
     /// <summary>
     /// </summary>
-    [Display(Name = "主键")]
+    [Display(Name = "Primary Key")]
     [AutoGenerateColumn(Ignore = true)]
     public int Id { get; set; }
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "{0}不能为空")]
+    [Required(ErrorMessage = "{0} cannot be empty")]
     [AutoGenerateColumn(Order = 10, Filterable = true, Searchable = true)]
-    [Display(Name = "姓名")]
+    [Display(Name = "Name")]
     public string? Name { get; set; }
 
     /// <summary>
     /// </summary>
     [AutoGenerateColumn(Order = 1, FormatString = "yyyy-MM-dd", Width = 180)]
-    [Display(Name = "日期")]
+    [Display(Name = "Date")]
     public DateTime DateTime { get; set; }
 
     /// <summary>
     /// </summary>
-    [Display(Name = "地址")]
-    [Required(ErrorMessage = "{0}不能为空")]
+    [Display(Name = "Address")]
+    [Required(ErrorMessage = "{0} cannot be empty")]
     [AutoGenerateColumn(Order = 20, Filterable = true, Searchable = true)]
     public string? Address { get; set; }
 
     /// <summary>
     /// </summary>
-    [Display(Name = "数量")]
+    [Display(Name = "Quantity")]
     [Required]
     [AutoGenerateColumn(Order = 40, Sortable = true)]
     public int Count { get; set; }
 
     /// <summary>
     /// </summary>
-    [Display(Name = "是/否")]
+    [Display(Name = "Yes/No")]
     [AutoGenerateColumn(Order = 50, ComponentType = typeof(Switch))]
     public bool Complete { get; set; }
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "请选择学历")]
-    [Display(Name = "学历")]
+    [Required(ErrorMessage = "Please select education level")]
+    [Display(Name = "Education")]
     [AutoGenerateColumn(Order = 60)]
     public EnumEducation? Education { get; set; }
 
     /// <summary>
     /// </summary>
-    [Required(ErrorMessage = "请选择一种{0}")]
-    [Display(Name = "爱好")]
+    [Required(ErrorMessage = "Please select a {0}")]
+    [Display(Name = "Hobby")]
     [AutoGenerateColumn(Order = 70)]
     public IEnumerable<string> Hobby { get; set; } = new List<string>();
 
@@ -111,11 +111,11 @@ public enum EnumEducation
 {
     /// <summary>
     /// </summary>
-    [Display(Name = "小学")]
+    [Display(Name = "Primary School")]
     Primary,
 
     /// <summary>
     /// </summary>
-    [Display(Name = "中学")]
+    [Display(Name = "Middle School")]
     Middel
 }
