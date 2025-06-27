@@ -42,7 +42,7 @@ public partial class Users
 
     private Task<QueryData<Foo>> OnQueryAsync(QueryPageOptions options)
     {
-        // This code is not usable in production, only written for demonstration to prevent all data from being deleted
+        // This code is not usable in production, written only for demonstration to prevent all data from being deleted
         if (Items == null || !Items.Any())
         {
             Items = Foo.GenerateFoo(Localizer, 23).ToList();
@@ -50,7 +50,7 @@ public partial class Users
 
         var items = Items;
         var isSearched = false;
-        // Handle advanced query
+        // Handle advanced queries
         if (options.SearchModel is Foo model)
         {
             if (!string.IsNullOrEmpty(model.Name))
@@ -68,7 +68,7 @@ public partial class Users
 
         if (options.Searches.Any())
         {
-            // Perform fuzzy search on SearchText
+            // Perform fuzzy query based on SearchText
             items = items.Where(options.Searches.GetFilterFunc<Foo>(FilterLogic.Or));
         }
 
@@ -84,7 +84,7 @@ public partial class Users
         var isSorted = false;
         if (!string.IsNullOrEmpty(options.SortName))
         {
-            // No external sorting, automatic internal sorting
+            // External sorting not performed, internal automatic sorting handling
             var invoker = SortLambdaCache.GetOrAdd(typeof(Foo), valueFactory: key => LambdaExtensions.GetSortLambda<Foo>().Compile());
             items = invoker(items, options.SortName, options.SortOrder);
             isSorted = true;

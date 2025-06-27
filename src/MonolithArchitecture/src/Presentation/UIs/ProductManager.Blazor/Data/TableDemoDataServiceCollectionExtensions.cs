@@ -10,7 +10,7 @@ namespace ProductManager.Blazor.Data;
 public static class TableDemoDataServiceCollectionExtensions
 {
     /// <summary>
-    ///     Add table demo data service
+    ///     Add PetaPoco database operation service
     /// </summary>
     /// <param name="services"></param>
     /// <returns></returns>
@@ -21,7 +21,7 @@ public static class TableDemoDataServiceCollectionExtensions
     }
 }
 /// <summary>
-///     Demo website sample data injection service implementation class
+///     演示网站示例数据注入服务实现类
 /// </summary>
 internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : DataServiceBase<TModel> where TModel : class, new()
 {
@@ -33,13 +33,13 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
     private List<TModel>? Items { get; set; }
 
     /// <summary>
-    ///     Query operation method
+    ///     查询操作方法
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
     public override Task<QueryData<TModel>> QueryAsync(QueryPageOptions options)
     {
-        // This code is not usable in production, only written for demonstration to prevent all data from being deleted
+        // 此处代码实战中不可用，仅仅为演示而写防止数据全部被删除
         if (Items == null || Items.Count == 0)
         {
             Items = Foo.GenerateFoo(localizer).Cast<TModel>().ToList();
@@ -47,7 +47,7 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
 
         var items = Items.AsEnumerable();
         var isSearched = false;
-        // Handle advanced query
+        // 处理高级查询
         if (options.SearchModel is Foo model)
         {
             if (!string.IsNullOrEmpty(model.Name))
@@ -67,11 +67,11 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
 
         if (options.Searches.Count != 0)
         {
-            // Perform fuzzy search on SearchText
+            // 针对 SearchText 进行模糊查询
             items = items.Where(options.Searches.GetFilterFunc<TModel>(FilterLogic.Or));
         }
 
-        // Filter
+        // 过滤
         var isFiltered = false;
         if (options.Filters.Count != 0)
         {
@@ -79,11 +79,11 @@ internal class TableDemoDataService<TModel>(IStringLocalizer<Foo> localizer) : D
             isFiltered = true;
         }
 
-        // Sort
+        // 排序
         var isSorted = false;
         if (!string.IsNullOrEmpty(options.SortName))
         {
-            // No external sorting, automatic internal sorting
+            // 外部未进行排序，内部自动进行排序处理
             var invoker = SortLambdaCache.GetOrAdd(typeof(Foo),
             valueFactory: key => LambdaExtensions.GetSortLambda<TModel>().Compile());
             items = invoker(items, options.SortName, options.SortOrder);
