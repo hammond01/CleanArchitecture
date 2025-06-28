@@ -2,13 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductManager.Domain.Common;
 using ProductManager.Persistence;
+using Asp.Versioning;
 namespace ProductManager.Api.Controllers;
 
 /// <summary>
 ///     Controller for viewing logs stored in the database
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/logs")]
 public class LogsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
@@ -22,9 +24,9 @@ public class LogsController : ControllerBase
     /// <summary>
     ///     Get API logs with pagination
     /// </summary>
-    [HttpGet("api-logs")]
+    [HttpGet("api")]
     [LogAction("View API logs")]
-    public async Task<ActionResult> GetApiLogs(
+    public async Task<ActionResult<ApiResponse>> GetApiLogs(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 50,
         [FromQuery] string? userId = null,
@@ -86,9 +88,9 @@ public class LogsController : ControllerBase
     /// <summary>
     ///     Get action logs with pagination
     /// </summary>
-    [HttpGet("action-logs")]
+    [HttpGet("actions")]
     [LogAction("View action logs")]
-    public async Task<ActionResult> GetActionLogs(
+    public async Task<ActionResult<ApiResponse>> GetActionLogs(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 50,
         [FromQuery] string? userId = null,
@@ -154,7 +156,7 @@ public class LogsController : ControllerBase
     /// </summary>
     [HttpGet("statistics")]
     [LogAction("View log statistics")]
-    public async Task<ActionResult> GetLogStatistics([FromQuery] DateTime? fromDate = null, [FromQuery] DateTime? toDate = null)
+    public async Task<ActionResult<ApiResponse>> GetLogStatistics([FromQuery] DateTime? fromDate = null, [FromQuery] DateTime? toDate = null)
     {
         _logger.LogInformation("📈 Retrieving log statistics");
 
