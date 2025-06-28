@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Asp.Versioning;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ProductManager.Application.Common;
 using ProductManager.Application.Feature.Orders.Command;
@@ -8,7 +9,10 @@ using ProductManager.Domain.Entities;
 using ProductManager.Shared.DTOs.OrderDto;
 namespace ProductManager.Api.Controllers;
 
-public class OrderController : ConBase
+[Route("api/v{version:apiVersion}/orders")]
+[ApiVersion("1.0")]
+[ApiController]
+public class OrderController : ControllerBase
 {
     private readonly Dispatcher _dispatcher;
 
@@ -16,42 +20,53 @@ public class OrderController : ConBase
     {
         _dispatcher = dispatcher;
     }
+
     [HttpGet]
-    public async Task<ApiResponse> Get()
+    [LogAction("Get all orders")]
+    public async Task<ActionResult<ApiResponse>> GetOrders()
     {
         var data = await _dispatcher.DispatchAsync(new GetOrders());
-        data.Result = ((List<Order>)data.Result).Adapt<List<GetOrderDto>>();
-        return data;
+        data.Result = data.Result.Adapt<List<GetOrderDto>>();
+        return Ok(data);
     }
 
     [HttpGet("{id}")]
-    public async Task<ApiResponse> Get(string id)
+    [LogAction("Get order by ID")]
+    public async Task<ActionResult<ApiResponse>> GetOrder(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
-        data.Result = ((Order)data.Result).Adapt<GetOrderDto>();
-        return data;
+        data.Result = data.Result.Adapt<GetOrderDto>();
+        return Ok(data);
     }
 
     [HttpPost]
-    public async Task<ApiResponse> Post([FromBody] CreateOrderDto createOrderDto)
+    [LogAction("Create new order")]
+    public async Task<ActionResult<ApiResponse>> CreateOrder([FromBody] CreateOrderDto createOrderDto)
     {
         var data = createOrderDto.Adapt<Order>();
-        return await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(data));
+        var result = await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(data));
+        var createdOrder = (Order)result.Result;
+        return Created($"/api/v1.0/orders/{createdOrder.Id}", result);
     }
 
     [HttpPut("{id}")]
-    public async Task<ApiResponse> Put(string id, [FromBody] UpdateOrderDto updateOrderDto)
+    [LogAction("Update order")]
+    public async Task<ActionResult<ApiResponse>> UpdateOrder(string id, [FromBody] UpdateOrderDto updateOrderDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
         var order = (Order)apiResponse.Result;
         updateOrderDto.Adapt(order);
-        return await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(order));
+        var result = await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(order));
+        return Ok(result);
     }
+
     [HttpDelete("{id}")]
-    public async Task<ApiResponse> Delete(string id)
+    [LogAction("Delete order")]
+    public async Task<ActionResult<ApiResponse>> DeleteOrder(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
         var order = (Order)apiResponse.Result;
-        return await _dispatcher.DispatchAsync(new DeleteOrderCommand(order));
+        await _dispatcher.DispatchAsync(new DeleteOrderCommand(order));
+        return NoContent();
     }
 }
