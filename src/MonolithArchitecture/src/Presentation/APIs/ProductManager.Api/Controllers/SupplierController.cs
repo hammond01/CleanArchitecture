@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Asp.Versioning;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ProductManager.Application.Common;
 using ProductManager.Application.Feature.Supplier.Commands;
@@ -8,7 +9,10 @@ using ProductManager.Domain.Entities;
 using ProductManager.Shared.DTOs.SupplierDto;
 namespace ProductManager.Api.Controllers;
 
-public class SupplierController : ConBase
+[Route("api/v{version:apiVersion}/suppliers")]
+[ApiController]
+[ApiVersion("1.0")]
+public class SupplierController : ControllerBase
 {
     private readonly Dispatcher _dispatcher;
 
@@ -17,46 +21,57 @@ public class SupplierController : ConBase
         _dispatcher = dispatcher;
     }
     [HttpGet]
-    public async Task<ApiResponse> Get()
+    [LogAction("Get all suppliers")]
+    public async Task<ActionResult<ApiResponse>> GetSuppliers()
     {
         var data = await _dispatcher.DispatchAsync(new GetSuppliers());
         data.Result = ((List<Suppliers>)data.Result).Adapt<List<GetSupplierDto>>();
-        return data;
+        return Ok(data);
     }
 
     [HttpGet("{id}")]
-    public async Task<ApiResponse> Get(string id)
+    [LogAction("Get supplier by ID")]
+    public async Task<ActionResult<ApiResponse>> GetSupplier(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
         data.Result = ((Suppliers)data.Result).Adapt<GetSupplierDto>();
-        return data;
+        return Ok(data);
     }
 
     [HttpPost]
-    public async Task<ApiResponse> Post([FromBody] CreateSupplierDto createSupplierDto)
+    [LogAction("Create new supplier")]
+    public async Task<ActionResult<ApiResponse>> CreateSupplier([FromBody] CreateSupplierDto createSupplierDto)
     {
         var data = createSupplierDto.Adapt<Suppliers>();
-        return await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(data));
+        var result = await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(data));
+        var createdSupplier = (Suppliers)result.Result;
+        return Created($"/api/v1.0/suppliers/{createdSupplier.Id}", result);
     }
 
     [HttpPut("{id}")]
-    public async Task<ApiResponse> Put(string id, [FromBody] UpdateSupplierDto updateSupplierDto)
+    [LogAction("Update supplier")]
+    public async Task<ActionResult<ApiResponse>> UpdateSupplier(string id, [FromBody] UpdateSupplierDto updateSupplierDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
-        var supplier = (Suppliers)apiResponse.Result;
+        if (apiResponse.Result is not Suppliers supplier)
+        {
+            return NotFound(new ApiResponse(404, "Supplier not found"));
+        }
         updateSupplierDto.Adapt(supplier);
-        return await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(supplier));
+        var result = await _dispatcher.DispatchAsync(new AddOrUpdateSupplierCommand(supplier));
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ApiResponse> Delete(string id)
+    [LogAction("Delete supplier")]
+    public async Task<ActionResult<ApiResponse>> DeleteSupplier(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
-        if (apiResponse.IsSuccessStatusCode == false)
+        if (apiResponse.Result is not Suppliers supplier)
         {
-            return apiResponse;
+            return NotFound(new ApiResponse(404, "Supplier not found"));
         }
-        var supplier = (Suppliers)apiResponse.Result;
-        return await _dispatcher.DispatchAsync(new DeleteSupplierCommand(supplier));
+        await _dispatcher.DispatchAsync(new DeleteSupplierCommand(supplier));
+        return NoContent();
     }
 }

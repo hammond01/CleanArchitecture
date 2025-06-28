@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ProductManager.Application.Common;
@@ -9,7 +10,10 @@ using ProductManager.Infrastructure.Middleware;
 using ProductManager.Shared.DTOs.ProductDto;
 namespace ProductManager.Api.Controllers;
 
-public class ProductController : ConBase
+[Route("api/v{version:apiVersion}/products")]
+[ApiVersion("1.0")]
+[ApiController]
+public class ProductController : ControllerBase
 {
     private readonly Dispatcher _dispatcher;
 
@@ -20,49 +24,55 @@ public class ProductController : ConBase
 
     [HttpGet]
     [LogAction("Get all products")]
-    public async Task<ApiResponse> Get()
+    public async Task<ActionResult<ApiResponse>> GetProducts()
     {
-        return await _dispatcher.DispatchAsync(new GetProducts());
+        var result = await _dispatcher.DispatchAsync(new GetProducts());
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
     [LogAction("Get product by ID")]
-    public async Task<ApiResponse> Get(string id)
+    public async Task<ActionResult<ApiResponse>> GetProduct(string id)
     {
-        return await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
+        var result = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
+        return Ok(result);
     }
 
     [HttpPost]
     [LogAction("Create new product")]
-    public async Task<ApiResponse> Post([FromBody] CreateProductDto createProductDto)
+    public async Task<ActionResult<ApiResponse>> CreateProduct([FromBody] CreateProductDto createProductDto)
     {
         var data = createProductDto.Adapt<Products>();
-        return await _dispatcher.DispatchAsync(new AddOrUpdateProductCommand(data));
+        var result = await _dispatcher.DispatchAsync(new AddOrUpdateProductCommand(data));
+        var createdProduct = (Products)result.Result;
+        return Created($"/api/v1.0/products/{createdProduct.Id}", result);
     }
 
     [HttpPut("{id}")]
     [EntityLock("Product", "{id}", 30)]
     [LogAction("Update product")]
-    public async Task<ApiResponse> Put(string id, [FromBody] UpdateProductDto updateProductDto)
+    public async Task<ActionResult<ApiResponse>> UpdateProduct(string id, [FromBody] UpdateProductDto updateProductDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
-        if (apiResponse?.Result is Products product)
+        if (apiResponse.Result is not Products product)
         {
-            updateProductDto.Adapt(product);
-            return await _dispatcher.DispatchAsync(new AddOrUpdateProductCommand(product));
+            return NotFound(new ApiResponse(404, "Product not found"));
         }
-        return new ApiResponse(404, "Product not found");
+        updateProductDto.Adapt(product);
+        var result = await _dispatcher.DispatchAsync(new AddOrUpdateProductCommand(product));
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
     [LogAction("Delete product")]
-    public async Task<ApiResponse> Delete(string id)
+    public async Task<ActionResult<ApiResponse>> DeleteProduct(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
-        if (apiResponse?.Result is Products product)
+        if (apiResponse.Result is not Products product)
         {
-            return await _dispatcher.DispatchAsync(new DeleteProductCommand(product));
+            return NotFound(new ApiResponse(404, "Product not found"));
         }
-        return new ApiResponse(404, "Product not found");
+        await _dispatcher.DispatchAsync(new DeleteProductCommand(product));
+        return NoContent();
     }
 }

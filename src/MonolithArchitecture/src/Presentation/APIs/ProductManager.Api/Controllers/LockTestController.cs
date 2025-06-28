@@ -1,14 +1,15 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using ProductManager.Infrastructure.Middleware;
 using ProductManager.Shared.Locks;
-
 namespace ProductManager.Api.Controllers;
 
 /// <summary>
-/// Test controller to demonstrate distributed locking functionality
+///     Test controller to demonstrate distributed locking functionality
 /// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/lock-tests")]
 public class LockTestController : ControllerBase
 {
     private readonly ILockManager _lockManager;
@@ -18,9 +19,10 @@ public class LockTestController : ControllerBase
     {
         _lockManager = lockManager;
         _logger = logger;
-    }    /// <summary>
-         /// Test explicit locking using EntityLockAttribute
-         /// </summary>
+    }
+    /// <summary>
+    ///     Test explicit locking using EntityLockAttribute
+    /// </summary>
     [HttpPost("explicit/{resourceId}")]
     [EntityLock("TestResource", "resourceId", 30)]
     public async Task<IActionResult> TestExplicitLock(string resourceId, [FromBody] string data)
@@ -31,11 +33,14 @@ public class LockTestController : ControllerBase
         await Task.Delay(2000);
 
         _logger.LogInformation("✅ Explicit lock test completed for resource: {ResourceId}", resourceId);
-        return Ok(new { ResourceId = resourceId, Data = data, Message = "Explicit lock test completed" });
+        return Ok(new
+        {
+            ResourceId = resourceId, Data = data, Message = "Explicit lock test completed"
+        });
     }
 
     /// <summary>
-    /// Test automatic locking via AutoEntityLockMiddleware (PUT operation)
+    ///     Test automatic locking via AutoEntityLockMiddleware (PUT operation)
     /// </summary>
     [HttpPut("automatic/{resourceId}")]
     public async Task<IActionResult> TestAutomaticLockPut(string resourceId, [FromBody] string data)
@@ -46,11 +51,14 @@ public class LockTestController : ControllerBase
         await Task.Delay(2000);
 
         _logger.LogInformation("✅ Automatic lock (PUT) test completed for resource: {ResourceId}", resourceId);
-        return Ok(new { ResourceId = resourceId, Data = data, Message = "Automatic PUT lock test completed" });
+        return Ok(new
+        {
+            ResourceId = resourceId, Data = data, Message = "Automatic PUT lock test completed"
+        });
     }
 
     /// <summary>
-    /// Test automatic locking via AutoEntityLockMiddleware (DELETE operation)
+    ///     Test automatic locking via AutoEntityLockMiddleware (DELETE operation)
     /// </summary>
     [HttpDelete("automatic/{resourceId}")]
     public async Task<IActionResult> TestAutomaticLockDelete(string resourceId)
@@ -61,11 +69,14 @@ public class LockTestController : ControllerBase
         await Task.Delay(2000);
 
         _logger.LogInformation("✅ Automatic lock (DELETE) test completed for resource: {ResourceId}", resourceId);
-        return Ok(new { ResourceId = resourceId, Message = "Automatic DELETE lock test completed" });
+        return Ok(new
+        {
+            ResourceId = resourceId, Message = "Automatic DELETE lock test completed"
+        });
     }
 
     /// <summary>
-    /// Test manual lock acquisition and release
+    ///     Test manual lock acquisition and release
     /// </summary>
     [HttpPost("manual/{resourceId}")]
     public async Task<IActionResult> TestManualLock(string resourceId, [FromBody] string data)
@@ -82,7 +93,10 @@ public class LockTestController : ControllerBase
             if (!lockAcquired)
             {
                 _logger.LogWarning("⚠️ Could not acquire lock for resource: {ResourceId}", resourceId);
-                return Conflict(new { ResourceId = resourceId, Message = "Resource is currently locked by another process" });
+                return Conflict(new
+                {
+                    ResourceId = resourceId, Message = "Resource is currently locked by another process"
+                });
             }
 
             _logger.LogInformation("🔒 Manual lock acquired for resource: {ResourceId}", resourceId);
@@ -95,7 +109,10 @@ public class LockTestController : ControllerBase
             _logger.LogInformation("🔓 Manual lock released for resource: {ResourceId}, Success: {Success}", resourceId, lockReleased);
 
             _logger.LogInformation("✅ Manual lock test completed for resource: {ResourceId}", resourceId);
-            return Ok(new { ResourceId = resourceId, Data = data, Message = "Manual lock test completed" });
+            return Ok(new
+            {
+                ResourceId = resourceId, Data = data, Message = "Manual lock test completed"
+            });
         }
         catch (Exception ex)
         {
@@ -106,14 +123,20 @@ public class LockTestController : ControllerBase
             {
                 _lockManager.ReleaseLock("ManualTestResource", resourceId, ownerId);
             }
-            catch { } // Ignore errors during cleanup
+            catch
+            {
+                // ignored
+            }// Ignore errors during cleanup
 
-            return StatusCode(500, new { ResourceId = resourceId, Error = ex.Message });
+            return StatusCode(500, new
+            {
+                ResourceId = resourceId, Error = ex.Message
+            });
         }
     }
 
     /// <summary>
-    /// Get information about whether a resource is currently locked
+    ///     Get information about whether a resource is currently locked
     /// </summary>
     [HttpGet("status/{resourceId}")]
     public IActionResult GetLockStatus(string resourceId)
@@ -124,24 +147,30 @@ public class LockTestController : ControllerBase
 
         try
         {
-            // Try to acquire a very short lock to test if resource is available
+            // Try to acquire a very short lock to test if the resource is available
             var lockAcquired = _lockManager.AcquireLock("StatusCheck", resourceId, ownerId, TimeSpan.FromMilliseconds(100));
 
             if (lockAcquired)
             {
                 // Release immediately since this was just a test
                 _lockManager.ReleaseLock("StatusCheck", resourceId, ownerId);
-                return Ok(new { ResourceId = resourceId, IsLocked = false, Message = "Resource is available" });
+                return Ok(new
+                {
+                    ResourceId = resourceId, IsLocked = false, Message = "Resource is available"
+                });
             }
-            else
+            return Ok(new
             {
-                return Ok(new { ResourceId = resourceId, IsLocked = true, Message = "Resource is currently locked" });
-            }
+                ResourceId = resourceId, IsLocked = true, Message = "Resource is currently locked"
+            });
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "❌ Error checking lock status for resource: {ResourceId}", resourceId);
-            return StatusCode(500, new { ResourceId = resourceId, Error = ex.Message });
+            return StatusCode(500, new
+            {
+                ResourceId = resourceId, Error = ex.Message
+            });
         }
     }
 }
