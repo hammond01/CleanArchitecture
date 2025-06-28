@@ -4,16 +4,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProductManager.Domain.Common;
-
 namespace ProductManager.Infrastructure.Middleware;
 
 public class ApiRequestLoggingMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly ILogger<ApiRequestLoggingMiddleware> _logger;
+    private readonly RequestDelegate _next;
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public ApiRequestLoggingMiddleware(RequestDelegate next, ILogger<ApiRequestLoggingMiddleware> logger, IServiceScopeFactory serviceScopeFactory)
+    public ApiRequestLoggingMiddleware(RequestDelegate next, ILogger<ApiRequestLoggingMiddleware> logger,
+        IServiceScopeFactory serviceScopeFactory)
     {
         _next = next;
         _logger = logger;
@@ -62,6 +62,15 @@ public class ApiRequestLoggingMiddleware
             responseBodyStream.Seek(0, SeekOrigin.Begin);
             await responseBodyStream.CopyToAsync(originalBodyStream);
 
+            // Capture all context data before the context might be disposed
+            var requestMethod = context.Request.Method;
+            var requestPath = context.Request.Path.Value ?? "";
+            var responseStatusCode = context.Response.StatusCode;
+            var elapsedMs = stopwatch.ElapsedMilliseconds;
+            var userId = GetUserId(context)?.ToString();
+            var clientIp = GetClientIpAddress(context);
+            var userAgent = context.Request.Headers["User-Agent"].FirstOrDefault();
+
             // Log to database asynchronously with new scope (fire and forget)
             _ = Task.Run(async () =>
             {
@@ -71,15 +80,12 @@ public class ApiRequestLoggingMiddleware
                     var actionLogService = scope.ServiceProvider.GetRequiredService<IActionLogService>();
 
                     await actionLogService.LogApiRequestAsync(
-                        context.Request.Method,
-                        context.Request.Path.Value ?? "",
-                        context.Response.StatusCode,
-                        stopwatch.ElapsedMilliseconds,
-                        GetUserId(context)?.ToString(),
-                        GetClientIpAddress(context),
-                        context.Request.Headers["User-Agent"].FirstOrDefault(),
-                        null, // requestSize
-                        null  // responseSize
+                    requestMethod,
+                    requestPath,
+                    responseStatusCode,
+                    elapsedMs,
+                    userId,
+                    clientIp// responseSize
                     );
                 }
                 catch (Exception ex)
@@ -90,11 +96,11 @@ public class ApiRequestLoggingMiddleware
 
             // Log to console/file
             _logger.LogInformation("🌐 {Method} {Path} → {StatusCode} ({ElapsedMs}ms) | IP: {ClientIP}",
-                context.Request.Method,
-                context.Request.Path,
-                context.Response.StatusCode,
-                stopwatch.ElapsedMilliseconds,
-                GetClientIpAddress(context));
+            requestMethod,
+            requestPath,
+            responseStatusCode,
+            elapsedMs,
+            clientIp);
         }
     }
 
@@ -148,7 +154,9 @@ public class ApiRequestLoggingMiddleware
     private static string TruncateString(string input, int maxLength)
     {
         if (string.IsNullOrEmpty(input) || input.Length <= maxLength)
+        {
             return input;
+        }
 
         return input.Substring(0, maxLength) + "... [TRUNCATED]";
     }
