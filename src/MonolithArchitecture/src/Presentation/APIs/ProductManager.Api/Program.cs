@@ -43,6 +43,13 @@ builder.Host.UseSerilog();
     {
         // Add global action logging filter
         options.Filters.Add<ActionLoggingFilter>();
+    })
+    .AddJsonOptions(options =>
+    {
+        // Configure JSON serializer to handle object cycles
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     });
     builder.Services.AddEndpointsApiExplorer();
 
