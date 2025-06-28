@@ -37,7 +37,7 @@ internal class AddOrUpdateCustomerHandler : ICommandHandler<AddOrUpdateCustomerC
             {
                 await _customerService.AddAsync(command.Customer, cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                return new ApiResponse(201, CRUDMessage.CreateSuccess);
+                return new ApiResponse(201, CRUDMessage.CreateSuccess, command.Customer);
             }
 
             await _customerService.UpdateAsync(command.Customer, cancellationToken);
