@@ -36,7 +36,7 @@ internal class AddOrUpdateEmployeeHandler : ICommandHandler<AddOrUpdateEmployeeC
                 command.Employees.Id = UlidExtension.Generate();
                 await _employeeService.AddAsync(command.Employees, cancellationToken);
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                return new ApiResponse(201, CRUDMessage.CreateSuccess);
+                return new ApiResponse(201, CRUDMessage.CreateSuccess, command.Employees);
             }
             await _employeeService.UpdateAsync(command.Employees, cancellationToken);
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
