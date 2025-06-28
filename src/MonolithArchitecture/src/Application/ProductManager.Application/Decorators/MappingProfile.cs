@@ -1,10 +1,9 @@
 ﻿using Mapster;
 using ProductManager.Domain.Entities;
 using ProductManager.Shared.DTOs.CategoryDto;
-using ProductManager.Shared.DTOs.SupplierDto;
 using ProductManager.Shared.DTOs.OrderDto;
 using ProductManager.Shared.DTOs.ProductDto;
-
+using ProductManager.Shared.DTOs.SupplierDto;
 namespace ProductManager.Application.Decorators;
 
 public static class MappingConfig
@@ -28,8 +27,8 @@ public static class MappingConfig
 
         // Product mappings with custom logic
         TypeAdapterConfig<Products, GetProductDto>.NewConfig()
-            .Map(dest => dest.CategoryName, src => src.Category != null ? src.Category.CategoryName : string.Empty)
-            .Map(dest => dest.SupplierName, src => src.Supplier != null ? src.Supplier.CompanyName : string.Empty);
+            .Map(member: dest => dest.CategoryName, source: src => src.Category.CategoryName)
+            .Map(member: dest => dest.SupplierName, source: src => src.Supplier.CompanyName);
 
         TypeAdapterConfig<CreateProductDto, Products>.NewConfig();
         TypeAdapterConfig<UpdateProductDto, Products>.NewConfig();
