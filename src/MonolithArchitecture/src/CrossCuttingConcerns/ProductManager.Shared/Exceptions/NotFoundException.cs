@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.Exceptions;
+namespace ProductManager.Shared.Exceptions;
 
 public class NotFoundException : Exception
 {

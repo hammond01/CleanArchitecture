@@ -1,4 +1,4 @@
-﻿using Asp.Versioning;
+using Asp.Versioning;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ProductManager.Application.Common;

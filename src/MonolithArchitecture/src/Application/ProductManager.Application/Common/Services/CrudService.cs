@@ -1,4 +1,4 @@
-﻿using ProductManager.Domain.Entities;
+using ProductManager.Domain.Entities;
 using ProductManager.Domain.Events;
 using ProductManager.Domain.Repositories;
 using ProductManager.Shared.Exceptions;

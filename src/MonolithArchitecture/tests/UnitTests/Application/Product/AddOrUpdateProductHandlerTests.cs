@@ -1,12 +1,12 @@
+using System.Data;
 using AutoFixture;
 using FluentAssertions;
 using Moq;
-using ProductManager.Application.Feature.Product.Commands;
 using ProductManager.Application.Common.Services;
+using ProductManager.Application.Feature.Product.Commands;
+using ProductManager.Constants.ApiResponseConstants;
 using ProductManager.Domain.Entities;
 using ProductManager.Domain.Repositories;
-using ProductManager.Constants.ApiResponseConstants;
-using System.Data;
 using Xunit;
 
 namespace ProductManager.UnitTests.Application.Product;

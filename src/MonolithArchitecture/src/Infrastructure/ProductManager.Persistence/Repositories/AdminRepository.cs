@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -223,7 +223,8 @@ public class AdminRepository : IAdminRepository
 
             roleDtoList.Add(new RoleDto
             {
-                Name = role.Name ?? "", Permissions = permissions
+                Name = role.Name ?? "",
+                Permissions = permissions
             });
         }
         return new ApiResponse(Status200OK, $"{count} roles fetched", roleDtoList);
@@ -238,7 +239,8 @@ public class AdminRepository : IAdminRepository
 
         var roleDto = new RoleDto
         {
-            Name = name, Permissions = permissions
+            Name = name,
+            Permissions = permissions
         };
 
         return new ApiResponse(Status200OK, "List roles fetched", roleDto);

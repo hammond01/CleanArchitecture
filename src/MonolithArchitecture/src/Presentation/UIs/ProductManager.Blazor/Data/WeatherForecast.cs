@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Blazor.Data
+namespace ProductManager.Blazor.Data
 {
     /// <summary>
     /// 

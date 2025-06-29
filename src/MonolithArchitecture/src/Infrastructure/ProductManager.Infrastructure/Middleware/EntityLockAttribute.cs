@@ -1,9 +1,9 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProductManager.Domain.Identity;
 using ProductManager.Shared.Locks;
-using System.Net;
 
 namespace ProductManager.Infrastructure.Middleware;
 

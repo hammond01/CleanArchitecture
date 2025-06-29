@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ProductManager.Domain.Entities;
 using ProductManager.Domain.Repositories;
 using ProductManager.Shared.DateTimes;

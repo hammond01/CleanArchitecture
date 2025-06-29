@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using ProductManager.Domain.Entities.Identity;
 
 namespace ProductManager.Domain.Entities;

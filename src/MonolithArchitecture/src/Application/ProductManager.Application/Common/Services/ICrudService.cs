@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Application.Common.Services;
+namespace ProductManager.Application.Common.Services;
 
 public interface ICrudService<T>
 {

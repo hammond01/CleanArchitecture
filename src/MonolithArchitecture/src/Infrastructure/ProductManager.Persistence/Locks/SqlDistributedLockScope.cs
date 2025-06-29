@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using ProductManager.Shared.Locks;
 namespace ProductManager.Persistence.Locks;
@@ -73,14 +73,17 @@ public class SqlDistributedLockScope : IDistributedLockScope
         {
             returnValue = command.Parameters.Add(new SqlParameter
             {
-                ParameterName = "Result", DbType = DbType.Int32, Direction = ParameterDirection.Output
+                ParameterName = "Result",
+                DbType = DbType.Int32,
+                Direction = ParameterDirection.Output
             });
         }
         else
         {
             returnValue = command.Parameters.Add(new SqlParameter
             {
-                DbType = DbType.Int32, Direction = ParameterDirection.ReturnValue
+                DbType = DbType.Int32,
+                Direction = ParameterDirection.ReturnValue
             });
         }
 

@@ -1,8 +1,6 @@
-﻿using ProductManager.Application.Common.Queries;
+using ProductManager.Application.Common.Queries;
 using ProductManager.Domain.Repositories;
 using ProductManager.Shared.DTOs.AuditLogDto;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ProductManager.Application.Feature.AuditLogEntries.Queries;
 

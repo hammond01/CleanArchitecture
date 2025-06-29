@@ -1,4 +1,4 @@
-﻿using ProductManager.Shared.DateTimes;
+using ProductManager.Shared.DateTimes;
 namespace ProductManager.Infrastructure.DateTimes;
 
 public class DateTimeProvider : IDateTimeProvider

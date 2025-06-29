@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Application.Common.Commands;
+namespace ProductManager.Application.Common.Commands;
 
 public interface ICommand<TResult>
 {

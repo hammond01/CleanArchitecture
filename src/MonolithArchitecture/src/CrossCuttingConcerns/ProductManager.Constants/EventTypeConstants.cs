@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Constants;
+namespace ProductManager.Constants;
 
 public class EventTypeConstants
 {

@@ -1,4 +1,4 @@
-﻿using ProductManager.Application.Common.Services;
+using ProductManager.Application.Common.Services;
 using ProductManager.Constants;
 using ProductManager.Domain.Entities;
 using ProductManager.Domain.Events;
