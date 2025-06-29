@@ -26,16 +26,18 @@ public class ProductController : ControllerBase
     [LogAction("Get all products")]
     public async Task<ActionResult<ApiResponse>> GetProducts()
     {
-        var result = await _dispatcher.DispatchAsync(new GetProducts());
-        return Ok(result);
+        var data = await _dispatcher.DispatchAsync(new GetProducts());
+        data.Result = data.Result.Adapt<List<GetProductDto>>();
+        return Ok(data);
     }
 
     [HttpGet("{id}")]
     [LogAction("Get product by ID")]
     public async Task<ActionResult<ApiResponse>> GetProduct(string id)
     {
-        var result = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
-        return Ok(result);
+        var data = await _dispatcher.DispatchAsync(new GetProductByIdQuery(id));
+        data.Result = data.Result.Adapt<GetProductDto>();
+        return Ok(data);
     }
 
     [HttpPost]

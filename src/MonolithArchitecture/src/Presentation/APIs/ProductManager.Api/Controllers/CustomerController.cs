@@ -33,7 +33,7 @@ public class CustomerController : ControllerBase
     public async Task<ActionResult<ApiResponse>> GetCustomers()
     {
         var data = await _dispatcher.DispatchAsync(new GetCustomers());
-        data.Result = ((List<Customers>)data.Result).Adapt<List<GetCustomerDto>>();
+        data.Result = data.Result.Adapt<List<GetCustomerDto>>();
         return Ok(data);
     }
 
@@ -42,7 +42,7 @@ public class CustomerController : ControllerBase
     public async Task<ActionResult<ApiResponse>> GetCustomer(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetCustomerByIdQuery(id));
-        data.Result = ((Customers)data.Result).Adapt<GetCustomerDto>();
+        data.Result = data.Result.Adapt<GetCustomerDto>();
         return Ok(data);
     }
 

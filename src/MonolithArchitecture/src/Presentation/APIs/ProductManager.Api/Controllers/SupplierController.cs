@@ -25,7 +25,7 @@ public class SupplierController : ControllerBase
     public async Task<ActionResult<ApiResponse>> GetSuppliers()
     {
         var data = await _dispatcher.DispatchAsync(new GetSuppliers());
-        data.Result = ((List<Suppliers>)data.Result).Adapt<List<GetSupplierDto>>();
+        data.Result = data.Result.Adapt<List<GetSupplierDto>>();
         return Ok(data);
     }
 
@@ -34,7 +34,7 @@ public class SupplierController : ControllerBase
     public async Task<ActionResult<ApiResponse>> GetSupplier(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetSupplierByIdQuery(id));
-        data.Result = ((Suppliers)data.Result).Adapt<GetSupplierDto>();
+        data.Result = data.Result.Adapt<GetSupplierDto>();
         return Ok(data);
     }
 
