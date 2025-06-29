@@ -64,5 +64,5 @@ public class Order : Entity<string>
 
     [ForeignKey("ShipVia")]
     [InverseProperty("Orders")]
-    public Shipper? ShipViaNavigation { get; set; }
+    public Shippers? ShipViaNavigation { get; set; }
 }
