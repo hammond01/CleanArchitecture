@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.DTOs;
+namespace ProductManager.Shared.DTOs;
 
 public interface IMementoDto
 {

@@ -1,4 +1,4 @@
-﻿using ProductManager.Domain.Entities;
+using ProductManager.Domain.Entities;
 
 namespace ProductManager.Domain.Repositories;
 

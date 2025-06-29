@@ -1,9 +1,9 @@
+using System.Net;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace ProductManager.Infrastructure.RateLimit;
 

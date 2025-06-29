@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ProductManager.Domain.Entities.Identity;
 using ProductManager.Domain.Common;
+using ProductManager.Domain.Entities.Identity;
 using ProductManager.Domain.Repositories;
 using ProductManager.Infrastructure.Storage;
 using ProductManager.Persistence.Extensions;
+using ProductManager.Persistence.Locks;
 using ProductManager.Persistence.Repositories;
 using ProductManager.Persistence.Services;
-using ProductManager.Shared.Permission;
 using ProductManager.Shared.Locks;
-using ProductManager.Persistence.Locks;
+using ProductManager.Shared.Permission;
 
 namespace ProductManager.Persistence;
 

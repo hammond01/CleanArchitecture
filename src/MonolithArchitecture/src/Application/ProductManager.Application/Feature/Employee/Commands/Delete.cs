@@ -29,7 +29,9 @@ public class DeleteEmployeeCommandHandler : ICommandHandler<DeleteEmployeeComman
 
         return new ApiResponse
         {
-            StatusCode = 200, Message = CRUDMessage.DeleteSuccess, Result = null!
+            StatusCode = 200,
+            Message = CRUDMessage.DeleteSuccess,
+            Result = null!
         };
     }
 }

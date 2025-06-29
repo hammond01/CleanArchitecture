@@ -1,11 +1,11 @@
 // Advanced security middleware and configurations
-using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace ProductManager.Infrastructure.Security;
 

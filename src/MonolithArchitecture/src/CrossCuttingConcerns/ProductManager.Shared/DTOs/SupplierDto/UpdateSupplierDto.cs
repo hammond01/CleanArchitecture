@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.DTOs.SupplierDto;
+namespace ProductManager.Shared.DTOs.SupplierDto;
 
 public class UpdateSupplierDto
 {

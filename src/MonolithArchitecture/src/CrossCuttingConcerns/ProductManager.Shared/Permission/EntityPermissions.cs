@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
-using System.Reflection;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace ProductManager.Shared.Permission;
 

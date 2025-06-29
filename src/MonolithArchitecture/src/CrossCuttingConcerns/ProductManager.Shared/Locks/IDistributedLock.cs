@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.Locks;
+namespace ProductManager.Shared.Locks;
 
 public interface IDistributedLock : IDisposable
 {

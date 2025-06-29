@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
@@ -56,7 +56,10 @@ public class GlobalExceptionHandlerMiddleware
         var statusCode = GetStatusCode(exception);
         var errorResponse = new ApiResponseException
         {
-            Success = false, StatusCode = statusCode, Message = GetErrorMessage(exception), Errors = GetErrors(exception)
+            Success = false,
+            StatusCode = statusCode,
+            Message = GetErrorMessage(exception),
+            Errors = GetErrors(exception)
         };
 
         // Log exception with structured data

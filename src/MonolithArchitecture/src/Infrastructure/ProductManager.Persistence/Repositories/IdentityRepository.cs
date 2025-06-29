@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -99,7 +99,8 @@ public class IdentityRepository : IIdentityRepository
 
                     roleDtoList.Add(new RoleDto
                     {
-                        Name = role.Name!, Permissions = permissions
+                        Name = role.Name!,
+                        Permissions = permissions
                     });
                 }
                 foreach (var role in userRoles)
@@ -120,7 +121,8 @@ public class IdentityRepository : IIdentityRepository
                 await _identityExtension.SaveRefreshTokenAsync(user.Id, refreshToken);
                 var loginResponse = new LoginResponse
                 {
-                    Token = new JwtSecurityTokenHandler().WriteToken(token), RefreshToken = refreshToken.Token
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    RefreshToken = refreshToken.Token
                 };
                 return new ApiResponse(Status200OK, IdentityMessage.LoginSuccess, loginResponse);
             }
@@ -172,7 +174,8 @@ public class IdentityRepository : IIdentityRepository
 
             roleDtoList.Add(new RoleDto
             {
-                Name = role.Name!, Permissions = permissions
+                Name = role.Name!,
+                Permissions = permissions
             });
         }
 
@@ -194,7 +197,8 @@ public class IdentityRepository : IIdentityRepository
 
         var response = new LoginResponse
         {
-            Token = new JwtSecurityTokenHandler().WriteToken(newJwtToken), RefreshToken = newRefreshToken.Token
+            Token = new JwtSecurityTokenHandler().WriteToken(newJwtToken),
+            RefreshToken = newRefreshToken.Token
         };
 
         // Revoked refresh tokens to be used

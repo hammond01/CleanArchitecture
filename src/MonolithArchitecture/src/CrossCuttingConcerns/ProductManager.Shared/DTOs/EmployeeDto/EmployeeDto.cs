@@ -1,5 +1,3 @@
-using System;
-
 namespace ProductManager.Shared.DTOs.EmployeeDto;
 
 public class EmployeeDto

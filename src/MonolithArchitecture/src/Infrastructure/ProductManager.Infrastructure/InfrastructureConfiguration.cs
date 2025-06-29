@@ -1,14 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using ProductManager.Domain.Identity;
-using ProductManager.Infrastructure.DateTimes;
-using ProductManager.Infrastructure.Identity;
-using ProductManager.Infrastructure.Middleware;
-using ProductManager.Infrastructure.Metrics;
 using ProductManager.Infrastructure.Cache;
 using ProductManager.Infrastructure.Configuration;
-using ProductManager.Infrastructure.RateLimit;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Caching.Distributed;
+using ProductManager.Infrastructure.DateTimes;
+using ProductManager.Infrastructure.Identity;
+using ProductManager.Infrastructure.Metrics;
+using ProductManager.Infrastructure.Middleware;
 namespace ProductManager.Infrastructure;
 
 public static class InfrastructureConfiguration
@@ -35,7 +33,7 @@ public static class InfrastructureConfiguration
         services.AddSingleton(provider =>
         {
             var rateLimitConfig = configuration.GetSection("RateLimit");
-            return new Infrastructure.RateLimit.RateLimitOptions
+            return new RateLimit.RateLimitOptions
             {
                 EnableRateLimit = rateLimitConfig.GetValue<bool>("EnableRateLimit", true),
                 MaxRequests = rateLimitConfig.GetValue<int>("MaxRequests", 100),

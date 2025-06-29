@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Domain.Entities;
+namespace ProductManager.Domain.Entities;
 
 public class OutboxEvent : OutboxEventBase;
 public class ArchivedOutboxEvent : OutboxEventBase;

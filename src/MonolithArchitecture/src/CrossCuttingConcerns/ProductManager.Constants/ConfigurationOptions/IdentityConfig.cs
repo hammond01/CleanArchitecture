@@ -1,4 +1,4 @@
-﻿// ReSharper disable All
+// ReSharper disable All
 namespace SolidTemplate.Constants.ConfigurationOptions;
 
 public class IdentityConfig

@@ -45,7 +45,8 @@ public class CreateCustomerDtoValidator : AbstractValidator<CreateCustomerDto>
     private bool BeValidName(string name)
     {
         return !string.IsNullOrEmpty(name) && name.All(c => char.IsLetter(c) || char.IsWhiteSpace(c) || c == '.' || c == '-');
-    }    private bool BeValidPostalCode(string? postalCode)
+    }
+    private bool BeValidPostalCode(string? postalCode)
     {
         if (string.IsNullOrEmpty(postalCode))
             return true; // Let the NotEmpty rule handle null/empty validation

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * https://github.com/serilog/serilog-aspnetcore/issues/207
  *
  */
