@@ -25,7 +25,7 @@ public class EmployeeController : ControllerBase
     public async Task<ActionResult<ApiResponse>> GetEmployees()
     {
         var data = await _dispatcher.DispatchAsync(new GetEmployees());
-        data.Result = ((List<Employees>)data.Result).Adapt<List<GetEmployeeDto>>();
+        data.Result = data.Result.Adapt<List<GetEmployeeDto>>();
         return Ok(data);
     }
 
@@ -34,7 +34,7 @@ public class EmployeeController : ControllerBase
     public async Task<ActionResult<ApiResponse>> GetEmployee(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetEmployeeByIdQuery(id));
-        data.Result = ((Employees)data.Result).Adapt<GetEmployeeDto>();
+        data.Result = data.Result.Adapt<GetEmployeeDto>();
         return Ok(data);
     }
 
