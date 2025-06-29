@@ -1,4 +1,3 @@
-﻿using System;
 using ProductManager.Application.Common.Commands;
 using ProductManager.Application.Common.Queries;
 

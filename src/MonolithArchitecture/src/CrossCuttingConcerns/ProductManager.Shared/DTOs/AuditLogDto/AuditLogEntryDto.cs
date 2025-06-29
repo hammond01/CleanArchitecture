@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.DTOs.AuditLogDto;
+namespace ProductManager.Shared.DTOs.AuditLogDto;
 
 public class AuditLogEntryDto
 {

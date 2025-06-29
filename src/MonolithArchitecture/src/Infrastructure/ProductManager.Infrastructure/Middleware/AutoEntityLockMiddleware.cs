@@ -1,10 +1,10 @@
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProductManager.Domain.Identity;
 using ProductManager.Shared.Locks;
-using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace ProductManager.Infrastructure.Middleware;
 

@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using ProductManager.Application.Common.Commands;
 using ProductManager.Application.Common.Services;
 using ProductManager.Constants.ApiResponseConstants;

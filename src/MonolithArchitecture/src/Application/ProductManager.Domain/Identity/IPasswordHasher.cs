@@ -1,4 +1,4 @@
-﻿using ProductManager.Domain.Entities.Identity;
+using ProductManager.Domain.Entities.Identity;
 
 namespace ProductManager.Domain.Identity;
 

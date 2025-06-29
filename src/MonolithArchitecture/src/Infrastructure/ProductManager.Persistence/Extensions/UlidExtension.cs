@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Persistence.Extensions;
+namespace ProductManager.Persistence.Extensions;
 
 public static class UlidExtension
 {

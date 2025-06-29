@@ -1,18 +1,18 @@
-﻿using System.Text;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using ProductManager.Api.Versioning; // Add this for API versioning
 using ProductManager.Application;
 using ProductManager.Constants.AuthorizationDefinitions;
 using ProductManager.Infrastructure;
+using ProductManager.Infrastructure.HealthChecks;
 using ProductManager.Infrastructure.Middleware;
 using ProductManager.Infrastructure.Storage;
 using ProductManager.Persistence;
-using ProductManager.Api.Versioning; // Add this for API versioning
 using Serilog;
 using Serilog.Events;
 using SolidTemplate.Constants.ConfigurationOptions;
-using ProductManager.Infrastructure.HealthChecks;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog first

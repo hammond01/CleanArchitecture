@@ -125,7 +125,8 @@ public class ActionLoggingFilter : ActionFilterAttribute
 
             return JsonSerializer.Serialize(parameters, new JsonSerializerOptions
             {
-                WriteIndented = false, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                WriteIndented = false,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             });
         }
         catch
@@ -142,7 +143,8 @@ public class ActionLoggingFilter : ActionFilterAttribute
             {
                 return JsonSerializer.Serialize(objectResult.Value, new JsonSerializerOptions
                 {
-                    WriteIndented = false, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                    WriteIndented = false,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                 });
             }
             return null;

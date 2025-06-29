@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductManager.Domain.Entities;
 namespace ProductManager.Persistence.MappingConfigurations;
@@ -10,7 +10,8 @@ public class EmployeeTerritoriesConfiguration : IEntityTypeConfiguration<Employe
         builder.ToTable("EmployeeTerritories");
         builder.HasKey(x => new
         {
-            x.EmployeeId, x.TerritoryId
+            x.EmployeeId,
+            x.TerritoryId
         });
         builder.HasOne(et => et.Employees)
             .WithMany(e => e.EmployeeTerritories)

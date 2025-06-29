@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductManager.Domain.Entities;
 namespace ProductManager.Persistence.MappingConfigurations;
@@ -10,7 +10,8 @@ public class LockConfiguration : IEntityTypeConfiguration<Lock>
         builder.ToTable("Locks");
         builder.HasKey(x => new
         {
-            x.EntityId, x.EntityName
+            x.EntityId,
+            x.EntityName
         });
         builder.HasIndex(x => new
         {

@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.DTOs.OrderDto;
+namespace ProductManager.Shared.DTOs.OrderDto;
 
 public class CreateOrderDto
 {

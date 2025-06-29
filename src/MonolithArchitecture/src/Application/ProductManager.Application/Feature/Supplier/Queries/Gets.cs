@@ -1,4 +1,4 @@
-﻿using ProductManager.Application.Common.Queries;
+using ProductManager.Application.Common.Queries;
 using ProductManager.Application.Common.Services;
 using ProductManager.Constants.ApiResponseConstants;
 using ProductManager.Domain.Common;

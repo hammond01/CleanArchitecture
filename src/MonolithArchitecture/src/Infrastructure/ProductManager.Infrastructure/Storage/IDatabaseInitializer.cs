@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Infrastructure.Storage;
+namespace ProductManager.Infrastructure.Storage;
 
 public interface IDatabaseInitializer
 {

@@ -6,7 +6,6 @@ using ProductManager.Application.Feature.Employee.Commands;
 using ProductManager.Application.Feature.Employee.Queries;
 using ProductManager.Domain.Common;
 using ProductManager.Domain.Entities;
-using ProductManager.Infrastructure.Middleware;
 using ProductManager.Shared.DTOs.EmployeeDto;
 namespace ProductManager.Api.Controllers;
 

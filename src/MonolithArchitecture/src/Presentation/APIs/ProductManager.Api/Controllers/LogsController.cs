@@ -1,8 +1,8 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductManager.Domain.Common;
 using ProductManager.Persistence;
-using Asp.Versioning;
 namespace ProductManager.Api.Controllers;
 
 /// <summary>

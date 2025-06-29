@@ -1,4 +1,4 @@
-﻿using ProductManager.Application.Common.Queries;
+using ProductManager.Application.Common.Queries;
 using ProductManager.Domain.Common;
 using ProductManager.Domain.Repositories;
 

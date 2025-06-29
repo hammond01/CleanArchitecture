@@ -1,4 +1,4 @@
-﻿using Mapster;
+using Mapster;
 using ProductManager.Domain.Entities;
 using ProductManager.Shared.DTOs.CategoryDto;
 using ProductManager.Shared.DTOs.OrderDto;

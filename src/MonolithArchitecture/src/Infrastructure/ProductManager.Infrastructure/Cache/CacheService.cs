@@ -1,7 +1,6 @@
+using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using ProductManager.Domain.Repositories;
-using System.Text.Json;
 
 namespace ProductManager.Infrastructure.Cache;
 

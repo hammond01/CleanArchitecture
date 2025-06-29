@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using ProductManager.Shared.Locks;
 namespace ProductManager.Persistence.Locks;

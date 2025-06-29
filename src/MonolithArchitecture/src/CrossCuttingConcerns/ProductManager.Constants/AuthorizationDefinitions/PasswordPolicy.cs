@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Constants.AuthorizationDefinitions;
+namespace ProductManager.Constants.AuthorizationDefinitions;
 
 public static class PasswordPolicy
 {

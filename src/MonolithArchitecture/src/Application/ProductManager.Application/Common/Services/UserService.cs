@@ -1,4 +1,4 @@
-﻿using ProductManager.Domain.Repositories;
+using ProductManager.Domain.Repositories;
 
 namespace ProductManager.Application.Common.Services;
 

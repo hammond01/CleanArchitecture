@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using ProductManager.Domain.Common;
 using ProductManager.Shared.DTOs.AdminDto;
 using ProductManager.Shared.DTOs.UserDto;

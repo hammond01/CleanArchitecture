@@ -1,6 +1,3 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
 namespace ProductManager.Application.Common.Queries;
 
 public interface IQueryHandler<in TQuery, TResult>

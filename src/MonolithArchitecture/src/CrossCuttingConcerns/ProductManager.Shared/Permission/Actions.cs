@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.Permission;
+namespace ProductManager.Shared.Permission;
 
 [Flags]
 public enum Actions

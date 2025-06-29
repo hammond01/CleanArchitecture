@@ -1,4 +1,4 @@
-﻿using Blazored.LocalStorage;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 using ProductManager.Shared.DTOs.UserDto;
 namespace ProductManager.Blazor.Components.Authentication;

@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Constants.ApiResponseConstants;
+namespace ProductManager.Constants.ApiResponseConstants;
 
 public static class CRUDMessage
 {

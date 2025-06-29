@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Constants.ConfigurationOptions;
+namespace ProductManager.Constants.ConfigurationOptions;
 
 public class AppSetting
 {

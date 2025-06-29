@@ -1,9 +1,9 @@
 // Comprehensive Health Checks
+using System.Data;
+using System.Diagnostics;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using ProductManager.Domain.Repositories;
-using System.Data;
-using System.Diagnostics;
 
 namespace ProductManager.Infrastructure.HealthChecks;
 

@@ -1,7 +1,7 @@
 // Distributed Cache Service for high performance
+using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 
 namespace ProductManager.Application.Common.Services;
 
@@ -80,7 +80,8 @@ public class CacheService : ICacheService
         {
             _logger.LogError(ex, "Cache removal failed for key: {Key}", key);
         }
-    }    public Task RemoveByPatternAsync(string pattern, CancellationToken cancellationToken = default)
+    }
+    public Task RemoveByPatternAsync(string pattern, CancellationToken cancellationToken = default)
     {
         // Implementation for pattern-based cache invalidation
         // Would require Redis or similar cache store with pattern support

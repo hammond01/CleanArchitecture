@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using ProductManager.Application.Common.Commands;
 using ProductManager.Domain.Common;
 using ProductManager.Domain.Repositories;

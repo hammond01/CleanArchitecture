@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using ProductManager.Domain.Entities.Identity;
 using ProductManager.Domain.Identity;
 namespace ProductManager.Infrastructure.Identity;

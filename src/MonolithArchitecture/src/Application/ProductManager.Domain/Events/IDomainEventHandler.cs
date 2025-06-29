@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Domain.Events;
+namespace ProductManager.Domain.Events;
 
 public interface IDomainEventHandler<in T>
     where T : IDomainEvent

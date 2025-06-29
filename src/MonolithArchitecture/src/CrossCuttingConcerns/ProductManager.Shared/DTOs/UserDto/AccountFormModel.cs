@@ -1,4 +1,4 @@
-﻿namespace ProductManager.Shared.DTOs.UserDto;
+namespace ProductManager.Shared.DTOs.UserDto;
 
 public class AccountFormModel
 {

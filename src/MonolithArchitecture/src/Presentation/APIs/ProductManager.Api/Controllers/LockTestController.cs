@@ -35,7 +35,9 @@ public class LockTestController : ControllerBase
         _logger.LogInformation("✅ Explicit lock test completed for resource: {ResourceId}", resourceId);
         return Ok(new
         {
-            ResourceId = resourceId, Data = data, Message = "Explicit lock test completed"
+            ResourceId = resourceId,
+            Data = data,
+            Message = "Explicit lock test completed"
         });
     }
 
@@ -53,7 +55,9 @@ public class LockTestController : ControllerBase
         _logger.LogInformation("✅ Automatic lock (PUT) test completed for resource: {ResourceId}", resourceId);
         return Ok(new
         {
-            ResourceId = resourceId, Data = data, Message = "Automatic PUT lock test completed"
+            ResourceId = resourceId,
+            Data = data,
+            Message = "Automatic PUT lock test completed"
         });
     }
 
@@ -71,7 +75,8 @@ public class LockTestController : ControllerBase
         _logger.LogInformation("✅ Automatic lock (DELETE) test completed for resource: {ResourceId}", resourceId);
         return Ok(new
         {
-            ResourceId = resourceId, Message = "Automatic DELETE lock test completed"
+            ResourceId = resourceId,
+            Message = "Automatic DELETE lock test completed"
         });
     }
 
@@ -95,7 +100,8 @@ public class LockTestController : ControllerBase
                 _logger.LogWarning("⚠️ Could not acquire lock for resource: {ResourceId}", resourceId);
                 return Conflict(new
                 {
-                    ResourceId = resourceId, Message = "Resource is currently locked by another process"
+                    ResourceId = resourceId,
+                    Message = "Resource is currently locked by another process"
                 });
             }
 
@@ -111,7 +117,9 @@ public class LockTestController : ControllerBase
             _logger.LogInformation("✅ Manual lock test completed for resource: {ResourceId}", resourceId);
             return Ok(new
             {
-                ResourceId = resourceId, Data = data, Message = "Manual lock test completed"
+                ResourceId = resourceId,
+                Data = data,
+                Message = "Manual lock test completed"
             });
         }
         catch (Exception ex)
@@ -130,7 +138,8 @@ public class LockTestController : ControllerBase
 
             return StatusCode(500, new
             {
-                ResourceId = resourceId, Error = ex.Message
+                ResourceId = resourceId,
+                Error = ex.Message
             });
         }
     }
@@ -156,12 +165,16 @@ public class LockTestController : ControllerBase
                 _lockManager.ReleaseLock("StatusCheck", resourceId, ownerId);
                 return Ok(new
                 {
-                    ResourceId = resourceId, IsLocked = false, Message = "Resource is available"
+                    ResourceId = resourceId,
+                    IsLocked = false,
+                    Message = "Resource is available"
                 });
             }
             return Ok(new
             {
-                ResourceId = resourceId, IsLocked = true, Message = "Resource is currently locked"
+                ResourceId = resourceId,
+                IsLocked = true,
+                Message = "Resource is currently locked"
             });
         }
         catch (Exception ex)
@@ -169,7 +182,8 @@ public class LockTestController : ControllerBase
             _logger.LogError(ex, "❌ Error checking lock status for resource: {ResourceId}", resourceId);
             return StatusCode(500, new
             {
-                ResourceId = resourceId, Error = ex.Message
+                ResourceId = resourceId,
+                Error = ex.Message
             });
         }
     }
