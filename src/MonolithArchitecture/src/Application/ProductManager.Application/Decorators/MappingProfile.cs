@@ -3,6 +3,7 @@ using ProductManager.Domain.Entities;
 using ProductManager.Shared.DTOs.CategoryDto;
 using ProductManager.Shared.DTOs.OrderDto;
 using ProductManager.Shared.DTOs.ProductDto;
+using ProductManager.Shared.DTOs.ShipperDto;
 using ProductManager.Shared.DTOs.SupplierDto;
 namespace ProductManager.Application.Decorators;
 
@@ -19,6 +20,11 @@ public static class MappingConfig
         TypeAdapterConfig<Suppliers, GetSupplierDto>.NewConfig();
         TypeAdapterConfig<CreateSupplierDto, Suppliers>.NewConfig();
         TypeAdapterConfig<UpdateSupplierDto, Suppliers>.NewConfig();
+
+        // Shipper mappings
+        TypeAdapterConfig<Shippers, GetShipperDto>.NewConfig();
+        TypeAdapterConfig<CreateShipperDto, Shippers>.NewConfig();
+        TypeAdapterConfig<UpdateShipperDto, Shippers>.NewConfig();
 
         // Order mappings
         TypeAdapterConfig<Order, GetOrderDto>.NewConfig();

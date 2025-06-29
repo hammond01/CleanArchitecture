@@ -12,7 +12,9 @@ public class EventTypeConstants
 
     public const string SupplierCreated = "SUPPLIER_CREATED";
     public const string SupplierUpdated = "SUPPLIER_UPDATED";
-    public const string SupplierDeleted = "SUPPLIER_DELETED"; public const string OrderCreated = "ORDER_CREATED";
+    public const string SupplierDeleted = "SUPPLIER_DELETED";
+
+    public const string OrderCreated = "ORDER_CREATED";
     public const string OrderUpdated = "ORDER_UPDATED";
     public const string OrderDeleted = "ORDER_DELETED";
 
@@ -23,4 +25,8 @@ public class EventTypeConstants
     public const string EmployeeCreated = "EMPLOYEE_CREATED";
     public const string EmployeeUpdated = "EMPLOYEE_UPDATED";
     public const string EmployeeDeleted = "EMPLOYEE_DELETED";
+
+    public const string ShipperCreated = "SHIPPER_CREATED";
+    public const string ShipperUpdated = "SHIPPER_UPDATED";
+    public const string ShipperDeleted = "SHIPPER_DELETED";
 }

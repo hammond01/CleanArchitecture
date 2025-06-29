@@ -35,9 +35,9 @@ public static class InfrastructureConfiguration
             var rateLimitConfig = configuration.GetSection("RateLimit");
             return new RateLimit.RateLimitOptions
             {
-                EnableRateLimit = rateLimitConfig.GetValue<bool>("EnableRateLimit", true),
-                MaxRequests = rateLimitConfig.GetValue<int>("MaxRequests", 100),
-                Window = TimeSpan.FromMinutes(rateLimitConfig.GetValue<int>("WindowMinutes", 1))
+                EnableRateLimit = rateLimitConfig.GetValue("EnableRateLimit", true),
+                MaxRequests = rateLimitConfig.GetValue("MaxRequests", 100),
+                Window = TimeSpan.FromMinutes(rateLimitConfig.GetValue("WindowMinutes", 1))
             };
         });
 

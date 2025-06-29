@@ -34,7 +34,7 @@ public static class LoggingConfiguration
             loggingBuilder.AddSerilog(logger, true);
         });
 
-        services.AddSingleton<DiagnosticContext>(_ => new DiagnosticContext(logger));
+        services.AddSingleton(_ => new DiagnosticContext(logger));
 
         return services;
     }
