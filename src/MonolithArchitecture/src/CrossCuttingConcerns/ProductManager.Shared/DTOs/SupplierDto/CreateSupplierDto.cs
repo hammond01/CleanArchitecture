@@ -2,6 +2,7 @@ namespace ProductManager.Shared.DTOs.SupplierDto;
 
 public class CreateSupplierDto
 {
+    public string? Id { get; set; }
     public string CompanyName { get; set; } = null!;
     public string? ContactName { get; set; }
     public string? ContactTitle { get; set; }
