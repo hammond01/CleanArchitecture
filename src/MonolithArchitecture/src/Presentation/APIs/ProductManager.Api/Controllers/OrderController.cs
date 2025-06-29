@@ -54,7 +54,10 @@ public class OrderController : ControllerBase
     public async Task<ActionResult<ApiResponse>> UpdateOrder(string id, [FromBody] UpdateOrderDto updateOrderDto)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
-        var order = (Order)apiResponse.Result;
+        if (apiResponse.Result is not Order order)
+        {
+            return NotFound(new ApiResponse(404, "Order not found"));
+        }
         updateOrderDto.Adapt(order);
         var result = await _dispatcher.DispatchAsync(new AddOrUpdateOrderCommand(order));
         return Ok(result);
@@ -65,7 +68,10 @@ public class OrderController : ControllerBase
     public async Task<ActionResult<ApiResponse>> DeleteOrder(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetOrderByIdQuery(id));
-        var order = (Order)apiResponse.Result;
+        if (apiResponse.Result is not Order order)
+        {
+            return NotFound(new ApiResponse(404, "Order not found"));
+        }
         await _dispatcher.DispatchAsync(new DeleteOrderCommand(order));
         return NoContent();
     }
