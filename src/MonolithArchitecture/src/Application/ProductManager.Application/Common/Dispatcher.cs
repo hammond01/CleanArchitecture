@@ -24,8 +24,8 @@ public class Dispatcher
         foreach (var type in types)
         {
             services.AddTransient(type);
+            _eventHandlers.Add(type);
         }
-        _eventHandlers.AddRange(types);
     }
     public async Task<T> DispatchAsync<T>(IQuery<T> query, CancellationToken cancellationToken = default)
     {
@@ -52,6 +52,8 @@ public class Dispatcher
                                 let canHandleEvent = handlerType.GetInterfaces()
                                     .Any(x => x.IsGenericType
                                               && x.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
+                                              && x.GenericTypeArguments != null
+                                              && x.GenericTypeArguments.Length > 0
                                               && x.GenericTypeArguments[0] == domainEvent.GetType())
                                 where canHandleEvent
                                 select _serviceProvider.GetService(handlerType)!)
