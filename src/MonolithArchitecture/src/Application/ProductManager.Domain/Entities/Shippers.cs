@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProductManager.Domain.Entities;
 
-public class Shipper : Entity<string>
+public class Shippers : Entity<string>
 {
     [StringLength(40)]
     public string CompanyName { get; set; } = null!;
