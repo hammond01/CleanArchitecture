@@ -31,7 +31,7 @@ public class HealthController : ControllerBase
     public ActionResult<object> GetHealth()
     {
         _logger.LogInformation("🏥 Health check requested");
-        
+
         var result = new
         {
             Status = "Healthy",
