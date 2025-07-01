@@ -25,14 +25,14 @@ public class HealthControllerTests : IClassFixture<WebApplicationFactory<Program
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         content.Should().NotBeNullOrEmpty();
-        
+
         var jsonDocument = JsonDocument.Parse(content);
         jsonDocument.RootElement.TryGetProperty("status", out var statusProperty).Should().BeTrue();
         statusProperty.GetString().Should().Be("Healthy");
-        
+
         jsonDocument.RootElement.TryGetProperty("timestamp", out var timestampProperty).Should().BeTrue();
         jsonDocument.RootElement.TryGetProperty("version", out var versionProperty).Should().BeTrue();
         jsonDocument.RootElement.TryGetProperty("environment", out var environmentProperty).Should().BeTrue();
@@ -46,14 +46,14 @@ public class HealthControllerTests : IClassFixture<WebApplicationFactory<Program
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         content.Should().NotBeNullOrEmpty();
-        
+
         var jsonDocument = JsonDocument.Parse(content);
         jsonDocument.RootElement.TryGetProperty("status", out var statusProperty).Should().BeTrue();
         statusProperty.GetString().Should().Be("Healthy");
-        
+
         jsonDocument.RootElement.TryGetProperty("database", out var databaseProperty).Should().BeTrue();
         jsonDocument.RootElement.TryGetProperty("system", out var systemProperty).Should().BeTrue();
     }
@@ -66,10 +66,10 @@ public class HealthControllerTests : IClassFixture<WebApplicationFactory<Program
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         content.Should().NotBeNullOrEmpty();
-        
+
         var jsonDocument = JsonDocument.Parse(content);
         jsonDocument.RootElement.TryGetProperty("status", out var statusProperty).Should().BeTrue();
         statusProperty.GetString().Should().Be("Healthy");
@@ -83,10 +83,10 @@ public class HealthControllerTests : IClassFixture<WebApplicationFactory<Program
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         content.Should().NotBeNullOrEmpty();
-        
+
         var jsonDocument = JsonDocument.Parse(content);
         jsonDocument.RootElement.TryGetProperty("machineName", out var machineNameProperty).Should().BeTrue();
         jsonDocument.RootElement.TryGetProperty("osVersion", out var osVersionProperty).Should().BeTrue();
