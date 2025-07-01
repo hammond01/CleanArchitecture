@@ -16,19 +16,19 @@ public class RegionConfiguration : IEntityTypeConfiguration<Region>
         {
             new Region
             {
-                Id = UlidExtension.Generate(), RegionDescription = "Ha Noi"
+                Id = UlidExtension.Generate(), RegionDescription = "Ha Noi", TestCode = "TestCode1"
             },
             new Region
             {
-                Id = UlidExtension.Generate(), RegionDescription = "Ho Chi Minh City"
+                Id = UlidExtension.Generate(), RegionDescription = "Ho Chi Minh City", TestCode = "TestCode2"
             },
             new Region
             {
-                Id = UlidExtension.Generate(), RegionDescription = "Can Tho"
+                Id = UlidExtension.Generate(), RegionDescription = "Can Tho", TestCode = "TestCode3"
             },
             new Region
             {
-                Id = UlidExtension.Generate(), RegionDescription = "Nha Trang"
+                Id = UlidExtension.Generate(), RegionDescription = "Nha Trang", TestCode = "TestCode4"
             }
         });
     }
