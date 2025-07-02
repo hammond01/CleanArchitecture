@@ -38,5 +38,10 @@ public static class MappingConfig
 
         TypeAdapterConfig<CreateProductDto, Products>.NewConfig();
         TypeAdapterConfig<UpdateProductDto, Products>.NewConfig();
+
+        // Region mappings
+        TypeAdapterConfig<ProductManager.Domain.Entities.Regions, ProductManager.Application.Feature.Region.DTOs.RegionDto>.NewConfig();
+        TypeAdapterConfig<ProductManager.Application.Feature.Region.DTOs.CreateRegionRequest, ProductManager.Domain.Entities.Regions>.NewConfig();
+        TypeAdapterConfig<ProductManager.Application.Feature.Region.DTOs.UpdateRegionRequest, ProductManager.Domain.Entities.Regions>.NewConfig();
     }
 }

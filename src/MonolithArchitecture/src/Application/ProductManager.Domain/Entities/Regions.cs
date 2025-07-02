@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ProductManager.Domain.Entities;
 
 [Table("Region")]
-public class Region : Entity<string>
+public class Regions : Entity<string>
 {
     [StringLength(50)]
     public string RegionDescription { get; set; } = null!;

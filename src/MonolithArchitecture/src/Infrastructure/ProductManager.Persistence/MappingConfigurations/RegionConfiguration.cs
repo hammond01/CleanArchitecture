@@ -4,29 +4,29 @@ using ProductManager.Domain.Entities;
 using ProductManager.Persistence.Extensions;
 namespace ProductManager.Persistence.MappingConfigurations;
 
-public class RegionConfiguration : IEntityTypeConfiguration<Region>
+public class RegionConfiguration : IEntityTypeConfiguration<Regions>
 {
 
-    public void Configure(EntityTypeBuilder<Region> builder)
+    public void Configure(EntityTypeBuilder<Regions> builder)
     {
         builder.ToTable("Region");
         builder.HasKey(x => x.Id);
 
-        builder.HasData(new List<Region>
+        builder.HasData(new List<Regions>
         {
-            new Region
+            new Regions
             {
                 Id = UlidExtension.Generate(), RegionDescription = "Ha Noi", TestCode = "TestCode1"
             },
-            new Region
+            new Regions
             {
                 Id = UlidExtension.Generate(), RegionDescription = "Ho Chi Minh City", TestCode = "TestCode2"
             },
-            new Region
+            new Regions
             {
                 Id = UlidExtension.Generate(), RegionDescription = "Can Tho", TestCode = "TestCode3"
             },
-            new Region
+            new Regions
             {
                 Id = UlidExtension.Generate(), RegionDescription = "Nha Trang", TestCode = "TestCode4"
             }
