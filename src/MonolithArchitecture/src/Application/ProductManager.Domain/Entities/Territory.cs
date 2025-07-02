@@ -13,7 +13,7 @@ public class Territory : Entity<string>
 
     [ForeignKey("RegionId")]
     [InverseProperty("Territories")]
-    public Region Region { get; set; } = null!;
+    public Regions Region { get; set; } = null!;
 
     public ICollection<EmployeeTerritory> EmployeeTerritories { get; set; } = new List<EmployeeTerritory>();
 }

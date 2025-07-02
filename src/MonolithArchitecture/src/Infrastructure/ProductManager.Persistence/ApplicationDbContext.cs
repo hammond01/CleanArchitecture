@@ -25,6 +25,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<Customers> Customers { get; set; } = null!;
     public DbSet<Employees> Employees { get; set; } = null!;
+    public DbSet<Regions> Regions { get; set; } = null!;
 
     // Logging Entities
     public DbSet<ApiLogItem> ApiLogs { get; set; } = null!;
