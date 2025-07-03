@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductManager.Domain.Entities;
 namespace ProductManager.Persistence.MappingConfigurations;
 
-public class TerritoryConfiguration : IEntityTypeConfiguration<Territory>
+public class TerritoryConfiguration : IEntityTypeConfiguration<Territories>
 {
 
-    public void Configure(EntityTypeBuilder<Territory> builder)
+    public void Configure(EntityTypeBuilder<Territories> builder)
     {
         builder.ToTable("Territories");
         builder.HasKey(x => x.Id);
