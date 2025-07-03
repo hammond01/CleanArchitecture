@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace ProductManager.Domain.Entities;
 
-public class Territory : Entity<string>
+public class Territories : Entity<string>
 {
     [StringLength(50)]
     public string TerritoryDescription { get; set; } = null!;
