@@ -7,7 +7,7 @@ using ProductManager.Persistence;
 namespace ProductManager.Api.Controllers;
 
 /// <summary>
-/// Controller for system health checks and monitoring
+///     Controller for system health checks and monitoring
 /// </summary>
 [ApiController]
 [ApiVersion("1.0")]
@@ -24,7 +24,7 @@ public class HealthController : ControllerBase
     }
 
     /// <summary>
-    /// Basic health check endpoint
+    ///     Basic health check endpoint
     /// </summary>
     [HttpGet]
     [LogAction("Health check")]
@@ -44,7 +44,7 @@ public class HealthController : ControllerBase
     }
 
     /// <summary>
-    /// Detailed health check with database connectivity
+    ///     Detailed health check with database connectivity
     /// </summary>
     [HttpGet("detailed")]
     [LogAction("Detailed health check")]
@@ -66,7 +66,7 @@ public class HealthController : ControllerBase
     }
 
     /// <summary>
-    /// Get database statistics
+    ///     Get database statistics
     /// </summary>
     [HttpGet("database")]
     [LogAction("Database health check")]
@@ -79,7 +79,7 @@ public class HealthController : ControllerBase
     }
 
     /// <summary>
-    /// Get system information
+    ///     Get system information
     /// </summary>
     [HttpGet("system")]
     [LogAction("System info check")]
@@ -89,12 +89,12 @@ public class HealthController : ControllerBase
 
         var systemInfo = new
         {
-            MachineName = Environment.MachineName,
+            Environment.MachineName,
             OSVersion = Environment.OSVersion.ToString(),
-            ProcessorCount = Environment.ProcessorCount,
+            Environment.ProcessorCount,
             WorkingSet = GC.GetTotalMemory(false),
             FrameworkVersion = Environment.Version.ToString(),
-            CurrentDirectory = Environment.CurrentDirectory,
+            Environment.CurrentDirectory,
             SystemUptime = TimeSpan.FromMilliseconds(Environment.TickCount64)
         };
 
@@ -107,14 +107,12 @@ public class HealthController : ControllerBase
         {
             var canConnect = await _context.Database.CanConnectAsync();
             if (!canConnect)
-            {
                 return new
                 {
                     Status = "Unhealthy",
                     Message = "Cannot connect to database",
                     ConnectionString = _context.Database.GetConnectionString()?.Split(';')[0] // Only show server part
                 };
-            }
 
             // Get table counts
             var productCount = await _context.Products.CountAsync();

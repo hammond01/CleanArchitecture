@@ -12,5 +12,5 @@ public class Regions : Entity<string>
     public string TestCode { get; set; } = null!;
 
     [InverseProperty("Region")]
-    public ICollection<Territory> Territories { get; set; } = new List<Territory>();
+    public ICollection<Territories> Territories { get; set; } = new List<Territories>();
 }
