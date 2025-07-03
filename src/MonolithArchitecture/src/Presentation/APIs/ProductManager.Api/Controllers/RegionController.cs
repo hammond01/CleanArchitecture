@@ -3,8 +3,8 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ProductManager.Application.Common;
 using ProductManager.Application.Feature.Region.Commands;
-using ProductManager.Application.Feature.Region.Queries;
 using ProductManager.Application.Feature.Region.DTOs;
+using ProductManager.Application.Feature.Region.Queries;
 using ProductManager.Domain.Common;
 using ProductManager.Domain.Entities;
 
@@ -24,7 +24,6 @@ public class RegionController : ControllerBase
     }
 
     [HttpGet]
-    [LogAction("Get all regions")]
     public async Task<ActionResult<ApiResponse>> GetRegions()
     {
         var data = await _dispatcher.DispatchAsync(new GetRegions());
@@ -33,7 +32,6 @@ public class RegionController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [LogAction("Get region by ID")]
     public async Task<ActionResult<ApiResponse>> GetRegion(string id)
     {
         var data = await _dispatcher.DispatchAsync(new GetRegionByIdQuery(id));
@@ -42,7 +40,6 @@ public class RegionController : ControllerBase
     }
 
     [HttpPost]
-    [LogAction("Create new region")]
     public async Task<ActionResult<ApiResponse>> CreateRegion([FromBody] CreateRegionRequest createRegionRequest)
     {
         var data = createRegionRequest.Adapt<Regions>();
@@ -52,7 +49,6 @@ public class RegionController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [LogAction("Update region")]
     public async Task<ActionResult<ApiResponse>> UpdateRegion(string id, [FromBody] UpdateRegionRequest updateRegionRequest)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetRegionByIdQuery(id));
@@ -66,7 +62,6 @@ public class RegionController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [LogAction("Delete region")]
     public async Task<ActionResult<ApiResponse>> DeleteRegion(string id)
     {
         var apiResponse = await _dispatcher.DispatchAsync(new GetRegionByIdQuery(id));
