@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-
 namespace ProductManager.Domain.Entities;
 
 [PrimaryKey("OrderId", "ProductId")]
@@ -10,7 +9,7 @@ namespace ProductManager.Domain.Entities;
 [Index("OrderId", Name = "OrdersOrder_Details")]
 [Index("ProductId", Name = "ProductID")]
 [Index("ProductId", Name = "ProductsOrder_Details")]
-public class OrderDetail : Entity<string>
+public class OrderDetails : Entity<string>
 {
     [Key]
     [Column("ProductID")]

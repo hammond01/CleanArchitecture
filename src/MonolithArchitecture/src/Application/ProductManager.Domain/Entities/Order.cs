@@ -60,7 +60,7 @@ public class Order : Entity<string>
     public Employees? Employee { get; set; }
 
     [InverseProperty("Order")]
-    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public ICollection<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
 
     [ForeignKey("ShipVia")]
     [InverseProperty("Orders")]

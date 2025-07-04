@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductManager.Domain.Entities;
 namespace ProductManager.Persistence.MappingConfigurations;
 
-public class OrderDetailConfiguration : IEntityTypeConfiguration<OrderDetail>
+public class OrderDetailConfiguration : IEntityTypeConfiguration<OrderDetails>
 {
 
-    public void Configure(EntityTypeBuilder<OrderDetail> builder)
+    public void Configure(EntityTypeBuilder<OrderDetails> builder)
     {
         builder.ToTable("OrderDetails");
         builder.HasKey(x => x.Id);
