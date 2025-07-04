@@ -13,15 +13,15 @@
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Project Structure](#project-structure)
-- [Technologies](#technologies)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Development Guide](#development-guide)
-- [Testing](#testing)
-- [Contributing](#contributing)
+- [Overview](#-overview)
+- [Architecture](#️-architecture-overview)
+- [Project Structure](#-project-structure)
+- [Technologies](#️-technologies-used)
+- [Features](#-key-features)
+- [Getting Started](#-getting-started)
+- [Development Guide](#-development-guide)
+- [Testing](#-testing)
+- [Contributing](#-contributing)
 
 ## 🚀 Overview
 
