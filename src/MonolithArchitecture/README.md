@@ -1,19 +1,44 @@
-# ProductManager -## 🆕 Recent Updates
+# ProductManager - Clean Architecture Monolith
 
-### Controller Pattern Standardization & Complete Test Coverage (Latest)
+[![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
+[![Tests](https://img.shields.io/badge/tests-77%2F77%20passing-brightgreen.svg)](#testing)
+[![GitHub](https://img.shields.io/badge/GitHub-hammond01/CleanArchitecture-blue.svg)](https://github.com/hammond01/CleanArchitecture)
+[![Stars](https://img.shields.io/github/stars/hammond01/CleanArchitecture?style=social)](https://github.com/hammond01/CleanArchitecture/stargazers)
+[![Forks](https://img.shields.io/github/forks/hammond01/CleanArchitecture?style=social)](https://github.com/hammond01/CleanArchitecture/network/members)
 
--   ✅ **Standardized API Pattern**: All controllers now follow consistent pattern (GET returns DTO, POST/PUT/DELETE return Enti### 🧪 Testing Infrastructure
+A modern e-commerce product management system built with **Clean Architecture** principles using **.NET 8**, **Entity Framework Core**, and **Blazor**. This monolithic application demonstrates enterprise-level patterns including **CQRS**, **Repository Pattern**, **Unit of Work**, and **Domain-Driven Design (DDD)** with comprehensive test coverage and standardized API patterns.
 
-The project includes **production-ready testi- 🛍️ **Product Management\*\* - Complete product lifecycle with categories and suppliers
+> **Project Status**: ✅ **Production Ready** - This project implements complete Clean Architecture patterns with **standardized Entity Framework configurations**, **comprehensive test coverage (77/77 tests passing)**, and **full CRUD operations** for all 10 business modules including newly added Territory and OrderDetail APIs.
 
--   📦 **Category Management** - Hierarchical product categorization
--   🏪 **Supplier Management** - Vendor and supplier information
--   👤 **Customer Management** - Customer profiles and contact information
--   👤 **Employee Management** - Staff management with roles and permissions
--   📝 **Order Management** - Order processing and fulfillment
--   🌍 **Region Management** - Geographic region management (newly added)
--   🚚 **Shipper Management** - Shipping provider management
--   🔐 **Identity Management** - User authentication and authorizationstructure\*\* with complete coverage:
+## 🆕 Recent Updates
+
+### Entity Framework Configuration Standardization & Complete API Coverage (Latest)
+
+-   ✅ **Entity Framework Configuration Standardization**: All entity constraints moved from entity annotations to IEntityTypeConfiguration classes
+-   ✅ **Complete API Coverage**: All 10 business modules now have full CRUD operations including Territory and OrderDetail
+-   ✅ **Configuration Best Practices**: All ID columns configured with HasMaxLength(50), proper column types and constraints
+-   ✅ **Clean Entity Models**: Removed all configuration attributes from entities, maintaining clean domain models
+-   ✅ **Database Migration Ready**: All configurations properly set up for new migrations and database updates
+
+### Business Modules Implemented (All with Full CRUD)
+
+-   ✅ **Product Management** - Complete product lifecycle with categories and suppliers
+-   ✅ **Category Management** - Hierarchical product categorization  
+-   ✅ **Supplier Management** - Vendor and supplier information
+-   ✅ **Customer Management** - Customer profiles and contact information
+-   ✅ **Employee Management** - Staff management with roles and permissions
+-   ✅ **Order Management** - Order processing and fulfillment
+-   ✅ **Region Management** - Geographic region management
+-   ✅ **Shipper Management** - Shipping provider management
+-   ✅ **Territory Management** - Territory and sales region management (newly added)
+-   ✅ **OrderDetail Management** - Order line items and details management (newly added)
+-   ✅ **Identity Management** - User authentication and authorization
+
+### 🧪 Testing Infrastructure
+
+The project includes **production-ready testing infrastructure** with complete coverage:
 
 -   **Integration Tests**: Complete API endpoint testing with 51 test cases covering all business operations
 -   **Unit Tests**: Application layer testing with proper dependency injection and business logic validation
@@ -24,14 +49,26 @@ The project includes **production-ready testi- 🛍️ **Product Management\*\* 
 
 **Current Test Status:**
 
--   ✅ **Integration Tests**: 51/51 passing (100%) - Full CRUD coverage for all 7 business modules
+-   ✅ **Integration Tests**: 75/75 passing (100%) - Full CRUD coverage for all 10 business modules
 -   ✅ **Unit Tests**: 2/2 passing (100%) - Application layer validation
 -   ✅ **Build Status**: All projects compile successfully
--   ✅ **API Endpoints**: All 35+ endpoints functional with proper HTTP status codeste CRUD Coverage\*\*: All 7 business modules have full Create, Read, Update, Delete operations
--   ✅ **Comprehensive Test Suite**: 53 integration tests covering all controller endpoints with 100% pass rate
--   ✅ **Shipper Module**: Complete implementation of Shipper management with CRUD operations
--   ✅ **DTO Consistency**: Fixed all DTOs to properly match Entity properties and data types
--   ✅ **Entity Model Updates**: Updated Order entity to use DateTime for consistency
+-   ✅ **API Endpoints**: All 40+ endpoints functional with proper HTTP status codes
+
+### Entity Framework Configuration Improvements
+
+-   ✅ **Standardized Configuration**: All entities now use IEntityTypeConfiguration pattern instead of annotations
+-   ✅ **Clean Domain Models**: Removed all [StringLength], [Required], [Column] attributes from entities
+-   ✅ **Consistent ID Configuration**: All ID columns configured with HasMaxLength(50)
+-   ✅ **Proper Data Types**: Standardized column types and constraints in configuration classes
+-   ✅ **Migration Ready**: All configurations properly set up for database schema updates
+
+### Latest API Additions
+
+-   ✅ **Territory API**: Complete CRUD operations for territory management
+-   ✅ **OrderDetail API**: Complete CRUD operations for order line items
+-   ✅ **Controller Standardization**: All APIs follow consistent patterns and naming conventions
+-   ✅ **DTO Consistency**: Proper DTOs created for all new APIs
+-   ✅ **Error Handling**: Comprehensive validation and error responses
 
 ### Latest Commits & Improvements (December 2024)
 
@@ -231,6 +268,8 @@ Total Tests: 77
 │   ├── RegionController: 2 tests (full CRUD)
 │   ├── ShipperController: 6 tests (full CRUD)
 │   ├── SupplierController: 5 tests (full CRUD)
+│   ├── TerritoryController: 5 tests (full CRUD) - newly added
+│   ├── OrderDetailController: 5 tests (full CRUD) - newly added
 │   └── IdentityController: 6 tests (auth/auth)
 └── Unit Tests: 2/2 passing (100%)
     └── Application Layer: 2 tests (business logic validation)
@@ -290,6 +329,72 @@ The project includes **production-ready testing infrastructure** with complete c
 
     ```
 
+## 🗄️ Entity Framework Configuration Standards
+
+This project demonstrates **best practices for Entity Framework Core configuration** with complete separation of concerns:
+
+### Configuration Pattern
+
+**Before (Entity Annotations):**
+```csharp
+public class Product : Entity<string>
+{
+    [StringLength(40)]
+    [Required]
+    public string ProductName { get; set; }
+    
+    [Column(TypeName = "money")]
+    public decimal? UnitPrice { get; set; }
+}
+```
+
+**After (Configuration Classes):**
+```csharp
+// Clean Domain Entity
+public class Product : Entity<string>
+{
+    public string ProductName { get; set; }
+    public decimal? UnitPrice { get; set; }
+}
+
+// Separate Configuration Class
+public class ProductConfiguration : IEntityTypeConfiguration<Product>
+{
+    public void Configure(EntityTypeBuilder<Product> builder)
+    {
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).HasMaxLength(50);
+        builder.Property(x => x.ProductName).HasMaxLength(40).IsRequired();
+        builder.Property(x => x.UnitPrice).HasColumnType("money");
+    }
+}
+```
+
+### Configuration Benefits
+
+-   ✅ **Clean Domain Models**: No infrastructure concerns in entities
+-   ✅ **Centralized Configuration**: All constraints in one place per entity
+-   ✅ **Better Testability**: Domain models are pure C# classes
+-   ✅ **Separation of Concerns**: Domain logic separate from persistence logic
+-   ✅ **Easier Maintenance**: Configuration changes don't affect domain models
+-   ✅ **Consistent Standards**: All ID columns have HasMaxLength(50)
+
+### Configuration Files Structure
+
+```
+src/Infrastructure/ProductManager.Persistence/MappingConfigurations/
+├── CategoryConfiguration.cs
+├── CustomerConfiguration.cs
+├── EmployeeConfiguration.cs
+├── OrderConfiguration.cs
+├── OrderDetailConfiguration.cs
+├── ProductConfiguration.cs
+├── RegionConfiguration.cs
+├── ShipperConfiguration.cs
+├── SupplierConfiguration.cs
+└── TerritoryConfiguration.cs
+```
+
 ## 🛠️ Technologies & Patterns
 
 ### Core Technologies
@@ -334,10 +439,13 @@ The project includes **production-ready testing infrastructure** with complete c
 -   🛍️ **Product Management** - Complete product lifecycle with categories and suppliers
 -   📦 **Category Management** - Hierarchical product categorization
 -   🏪 **Supplier Management** - Vendor and supplier information
--   � **Customer Management** - Customer profiles and contact information
+-   👤 **Customer Management** - Customer profiles and contact information
 -   👤 **Employee Management** - Staff management with roles and permissions
--   � **Order Management** - Order processing and fulfillment
--   🚚 **Shipper Management** - Shipping provider management (newly added)
+-   📝 **Order Management** - Order processing and fulfillment
+-   � **OrderDetail Management** - Order line items and details management (newly added)
+-   🌍 **Region Management** - Geographic region management
+-   🗺️ **Territory Management** - Territory and sales region management (newly added)
+-   🚚 **Shipper Management** - Shipping provider management
 -   🔐 **Identity Management** - User authentication and authorization
 
 ### Technical Features
@@ -503,6 +611,10 @@ Key configuration options in `appsettings.json`:
 The application uses **Entity Framework Core** with **SQL Server**:
 
 -   **Code-First approach** with migrations
+-   **IEntityTypeConfiguration pattern** for all entity configurations
+-   **Clean domain models** without configuration attributes
+-   **Standardized ID constraints** with HasMaxLength(50) for all primary keys
+-   **Proper column types and constraints** defined in configuration classes
 -   **Automatic relationship mapping**
 -   **Audit trail tracking**
 -   **Soft delete patterns**
@@ -602,6 +714,10 @@ All controllers follow the **standardized pattern**: GET operations return DTOs 
 -   `POST /api/Shipper` - Create shipper (returns Shipper entity)
 -   `GET /api/Supplier` - Supplier management (returns SupplierDto[])
 -   `POST /api/Supplier` - Create supplier (returns Supplier entity)
+-   `GET /api/Territory` - Territory management (returns TerritoryDto[]) - newly added
+-   `POST /api/Territory` - Create territory (returns Territory entity) - newly added
+-   `GET /api/OrderDetail` - OrderDetail management (returns OrderDetailDto[]) - newly added
+-   `POST /api/OrderDetail` - Create order detail (returns OrderDetail entity) - newly added
 -   `POST /api/Identity` - Identity/Authentication endpoints
 
 ## 🔧 Development & Quality Assurance
@@ -765,4 +881,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-**Last Updated**: June 30, 2025 | **Version**: 2.0 Production Ready | **Happy Coding! 🚀**
+**Last Updated**: July 4, 2025 | **Version**: 3.0 Production Ready | **Happy Coding! 🚀**
