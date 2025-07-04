@@ -1,4 +1,5 @@
 using Mapster;
+using ProductManager.Application.Feature.Region.DTOs;
 using ProductManager.Domain.Entities;
 using ProductManager.Shared.DTOs.CategoryDto;
 using ProductManager.Shared.DTOs.OrderDto;
@@ -40,8 +41,8 @@ public static class MappingConfig
         TypeAdapterConfig<UpdateProductDto, Products>.NewConfig();
 
         // Region mappings
-        TypeAdapterConfig<ProductManager.Domain.Entities.Regions, ProductManager.Application.Feature.Region.DTOs.RegionDto>.NewConfig();
-        TypeAdapterConfig<ProductManager.Application.Feature.Region.DTOs.CreateRegionRequest, ProductManager.Domain.Entities.Regions>.NewConfig();
-        TypeAdapterConfig<ProductManager.Application.Feature.Region.DTOs.UpdateRegionRequest, ProductManager.Domain.Entities.Regions>.NewConfig();
+        TypeAdapterConfig<Regions, RegionDto>.NewConfig();
+        TypeAdapterConfig<CreateRegionRequest, Regions>.NewConfig();
+        TypeAdapterConfig<UpdateRegionRequest, Regions>.NewConfig();
     }
 }

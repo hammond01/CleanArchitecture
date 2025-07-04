@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-
 namespace ProductManager.Domain.Entities;
 
 [Index("CategoryId", Name = "CategoriesProducts")]
@@ -39,7 +38,7 @@ public class Products : Entity<string>
     public Categories Category { get; set; } = null!;
 
     [InverseProperty("Products")]
-    public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    public ICollection<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
 
     [ForeignKey("SupplierId")]
     [InverseProperty("Products")]
