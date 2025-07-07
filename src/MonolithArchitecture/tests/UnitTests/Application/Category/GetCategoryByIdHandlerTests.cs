@@ -110,12 +110,14 @@ public class GetCategoryByIdHandlerTests
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
-    public async Task HandleAsync_WhenCategoryIdIsInvalid_ShouldStillCallService(string invalidId)
+    [InlineData(null)]
+    public async Task HandleAsync_WhenCategoryIdIsInvalid_ShouldStillCallService(string? invalidId)
     {
         // Arrange
-        var query = new GetCategoryByIdQuery(invalidId);
+        var actualId = invalidId ?? string.Empty;
+        var query = new GetCategoryByIdQuery(actualId);
 
-        _crudServiceMock.Setup(x => x.GetByIdAsync(invalidId))
+        _crudServiceMock.Setup(x => x.GetByIdAsync(actualId))
             .ReturnsAsync((Categories)null!);
 
         // Act
@@ -125,7 +127,7 @@ public class GetCategoryByIdHandlerTests
         result.Should().NotBeNull();
         result.StatusCode.Should().Be(404);
 
-        _crudServiceMock.Verify(x => x.GetByIdAsync(invalidId), Times.Once);
+        _crudServiceMock.Verify(x => x.GetByIdAsync(actualId), Times.Once);
     }
 
     [Fact]
