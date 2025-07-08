@@ -18,32 +18,32 @@ A modern, production-ready e-commerce product management system built with **Cle
 
 ### 🚀 Enterprise API Enhancement & Security Features (Latest - January 2025)
 
-- ✅ **Enhanced API Documentation**: Comprehensive Swagger documentation with detailed descriptions, examples, and response types
-- ✅ **Advanced Security Configuration**: CORS policies, compression middleware, request signing, IP whitelisting, and rate limiting
-- ✅ **API Versioning**: Full support for multiple API versions (v1.0 and v2.0) with flexible version strategies
-- ✅ **Production-Grade Middleware**: Entity locking, global exception handling, request logging, and auto-locking for PUT/DELETE operations
-- ✅ **Response Optimization**: Response caching, compression (Gzip/Brotli), and performance headers
-- ✅ **Custom Swagger UI**: Enhanced documentation with custom styling, OAuth2 integration, and improved user experience
-- ✅ **Controller Enhancement**: ProductController updated with XML documentation, validation attributes, and comprehensive error handling
+-   ✅ **Enhanced API Documentation**: Comprehensive Swagger documentation with detailed descriptions, examples, and response types
+-   ✅ **Advanced Security Configuration**: CORS policies, compression middleware, request signing, IP whitelisting, and rate limiting
+-   ✅ **API Versioning**: Full support for multiple API versions (v1.0 and v2.0) with flexible version strategies
+-   ✅ **Production-Grade Middleware**: Entity locking, global exception handling, request logging, and auto-locking for PUT/DELETE operations
+-   ✅ **Response Optimization**: Response caching, compression (Gzip/Brotli), and performance headers
+-   ✅ **Custom Swagger UI**: Enhanced documentation with custom styling, OAuth2 integration, and improved user experience
+-   ✅ **Controller Enhancement**: ProductController updated with XML documentation, validation attributes, and comprehensive error handling
 
 ### 🔒 Security & Performance Features
 
-- ✅ **CORS Configuration**: Environment-specific policies (Development vs Production) with flexible origin management
-- ✅ **Response Compression**: Automatic Gzip and Brotli compression for better performance
-- ✅ **Request Signing**: Optional API request integrity verification with configurable security keys
-- ✅ **IP Whitelisting**: Configurable IP-based access control for enhanced security
-- ✅ **Rate Limiting**: Configurable request throttling (default: 100 requests/minute) to prevent abuse
-- ✅ **Entity Locking**: Distributed locking system for concurrent data modification prevention
-- ✅ **Caching Strategy**: Response caching middleware for improved API performance
+-   ✅ **CORS Configuration**: Environment-specific policies (Development vs Production) with flexible origin management
+-   ✅ **Response Compression**: Automatic Gzip and Brotli compression for better performance
+-   ✅ **Request Signing**: Optional API request integrity verification with configurable security keys
+-   ✅ **IP Whitelisting**: Configurable IP-based access control for enhanced security
+-   ✅ **Rate Limiting**: Configurable request throttling (default: 100 requests/minute) to prevent abuse
+-   ✅ **Entity Locking**: Distributed locking system for concurrent data modification prevention
+-   ✅ **Caching Strategy**: Response caching middleware for improved API performance
 
 ### 📚 API Documentation & Versioning
 
-- ✅ **Multi-Version Support**: Support for v1.0 and v2.0 APIs with automatic endpoint discovery
-- ✅ **Comprehensive Documentation**: Detailed API descriptions with getting started guides and feature lists
-- ✅ **Interactive Swagger UI**: Enhanced UI with custom CSS, deep linking, filtering, and validation
-- ✅ **Authentication Integration**: JWT Bearer token support with clear authentication instructions
-- ✅ **Response Examples**: Detailed response type documentation with proper HTTP status codes
-- ✅ **XML Comments**: Full XML documentation support for enhanced IntelliSense and API docs
+-   ✅ **Multi-Version Support**: Support for v1.0 and v2.0 APIs with automatic endpoint discovery
+-   ✅ **Comprehensive Documentation**: Detailed API descriptions with getting started guides and feature lists
+-   ✅ **Interactive Swagger UI**: Enhanced UI with custom CSS, deep linking, filtering, and validation
+-   ✅ **Authentication Integration**: JWT Bearer token support with clear authentication instructions
+-   ✅ **Response Examples**: Detailed response type documentation with proper HTTP status codes
+-   ✅ **XML Comments**: Full XML documentation support for enhanced IntelliSense and API docs
 
 ### Business Modules Implemented (All with Full CRUD & Enhanced Features)
 
@@ -61,11 +61,11 @@ A modern, production-ready e-commerce product management system built with **Cle
 
 ### 🏗️ Infrastructure & Configuration Enhancements
 
-- ✅ **Entity Framework Configuration Standardization**: All entity constraints moved from annotations to IEntityTypeConfiguration classes
-- ✅ **Clean Domain Models**: Removed all configuration attributes from entities, maintaining pure domain models
-- ✅ **Consistent ID Configuration**: All ID columns configured with HasMaxLength(50) and proper constraints
-- ✅ **Migration Ready**: All configurations properly set up for database schema updates
-- ✅ **Centralized Configuration**: Infrastructure settings managed through appsettings.json with environment-specific overrides
+-   ✅ **Entity Framework Configuration Standardization**: All entity constraints moved from annotations to IEntityTypeConfiguration classes
+-   ✅ **Clean Domain Models**: Removed all configuration attributes from entities, maintaining pure domain models
+-   ✅ **Consistent ID Configuration**: All ID columns configured with HasMaxLength(50) and proper constraints
+-   ✅ **Migration Ready**: All configurations properly set up for database schema updates
+-   ✅ **Centralized Configuration**: Infrastructure settings managed through appsettings.json with environment-specific overrides
 
 ### 🧪 Testing Infrastructure
 
@@ -183,48 +183,49 @@ A modern e-commerce product management system built with **Clean Architecture** 
 
 ```json
 {
-  "RequestSigning": {
-    "RequireSignedRequests": false,
-    "SecretKey": "your-secret-key-here",
-    "MaxTimestampAge": "00:05:00"
-  },
-  "IpWhitelist": {
-    "EnableWhitelist": false,
-    "AllowedIps": ["127.0.0.1", "::1"]
-  },
-  "RateLimit": {
-    "EnableRateLimit": true,
-    "MaxRequests": 100,
-    "Window": "00:01:00"
-  }
+    "RequestSigning": {
+        "RequireSignedRequests": false,
+        "SecretKey": "your-secret-key-here",
+        "MaxTimestampAge": "00:05:00"
+    },
+    "IpWhitelist": {
+        "EnableWhitelist": false,
+        "AllowedIps": ["127.0.0.1", "::1"]
+    },
+    "RateLimit": {
+        "EnableRateLimit": true,
+        "MaxRequests": 100,
+        "Window": "00:01:00"
+    }
 }
 ```
 
 **Security Features:**
-- 🔐 **JWT Authentication** with refresh tokens and role-based authorization
-- 🛡️ **Request Signing** for API integrity verification (optional)
-- 🌐 **IP Whitelisting** for access control (configurable)
-- ⚡ **Rate Limiting** to prevent API abuse (100 requests/minute default)
-- 🔒 **Entity Locking** for concurrent data modification prevention
-- 📝 **Comprehensive Logging** with Serilog and database persistence
+
+-   🔐 **JWT Authentication** with refresh tokens and role-based authorization
+-   🛡️ **Request Signing** for API integrity verification (optional)
+-   🌐 **IP Whitelisting** for access control (configurable)
+-   ⚡ **Rate Limiting** to prevent API abuse (100 requests/minute default)
+-   🔒 **Entity Locking** for concurrent data modification prevention
+-   📝 **Comprehensive Logging** with Serilog and database persistence
 
 ### 🚀 Performance & Optimization
 
-- ⚡ **Response Compression** (Gzip/Brotli) for reduced bandwidth usage
-- 💾 **Response Caching** middleware for improved API performance
-- 🔄 **CORS Policies** with environment-specific configurations
-- 📊 **Health Checks** with detailed monitoring endpoints
-- 🎯 **Entity Locking** with automatic conflict resolution
-- 📈 **Performance Headers** for TTFB and caching optimization
+-   ⚡ **Response Compression** (Gzip/Brotli) for reduced bandwidth usage
+-   💾 **Response Caching** middleware for improved API performance
+-   🔄 **CORS Policies** with environment-specific configurations
+-   📊 **Health Checks** with detailed monitoring endpoints
+-   🎯 **Entity Locking** with automatic conflict resolution
+-   📈 **Performance Headers** for TTFB and caching optimization
 
 ### 📚 API Documentation & Versioning
 
-- 📖 **Comprehensive Swagger Documentation** with examples and detailed descriptions
-- 🔄 **Multi-Version API Support** (v1.0 and v2.0) with flexible version strategies
-- 🎨 **Custom Swagger UI** with enhanced styling and OAuth2 integration
-- 📝 **XML Documentation** for full IntelliSense support
-- 🏷️ **Controller Grouping** for better API organization
-- 🔍 **Deep Linking** and filtering in documentation UI
+-   📖 **Comprehensive Swagger Documentation** with examples and detailed descriptions
+-   🔄 **Multi-Version API Support** (v1.0 and v2.0) with flexible version strategies
+-   🎨 **Custom Swagger UI** with enhanced styling and OAuth2 integration
+-   📝 **XML Documentation** for full IntelliSense support
+-   🏷️ **Controller Grouping** for better API organization
+-   🔍 **Deep Linking** and filtering in documentation UI
 
 ### 🎛️ Middleware Pipeline
 
@@ -356,10 +357,10 @@ src/
     dotnet run --project src/Presentation/APIs/ProductManager.Api
 
     # The API will be available at:
-    # - HTTP: http://localhost:5000
-    # - HTTPS: https://localhost:5001  
-    # - Swagger UI: https://localhost:5001/swagger
-    # - Health Checks: https://localhost:5001/health
+    # - HTTP: http://localhost:5151
+    # - HTTPS: https://localhost:7130
+    # - Swagger UI: http://localhost:5151/swagger
+    # - Health Checks: http://localhost:5151/health
 
     # Run Blazor UI (in another terminal)
     dotnet run --project src/Presentation/UIs/ProductManager.Blazor
@@ -368,6 +369,7 @@ src/
 6. **Explore the enhanced API documentation**
 
     Navigate to the comprehensive Swagger documentation:
+
     - **Main Documentation**: `https://localhost:5001/swagger`
     - **API v1.0**: Full feature set with all business modules
     - **API v2.0**: Enhanced version with additional features
@@ -391,7 +393,7 @@ src/
          -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
     ```
 
-6. **Run tests**
+8. **Run tests**
 
     ```bash
     # Run all tests (53 total: 51 integration tests + 2 unit tests)
@@ -435,7 +437,7 @@ Total Tests: 137
 **Test Categories Covered:**
 
 -   ✅ GET operations (Read All, Read Single)
--   ✅ POST operations (Create Valid, Create Invalid)  
+-   ✅ POST operations (Create Valid, Create Invalid)
 -   ✅ PUT operations (Update)
 -   ✅ DELETE operations (Delete)
 -   ✅ Error handling and validation
@@ -497,19 +499,21 @@ This project demonstrates **best practices for Entity Framework Core configurati
 ### Configuration Pattern
 
 **Before (Entity Annotations):**
+
 ```csharp
 public class Product : Entity<string>
 {
     [StringLength(40)]
     [Required]
     public string ProductName { get; set; }
-    
+
     [Column(TypeName = "money")]
     public decimal? UnitPrice { get; set; }
 }
 ```
 
 **After (Configuration Classes):**
+
 ```csharp
 // Clean Domain Entity
 public class Product : Entity<string>
@@ -561,6 +565,7 @@ src/Infrastructure/ProductManager.Persistence/MappingConfigurations/
 This project demonstrates **comprehensive unit testing** following industry best practices:
 
 **Test Structure & Organization:**
+
 ```
 tests/UnitTests/Application/Product/
 ├── Handler Tests (27 tests)
@@ -575,14 +580,16 @@ tests/UnitTests/Application/Product/
 ```
 
 **Testing Technologies & Patterns:**
-- ✅ **xUnit** - Modern .NET testing framework
-- ✅ **FluentAssertions** - Expressive assertions with clear failure messages  
-- ✅ **Moq** - Dependency mocking with interaction verification
-- ✅ **AutoFixture** - Automated test data generation with circular reference handling
-- ✅ **AAA Pattern** - Arrange, Act, Assert structure for clarity
-- ✅ **Theory/InlineData** - Parameterized tests for multiple scenarios
+
+-   ✅ **xUnit** - Modern .NET testing framework
+-   ✅ **FluentAssertions** - Expressive assertions with clear failure messages
+-   ✅ **Moq** - Dependency mocking with interaction verification
+-   ✅ **AutoFixture** - Automated test data generation with circular reference handling
+-   ✅ **AAA Pattern** - Arrange, Act, Assert structure for clarity
+-   ✅ **Theory/InlineData** - Parameterized tests for multiple scenarios
 
 **Test Coverage Areas:**
+
 ```csharp
 // Example: Comprehensive handler testing
 [Fact]
@@ -601,19 +608,20 @@ public async Task HandleAsync_WhenProductIdIsNull_ShouldCreateNewProduct()
     result.StatusCode.Should().Be(201);
     result.Message.Should().Be(CRUDMessage.CreateSuccess);
     product.Id.Should().NotBeNullOrEmpty(); // ID should be generated
-    
-    _crudServiceMock.Verify(x => x.AddAsync(It.IsAny<Products>(), 
+
+    _crudServiceMock.Verify(x => x.AddAsync(It.IsAny<Products>(),
         It.IsAny<CancellationToken>()), Times.Once);
 }
 ```
 
 **Key Testing Features:**
-- ✅ **Transaction Testing**: Proper transaction handling with disposal verification
-- ✅ **Error Scenario Coverage**: Exception handling and edge case validation
-- ✅ **Mock Verification**: Ensuring correct service interactions
-- ✅ **Null Parameter Handling**: Comprehensive null safety testing
-- ✅ **CQRS Validation**: Command/Query pattern compliance testing
-- ✅ **Feature Integration**: End-to-end business scenario validation
+
+-   ✅ **Transaction Testing**: Proper transaction handling with disposal verification
+-   ✅ **Error Scenario Coverage**: Exception handling and edge case validation
+-   ✅ **Mock Verification**: Ensuring correct service interactions
+-   ✅ **Null Parameter Handling**: Comprehensive null safety testing
+-   ✅ **CQRS Validation**: Command/Query pattern compliance testing
+-   ✅ **Feature Integration**: End-to-end business scenario validation
 
 ## 🌐 API Endpoints & Documentation
 
@@ -622,6 +630,7 @@ public async Task HandleAsync_WhenProductIdIsNull_ShouldCreateNewProduct()
 The API provides **comprehensive CRUD operations** for all business modules with **enhanced documentation** and **validation**:
 
 **📊 Product Management API** (Enhanced with validation & locking)
+
 ```http
 GET    /api/v1/products              # Get all products with pagination
 GET    /api/v1/products/{id}         # Get product by ID
@@ -631,6 +640,7 @@ DELETE /api/v1/products/{id}         # Delete product (with entity locking)
 ```
 
 **📂 Category Management API**
+
 ```http
 GET    /api/v1/categories            # Get all categories
 GET    /api/v1/categories/{id}       # Get category by ID
@@ -640,6 +650,7 @@ DELETE /api/v1/categories/{id}       # Delete category
 ```
 
 **👥 Customer & Employee Management APIs**
+
 ```http
 # Customer Management
 GET    /api/v1/customers             # Get all customers
@@ -648,7 +659,7 @@ POST   /api/v1/customers             # Create new customer
 PUT    /api/v1/customers/{id}        # Update customer
 DELETE /api/v1/customers/{id}        # Delete customer
 
-# Employee Management  
+# Employee Management
 GET    /api/v1/employees             # Get all employees
 GET    /api/v1/employees/{id}        # Get employee by ID
 POST   /api/v1/employees             # Create new employee
@@ -657,6 +668,7 @@ DELETE /api/v1/employees/{id}        # Delete employee
 ```
 
 **📦 Order & OrderDetail Management APIs**
+
 ```http
 # Order Management
 GET    /api/v1/orders                # Get all orders
@@ -674,6 +686,7 @@ DELETE /api/v1/orderdetails/{id}     # Delete order detail
 ```
 
 **🏢 Business Management APIs**
+
 ```http
 # Supplier Management
 GET    /api/v1/suppliers             # Get all suppliers
@@ -691,6 +704,7 @@ DELETE /api/v1/shippers/{id}         # Delete shipper
 ```
 
 **🌍 Geographic Management APIs**
+
 ```http
 # Region Management
 GET    /api/v1/regions               # Get all regions
@@ -708,6 +722,7 @@ DELETE /api/v1/territories/{id}      # Delete territory
 ```
 
 **🔐 Authentication & Identity APIs**
+
 ```http
 POST   /api/v1/identity/register     # User registration
 POST   /api/v1/identity/login        # User login (JWT token)
@@ -718,6 +733,7 @@ PUT    /api/v1/identity/profile      # Update user profile
 ```
 
 **📊 System & Monitoring APIs**
+
 ```http
 GET    /health                       # Basic health check
 GET    /health/ready                 # Readiness probe
@@ -731,7 +747,7 @@ GET    /swagger                      # API documentation
 ```http
 # Multiple versioning strategies supported:
 GET /api/v1/products                  # URL segment versioning
-GET /api/products?version=1.0         # Query string versioning  
+GET /api/products?version=1.0         # Query string versioning
 GET /api/products?v=1                 # Short query string versioning
 GET /api/products                     # Header: X-API-Version: 1.0
 ```
@@ -740,13 +756,13 @@ GET /api/products                     # Header: X-API-Version: 1.0
 
 Access comprehensive API documentation at `/swagger` with:
 
-- 🎨 **Custom UI styling** with enhanced readability
-- 🔐 **JWT authentication** integration with Bearer token support
-- 📖 **Detailed endpoint descriptions** with examples and use cases
-- 🔄 **Multiple API versions** (v1.0 and v2.0) with automatic discovery
-- 🏷️ **Controller grouping** for better organization
-- 🔍 **Interactive testing** with request/response examples
-- 📋 **Response type documentation** with proper HTTP status codes
+-   🎨 **Custom UI styling** with enhanced readability
+-   🔐 **JWT authentication** integration with Bearer token support
+-   📖 **Detailed endpoint descriptions** with examples and use cases
+-   🔄 **Multiple API versions** (v1.0 and v2.0) with automatic discovery
+-   🏷️ **Controller grouping** for better organization
+-   🔍 **Interactive testing** with request/response examples
+-   📋 **Response type documentation** with proper HTTP status codes
 
 ## 🛠️ Technologies & Patterns
 
