@@ -67,7 +67,7 @@ public class EntityLockAttribute : ActionFilterAttribute
                 statusCode = (int)HttpStatusCode.Conflict,
                 message = $"{EntityName} is currently being edited by another user. Please try again later.",
                 entityName = EntityName,
-                entityId = entityId
+                entityId
             })
             {
                 StatusCode = (int)HttpStatusCode.Conflict
