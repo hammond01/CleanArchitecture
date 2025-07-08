@@ -4,37 +4,68 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
 [![Tests](https://img.shields.io/badge/tests-137%2F137%20passing-brightgreen.svg)](#testing)
+[![Security](https://img.shields.io/badge/security-enhanced-green.svg)](#security)
+[![API Version](https://img.shields.io/badge/API-v1.0%20%7C%20v2.0-blue.svg)](#api-versioning)
 [![GitHub](https://img.shields.io/badge/GitHub-hammond01/CleanArchitecture-blue.svg)](https://github.com/hammond01/CleanArchitecture)
 [![Stars](https://img.shields.io/github/stars/hammond01/CleanArchitecture?style=social)](https://github.com/hammond01/CleanArchitecture/stargazers)
 [![Forks](https://img.shields.io/github/forks/hammond01/CleanArchitecture?style=social)](https://github.com/hammond01/CleanArchitecture/network/members)
 
-A modern e-commerce product management system built with **Clean Architecture** principles using **.NET 8**, **Entity Framework Core**, and **Blazor**. This monolithic application demonstrates enterprise-level patterns including **CQRS**, **Repository Pattern**, **Unit of Work**, and **Domain-Driven Design (DDD)** with comprehensive test coverage and standardized API patterns.
+A modern, production-ready e-commerce product management system built with **Clean Architecture** principles using **.NET 8**, **Entity Framework Core**, and **Blazor**. This enterprise-grade monolithic application demonstrates best practices including **CQRS**, **Repository Pattern**, **Unit of Work**, **Domain-Driven Design (DDD)**, **API versioning**, **comprehensive security**, and **advanced middleware pipeline**.
 
-> **Project Status**: ✅ **Production Ready** - This project implements complete Clean Architecture patterns with **standardized Entity Framework configurations**, **comprehensive test coverage (137/137 tests passing)**, and **full CRUD operations** for all 10 business modules including newly added Territory and OrderDetail APIs.
+> **Project Status**: 🚀 **Enterprise Ready** - This project implements complete Clean Architecture patterns with **enhanced API design**, **comprehensive security features**, **advanced documentation**, **response caching**, **CORS policies**, **entity locking**, **API versioning**, and **production-grade middleware pipeline** with 137/137 tests passing.
 
 ## 🆕 Recent Updates
 
-### Entity Framework Configuration Standardization & Complete API Coverage (Latest)
+### 🚀 Enterprise API Enhancement & Security Features (Latest - January 2025)
 
--   ✅ **Entity Framework Configuration Standardization**: All entity constraints moved from entity annotations to IEntityTypeConfiguration classes
--   ✅ **Complete API Coverage**: All 10 business modules now have full CRUD operations including Territory and OrderDetail
--   ✅ **Configuration Best Practices**: All ID columns configured with HasMaxLength(50), proper column types and constraints
--   ✅ **Clean Entity Models**: Removed all configuration attributes from entities, maintaining clean domain models
--   ✅ **Database Migration Ready**: All configurations properly set up for new migrations and database updates
+- ✅ **Enhanced API Documentation**: Comprehensive Swagger documentation with detailed descriptions, examples, and response types
+- ✅ **Advanced Security Configuration**: CORS policies, compression middleware, request signing, IP whitelisting, and rate limiting
+- ✅ **API Versioning**: Full support for multiple API versions (v1.0 and v2.0) with flexible version strategies
+- ✅ **Production-Grade Middleware**: Entity locking, global exception handling, request logging, and auto-locking for PUT/DELETE operations
+- ✅ **Response Optimization**: Response caching, compression (Gzip/Brotli), and performance headers
+- ✅ **Custom Swagger UI**: Enhanced documentation with custom styling, OAuth2 integration, and improved user experience
+- ✅ **Controller Enhancement**: ProductController updated with XML documentation, validation attributes, and comprehensive error handling
 
-### Business Modules Implemented (All with Full CRUD)
+### 🔒 Security & Performance Features
 
--   ✅ **Product Management** - Complete product lifecycle with categories and suppliers
--   ✅ **Category Management** - Hierarchical product categorization  
--   ✅ **Supplier Management** - Vendor and supplier information
--   ✅ **Customer Management** - Customer profiles and contact information
+- ✅ **CORS Configuration**: Environment-specific policies (Development vs Production) with flexible origin management
+- ✅ **Response Compression**: Automatic Gzip and Brotli compression for better performance
+- ✅ **Request Signing**: Optional API request integrity verification with configurable security keys
+- ✅ **IP Whitelisting**: Configurable IP-based access control for enhanced security
+- ✅ **Rate Limiting**: Configurable request throttling (default: 100 requests/minute) to prevent abuse
+- ✅ **Entity Locking**: Distributed locking system for concurrent data modification prevention
+- ✅ **Caching Strategy**: Response caching middleware for improved API performance
+
+### 📚 API Documentation & Versioning
+
+- ✅ **Multi-Version Support**: Support for v1.0 and v2.0 APIs with automatic endpoint discovery
+- ✅ **Comprehensive Documentation**: Detailed API descriptions with getting started guides and feature lists
+- ✅ **Interactive Swagger UI**: Enhanced UI with custom CSS, deep linking, filtering, and validation
+- ✅ **Authentication Integration**: JWT Bearer token support with clear authentication instructions
+- ✅ **Response Examples**: Detailed response type documentation with proper HTTP status codes
+- ✅ **XML Comments**: Full XML documentation support for enhanced IntelliSense and API docs
+
+### Business Modules Implemented (All with Full CRUD & Enhanced Features)
+
+-   ✅ **Product Management** - Complete product lifecycle with categories, suppliers, advanced validation, and entity locking
+-   ✅ **Category Management** - Hierarchical product categorization with full CRUD operations
+-   ✅ **Supplier Management** - Vendor and supplier information management
+-   ✅ **Customer Management** - Customer profiles and contact information management
 -   ✅ **Employee Management** - Staff management with roles and permissions
--   ✅ **Order Management** - Order processing and fulfillment
--   ✅ **Region Management** - Geographic region management
--   ✅ **Shipper Management** - Shipping provider management
--   ✅ **Territory Management** - Territory and sales region management (newly added)
--   ✅ **OrderDetail Management** - Order line items and details management (newly added)
--   ✅ **Identity Management** - User authentication and authorization
+-   ✅ **Order Management** - Order processing and fulfillment with comprehensive tracking
+-   ✅ **Region Management** - Geographic region management for shipping and logistics
+-   ✅ **Shipper Management** - Shipping provider management with complete CRUD operations
+-   ✅ **Territory Management** - Territory and sales region management (enhanced with full CRUD)
+-   ✅ **OrderDetail Management** - Order line items and details management (enhanced with full CRUD)
+-   ✅ **Identity Management** - User authentication, authorization, and JWT token management
+
+### 🏗️ Infrastructure & Configuration Enhancements
+
+- ✅ **Entity Framework Configuration Standardization**: All entity constraints moved from annotations to IEntityTypeConfiguration classes
+- ✅ **Clean Domain Models**: Removed all configuration attributes from entities, maintaining pure domain models
+- ✅ **Consistent ID Configuration**: All ID columns configured with HasMaxLength(50) and proper constraints
+- ✅ **Migration Ready**: All configurations properly set up for database schema updates
+- ✅ **Centralized Configuration**: Infrastructure settings managed through appsettings.json with environment-specific overrides
 
 ### 🧪 Testing Infrastructure
 
@@ -146,6 +177,71 @@ A modern e-commerce product management system built with **Clean Architecture** 
 -   ✅ **Added Action Logging**: Comprehensive request/response logging with `ActionLoggingFilter`
 -   ✅ **Enhanced Audit Trail**: Improved audit logging with `ActionLogService` and database persistence
 
+## 🔧 Enterprise Features
+
+### 🛡️ Security & Authentication
+
+```json
+{
+  "RequestSigning": {
+    "RequireSignedRequests": false,
+    "SecretKey": "your-secret-key-here",
+    "MaxTimestampAge": "00:05:00"
+  },
+  "IpWhitelist": {
+    "EnableWhitelist": false,
+    "AllowedIps": ["127.0.0.1", "::1"]
+  },
+  "RateLimit": {
+    "EnableRateLimit": true,
+    "MaxRequests": 100,
+    "Window": "00:01:00"
+  }
+}
+```
+
+**Security Features:**
+- 🔐 **JWT Authentication** with refresh tokens and role-based authorization
+- 🛡️ **Request Signing** for API integrity verification (optional)
+- 🌐 **IP Whitelisting** for access control (configurable)
+- ⚡ **Rate Limiting** to prevent API abuse (100 requests/minute default)
+- 🔒 **Entity Locking** for concurrent data modification prevention
+- 📝 **Comprehensive Logging** with Serilog and database persistence
+
+### 🚀 Performance & Optimization
+
+- ⚡ **Response Compression** (Gzip/Brotli) for reduced bandwidth usage
+- 💾 **Response Caching** middleware for improved API performance
+- 🔄 **CORS Policies** with environment-specific configurations
+- 📊 **Health Checks** with detailed monitoring endpoints
+- 🎯 **Entity Locking** with automatic conflict resolution
+- 📈 **Performance Headers** for TTFB and caching optimization
+
+### 📚 API Documentation & Versioning
+
+- 📖 **Comprehensive Swagger Documentation** with examples and detailed descriptions
+- 🔄 **Multi-Version API Support** (v1.0 and v2.0) with flexible version strategies
+- 🎨 **Custom Swagger UI** with enhanced styling and OAuth2 integration
+- 📝 **XML Documentation** for full IntelliSense support
+- 🏷️ **Controller Grouping** for better API organization
+- 🔍 **Deep Linking** and filtering in documentation UI
+
+### 🎛️ Middleware Pipeline
+
+```csharp
+// Production-grade middleware pipeline
+app.UseSerilogRequestLogging();           // Request logging
+app.UseCompressionConfiguration();        // Response compression
+app.UseCors("Development|AllowedOrigins"); // CORS policies
+app.UseHealthChecks("/health");           // Health monitoring
+app.UseSwaggerVersioning();               // API documentation
+app.UseGlobalExceptionHandlerMiddleware(); // Global error handling
+app.UseMiddleware<ApiRequestLoggingMiddleware>(); // API logging
+app.UseMiddleware<AutoEntityLockMiddleware>(); // Auto-locking
+app.UseAuthentication();                  // JWT authentication
+app.UseAuthorization();                   // Role-based authorization
+```
+
 ## 🏗️ Architecture Overview
 
 This project follows **Clean Architecture** (Onion Architecture) principles with clear separation of concerns across four main layers:
@@ -220,15 +316,29 @@ src/
     dotnet restore
     ```
 
-3. **Update database connection string**
+3. **Update database connection string and security settings**
 
-    Update the connection string in `appsettings.json` files for your SQL Server instance:
+    Update the configuration in `appsettings.json` files for your environment:
 
     ```json
     {
         "ConnectionStrings": {
             "SQL": "Data Source=your-server;Initial Catalog=ProductManager;Persist Security Info=True;User Id=sa;password=your-password;TrustServerCertificate=true",
             "IDENTITY": "Data Source=your-server;Initial Catalog=ProductManager.Identity;Persist Security Info=True;User Id=sa;password=your-password;TrustServerCertificate=true"
+        },
+        "RequestSigning": {
+            "RequireSignedRequests": false,
+            "SecretKey": "your-secret-key-here",
+            "MaxTimestampAge": "00:05:00"
+        },
+        "IpWhitelist": {
+            "EnableWhitelist": false,
+            "AllowedIps": ["127.0.0.1", "::1"]
+        },
+        "RateLimit": {
+            "EnableRateLimit": true,
+            "MaxRequests": 100,
+            "Window": "00:01:00"
         }
     }
     ```
@@ -242,11 +352,43 @@ src/
 5. **Build and run the application**
 
     ```bash
-    # Run Web API
+    # Run Web API (with enhanced features)
     dotnet run --project src/Presentation/APIs/ProductManager.Api
+
+    # The API will be available at:
+    # - HTTP: http://localhost:5000
+    # - HTTPS: https://localhost:5001  
+    # - Swagger UI: https://localhost:5001/swagger
+    # - Health Checks: https://localhost:5001/health
 
     # Run Blazor UI (in another terminal)
     dotnet run --project src/Presentation/UIs/ProductManager.Blazor
+    ```
+
+6. **Explore the enhanced API documentation**
+
+    Navigate to the comprehensive Swagger documentation:
+    - **Main Documentation**: `https://localhost:5001/swagger`
+    - **API v1.0**: Full feature set with all business modules
+    - **API v2.0**: Enhanced version with additional features
+    - **Health Monitoring**: `https://localhost:5001/health/detailed` (Development only)
+
+7. **Test the API with authentication**
+
+    ```bash
+    # Register a new user
+    curl -X POST "https://localhost:5001/api/v1/identity/register" \
+         -H "Content-Type: application/json" \
+         -d '{"email":"test@example.com","password":"Test123!","confirmPassword":"Test123!"}'
+
+    # Login to get JWT token
+    curl -X POST "https://localhost:5001/api/v1/identity/login" \
+         -H "Content-Type: application/json" \
+         -d '{"email":"test@example.com","password":"Test123!"}'
+
+    # Use the token to access protected endpoints
+    curl -X GET "https://localhost:5001/api/v1/products" \
+         -H "Authorization: Bearer YOUR_JWT_TOKEN_HERE"
     ```
 
 6. **Run tests**
@@ -473,34 +615,185 @@ public async Task HandleAsync_WhenProductIdIsNull_ShouldCreateNewProduct()
 - ✅ **CQRS Validation**: Command/Query pattern compliance testing
 - ✅ **Feature Integration**: End-to-end business scenario validation
 
+## 🌐 API Endpoints & Documentation
+
+### 📋 Complete API Coverage
+
+The API provides **comprehensive CRUD operations** for all business modules with **enhanced documentation** and **validation**:
+
+**📊 Product Management API** (Enhanced with validation & locking)
+```http
+GET    /api/v1/products              # Get all products with pagination
+GET    /api/v1/products/{id}         # Get product by ID
+POST   /api/v1/products              # Create new product (with validation)
+PUT    /api/v1/products/{id}         # Update product (with entity locking)
+DELETE /api/v1/products/{id}         # Delete product (with entity locking)
+```
+
+**📂 Category Management API**
+```http
+GET    /api/v1/categories            # Get all categories
+GET    /api/v1/categories/{id}       # Get category by ID
+POST   /api/v1/categories            # Create new category
+PUT    /api/v1/categories/{id}       # Update category
+DELETE /api/v1/categories/{id}       # Delete category
+```
+
+**👥 Customer & Employee Management APIs**
+```http
+# Customer Management
+GET    /api/v1/customers             # Get all customers
+GET    /api/v1/customers/{id}        # Get customer by ID
+POST   /api/v1/customers             # Create new customer
+PUT    /api/v1/customers/{id}        # Update customer
+DELETE /api/v1/customers/{id}        # Delete customer
+
+# Employee Management  
+GET    /api/v1/employees             # Get all employees
+GET    /api/v1/employees/{id}        # Get employee by ID
+POST   /api/v1/employees             # Create new employee
+PUT    /api/v1/employees/{id}        # Update employee
+DELETE /api/v1/employees/{id}        # Delete employee
+```
+
+**📦 Order & OrderDetail Management APIs**
+```http
+# Order Management
+GET    /api/v1/orders                # Get all orders
+GET    /api/v1/orders/{id}           # Get order by ID
+POST   /api/v1/orders                # Create new order
+PUT    /api/v1/orders/{id}           # Update order
+DELETE /api/v1/orders/{id}           # Delete order
+
+# OrderDetail Management
+GET    /api/v1/orderdetails          # Get all order details
+GET    /api/v1/orderdetails/{id}     # Get order detail by ID
+POST   /api/v1/orderdetails          # Create new order detail
+PUT    /api/v1/orderdetails/{id}     # Update order detail
+DELETE /api/v1/orderdetails/{id}     # Delete order detail
+```
+
+**🏢 Business Management APIs**
+```http
+# Supplier Management
+GET    /api/v1/suppliers             # Get all suppliers
+GET    /api/v1/suppliers/{id}        # Get supplier by ID
+POST   /api/v1/suppliers             # Create new supplier
+PUT    /api/v1/suppliers/{id}        # Update supplier
+DELETE /api/v1/suppliers/{id}        # Delete supplier
+
+# Shipper Management
+GET    /api/v1/shippers              # Get all shippers
+GET    /api/v1/shippers/{id}         # Get shipper by ID
+POST   /api/v1/shippers              # Create new shipper
+PUT    /api/v1/shippers/{id}         # Update shipper
+DELETE /api/v1/shippers/{id}         # Delete shipper
+```
+
+**🌍 Geographic Management APIs**
+```http
+# Region Management
+GET    /api/v1/regions               # Get all regions
+GET    /api/v1/regions/{id}          # Get region by ID
+POST   /api/v1/regions               # Create new region
+PUT    /api/v1/regions/{id}          # Update region
+DELETE /api/v1/regions/{id}          # Delete region
+
+# Territory Management
+GET    /api/v1/territories           # Get all territories
+GET    /api/v1/territories/{id}      # Get territory by ID
+POST   /api/v1/territories           # Create new territory
+PUT    /api/v1/territories/{id}      # Update territory
+DELETE /api/v1/territories/{id}      # Delete territory
+```
+
+**🔐 Authentication & Identity APIs**
+```http
+POST   /api/v1/identity/register     # User registration
+POST   /api/v1/identity/login        # User login (JWT token)
+POST   /api/v1/identity/refresh      # Refresh JWT token
+POST   /api/v1/identity/logout       # User logout
+GET    /api/v1/identity/profile      # Get user profile
+PUT    /api/v1/identity/profile      # Update user profile
+```
+
+**📊 System & Monitoring APIs**
+```http
+GET    /health                       # Basic health check
+GET    /health/ready                 # Readiness probe
+GET    /health/live                  # Liveness probe
+GET    /health/detailed              # Detailed health info (Development only)
+GET    /swagger                      # API documentation
+```
+
+### 🔄 API Versioning Support
+
+```http
+# Multiple versioning strategies supported:
+GET /api/v1/products                  # URL segment versioning
+GET /api/products?version=1.0         # Query string versioning  
+GET /api/products?v=1                 # Short query string versioning
+GET /api/products                     # Header: X-API-Version: 1.0
+```
+
+### 📚 Enhanced Swagger Documentation
+
+Access comprehensive API documentation at `/swagger` with:
+
+- 🎨 **Custom UI styling** with enhanced readability
+- 🔐 **JWT authentication** integration with Bearer token support
+- 📖 **Detailed endpoint descriptions** with examples and use cases
+- 🔄 **Multiple API versions** (v1.0 and v2.0) with automatic discovery
+- 🏷️ **Controller grouping** for better organization
+- 🔍 **Interactive testing** with request/response examples
+- 📋 **Response type documentation** with proper HTTP status codes
+
 ## 🛠️ Technologies & Patterns
 
 ### Core Technologies
 
--   **.NET 8.0** - Latest .NET framework
--   **ASP.NET Core** - Web framework
--   **Entity Framework Core 8.0** - ORM for data access
--   **Blazor Server** - Interactive web UI
--   **SQL Server** - Database
+-   **.NET 8.0** - Latest .NET framework with improved performance
+-   **ASP.NET Core** - High-performance web framework
+-   **Entity Framework Core 8.0** - Advanced ORM with configuration standards
+-   **Blazor Server** - Interactive server-side web UI
+-   **SQL Server** - Enterprise-grade relational database
 
 ### Design Patterns & Principles
 
--   **Clean Architecture** - Separation of concerns
--   **CQRS** (Command Query Responsibility Segregation)
--   **Repository Pattern** - Data access abstraction
--   **Unit of Work** - Transaction management
--   **Domain-Driven Design (DDD)** - Business logic organization
--   **Dependency Injection** - IoC container
--   **Explicit Dependency Management** - No global usings for better code clarity
+-   **Clean Architecture** - Onion architecture with clear separation of concerns
+-   **CQRS** (Command Query Responsibility Segregation) - Separate read/write operations
+-   **Repository Pattern** - Data access abstraction with Unit of Work
+-   **Domain-Driven Design (DDD)** - Business-focused domain modeling
+-   **Dependency Injection** - Built-in IoC container with scoped lifetimes
+-   **API Versioning** - Multiple version strategies with backward compatibility
+-   **Entity Locking** - Distributed locking for concurrent operations
+-   **Middleware Pipeline** - Production-grade request processing pipeline
 
-### Key Libraries
+### Key Libraries & Frameworks
 
--   **MediatR** (12.4.1) - CQRS implementation
--   **Mapster** (7.4.0) - Fast object mapping
--   **Serilog** (4.2.0) - Structured logging
--   **Identity Framework** - Authentication & authorization
--   **Swashbuckle** - API documentation
--   **NSwag** - API client generation
+-   **Asp.Versioning** (8.1.0) - Comprehensive API versioning support
+-   **MediatR** (12.4.1) - CQRS and mediator pattern implementation
+-   **Mapster** (7.4.0) - High-performance object mapping
+-   **Serilog** (4.2.0) - Structured logging with multiple sinks
+-   **Swashbuckle.AspNetCore** (7.2.0) - OpenAPI/Swagger documentation
+-   **Microsoft.AspNetCore.Authentication.JwtBearer** (8.0.10) - JWT authentication
+-   **Microsoft.EntityFrameworkCore** (8.0.10) - Entity Framework Core ORM
+-   **xUnit** (2.6.2) - Modern testing framework
+-   **FluentAssertions** (6.12.0) - Expressive test assertions
+-   **Moq** (4.20.72) - Mocking framework for unit tests
+-   **AutoFixture** (4.18.1) - Test data generation
+
+### Security & Performance Features
+
+-   **JWT Authentication** - Secure token-based authentication with refresh tokens
+-   **CORS Policies** - Environment-specific cross-origin resource sharing
+-   **Response Compression** - Gzip and Brotli compression for better performance
+-   **Request Signing** - Optional API integrity verification
+-   **Rate Limiting** - Configurable request throttling and abuse prevention
+-   **IP Whitelisting** - Access control based on client IP addresses
+-   **Entity Locking** - Concurrent modification prevention with automatic conflict resolution
+-   **Response Caching** - HTTP caching headers and server-side caching
+-   **Health Checks** - Comprehensive application and database health monitoring
 
 ### Testing Libraries
 
