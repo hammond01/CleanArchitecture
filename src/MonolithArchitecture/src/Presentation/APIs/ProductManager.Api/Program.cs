@@ -6,6 +6,7 @@ using ProductManager.Api.Versioning; // Add this for API versioning
 using ProductManager.Application;
 using ProductManager.Constants.AuthorizationDefinitions;
 using ProductManager.Infrastructure;
+using ProductManager.Infrastructure.Configuration;
 using ProductManager.Infrastructure.HealthChecks;
 using ProductManager.Infrastructure.Middleware;
 using ProductManager.Infrastructure.Storage;
@@ -52,6 +53,12 @@ builder.Host.UseSerilog();
         options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
     });
     builder.Services.AddEndpointsApiExplorer();
+
+    // Add CORS Configuration
+    builder.Services.AddCorsConfiguration();
+
+    // Add Compression Configuration
+    builder.Services.AddCompressionConfiguration();
 
     // Add API Versioning Configuration
     builder.Services.AddApiVersioningConfiguration();
@@ -122,6 +129,19 @@ var app = builder.Build();
 
     // Log startup
     Log.Information("🚀 ProductManager API starting up...");
+
+    // Use Compression Configuration
+    app.UseCompressionConfiguration();
+
+    // Use CORS Configuration
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseCors("Development");
+    }
+    else
+    {
+        app.UseCors("AllowedOrigins");
+    }
 
     // Configure Health Check endpoints
     app.UseHealthChecks("/health");
