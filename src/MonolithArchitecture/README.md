@@ -111,6 +111,25 @@ The project includes **production-ready testing infrastructure** with complete c
 -   ✅ **DTO Consistency**: Proper DTOs created for all new APIs
 -   ✅ **Error Handling**: Comprehensive validation and error responses
 
+### 🚀 OData Integration (Latest)
+
+-   ✅ **Advanced Query Support**: OData endpoints for complex, flexible queries
+-   ✅ **Category OData Controller**: Full CRUD operations with OData query capabilities
+-   ✅ **Product OData Controller**: Advanced querying for product data
+-   ✅ **Filtering & Sorting**: Support for `$filter`, `$orderby`, `$select`, `$expand`
+-   ✅ **Pagination**: Built-in support for `$top`, `$skip`, and `$count`
+-   ✅ **Metadata Support**: Full OData metadata document at `/odata/$metadata`
+-   ✅ **Performance Optimized**: Configurable page sizes and query limits
+-   ✅ **Documentation**: Comprehensive OData usage guide with examples
+
+**OData Endpoints:**
+
+-   `GET /odata/Categories` - Query categories with advanced filtering
+-   `GET /odata/Products` - Query products with complex operations
+-   `GET /odata/$metadata` - OData metadata document
+
+For detailed usage examples, see [OData Integration Guide](docs/OData_Integration_Guide.md).
+
 ### Latest Commits & Improvements (December 2024)
 
 -   🧪 **test: add comprehensive integration test suite for all controllers** - Complete test coverage with 51 integration tests
@@ -838,7 +857,7 @@ Access comprehensive API documentation at `/swagger` with:
 ### Technical Features
 
 -   🏗️ **Standardized API Patterns** - Consistent controller behavior (GET→DTO, POST/PUT/DELETE→Entity)
--   🧪 **Comprehensive Test Coverage** - 51 integration tests + 2 unit tests (100% passing)
+-   🧪 **Comprehensive Test Coverage** - 53 integration tests + 2 unit tests (100% passing)
 -   📦 **Central Package Management** - Consistent NuGet versioning across all projects
 -   📝 **Explicit Using Directives** - Clear dependency management without global usings
 -   📊 **Enhanced Audit Logging** - Comprehensive tracking with ActionLogService and database persistence
