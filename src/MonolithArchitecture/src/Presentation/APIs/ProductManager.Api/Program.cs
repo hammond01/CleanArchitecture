@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
 using ProductManager.Api.Versioning; // Add this for API versioning
 using ProductManager.Application;
@@ -44,6 +45,11 @@ builder.Host.UseSerilog();
     {
         // Add global action logging filter
         options.Filters.Add<ActionLoggingFilter>();
+    })
+    .AddOData(options =>
+    {
+        options.Select().Filter().OrderBy().Count().SetMaxTop(1000);
+        options.AddRouteComponents("odata", ODataConfiguration.GetEdmModel());
     })
     .AddJsonOptions(options =>
     {
