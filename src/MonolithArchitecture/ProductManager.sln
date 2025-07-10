@@ -36,10 +36,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Shared", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Constants", "src\CrossCuttingConcerns\ProductManager.Constants\ProductManager.Constants.csproj", "{E5EF3095-855D-419C-BD42-A3744CABCA2C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UIs", "UIs", "{3AE4868D-3514-4537-929D-3071E530C9F0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Blazor", "src\Presentation\UIs\ProductManager.Blazor\ProductManager.Blazor.csproj", "{A2BF3280-4983-4F67-9289-BBF6AE798A61}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIs", "APIs", "{941A3550-52B2-48DB-8020-C18D4C6F764D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8B83C0C5-E4D2-4C5F-9F8A-2D5E3B7A9C8D}"
