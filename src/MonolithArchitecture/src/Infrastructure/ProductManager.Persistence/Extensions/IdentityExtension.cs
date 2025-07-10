@@ -7,28 +7,30 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ProductManager.Domain.Entities;
 using ProductManager.Domain.Repositories;
+using ProductManager.Infrastructure.Configuration;
 using ProductManager.Shared.DateTimes;
-using SolidTemplate.Constants.ConfigurationOptions;
+
 namespace ProductManager.Persistence.Extensions;
 
 public class IdentityExtension
 {
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IdentityConfig _identityConfig;
+    private readonly SecuritySettings _securitySettings;
     private readonly IRepository<RefreshToken, string> _refreshTokenRepository;
     private readonly IUnitOfWork _unitOfWork;
-    public IdentityExtension(IDateTimeProvider dateTimeProvider, IOptions<IdentityConfig> identityConfig,
+
+    public IdentityExtension(IDateTimeProvider dateTimeProvider, IOptions<SecuritySettings> securitySettings,
         IRepository<RefreshToken, string> refreshTokenRepository, IUnitOfWork unitOfWork)
     {
         _dateTimeProvider = dateTimeProvider;
         _refreshTokenRepository = refreshTokenRepository;
         _unitOfWork = unitOfWork;
-        _identityConfig = identityConfig.Value;
+        _securitySettings = securitySettings.Value;
     }
     public RefreshToken GenerateRefreshToken() => new RefreshToken
     {
         Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-        Expires = _dateTimeProvider.OffsetUtcNow.DateTime.AddDays(7)
+        Expires = _dateTimeProvider.OffsetUtcNow.DateTime.Add(_securitySettings.RefreshTokenExpiration)
     };
 
     public async Task SaveRefreshTokenAsync(Guid userId, RefreshToken refreshToken)
@@ -47,9 +49,9 @@ public class IdentityExtension
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = _identityConfig.ISSUER,
-            ValidAudience = _identityConfig.AUDIENCE,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_identityConfig.SECRET))
+            ValidIssuer = _securitySettings.JwtIssuer,
+            ValidAudience = _securitySettings.JwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securitySettings.JwtSecret))
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -73,13 +75,13 @@ public class IdentityExtension
 
     public JwtSecurityToken GenerateJwtToken(List<Claim> claims)
     {
-        var secretKey = _identityConfig.SECRET;
+        var secretKey = _securitySettings.JwtSecret;
         var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
         return new JwtSecurityToken(
-        _identityConfig.ISSUER,
-        _identityConfig.AUDIENCE,
-        expires: _dateTimeProvider.OffsetUtcNow.DateTime.AddHours(12),
+        _securitySettings.JwtIssuer,
+        _securitySettings.JwtAudience,
+        expires: _dateTimeProvider.OffsetUtcNow.DateTime.Add(_securitySettings.BearerTokenExpiration),
         claims: claims,
         signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha256));
     }

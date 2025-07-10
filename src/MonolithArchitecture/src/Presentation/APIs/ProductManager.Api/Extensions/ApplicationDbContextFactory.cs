@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using ProductManager.Infrastructure.Configuration;
 using ProductManager.Persistence;
 namespace ProductManager.Api.Extensions;
 
@@ -16,7 +17,13 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
             .AddEnvironmentVariables()
             .Build();
 
-        var connectionString = configuration.GetConnectionString("SQL");
+        // ONLY use AppSettings - No fallback to ConnectionStrings
+        var connectionString = configuration[AppSettings.ConfigPaths.DatabasePaths.DefaultConnection];
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new InvalidOperationException($"Database connection string is required. Please set '{AppSettings.ConfigPaths.DatabasePaths.DefaultConnection}' in appsettings.json");
+        }
 
         optionsBuilder.UseSqlServer(connectionString);
 
