@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
 using ProductManager.Api.Versioning; // Add this for API versioning
 using ProductManager.Application;
-using ProductManager.Constants.AuthorizationDefinitions;
 using ProductManager.Infrastructure;
 using ProductManager.Infrastructure.Configuration;
 using ProductManager.Infrastructure.HealthChecks;
@@ -14,7 +13,6 @@ using ProductManager.Infrastructure.Storage;
 using ProductManager.Persistence;
 using Serilog;
 using Serilog.Events;
-using SolidTemplate.Constants.ConfigurationOptions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog first
@@ -71,13 +69,19 @@ builder.Host.UseSerilog();
     builder.Services.AddSwaggerVersioning();    // Add Health Checks
     builder.Services.AddHealthChecks()
         .AddCheck<DatabaseHealthCheck>("database")
-        .AddCheck<ApplicationHealthCheck>("application"); builder.Services.AddPersistence(builder.Configuration.GetConnectionString("SQL")!);
-    builder.Services.ApplicationConfigureServices();
+        .AddCheck<ApplicationHealthCheck>("application");
+
+    // Configure AppSettings and Infrastructure FIRST
     builder.Services.InfrastructureConfigureServices(builder.Configuration);
-    builder.Services.Configure<IdentityConfig>(builder.Configuration.GetSection(IdentityConfig.ConfigName));
-    var audience = builder.Configuration["IdentityConfig:AUDIENCE"];
-    var issUser = builder.Configuration["IdentityConfig:ISSUER"];
-    var key = builder.Configuration["IdentityConfig:SECRET"];
+    builder.Services.ApplicationConfigureServices();
+
+    // Configure Persistence and Identity using configuration callback
+    builder.Services.AddPersistence(builder.Configuration);
+
+    // JWT Authentication configuration using AppSettings only
+    var audience = builder.Configuration.GetRequiredValue(AppSettings.ConfigPaths.SecurityPaths.JwtAudience);
+    var issuer = builder.Configuration.GetRequiredValue(AppSettings.ConfigPaths.SecurityPaths.JwtIssuer);
+    var key = builder.Configuration.ValidateAndGet(AppSettings.ConfigPaths.SecurityPaths.JwtSecret, minLength: 32);
 
     builder.Services.AddAuthentication(options =>
     {
@@ -93,18 +97,19 @@ builder.Host.UseSerilog();
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidAudience = audience,
-            ValidIssuer = issUser,
+            ValidIssuer = issuer,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!))
         };
     });
 
     builder.Services.Configure<IdentityOptions>(options =>
     {
-        options.Password.RequireDigit = PasswordPolicy.RequireDigit;
-        options.Password.RequiredLength = PasswordPolicy.RequiredLength;
-        options.Password.RequireNonAlphanumeric = PasswordPolicy.RequireNonAlphanumeric;
-        options.Password.RequireUppercase = PasswordPolicy.RequireUppercase;
-        options.Password.RequireLowercase = PasswordPolicy.RequireLowercase;
+        // Use safe configuration access with AppSettings constants
+        options.Password.RequireDigit = builder.Configuration.GetRequiredValue<bool>(AppSettings.ConfigPaths.SecurityPaths.PasswordRequireDigit);
+        options.Password.RequiredLength = builder.Configuration.GetRequiredValue<int>(AppSettings.ConfigPaths.SecurityPaths.PasswordRequiredLength);
+        options.Password.RequireNonAlphanumeric = builder.Configuration.GetRequiredValue<bool>(AppSettings.ConfigPaths.SecurityPaths.PasswordRequireNonAlphanumeric);
+        options.Password.RequireUppercase = builder.Configuration.GetRequiredValue<bool>(AppSettings.ConfigPaths.SecurityPaths.PasswordRequireUppercase);
+        options.Password.RequireLowercase = builder.Configuration.GetRequiredValue<bool>(AppSettings.ConfigPaths.SecurityPaths.PasswordRequireLowercase);
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
         options.Lockout.MaxFailedAccessAttempts = 10;
         options.Lockout.AllowedForNewUsers = true;
