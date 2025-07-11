@@ -29,9 +29,9 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
 
-    <!-- MediatR -->
-    <PackageVersion Include="MediatR" Version="12.2.0" />
-    <PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <!-- MediatR - Replaced with Custom Mediator -->
+    <!-- <PackageVersion Include="MediatR" Version="12.2.0" /> -->
+    <!-- <PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" /> -->
 
     <!-- AutoMapper -->
     <PackageVersion Include="AutoMapper" Version="12.0.1" />
