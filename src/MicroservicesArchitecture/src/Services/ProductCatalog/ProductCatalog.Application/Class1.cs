@@ -1,18 +1,22 @@
-﻿namespace ProductCatalog.Application.Common.Interfaces;
+﻿using ProductCatalog.Domain.Entities;
+
+namespace ProductCatalog.Application.Common.Interfaces;
 
 /// <summary>
 /// Product repository interface
 /// </summary>
 public interface IProductRepository
 {
-  Task<Domain.Entities.Product?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-  Task<IEnumerable<Domain.Entities.Product>> GetAllAsync(CancellationToken cancellationToken = default);
-  Task<IEnumerable<Domain.Entities.Product>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
-  Task<IEnumerable<Domain.Entities.Product>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default);
-  Task<Domain.Entities.Product> AddAsync(Domain.Entities.Product product, CancellationToken cancellationToken = default);
-  Task UpdateAsync(Domain.Entities.Product product, CancellationToken cancellationToken = default);
-  Task DeleteAsync(int id, CancellationToken cancellationToken = default);
-  Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default);
+  Task<Product?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+  Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken = default);
+  Task<IEnumerable<Product>> GetPagedAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default);
+  Task<IEnumerable<Product>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default);
+  Task<IEnumerable<Product>> GetByCategoryIdAsync(string categoryId, CancellationToken cancellationToken = default);
+  Task<IEnumerable<Product>> GetBySupplierIdAsync(string supplierId, CancellationToken cancellationToken = default);
+  Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default);
+  Task UpdateAsync(Product product, CancellationToken cancellationToken = default);
+  Task DeleteAsync(string id, CancellationToken cancellationToken = default);
+  Task<bool> ExistsAsync(string id, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -20,12 +24,13 @@ public interface IProductRepository
 /// </summary>
 public interface ICategoryRepository
 {
-  Task<Domain.Entities.Category?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-  Task<IEnumerable<Domain.Entities.Category>> GetAllAsync(CancellationToken cancellationToken = default);
-  Task<Domain.Entities.Category> AddAsync(Domain.Entities.Category category, CancellationToken cancellationToken = default);
-  Task UpdateAsync(Domain.Entities.Category category, CancellationToken cancellationToken = default);
-  Task DeleteAsync(int id, CancellationToken cancellationToken = default);
-  Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default);
+  Task<Category?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+  Task<IEnumerable<Category>> GetAllAsync(CancellationToken cancellationToken = default);
+  Task<IEnumerable<Category>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default);
+  Task<Category> AddAsync(Category category, CancellationToken cancellationToken = default);
+  Task UpdateAsync(Category category, CancellationToken cancellationToken = default);
+  Task DeleteAsync(string id, CancellationToken cancellationToken = default);
+  Task<bool> ExistsAsync(string id, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -33,12 +38,13 @@ public interface ICategoryRepository
 /// </summary>
 public interface ISupplierRepository
 {
-  Task<Domain.Entities.Supplier?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-  Task<IEnumerable<Domain.Entities.Supplier>> GetAllAsync(CancellationToken cancellationToken = default);
-  Task<Domain.Entities.Supplier> AddAsync(Domain.Entities.Supplier supplier, CancellationToken cancellationToken = default);
-  Task UpdateAsync(Domain.Entities.Supplier supplier, CancellationToken cancellationToken = default);
-  Task DeleteAsync(int id, CancellationToken cancellationToken = default);
-  Task<bool> ExistsAsync(int id, CancellationToken cancellationToken = default);
+  Task<Supplier?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+  Task<IEnumerable<Supplier>> GetAllAsync(CancellationToken cancellationToken = default);
+  Task<IEnumerable<Supplier>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default);
+  Task<Supplier> AddAsync(Supplier supplier, CancellationToken cancellationToken = default);
+  Task UpdateAsync(Supplier supplier, CancellationToken cancellationToken = default);
+  Task DeleteAsync(string id, CancellationToken cancellationToken = default);
+  Task<bool> ExistsAsync(string id, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
