@@ -8,10 +8,10 @@ namespace ProductCatalog.Domain.Entities;
 /// </summary>
 public class Product : AggregateRoot
 {
-    public int ProductId { get; private set; }
+    public string ProductId { get; private set; } = string.Empty;
     public string ProductName { get; private set; } = string.Empty;
-    public int? SupplierId { get; private set; }
-    public int? CategoryId { get; private set; }
+    public string? SupplierId { get; private set; }
+    public string? CategoryId { get; private set; }
     public string? QuantityPerUnit { get; private set; }
     public decimal? UnitPrice { get; private set; }
     public short? UnitsInStock { get; private set; }
@@ -27,9 +27,10 @@ public class Product : AggregateRoot
     private Product() { }
 
     public Product(
+        string productId,
         string productName,
-        int? supplierId = null,
-        int? categoryId = null,
+        string? supplierId = null,
+        string? categoryId = null,
         string? quantityPerUnit = null,
         decimal? unitPrice = null,
         short? unitsInStock = null,
@@ -37,9 +38,12 @@ public class Product : AggregateRoot
         short? reorderLevel = null,
         bool discontinued = false)
     {
+        if (string.IsNullOrWhiteSpace(productId))
+            throw new ArgumentException("Product ID cannot be empty", nameof(productId));
         if (string.IsNullOrWhiteSpace(productName))
             throw new ArgumentException("Product name cannot be empty", nameof(productName));
 
+        ProductId = productId;
         ProductName = productName;
         SupplierId = supplierId;
         CategoryId = categoryId;
@@ -55,8 +59,8 @@ public class Product : AggregateRoot
 
     public void UpdateProductInfo(
         string productName,
-        int? supplierId = null,
-        int? categoryId = null,
+        string? supplierId = null,
+        string? categoryId = null,
         string? quantityPerUnit = null,
         decimal? unitPrice = null,
         short? unitsInStock = null,

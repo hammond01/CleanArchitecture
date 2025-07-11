@@ -7,7 +7,7 @@ namespace ProductCatalog.Domain.Entities;
 /// </summary>
 public class Supplier : BaseEntity
 {
-    public int SupplierId { get; private set; }
+    public string SupplierId { get; private set; } = string.Empty;
     public string CompanyName { get; private set; } = string.Empty;
     public string? ContactName { get; private set; }
     public string? ContactTitle { get; private set; }
@@ -27,6 +27,7 @@ public class Supplier : BaseEntity
     private Supplier() { }
 
     public Supplier(
+        string supplierId,
         string companyName,
         string? contactName = null,
         string? contactTitle = null,
@@ -39,9 +40,12 @@ public class Supplier : BaseEntity
         string? fax = null,
         string? homePage = null)
     {
+        if (string.IsNullOrWhiteSpace(supplierId))
+            throw new ArgumentException("Supplier ID cannot be empty", nameof(supplierId));
         if (string.IsNullOrWhiteSpace(companyName))
             throw new ArgumentException("Company name cannot be empty", nameof(companyName));
 
+        SupplierId = supplierId;
         CompanyName = companyName;
         ContactName = contactName;
         ContactTitle = contactTitle;
