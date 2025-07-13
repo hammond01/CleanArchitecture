@@ -1,5 +1,3 @@
-using Shared.Contracts.Common;
-
 namespace Shared.Contracts.Customers;
 
 /// <summary>
