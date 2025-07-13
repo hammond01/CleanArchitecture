@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common.Constants;
-using Shared.Contracts.Common;
+using Shared.Contracts;
 
 namespace ApiGateway.Controllers;
 
@@ -62,9 +62,9 @@ public class GatewayController : ControllerBase
 
                 var httpClient = _httpClientFactory.CreateClient();
                 var response = await httpClient.GetAsync($"{baseUrl}/health");
-                
-                serviceStatuses[service] = new 
-                { 
+
+                serviceStatuses[service] = new
+                {
                     Status = response.IsSuccessStatusCode ? "Healthy" : "Unhealthy",
                     Healthy = response.IsSuccessStatusCode,
                     StatusCode = (int)response.StatusCode
