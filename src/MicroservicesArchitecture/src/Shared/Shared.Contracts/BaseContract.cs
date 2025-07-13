@@ -1,4 +1,4 @@
-﻿namespace Shared.Contracts.Common;
+﻿namespace Shared.Contracts;
 
 /// <summary>
 /// Base interface for all API requests
