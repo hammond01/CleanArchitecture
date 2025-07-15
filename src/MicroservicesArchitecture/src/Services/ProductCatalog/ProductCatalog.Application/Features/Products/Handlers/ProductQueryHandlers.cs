@@ -233,7 +233,7 @@ public class GetPagedProductsQueryHandler : IRequestHandler<GetPagedProductsQuer
 
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
-            filteredProducts = filteredProducts.Where(p => 
+            filteredProducts = filteredProducts.Where(p =>
                 p.ProductName.Contains(request.SearchTerm, StringComparison.OrdinalIgnoreCase));
         }
 
@@ -253,7 +253,7 @@ public class GetPagedProductsQueryHandler : IRequestHandler<GetPagedProductsQuer
         }
 
         var mappedProducts = _mapper.Map<IEnumerable<ProductSummaryDto>>(filteredProducts);
-        
+
         return new PagedResponse<ProductSummaryDto>(
             mappedProducts,
             request.PageNumber,
