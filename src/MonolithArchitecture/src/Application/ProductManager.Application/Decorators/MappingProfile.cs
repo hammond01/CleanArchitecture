@@ -6,6 +6,7 @@ using ProductManager.Shared.DTOs.OrderDto;
 using ProductManager.Shared.DTOs.ProductDto;
 using ProductManager.Shared.DTOs.ShipperDto;
 using ProductManager.Shared.DTOs.SupplierDto;
+
 namespace ProductManager.Application.Decorators;
 
 public static class MappingConfig
@@ -33,7 +34,8 @@ public static class MappingConfig
         TypeAdapterConfig<UpdateOrderDto, Order>.NewConfig();
 
         // Product mappings with custom logic
-        TypeAdapterConfig<Products, GetProductDto>.NewConfig()
+        TypeAdapterConfig<Products, GetProductDto>
+            .NewConfig()
             .Map(member: dest => dest.CategoryName, source: src => src.Category.CategoryName)
             .Map(member: dest => dest.SupplierName, source: src => src.Supplier.CompanyName);
 
