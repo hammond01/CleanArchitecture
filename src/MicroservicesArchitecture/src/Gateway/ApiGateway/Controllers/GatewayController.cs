@@ -79,4 +79,119 @@ public class GatewayController : ControllerBase
 
         return Ok(ApiResponse<Dictionary<string, object>>.Success(serviceStatuses, "Service status retrieved"));
     }
+
+    /// <summary>
+    /// Forward requests to OrderManagement service
+    /// </summary>
+    [HttpGet("orders")]
+    [HttpPost("orders")]
+    [HttpPut("orders/{id}")]
+    [HttpDelete("orders/{id}")]
+    [HttpPatch("orders/{id}/status")]
+    public async Task<IActionResult> ForwardToOrderManagement()
+    {
+        var client = _httpClientFactory.CreateClient();
+        var orderServiceUrl = _configuration.GetValue<string>("Services:OrderManagement:BaseUrl") ?? "https://localhost:5003";
+
+        // Get the remaining path after /api/gateway/
+        var path = HttpContext.Request.Path.Value?.Replace("/api/gateway/", "");
+        var queryString = HttpContext.Request.QueryString.Value;
+
+        var targetUrl = $"{orderServiceUrl}/api/{path}{queryString}";
+
+        try
+        {
+            var request = new HttpRequestMessage(
+                new HttpMethod(HttpContext.Request.Method),
+                targetUrl);
+
+            // Copy headers
+            foreach (var header in HttpContext.Request.Headers)
+            {
+                if (!request.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray()))
+                {
+                    request.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                }
+            }
+
+            // Copy body for POST/PUT requests
+            if (HttpContext.Request.Method == "POST" || HttpContext.Request.Method == "PUT" || HttpContext.Request.Method == "PATCH")
+            {
+                var body = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                request.Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
+            }
+
+            var response = await client.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return new ContentResult
+            {
+                Content = responseContent,
+                ContentType = response.Content.Headers.ContentType?.ToString() ?? "application/json",
+                StatusCode = (int)response.StatusCode
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error forwarding request to OrderManagement service");
+            return StatusCode(503, ApiResponse.Failure("OrderManagement service unavailable"));
+        }
+    }
+
+    /// <summary>
+    /// Forward requests to OrderManagement customers endpoint
+    /// </summary>
+    [HttpGet("customers")]
+    [HttpPost("customers")]
+    [HttpPut("customers/{id}")]
+    [HttpDelete("customers/{id}")]
+    public async Task<IActionResult> ForwardToCustomerManagement()
+    {
+        var client = _httpClientFactory.CreateClient();
+        var orderServiceUrl = _configuration.GetValue<string>("Services:OrderManagement:BaseUrl") ?? "https://localhost:5003";
+
+        // Get the remaining path after /api/gateway/
+        var path = HttpContext.Request.Path.Value?.Replace("/api/gateway/", "");
+        var queryString = HttpContext.Request.QueryString.Value;
+
+        var targetUrl = $"{orderServiceUrl}/api/{path}{queryString}";
+
+        try
+        {
+            var request = new HttpRequestMessage(
+                new HttpMethod(HttpContext.Request.Method),
+                targetUrl);
+
+            // Copy headers
+            foreach (var header in HttpContext.Request.Headers)
+            {
+                if (!request.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray()))
+                {
+                    request.Content?.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                }
+            }
+
+            // Copy body for POST/PUT requests
+            if (HttpContext.Request.Method == "POST" || HttpContext.Request.Method == "PUT")
+            {
+                var body = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+                request.Content = new StringContent(body, System.Text.Encoding.UTF8, "application/json");
+            }
+
+            var response = await client.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return new ContentResult
+            {
+                Content = responseContent,
+                ContentType = response.Content.Headers.ContentType?.ToString() ?? "application/json",
+                StatusCode = (int)response.StatusCode
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error forwarding request to OrderManagement service");
+            return StatusCode(503, ApiResponse.Failure("OrderManagement service unavailable"));
+        }
+    }
 }
