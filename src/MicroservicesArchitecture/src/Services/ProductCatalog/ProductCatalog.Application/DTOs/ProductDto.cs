@@ -53,3 +53,37 @@ public class UpdateProductDto
     public short? ReorderLevel { get; set; }
     public bool Discontinued { get; set; }
 }
+
+/// <summary>
+/// Category DTO
+/// </summary>
+public class CategoryDto
+{
+    public string CategoryId { get; set; } = string.Empty;
+    public string CategoryName { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public string? PictureLink { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
+
+/// <summary>
+/// Supplier DTO
+/// </summary>
+public class SupplierDto
+{
+    public string SupplierId { get; set; } = string.Empty;
+    public string CompanyName { get; set; } = string.Empty;
+    public string? ContactName { get; set; }
+    public string? ContactTitle { get; set; }
+    public string? Address { get; set; }
+    public string? City { get; set; }
+    public string? Region { get; set; }
+    public string? PostalCode { get; set; }
+    public string? Country { get; set; }
+    public string? Phone { get; set; }
+    public string? Fax { get; set; }
+    public string? HomePage { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
