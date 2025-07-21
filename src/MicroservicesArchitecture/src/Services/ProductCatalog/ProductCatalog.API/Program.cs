@@ -1,7 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using ProductCatalog.API.Data;
-
-using Microsoft.EntityFrameworkCore;
 using ProductCatalog.Application.Common.Interfaces;
 using ProductCatalog.Infrastructure.Data;
 using ProductCatalog.Infrastructure.Repositories;
@@ -58,7 +55,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add Health Checks
 builder.Services.AddHealthChecks()
-    .AddDbContext<ProductCatalogDbContext>();
+    .AddDbContextCheck<ProductCatalogDbContext>();
 
 // Add CORS
 builder.Services.AddCors(options =>
