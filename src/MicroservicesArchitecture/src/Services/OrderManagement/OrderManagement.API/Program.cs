@@ -1,8 +1,7 @@
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using OrderManagement.API.Data;
-using OrderManagement.API.Services;
 using System.Text.Json.Serialization;
+using OrderManagement.Application;
+using OrderManagement.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,19 +18,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
 
-// Add Entity Framework
-builder.Services.AddDbContext<OrderDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Add services
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-
-// Add AutoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-// Add MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+// Add Clean Architecture layers
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -40,10 +29,6 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "OrderManagement API", Version = "v1" });
     c.EnableAnnotations();
 });
-
-// Add Health Checks
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<OrderDbContext>();
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -80,5 +65,8 @@ app.MapControllers();
 
 // Add Health Check endpoint
 app.MapHealthChecks("/health");
+
+// Ensure database is created
+await app.Services.EnsureDatabaseAsync();
 
 app.Run();
