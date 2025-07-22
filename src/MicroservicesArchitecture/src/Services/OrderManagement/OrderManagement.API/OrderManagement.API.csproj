@@ -28,9 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\Shared.Common\Shared.Common.csproj" />
-    <ProjectReference Include="..\..\Shared\Shared.Contracts\Shared.Contracts.csproj" />
-    <ProjectReference Include="..\..\Shared\Shared.Events\Shared.Events.csproj" />
+    <ProjectReference Include="..\OrderManagement.Application\OrderManagement.Application.csproj" />
+    <ProjectReference Include="..\OrderManagement.Infrastructure\OrderManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Shared.Common\Shared.Common.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Shared.Contracts\Shared.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Shared.Events\Shared.Events.csproj" />
   </ItemGroup>
 
 </Project>
