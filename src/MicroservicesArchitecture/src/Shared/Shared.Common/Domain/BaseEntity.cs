@@ -5,7 +5,7 @@ namespace Shared.Common.Domain;
 /// </summary>
 public abstract class BaseEntity
 {
-    public string Id { get; protected set; } = string.Empty;
+    public string Number { get; protected set; } = string.Empty;
     public DateTime CreatedAt { get; protected set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; protected set; }
     public string? CreatedBy { get; protected set; }
@@ -13,12 +13,12 @@ public abstract class BaseEntity
 
     protected BaseEntity()
     {
-        Id = GenerateId();
+        Number = GenerateId();
     }
 
     protected BaseEntity(string id)
     {
-        Id = id;
+        Number = id;
     }
 
     private static string GenerateId()
@@ -40,12 +40,12 @@ public abstract class BaseEntity
         if (GetType() != other.GetType())
             return false;
 
-        return Id == other.Id;
+        return Number == other.Number;
     }
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return Number.GetHashCode();
     }
 
     public static bool operator ==(BaseEntity? left, BaseEntity? right)
