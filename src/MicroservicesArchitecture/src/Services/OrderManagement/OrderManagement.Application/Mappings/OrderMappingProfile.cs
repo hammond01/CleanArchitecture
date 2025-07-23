@@ -1,5 +1,6 @@
 using AutoMapper;
 using OrderManagement.Application.DTOs;
+using OrderManagement.Application.Queries;
 using OrderManagement.Domain.Entities;
 using OrderManagement.Domain.Repositories;
 using OrderManagement.Domain.ValueObjects;
@@ -15,7 +16,7 @@ public class OrderMappingProfile : Profile
     {
         // Order mappings
         CreateMap<Order, OrderDto>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Number))
             .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.TotalAmount))
             .ForMember(dest => dest.CustomerInfo, opt => opt.MapFrom(src => src.CustomerInfo))
@@ -23,7 +24,7 @@ public class OrderMappingProfile : Profile
             .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
 
         CreateMap<Order, OrderSummaryDto>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Number))
             .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.CustomerInfo.Name))
             .ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => src.TotalAmount))
@@ -31,7 +32,7 @@ public class OrderMappingProfile : Profile
 
         // OrderItem mappings
         CreateMap<OrderItem, OrderItemDto>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Number))
             .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice))
             .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice));
 
@@ -72,15 +73,15 @@ public class OrderMappingProfile : Profile
             {
                 var customerInfo = context.Mapper.Map<CustomerInfo>(src.CustomerInfo);
                 var shippingAddress = src.ShippingAddress != null ? context.Mapper.Map<Address>(src.ShippingAddress) : null;
-                
+
                 var order = Order.Create(src.CustomerId, customerInfo, shippingAddress, src.Notes);
-                
+
                 foreach (var itemDto in src.OrderItems)
                 {
                     var unitPrice = Money.Create(itemDto.UnitPrice.Amount, itemDto.UnitPrice.Currency);
                     order.AddOrderItem(itemDto.ProductId, itemDto.ProductName, itemDto.Quantity, unitPrice);
                 }
-                
+
                 return order;
             });
 
