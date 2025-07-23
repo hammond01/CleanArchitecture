@@ -102,8 +102,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
                 // Commit transaction
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-                _logger.LogInformation("Order {OrderId} created successfully for customer {CustomerId}", 
-                    savedOrder.Id, request.CustomerId);
+                _logger.LogInformation("Order {OrderId} created successfully for customer {CustomerId}",
+                    savedOrder.Number, request.CustomerId);
 
                 // Map to DTO and return
                 return _mapper.Map<OrderDto>(savedOrder);
