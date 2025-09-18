@@ -17,17 +17,35 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Domain", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductCatalog.Application", "src\Services\ProductCatalog\ProductCatalog.Application\ProductCatalog.Application.csproj", "{B2345678-9ABC-4DEF-0123-456789ABCDEF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.API", "src\Services\OrderManagement\OrderManagement.API\OrderManagement.API.csproj", "{C3456789-ABCD-4EF0-1234-56789ABCDEF0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{928E323A-A64F-47BA-9D94-7A9A06092D66}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.Domain", "src\Services\OrderManagement\OrderManagement.Domain\OrderManagement.Domain.csproj", "{D4567890-BCDE-4F01-2345-6789ABCDEF01}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{53CEC022-C7DA-4D1E-A2CC-8AEEBC73EF4C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.Application", "src\Services\OrderManagement\OrderManagement.Application\OrderManagement.Application.csproj", "{E5678901-CDEF-4012-3456-789ABCDEF012}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3EE828A8-3238-45D1-8AD8-07B51E2BC032}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.Infrastructure", "src\Services\OrderManagement\OrderManagement.Infrastructure\OrderManagement.Infrastructure.csproj", "{F6789012-DEF0-4123-4567-89ABCDEF0123}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CustomerManagement", "CustomerManagement", "{CF9346A6-FB88-4591-BCDB-7DEC73019209}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagement.Migrator", "src\Tools\OrderManagement.Migrator\OrderManagement.Migrator.csproj", "{01234567-EF01-4234-5678-9ABCDEF01234}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement.API", "src\Services\CustomerManagement\CustomerManagement.API\CustomerManagement.API.csproj", "{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C}"
 EndProject
-
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement.Application", "src\Services\CustomerManagement\CustomerManagement.Application\CustomerManagement.Application.csproj", "{1AA43938-5E27-4BC1-893C-A8A9557E4F65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement.Domain", "src\Services\CustomerManagement\CustomerManagement.Domain\CustomerManagement.Domain.csproj", "{A5E64CC1-D90B-459A-BB10-14513A0774DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProductManagement", "ProductManagement", "{68FE7B60-C845-4F96-BCC4-D838F6CC4C97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerManagement.Infrastructure", "src\Services\CustomerManagement\CustomerManagement.Infrastructure\CustomerManagement.Infrastructure.csproj", "{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{EBDAC17E-8304-44E0-974F-6249D665A819}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB07BEB4-D582-478C-98D0-63186F1BFCAC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Clean.bat = Clean.bat
+		Clean.sh = Clean.sh
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,8 +65,6 @@ Global
 		{A1234567-89AB-4CDE-F012-3456789ABCDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1234567-89AB-4CDE-F012-3456789ABCDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 
-		{C3456789-ABCD-4EF0-1234-56789ABCDEF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3456789-ABCD-4EF0-1234-56789ABCDEF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 
 		{C3D4E5F6-A789-4BCD-EF01-23456789ABCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3D4E5F6-A789-4BCD-EF01-23456789ABCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -62,16 +78,50 @@ Global
 		{B2345678-9ABC-4DEF-0123-456789ABCDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2345678-9ABC-4DEF-0123-456789ABCDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 
-		{D4567890-BCDE-4F01-2345-6789ABCDEF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4567890-BCDE-4F01-2345-6789ABCDEF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 
-		{E5678901-CDEF-4012-3456-789ABCDEF012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5678901-CDEF-4012-3456-789ABCDEF012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 
-		{F6789012-DEF0-4123-4567-89ABCDEF0123}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F6789012-DEF0-4123-4567-89ABCDEF0123}.Debug|Any CPU.Build.0 = Debug|Any CPU
 
-		{01234567-EF01-4234-5678-9ABCDEF01234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01234567-EF01-4234-5678-9ABCDEF01234}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C}.Debug|x64.Build.0 = Debug|Any CPU
+		{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C}.Debug|x86.Build.0 = Debug|Any CPU
+		{1AA43938-5E27-4BC1-893C-A8A9557E4F65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AA43938-5E27-4BC1-893C-A8A9557E4F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AA43938-5E27-4BC1-893C-A8A9557E4F65}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1AA43938-5E27-4BC1-893C-A8A9557E4F65}.Debug|x64.Build.0 = Debug|Any CPU
+		{1AA43938-5E27-4BC1-893C-A8A9557E4F65}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1AA43938-5E27-4BC1-893C-A8A9557E4F65}.Debug|x86.Build.0 = Debug|Any CPU
+		{A5E64CC1-D90B-459A-BB10-14513A0774DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E64CC1-D90B-459A-BB10-14513A0774DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E64CC1-D90B-459A-BB10-14513A0774DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A5E64CC1-D90B-459A-BB10-14513A0774DB}.Debug|x64.Build.0 = Debug|Any CPU
+		{A5E64CC1-D90B-459A-BB10-14513A0774DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5E64CC1-D90B-459A-BB10-14513A0774DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D}.Debug|x64.Build.0 = Debug|Any CPU
+		{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D}.Debug|x86.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{53CEC022-C7DA-4D1E-A2CC-8AEEBC73EF4C} = {928E323A-A64F-47BA-9D94-7A9A06092D66}
+		{F0123456-789A-4BCD-EF01-23456789ABCD} = {53CEC022-C7DA-4D1E-A2CC-8AEEBC73EF4C}
+		{CF9346A6-FB88-4591-BCDB-7DEC73019209} = {3EE828A8-3238-45D1-8AD8-07B51E2BC032}
+		{43142BA1-F1C8-4858-A7B2-3CEB9D4FB20C} = {CF9346A6-FB88-4591-BCDB-7DEC73019209}
+		{1AA43938-5E27-4BC1-893C-A8A9557E4F65} = {CF9346A6-FB88-4591-BCDB-7DEC73019209}
+		{3EE828A8-3238-45D1-8AD8-07B51E2BC032} = {928E323A-A64F-47BA-9D94-7A9A06092D66}
+		{A5E64CC1-D90B-459A-BB10-14513A0774DB} = {CF9346A6-FB88-4591-BCDB-7DEC73019209}
+		{68FE7B60-C845-4F96-BCC4-D838F6CC4C97} = {3EE828A8-3238-45D1-8AD8-07B51E2BC032}
+		{8BB1F023-AEDA-4021-8EC6-6813C9FE2A0D} = {CF9346A6-FB88-4591-BCDB-7DEC73019209}
+		{B1A2C3D4-E5F6-4712-ABCD-9E8F76543210} = {68FE7B60-C845-4F96-BCC4-D838F6CC4C97}
+		{B2345678-9ABC-4DEF-0123-456789ABCDEF} = {68FE7B60-C845-4F96-BCC4-D838F6CC4C97}
+		{A1234567-89AB-4CDE-F012-3456789ABCDE} = {68FE7B60-C845-4F96-BCC4-D838F6CC4C97}
+		{EBDAC17E-8304-44E0-974F-6249D665A819} = {928E323A-A64F-47BA-9D94-7A9A06092D66}
+		{C3D4E5F6-A789-4BCD-EF01-23456789ABCD} = {EBDAC17E-8304-44E0-974F-6249D665A819}
+		{D56789AB-CDEF-4012-3456-789ABCDE0123} = {EBDAC17E-8304-44E0-974F-6249D665A819}
+		{E89ABC01-2345-4678-9ABC-DEF012345678} = {EBDAC17E-8304-44E0-974F-6249D665A819}
 	EndGlobalSection
 EndGlobal

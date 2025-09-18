@@ -21,18 +21,18 @@ public class RequestLoggingMiddleware
     {
         var stopwatch = Stopwatch.StartNew();
         var requestId = Guid.NewGuid().ToString("N")[..8];
-        
+
         // Add request ID to response headers
-        context.Response.Headers.Add("X-Request-ID", requestId);
-        
+        context.Response.Headers.Append("X-Request-ID", requestId);
+
         // Log request
         await LogRequestAsync(context, requestId);
-        
+
         // Capture response
         var originalResponseBodyStream = context.Response.Body;
         using var responseBodyStream = new MemoryStream();
         context.Response.Body = responseBodyStream;
-        
+
         try
         {
             await _next(context);
@@ -45,10 +45,10 @@ public class RequestLoggingMiddleware
         finally
         {
             stopwatch.Stop();
-            
+
             // Log response
             await LogResponseAsync(context, requestId, stopwatch.ElapsedMilliseconds);
-            
+
             // Copy response back to original stream
             responseBodyStream.Seek(0, SeekOrigin.Begin);
             await responseBodyStream.CopyToAsync(originalResponseBodyStream);
@@ -104,7 +104,7 @@ public class RequestLoggingMiddleware
             }
 
             var logLevel = response.StatusCode >= 400 ? LogLevel.Warning : LogLevel.Information;
-            
+
             _logger.Log(logLevel,
                 "HTTP Response {RequestId}: {StatusCode} in {ElapsedMilliseconds}ms | Body: {ResponseBody}",
                 requestId,
