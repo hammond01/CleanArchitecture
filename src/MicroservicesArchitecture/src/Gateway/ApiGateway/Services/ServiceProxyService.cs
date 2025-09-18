@@ -31,25 +31,25 @@ public class ServiceProxyService : IServiceProxyService
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         _logger = logger;
-        
+
         // Configure retry policy with exponential backoff
         _retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
             .WaitAndRetryAsync(
                 retryCount: 3,
                 sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                onRetry: (outcome, timespan, retryCount, context) =>
+                onRetry: (_, timespan, retryCount, context) =>
                 {
-                    _logger.LogWarning("Retry {RetryCount} for {ServiceName} after {Delay}ms", 
+                    _logger.LogWarning("Retry {RetryCount} for {ServiceName} after {Delay}ms",
                         retryCount, context.OperationKey, timespan.TotalMilliseconds);
                 });
     }
 
     public async Task<HttpResponseMessage> ForwardRequestAsync(
-        string serviceName, 
-        string path, 
-        HttpMethod method, 
-        object? body = null, 
+        string serviceName,
+        string path,
+        HttpMethod method,
+        object? body = null,
         Dictionary<string, string>? headers = null)
     {
         var baseUrl = _configuration[$"Services:{serviceName}:BaseUrl"];
@@ -82,7 +82,7 @@ public class ServiceProxyService : IServiceProxyService
 
         try
         {
-            _logger.LogInformation("Forwarding {Method} request to {ServiceName}: {RequestUri}", 
+            _logger.LogInformation("Forwarding {Method} request to {ServiceName}: {RequestUri}",
                 method, serviceName, requestUri);
 
             var response = await _retryPolicy.ExecuteAsync(async () =>
@@ -91,14 +91,14 @@ public class ServiceProxyService : IServiceProxyService
                 return httpResponse;
             });
 
-            _logger.LogInformation("Received response from {ServiceName}: {StatusCode}", 
+            _logger.LogInformation("Received response from {ServiceName}: {StatusCode}",
                 serviceName, response.StatusCode);
 
             return response;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error forwarding request to {ServiceName}: {RequestUri}", 
+            _logger.LogError(ex, "Error forwarding request to {ServiceName}: {RequestUri}",
                 serviceName, requestUri);
             throw;
         }
