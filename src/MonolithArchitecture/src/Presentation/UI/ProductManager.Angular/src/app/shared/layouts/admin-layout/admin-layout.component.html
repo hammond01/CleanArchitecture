@@ -1,0 +1,106 @@
+<nz-layout class="admin-layout">
+  <!-- Sidebar -->
+  <nz-sider
+    class="admin-sidebar"
+    nzCollapsible
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null"
+    nzWidth="250"
+    [nzCollapsedWidth]="80">
+
+    <div class="admin-logo">
+      <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+      @if (!isCollapsed) {
+        <span>Product Manager</span>
+      }
+    </div>
+
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li nz-menu-item nzMatchRouter>
+        <nz-icon nzType="dashboard"></nz-icon>
+        <span>Dashboard</span>
+        <a routerLink="/admin/dashboard"></a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter>
+        <nz-icon nzType="appstore"></nz-icon>
+        <span>Products</span>
+        <a routerLink="/admin/products"></a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter>
+        <nz-icon nzType="team"></nz-icon>
+        <span>Users</span>
+        <a routerLink="/admin/users"></a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter>
+        <nz-icon nzType="bar-chart"></nz-icon>
+        <span>Analytics</span>
+        <a routerLink="/admin/analytics"></a>
+      </li>
+
+      <li nz-menu-item nzMatchRouter>
+        <nz-icon nzType="setting"></nz-icon>
+        <span>Settings</span>
+        <a routerLink="/admin/settings"></a>
+      </li>
+    </ul>
+  </nz-sider>
+
+  <!-- Main Layout -->
+  <nz-layout class="admin-main-layout">
+    <!-- Header -->
+    <nz-header class="admin-header">
+      <div class="admin-header-left">
+        <button
+          nz-button
+          nzType="text"
+          nzSize="large"
+          (click)="toggleSidebar()"
+          class="sidebar-toggle">
+          <nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></nz-icon>
+        </button>
+        <h1 class="admin-title">Admin Panel</h1>
+      </div>
+
+      <div class="admin-header-right">
+        <!-- User dropdown -->
+        <div class="admin-user-info" nz-dropdown [nzDropdownMenu]="userMenu" nzPlacement="bottomRight">
+          <nz-avatar nzIcon="user" nzSize="default"></nz-avatar>
+          <span class="admin-username">Admin User</span>
+          <nz-icon nzType="down"></nz-icon>
+        </div>
+        <nz-dropdown-menu #userMenu="nzDropdownMenu">
+          <ul nz-menu nzSelectable="false">
+            <li nz-menu-item>
+              <nz-icon nzType="user"></nz-icon>
+              <span>Profile</span>
+            </li>
+            <li nz-menu-item>
+              <nz-icon nzType="setting"></nz-icon>
+              <span>Settings</span>
+            </li>
+            <li nz-menu-divider></li>
+            <li nz-menu-item (click)="onLogout()">
+              <nz-icon nzType="logout"></nz-icon>
+              <span>Logout</span>
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </nz-header>
+
+    <!-- Content -->
+    <nz-content class="admin-content">
+      <div class="admin-content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+
+    <!-- Footer -->
+    <nz-footer class="admin-footer">
+      Product Manager Admin ©2025 Created with Angular & Ant Design
+    </nz-footer>
+  </nz-layout>
+</nz-layout>

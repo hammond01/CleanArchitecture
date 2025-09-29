@@ -1,0 +1,36 @@
+.auth-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  z-index: 1000;
+}
+
+.auth-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .auth-layout {
+    padding: 16px;
+  }
+
+  .auth-wrapper {
+    max-width: 100%;
+  }
+}
+
+@media (max-height: 700px) {
+  .auth-layout {
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+}
