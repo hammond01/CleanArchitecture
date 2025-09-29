@@ -1,0 +1,89 @@
+<nz-card nzTitle="Login" class="auth-card">
+  <div class="auth-header">
+    <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" class="auth-logo">
+    <h2>Product Manager</h2>
+    <p>Please sign in to your account</p>
+  </div>
+
+      <nz-alert
+        *ngIf="errorMessage"
+        [nzMessage]="errorMessage"
+        nzType="error"
+        nzShowIcon
+        nzCloseable
+        (nzOnClose)="errorMessage = ''"
+        class="login-error">
+      </nz-alert>
+
+      <form nz-form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Username</nz-form-label>
+          <nz-form-control
+            [nzSpan]="24"
+            [nzValidateStatus]="isFieldInvalid('username') ? 'error' : ''"
+            [nzErrorTip]="getFieldError('username')">
+            <nz-input-group nzPrefixIcon="user">
+              <input
+                type="text"
+                nz-input
+                formControlName="username"
+                placeholder="Enter your username"
+                autocomplete="username">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Password</nz-form-label>
+          <nz-form-control
+            [nzSpan]="24"
+            [nzValidateStatus]="isFieldInvalid('password') ? 'error' : ''"
+            [nzErrorTip]="getFieldError('password')">
+            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+              <input
+                [type]="passwordVisible ? 'text' : 'password'"
+                nz-input
+                formControlName="password"
+                placeholder="Enter your password"
+                autocomplete="current-password">
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <nz-icon
+                [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                (click)="passwordVisible = !passwordVisible">
+              </nz-icon>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="24">
+            <label nz-checkbox formControlName="rememberMe">
+              <span>Remember me</span>
+            </label>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="24">
+            <button
+              nz-button
+              nzType="primary"
+              nzSize="large"
+              [nzLoading]="isLoading"
+              [disabled]="isLoading"
+              class="login-button">
+              <span *ngIf="!isLoading">Sign In</span>
+              <span *ngIf="isLoading">Signing In...</span>
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+  <div class="auth-footer">
+    <p>Demo credentials: admin / admin</p>
+    <p>Don't have an account?
+      <a (click)="goToRegister()" class="register-link">Sign Up</a>
+    </p>
+  </div>
+</nz-card>

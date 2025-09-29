@@ -1,0 +1,138 @@
+<nz-card nzTitle="Register" class="auth-card">
+  <div class="auth-header">
+    <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" class="auth-logo">
+    <h2>Product Manager</h2>
+    <p>Create your account</p>
+  </div>
+      <nz-alert
+        *ngIf="errorMessage"
+        [nzMessage]="errorMessage"
+        nzType="error"
+        nzShowIcon
+        nzCloseable
+        (nzOnClose)="errorMessage = ''"
+        class="login-error">
+      </nz-alert>
+
+      <nz-alert
+        *ngIf="successMessage"
+        [nzMessage]="successMessage"
+        nzType="success"
+        nzShowIcon
+        class="login-error">
+      </nz-alert>
+
+      <form nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Username</nz-form-label>
+          <nz-form-control
+            [nzSpan]="24"
+            [nzValidateStatus]="isFieldInvalid('username') ? 'error' : ''"
+            [nzErrorTip]="getFieldError('username')">
+            <nz-input-group nzPrefixIcon="user">
+              <input
+                type="text"
+                nz-input
+                formControlName="username"
+                placeholder="Enter your username"
+                autocomplete="username">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Email</nz-form-label>
+          <nz-form-control
+            [nzSpan]="24"
+            [nzValidateStatus]="isFieldInvalid('email') ? 'error' : ''"
+            [nzErrorTip]="getFieldError('email')">
+            <nz-input-group nzPrefixIcon="mail">
+              <input
+                type="email"
+                nz-input
+                formControlName="email"
+                placeholder="Enter your email address"
+                autocomplete="email">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Password</nz-form-label>
+          <nz-form-control
+            [nzSpan]="24"
+            [nzValidateStatus]="isFieldInvalid('password') ? 'error' : ''"
+            [nzErrorTip]="getFieldError('password')">
+            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+              <input
+                [type]="passwordVisible ? 'text' : 'password'"
+                nz-input
+                formControlName="password"
+                placeholder="Enter your password"
+                autocomplete="new-password">
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+              <nz-icon
+                [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                (click)="passwordVisible = !passwordVisible">
+              </nz-icon>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24" nzRequired>Confirm Password</nz-form-label>
+          <nz-form-control
+            [nzSpan]="24"
+            [nzValidateStatus]="isFieldInvalid('confirmPassword') ? 'error' : ''"
+            [nzErrorTip]="getFieldError('confirmPassword')">
+            <nz-input-group nzPrefixIcon="lock" [nzSuffix]="confirmSuffixTemplate">
+              <input
+                [type]="confirmPasswordVisible ? 'text' : 'password'"
+                nz-input
+                formControlName="confirmPassword"
+                placeholder="Confirm your password"
+                autocomplete="new-password">
+            </nz-input-group>
+            <ng-template #confirmSuffixTemplate>
+              <nz-icon
+                [nzType]="confirmPasswordVisible ? 'eye-invisible' : 'eye'"
+                (click)="confirmPasswordVisible = !confirmPasswordVisible">
+              </nz-icon>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="24">
+            <label nz-checkbox formControlName="acceptTerms">
+              <span>I agree to the Terms and Conditions</span>
+            </label>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="24">
+            <button
+              nz-button
+              nzType="primary"
+              nzSize="large"
+              [nzLoading]="isLoading"
+              [disabled]="isLoading"
+              class="login-button">
+              @if (!isLoading) {
+                <span>Create Account</span>
+              } @else {
+                <span>Creating Account...</span>
+              }
+            </button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+  <div class="auth-footer">
+    <p>Already have an account?
+      <a (click)="goToLogin()" class="register-link">Sign In</a>
+    </p>
+  </div>
+</nz-card>

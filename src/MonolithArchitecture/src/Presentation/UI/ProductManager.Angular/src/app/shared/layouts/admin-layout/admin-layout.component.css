@@ -1,0 +1,134 @@
+.admin-layout {
+  min-height: 100vh;
+}
+
+.admin-logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-logo img {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+.admin-logo span {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+
+
+.admin-header {
+  background: #fff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-toggle {
+  margin-right: 16px;
+  color: #666;
+}
+
+.admin-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+}
+
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.admin-user-info:hover {
+  background-color: #f5f5f5;
+}
+
+.admin-username {
+  margin: 0 8px;
+  color: #262626;
+  font-weight: 500;
+}
+
+.admin-content {
+  margin: 24px;
+  padding: 0;
+  min-height: calc(100vh - 64px - 48px - 48px); /* header + footer + margins */
+}
+
+.admin-content-wrapper {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-height: 400px;
+}
+
+.admin-footer {
+  text-align: center;
+  color: #666;
+  background: #f5f5f5;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Menu styling */
+:global(.ant-menu-dark) {
+  background: #001529;
+}
+
+:global(.ant-menu-dark .ant-menu-item-selected) {
+  background-color: #1890ff;
+}
+
+:global(.ant-menu-dark .ant-menu-item:hover) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-content {
+    margin: 16px;
+  }
+
+  .admin-header {
+    padding: 0 16px;
+  }
+
+  .admin-title {
+    font-size: 18px;
+  }
+
+  .admin-username {
+    display: none;
+  }
+}
