@@ -1,9 +1,10 @@
-<nz-layout class="admin-layout">
+<nz-layout class="admin-layout" [class.sidebar-collapsed]="isCollapsed">
   <!-- Sidebar -->
   <nz-sider
     class="admin-sidebar"
     nzCollapsible
-    [(nzCollapsed)]="isCollapsed"
+    [nzCollapsed]="isCollapsed"
+    (nzCollapsedChange)="isCollapsed = $event"
     [nzTrigger]="null"
     nzWidth="250"
     [nzCollapsedWidth]="80">

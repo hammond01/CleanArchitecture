@@ -1,0 +1,45 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+
+  <div nz-row [nzGutter]="[16, 16]">
+    @for(stat of stats; track stat.title) {
+      <div nz-col [nzSpan]="6">
+        <nz-card class="stat-card">
+          <nz-statistic
+            [nzValue]="stat.value"
+            [nzTitle]="stat.title"
+            [nzPrefix]="iconTemplate"
+            [nzValueStyle]="{ color: stat.color }">
+            <ng-template #iconTemplate>
+              <span nz-icon [nzType]="stat.icon" [style.color]="stat.color"></span>
+            </ng-template>
+          </nz-statistic>
+        </nz-card>
+      </div>
+    }
+  </div>
+
+  <div nz-row [nzGutter]="[16, 16]" style="margin-top: 24px;">
+    <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="Hoạt động gần đây">
+        <ul>
+          <li>Sản phẩm mới được thêm: iPhone 15</li>
+          <li>Đơn hàng #001 đã được xử lý</li>
+          <li>Khách hàng mới đăng ký: John Doe</li>
+          <li>Cập nhật giá sản phẩm: MacBook Pro</li>
+        </ul>
+      </nz-card>
+    </div>
+
+    <div nz-col [nzSpan]="12">
+      <nz-card nzTitle="Thông báo">
+        <ul>
+          <li>Sắp hết hàng: 5 sản phẩm</li>
+          <li>Đơn hàng chờ xử lý: 12 đơn</li>
+          <li>Khuyến mãi sắp hết hạn: 3 chương trình</li>
+          <li>Báo cáo tháng đã sẵn sàng</li>
+        </ul>
+      </nz-card>
+    </div>
+  </div>
+</div>

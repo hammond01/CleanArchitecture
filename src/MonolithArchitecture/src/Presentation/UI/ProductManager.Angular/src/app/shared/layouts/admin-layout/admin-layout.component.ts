@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router } from '@angular/router';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
@@ -27,6 +27,7 @@ import { AuthService } from '../../../core/services';
 export class AdminLayoutComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   isCollapsed = false;
 
@@ -37,5 +38,12 @@ export class AdminLayoutComponent {
 
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
+    console.log('Sidebar collapsed:', this.isCollapsed); // Debug log
+
+    // Force change detection and layout recalculation
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 50);
   }
 }

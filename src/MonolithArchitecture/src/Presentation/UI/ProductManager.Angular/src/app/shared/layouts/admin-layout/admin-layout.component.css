@@ -2,6 +2,11 @@
   min-height: 100vh;
 }
 
+.admin-layout.sidebar-collapsed .admin-main-layout {
+  margin-left: 0;
+  transition: all 0.2s ease-in-out;
+}
+
 .admin-logo {
   height: 64px;
   display: flex;
@@ -22,6 +27,12 @@
   color: white;
   font-weight: 600;
   font-size: 16px;
+}
+
+.admin-main-layout {
+  transition: all 0.2s ease-in-out;
+  flex: 1;
+  min-width: 0; /* Important for flex layout */
 }
 
 
@@ -101,6 +112,31 @@
   border-top: 1px solid #f0f0f0;
 }
 
+/* Sidebar styling */
+.admin-sidebar {
+  position: relative;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* Force proper width transitions */
+:global(.ant-layout-sider) {
+  transition: all 0.2s ease-in-out !important;
+  flex: 0 0 auto !important;
+}
+
+:global(.ant-layout-sider-collapsed) {
+  min-width: 80px !important;
+  max-width: 80px !important;
+  width: 80px !important;
+}
+
+:global(.ant-layout-sider:not(.ant-layout-sider-collapsed)) {
+  min-width: 250px !important;
+  max-width: 250px !important;
+  width: 250px !important;
+}
+
 /* Menu styling */
 :global(.ant-menu-dark) {
   background: #001529;
@@ -112,6 +148,15 @@
 
 :global(.ant-menu-dark .ant-menu-item:hover) {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Collapsed state */
+:global(.ant-layout-sider-collapsed) .admin-logo span {
+  display: none;
+}
+
+:global(.ant-layout-sider-collapsed) .admin-logo {
+  padding: 0 8px;
 }
 
 /* Responsive */
