@@ -1,0 +1,32 @@
+.dashboard-container {
+  padding: 24px;
+}
+
+.dashboard-container h1 {
+  margin-bottom: 24px;
+  color: #001529;
+}
+
+.stat-card {
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+li:last-child {
+  border-bottom: none;
+}
