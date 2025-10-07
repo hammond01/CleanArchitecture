@@ -9,26 +9,24 @@ using ProductManager.Domain.Entities.Identity;
 using ProductManager.Domain.Repositories;
 using ProductManager.Infrastructure.Storage;
 using ProductManager.Persistence.Extensions;
-using ProductManager.Shared.DTOs.AdminDto;
 using ProductManager.Shared.DTOs.UserDto;
+// using ProductManager.Shared.DTOs.AdminDto; // Removed - Admin module deleted
 using ProductManager.Shared.Permission;
 using static Microsoft.AspNetCore.Http.StatusCodes;
 namespace ProductManager.Persistence.Repositories;
 
 public class IdentityRepository : IIdentityRepository
 {
-    private readonly IDatabaseInitializer _databaseInitializer;
     private readonly EntityPermissions _entityPermissions;
     private readonly IdentityExtension _identityExtension;
     private readonly ILogger<IdentityRepository> _logger;
     private readonly RoleManager<Role> _roleManager;
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
-    public IdentityRepository(IDatabaseInitializer databaseInitializer, EntityPermissions entityPermissions,
+    public IdentityRepository(EntityPermissions entityPermissions,
         ILogger<IdentityRepository> logger, RoleManager<Role> roleManager, UserManager<User> userManager,
         SignInManager<User> signInManager, IdentityExtension identityExtension)
     {
-        _databaseInitializer = databaseInitializer;
         _entityPermissions = entityPermissions;
         _logger = logger;
         _roleManager = roleManager;
@@ -40,7 +38,7 @@ public class IdentityRepository : IIdentityRepository
     {
         try
         {
-            await _databaseInitializer.EnsureAdminIdentitiesAsync();
+            // await _databaseInitializer.EnsureAdminIdentitiesAsync(); // Commented out - Admin module deleted
 
             var result = await _signInManager.PasswordSignInAsync(parameters.UserName, parameters.Password, parameters.RememberMe,
             true);
