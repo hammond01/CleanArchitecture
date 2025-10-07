@@ -21,11 +21,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     // Business Entities
     public DbSet<Products> Products { get; set; } = null!;
     public DbSet<Categories> Categories { get; set; } = null!;
-    public DbSet<Suppliers> Suppliers { get; set; } = null!;
-    public DbSet<Order> Orders { get; set; } = null!;
-    public DbSet<Customers> Customers { get; set; } = null!;
-    public DbSet<Employees> Employees { get; set; } = null!;
-    public DbSet<Regions> Regions { get; set; } = null!;
+
+    // Identity Entities
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+    public DbSet<Lock> Locks { get; set; } = null!;
 
     // Logging Entities
     public DbSet<ApiLogItem> ApiLogs { get; set; } = null!;

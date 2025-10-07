@@ -138,11 +138,11 @@ public class PeriodicTaskProcessorService : BackgroundService
         {
             // Example: Update statistics, send notifications, etc.
             var productCount = await context.Products.CountAsync();
-            var customerCount = await context.Customers.CountAsync();
-            var orderCount = await context.Orders.CountAsync();
+            // var customerCount = await context.Customers.CountAsync(); // Commented out - Customers module deleted
+            // var orderCount = await context.Orders.CountAsync(); // Commented out - Orders module deleted
 
-            _logger.LogDebug("📊 Current statistics - Products: {ProductCount}, Customers: {CustomerCount}, Orders: {OrderCount}",
-                productCount, customerCount, orderCount);
+            _logger.LogDebug("📊 Current statistics - Products: {ProductCount}",
+                productCount);
 
             // Here you could implement:
             // - Send periodic health reports

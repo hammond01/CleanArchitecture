@@ -19,9 +19,19 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntit
     public IQueryable<TEntity> GetQueryableSet()
     {
         var query = _dbContext.Set<TEntity>().AsQueryable();
-        return _dbContext.Model.FindEntityType(typeof(TEntity))
-            ?.GetNavigations().Aggregate(query, func: (current, property) => current.Include
-                (property.Name)) ?? query;
+
+        // Use model metadata to include navigation properties
+        var entityType = _dbContext.Model.FindEntityType(typeof(TEntity));
+        if (entityType != null)
+        {
+            var navigationProperties = entityType.GetNavigations();
+            foreach (var navigation in navigationProperties)
+            {
+                query = query.Include(navigation.Name);
+            }
+        }
+
+        return query;
     }
     public async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
@@ -31,15 +41,24 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntit
     public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         entity.UpdatedDateTime = _dateTimeProvider.OffsetNow;
+
+        // For relational databases, ensure the entity is marked as modified
+        if (_dbContext.Entry(entity).State == EntityState.Detached)
+        {
+            DbSet.Attach(entity);
+        }
+        _dbContext.Entry(entity).State = EntityState.Modified;
+
         return Task.CompletedTask;
     }
     public void Delete(TEntity entity)
     {
-        var entityToDelete = DbSet.Find(entity.Id);
-        if (entityToDelete != null)
+        // For relational databases, we need to attach it first if it's not tracked
+        if (_dbContext.Entry(entity).State == EntityState.Detached)
         {
-            DbSet.Remove(entityToDelete);
+            DbSet.Attach(entity);
         }
+        DbSet.Remove(entity);
     }
     public Task<T?> FirstOrDefaultAsync<T>(IQueryable<T> query) => query.FirstOrDefaultAsync();
     public Task<T?> SingleOrDefaultAsync<T>(IQueryable<T> query) => query.SingleOrDefaultAsync();

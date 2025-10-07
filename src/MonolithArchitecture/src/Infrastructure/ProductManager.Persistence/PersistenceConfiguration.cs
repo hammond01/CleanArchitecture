@@ -40,7 +40,7 @@ public static class PersistenceConfiguration
             .AddDefaultTokenProviders();
 
         services.AddScoped<IIdentityRepository, IdentityRepository>();
-        services.AddScoped<IAdminRepository, AdminRepository>();
+        // services.AddScoped<IAdminRepository, AdminRepository>(); // Commented out - Admin module deleted
         services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
 
         // Register logging service
