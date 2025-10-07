@@ -117,10 +117,6 @@ public class HealthController : ControllerBase
             // Get table counts
             var productCount = await _context.Products.CountAsync();
             var categoryCount = await _context.Categories.CountAsync();
-            var orderCount = await _context.Orders.CountAsync();
-            var customerCount = await _context.Customers.CountAsync();
-            var employeeCount = await _context.Employees.CountAsync();
-            var supplierCount = await _context.Suppliers.CountAsync();
 
             return new
             {
@@ -129,11 +125,7 @@ public class HealthController : ControllerBase
                 Statistics = new
                 {
                     Products = productCount,
-                    Categories = categoryCount,
-                    Orders = orderCount,
-                    Customers = customerCount,
-                    Employees = employeeCount,
-                    Suppliers = supplierCount
+                    Categories = categoryCount
                 }
             };
         }
