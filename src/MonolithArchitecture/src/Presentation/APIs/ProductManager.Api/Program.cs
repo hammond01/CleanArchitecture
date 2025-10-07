@@ -47,7 +47,6 @@ builder.Host.UseSerilog();
     .AddOData(options =>
     {
         options.Select().Filter().OrderBy().Count().SetMaxTop(1000);
-        options.AddRouteComponents("odata", ODataConfiguration.GetEdmModel());
     })
     .AddJsonOptions(options =>
     {

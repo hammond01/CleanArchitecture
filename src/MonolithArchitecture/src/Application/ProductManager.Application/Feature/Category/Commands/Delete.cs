@@ -19,7 +19,7 @@ public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryComman
 
     public DeleteCategoryCommandHandler(ICrudService<Categories> categoryService)
     {
-        _categoryService = categoryService;
+        _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
     }
 
     public async Task<ApiResponse> HandleAsync(DeleteCategoryCommand request, CancellationToken cancellationToken)
