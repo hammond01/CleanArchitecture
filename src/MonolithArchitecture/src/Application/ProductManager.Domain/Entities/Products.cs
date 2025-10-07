@@ -6,15 +6,10 @@ namespace ProductManager.Domain.Entities;
 [Index("CategoryId", Name = "CategoriesProducts")]
 [Index("CategoryId", Name = "CategoryID")]
 [Index("ProductName", Name = "ProductName")]
-[Index("SupplierId", Name = "SupplierID")]
-[Index("SupplierId", Name = "SuppliersProducts")]
 public class Products : Entity<string>
 {
     [StringLength(40)]
     public string ProductName { get; set; } = null!;
-
-    [Column("SupplierID")]
-    public string SupplierId { get; set; } = null!;
 
     [Column("CategoryID")]
     public string CategoryId { get; set; } = null!;
@@ -36,11 +31,4 @@ public class Products : Entity<string>
     [ForeignKey("CategoryId")]
     [InverseProperty("Products")]
     public Categories Category { get; set; } = null!;
-
-    [InverseProperty("Products")]
-    public ICollection<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
-
-    [ForeignKey("SupplierId")]
-    [InverseProperty("Products")]
-    public Suppliers Supplier { get; set; } = null!;
 }
