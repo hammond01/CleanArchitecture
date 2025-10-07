@@ -25,7 +25,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
             throw new InvalidOperationException($"Database connection string is required. Please set '{AppSettings.ConfigPaths.DatabasePaths.DefaultConnection}' in appsettings.json");
         }
 
-        optionsBuilder.UseSqlServer(connectionString);
+        optionsBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly("ProductManager.Persistence"));
 
 
         return new ApplicationDbContext(optionsBuilder.Options);

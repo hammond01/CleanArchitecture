@@ -18,7 +18,7 @@ public class GetCategoryByIdHandler : IQueryHandler<GetCategoryByIdQuery, ApiRes
     private readonly ICrudService<Categories> _categoryService;
     public GetCategoryByIdHandler(ICrudService<Categories> categoryService)
     {
-        _categoryService = categoryService;
+        _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
     }
 
     public async Task<ApiResponse> HandleAsync(GetCategoryByIdQuery request, CancellationToken cancellationToken)

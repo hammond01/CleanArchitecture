@@ -10,7 +10,7 @@ internal class GetsCategoryHandler : IQueryHandler<GetCategories, ApiResponse>
     private readonly ICrudService<Categories> _categoryService;
     public GetsCategoryHandler(ICrudService<Categories> categoryService)
     {
-        _categoryService = categoryService;
+        _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService));
     }
     public async Task<ApiResponse> HandleAsync(GetCategories query, CancellationToken cancellationToken = default)
     {

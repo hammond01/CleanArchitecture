@@ -2,6 +2,7 @@ using ProductManager.Domain.Entities;
 using ProductManager.Domain.Events;
 using ProductManager.Domain.Repositories;
 using ProductManager.Shared.Exceptions;
+using Microsoft.EntityFrameworkCore;
 namespace ProductManager.Application.Common.Services;
 
 public class CrudService<T> : ICrudService<T>

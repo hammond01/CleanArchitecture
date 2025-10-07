@@ -28,18 +28,13 @@ internal class AddOrUpdateProductHandler : ICommandHandler<AddOrUpdateProductCom
 
     public async Task<ApiResponse> HandleAsync(AddOrUpdateProductCommand command, CancellationToken cancellationToken = default)
     {
-        using (await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken))
+        if (command.Products.Id == null!)
         {
-            if (command.Products.Id == null!)
-            {
-                command.Products.Id = UlidExtension.Generate();
-                await _crudService.AddAsync(command.Products, cancellationToken);
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                return new ApiResponse(201, CRUDMessage.CreateSuccess, command.Products);
-            }
-            await _crudService.UpdateAsync(command.Products, cancellationToken);
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            return new ApiResponse(200, CRUDMessage.UpdateSuccess, command.Products);
+            command.Products.Id = UlidExtension.Generate();
+            await _crudService.AddAsync(command.Products, cancellationToken);
+            return new ApiResponse(201, CRUDMessage.CreateSuccess, command.Products);
         }
+        await _crudService.UpdateAsync(command.Products, cancellationToken);
+        return new ApiResponse(200, CRUDMessage.UpdateSuccess, command.Products);
     }
 }
