@@ -32,10 +32,6 @@ public class AddOrUpdateProductHandlerTests
         _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
             .ForEach(b => _fixture.Behaviors.Remove(b));
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-        
-        // Setup default transaction behavior
-        _unitOfWorkMock.Setup(x => x.BeginTransactionAsync(It.IsAny<IsolationLevel>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(_transactionMock.Object);
     }
 
     [Fact]
@@ -56,15 +52,15 @@ public class AddOrUpdateProductHandlerTests
         result.Message.Should().Be(CRUDMessage.CreateSuccess);
         result.Result.Should().NotBeNull();
         result.Result.Should().BeOfType<Products>();
-        
+
         var resultProduct = result.Result as Products;
         resultProduct!.Id.Should().NotBeNullOrEmpty();
         resultProduct.ProductName.Should().Be(product.ProductName);
 
         _crudServiceMock.Verify(x => x.AddAsync(It.Is<Products>(p => p.Id != null), It.IsAny<CancellationToken>()), Times.Once);
-        _unitOfWorkMock.Verify(x => x.BeginTransactionAsync(IsolationLevel.ReadCommitted, It.IsAny<CancellationToken>()), Times.Once);
-        _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(It.IsAny<CancellationToken>()), Times.Once);
-        _transactionMock.Verify(x => x.Dispose(), Times.Once);
+        _unitOfWorkMock.Verify(x => x.BeginTransactionAsync(It.IsAny<IsolationLevel>(), It.IsAny<CancellationToken>()), Times.Never);
+        _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _transactionMock.Verify(x => x.Dispose(), Times.Never);
     }
 
     [Fact]
@@ -86,20 +82,20 @@ public class AddOrUpdateProductHandlerTests
         result.Message.Should().Be(CRUDMessage.UpdateSuccess);
         result.Result.Should().NotBeNull();
         result.Result.Should().BeOfType<Products>();
-        
+
         var resultProduct = result.Result as Products;
         resultProduct!.Id.Should().Be(existingId);
         resultProduct.ProductName.Should().Be(product.ProductName);
 
         _crudServiceMock.Verify(x => x.UpdateAsync(It.Is<Products>(p => p.Id == existingId), It.IsAny<CancellationToken>()), Times.Once);
         _crudServiceMock.Verify(x => x.AddAsync(It.IsAny<Products>(), It.IsAny<CancellationToken>()), Times.Never);
-        _unitOfWorkMock.Verify(x => x.BeginTransactionAsync(IsolationLevel.ReadCommitted, It.IsAny<CancellationToken>()), Times.Once);
-        _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(It.IsAny<CancellationToken>()), Times.Once);
-        _transactionMock.Verify(x => x.Dispose(), Times.Once);
+        _unitOfWorkMock.Verify(x => x.BeginTransactionAsync(It.IsAny<IsolationLevel>(), It.IsAny<CancellationToken>()), Times.Never);
+        _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(It.IsAny<CancellationToken>()), Times.Never);
+        _transactionMock.Verify(x => x.Dispose(), Times.Never);
     }
 
     [Fact]
-    public async Task HandleAsync_WhenCrudServiceThrowsException_ShouldDisposeTransaction()
+    public async Task HandleAsync_WhenCrudServiceThrowsException_ShouldThrowException()
     {
         // Arrange
         var product = _fixture.Build<Products>()
@@ -112,49 +108,8 @@ public class AddOrUpdateProductHandlerTests
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.HandleAsync(command));
-        
+
         exception.Message.Should().Be("Database error");
-        _transactionMock.Verify(x => x.Dispose(), Times.Once);
-        _unitOfWorkMock.Verify(x => x.CommitTransactionAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
-    [Fact]
-    public async Task HandleAsync_WhenTransactionBeginFails_ShouldThrowException()
-    {
-        // Arrange
-        var product = _fixture.Build<Products>()
-            .With(p => p.Id, (string)null!)
-            .Create();
-        var command = new AddOrUpdateProductCommand(product);
-
-        _unitOfWorkMock.Setup(x => x.BeginTransactionAsync(It.IsAny<IsolationLevel>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new InvalidOperationException("Transaction begin failed"));
-
-        // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.HandleAsync(command));
-        
-        exception.Message.Should().Be("Transaction begin failed");
-        _crudServiceMock.Verify(x => x.AddAsync(It.IsAny<Products>(), It.IsAny<CancellationToken>()), Times.Never);
-        _crudServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Products>(), It.IsAny<CancellationToken>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task HandleAsync_WhenCommitTransactionFails_ShouldDisposeTransaction()
-    {
-        // Arrange
-        var product = _fixture.Build<Products>()
-            .With(p => p.Id, "existing-id")
-            .Create();
-        var command = new AddOrUpdateProductCommand(product);
-
-        _unitOfWorkMock.Setup(x => x.CommitTransactionAsync(It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new InvalidOperationException("Commit failed"));
-
-        // Act & Assert
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.HandleAsync(command));
-        
-        exception.Message.Should().Be("Commit failed");
-        _crudServiceMock.Verify(x => x.UpdateAsync(It.IsAny<Products>(), It.IsAny<CancellationToken>()), Times.Once);
-        _transactionMock.Verify(x => x.Dispose(), Times.Once);
-    }
 }

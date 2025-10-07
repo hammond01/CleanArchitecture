@@ -6,12 +6,12 @@ using ProductManager.Shared.DTOs.ProductDto;
 using Xunit;
 namespace ProductManager.IntegrationTests.Controllers;
 
-public class ProductControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public class ProductControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public ProductControllerTests(WebApplicationFactory<Program> factory)
+    public ProductControllerTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
@@ -33,8 +33,7 @@ public class ProductControllerTests : IClassFixture<WebApplicationFactory<Progra
         var productDto = new CreateProductDto
         {
             ProductName = "Test Product",
-            CategoryId = "01JH179GGG9BN2V8SS9RG70QNG",// Valid category ID from seeded data (Mobile Phones)
-            SupplierId = "01JH179GGZ7FAHZ0DNFYNZ19FG",// Valid supplier ID from seeded data (Tech Supplies Co.)
+            CategoryId = "test-category-1", // Use seeded test category
             UnitPrice = 100.00m,
             UnitsInStock = 50,
             UnitsOnOrder = 0,
@@ -67,7 +66,7 @@ public class ProductControllerTests : IClassFixture<WebApplicationFactory<Progra
     public async Task GetProduct_WithValidId_ShouldReturnOkResult()
     {
         // Arrange
-        var productId = "test-id";
+        var productId = "test-product-1"; // Use seeded test data
 
         // Act
         var response = await _client.GetAsync($"/api/v1.0/products/{productId}");
@@ -80,7 +79,7 @@ public class ProductControllerTests : IClassFixture<WebApplicationFactory<Progra
     public async Task UpdateProduct_WithValidData_ShouldReturnOkResult()
     {
         // Arrange
-        var productId = "test-id";
+        var productId = "test-product-1"; // Use seeded test data
         var updateProductDto = new UpdateProductDto
         {
             ProductName = "Updated Product Name",
@@ -99,7 +98,7 @@ public class ProductControllerTests : IClassFixture<WebApplicationFactory<Progra
     public async Task DeleteProduct_WithValidId_ShouldReturnNoContentOrNotFound()
     {
         // Arrange
-        var productId = "test-id";
+        var productId = "test-product-1"; // Use seeded test data
 
         // Act
         var response = await _client.DeleteAsync($"/api/v1.0/products/{productId}");

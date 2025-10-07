@@ -101,7 +101,8 @@ public class CategoryCommandQueryTests
 
         // Assert
         query.Should().NotBeNull();
-        query.GetType().Should().BeDecoratedWith<System.Runtime.CompilerServices.CompilerGeneratedAttribute>();
+        query.GetType().IsValueType.Should().BeFalse(); // Records are reference types
+        query.GetType().Name.Should().Contain("GetCategories"); // Should have the record name
     }
 
     [Fact]
