@@ -6,12 +6,12 @@ using Xunit;
 
 namespace ProductManager.IntegrationTests.Controllers;
 
-public class HealthControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public class HealthControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
 
-    public HealthControllerTests(WebApplicationFactory<Program> factory)
+    public HealthControllerTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();

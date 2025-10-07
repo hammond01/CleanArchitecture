@@ -8,12 +8,12 @@ using Xunit;
 
 namespace ProductManager.IntegrationTests.Controllers;
 
-public class LogsControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public class LogsControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
 
-    public LogsControllerTests(WebApplicationFactory<Program> factory)
+    public LogsControllerTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();

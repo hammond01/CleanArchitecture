@@ -7,12 +7,12 @@ using Xunit;
 
 namespace ProductManager.IntegrationTests.Controllers;
 
-public class CategoryControllerTests : IClassFixture<WebApplicationFactory<Program>>
+public class CategoryControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public CategoryControllerTests(WebApplicationFactory<Program> factory)
+    public CategoryControllerTests(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _client = _factory.CreateClient();
@@ -62,7 +62,7 @@ public class CategoryControllerTests : IClassFixture<WebApplicationFactory<Progr
     public async Task GetCategory_WithValidId_ShouldReturnOkResult()
     {
         // Arrange
-        var categoryId = "test-id";
+        var categoryId = "test-category-1"; // Use seeded test data
 
         // Act
         var response = await _client.GetAsync($"/api/v1.0/categories/{categoryId}");
@@ -75,10 +75,10 @@ public class CategoryControllerTests : IClassFixture<WebApplicationFactory<Progr
     public async Task UpdateCategory_WithValidData_ShouldNotReturnServerError()
     {
         // Arrange
-        var categoryId = "test-id";
+        var categoryId = "test-category-1"; // Use seeded test data
         var updateCategoryDto = new UpdateCategoryDto
         {
-            CategoryName = "Updated Category",
+            CategoryName = "Electronics",
             Description = "Updated description"
         };
 
@@ -93,7 +93,7 @@ public class CategoryControllerTests : IClassFixture<WebApplicationFactory<Progr
     public async Task DeleteCategory_WithValidId_ShouldNotReturnServerError()
     {
         // Arrange
-        var categoryId = "test-id";
+        var categoryId = "test-category-1"; // Use seeded test data
 
         // Act
         var response = await _client.DeleteAsync($"/api/v1.0/categories/{categoryId}");
