@@ -9,3 +9,9 @@ public class UserDto : BaseDto
     public string LastName { get; set; } = default!;
     public List<string>? Roles { get; set; }
 }
+
+public class RoleDto
+{
+    public string Name { get; set; } = default!;
+    public List<string> Permissions { get; set; } = new List<string>();
+}
