@@ -35,13 +35,13 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 services.Remove(databaseInitializerDescriptor);
             }
 
-            // Use the existing database for testing
+            // Use In-Memory Database for testing (faster and no SQL Server required)
             var databaseName = $"ProductManager_Test_{Guid.NewGuid()}";
 
-            // Add ApplicationDbContext using SQL Server for testing.
+            // Add ApplicationDbContext using In-Memory Database for testing.
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer($"Data Source=127.0.0.1;Initial Catalog={databaseName};Persist Security Info=True;User Id=sa;password=123456;TrustServerCertificate=true");
+                options.UseInMemoryDatabase(databaseName);
             });
 
             // Build the service provider.
