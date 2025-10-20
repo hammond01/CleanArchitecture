@@ -4,9 +4,20 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-brightgreen.svg)](#clean-architecture)
 [![DDD](https://img.shields.io/badge/Design-Domain%20Driven-blue.svg)](#domain-driven-design)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
-[![Tests](https://img.shields.io/badge/tests-137%2F137%20passing-brightgreen.svg)](#testing)
-[![Production Ready](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)](#status)
+
+# Clean Architecture with Domain-Driven Design (DDD)
+
+[![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-brightgreen.svg)](#clean-architecture)
+[![DDD](https://img.shields.io/badge/Design-Domain%20Driven-blue.svg)](#domain-driven-design)
+[![Build Status](https://img.shields.io/badge/build-foundation%20complete-yellow.svg)](#)
+[![Tests](https://img.shields.io/badge/tests-infrastructure%20ready-yellow.svg)](#testing)
+[![Production Ready](https://img.shields.io/badge/status-implementation%20foundation-yellow.svg)](#status)
+
+A comprehensive implementation of **Clean Architecture** combined with **Domain-Driven Design (DDD)** using **.NET 8**. This project demonstrates architectural patterns for building enterprise applications, featuring a **Monolithic Architecture** foundation with **Microservices Architecture** partially implemented, and plans for **Event-Driven** and **Serverless** architectures.
+[![Tests](https://img.shields.io/badge/tests-infrastructure%20ready-yellow.svg)](#testing)
+[![Production Ready](https://img.shields.io/badge/status-implementation%20foundation-yellow.svg)](#status)
 
 ![Clean Architecture with DDD](/docs/imgs/CleanArchitecture-DDD.png)
 
@@ -26,25 +37,35 @@
 
 ## 🚀 Overview
 
-This project is a comprehensive implementation of **Clean Architecture** combined with **Domain-Driven Design (DDD)** using **.NET 8**. It demonstrates different architectural approaches for building enterprise applications, currently featuring a **Production-Ready Monolithic Architecture** implementation with plans to expand to **Microservices Architecture**, **Event-Driven Architecture**, and **Serverless Architecture**.
+This project is a comprehensive implementation of **Clean Architecture** combined with **Domain-Driven Design (DDD)** using **.NET 8**. It demonstrates different architectural approaches for building enterprise applications, currently featuring:
 
-The current implementation showcases a complete e-commerce product management system built following enterprise architecture principles with patterns like **CQRS**, **Repository Pattern**, **Unit of Work**, **Mediator**, **API Versioning**, **Enhanced Security**, and **Advanced Middleware Pipeline**.
+- **Monolithic Architecture** - Complete foundation with 2 main business modules (Product & Category)
+- **Microservices Architecture** - Partial implementation with API Gateway and 2 microservices
+- **Event-Driven Architecture** - Planning phase (documentation only)
+- **Serverless Architecture** - Planning phase (documentation only)
 
-> **📅 Current Status (July 2025)**: The Monolithic Architecture is **production-ready** with 137/137 tests passing, complete API documentation, enterprise-grade security features, and comprehensive business modules. New architectural patterns are being planned for implementation.
+The current implementations showcase enterprise architecture principles with patterns like **CQRS**, **Repository Pattern**, **Unit of Work**, **Mediator**, **API Versioning**, **Enhanced Security**, and **Advanced Middleware Pipeline**.
+
+> **📅 Current Status (October 2025)**:
+>
+> - **Monolithic Architecture**: Has complete architectural structure with Product and Category management modules, enterprise security features, and comprehensive middleware pipeline. Requires solution file path fixes.
+> - **Microservices Architecture**: Partially implemented with API Gateway, CustomerManagement service, and ProductCatalog service with full Clean Architecture layers.
+> - **Event-Driven & Serverless**: Planning documentation ready for future implementation.
 
 ### ✨ Key Highlights
 
 - 🏗️ **Clean Architecture**: Clear separation of layers and dependencies
 - 🎯 **Domain-Driven Design**: Focus on business logic and domain model
-- 🏛️ **Enterprise-Grade Monolith**: Production-ready with advanced features
-- 🔄 **CQRS Pattern**: Separation of Command and Query operations
-- 🏪 **Repository & Unit of Work**: Enterprise-grade data access patterns
-- 🧪 **Comprehensive Testing**: Unit tests and Integration tests (137/137 passing)
-- 📊 **Advanced APIs**: RESTful APIs with versioning, caching, and security
-- 🔒 **Enterprise Security**: JWT, CORS, Rate limiting, IP whitelisting
-- 🚀 **Performance Optimized**: Response caching, compression, entity locking
-- � **Rich Documentation**: Comprehensive API docs with Swagger UI
-- 🌐 **Multi-Architecture Ready**: Prepared for expansion to multiple patterns
+- 🏛️ **Monolithic Foundation**: 2 core modules (Product & Category) with full CQRS implementation
+- 🔄 **CQRS Pattern**: Complete Command Query Responsibility Segregation with MediatR
+- 🏪 **Repository & Unit of Work**: Enterprise-grade data access patterns implemented
+- 🧪 **Testing Infrastructure**: 17 test files (12 unit tests, 5 integration tests) with xUnit and Moq
+- 📊 **Advanced APIs**: RESTful APIs with API versioning (v1.0, v2.0) and OData support
+- 🔒 **Enterprise Security**: JWT authentication, CORS, rate limiting, IP whitelisting, request signing
+- 🚀 **Performance Features**: Response caching, compression (Gzip/Brotli), entity locking
+- 📝 **Rich API Documentation**: Interactive Swagger UI with comprehensive documentation
+- 🌐 **Microservices Foundation**: API Gateway + 2 services with event bus infrastructure
+- 🔧 **Advanced Middleware**: 8 middleware components for logging, rate limiting, exception handling
 
 ## 🏛️ Architecture Overview
 
@@ -89,16 +110,16 @@ A complete monolithic application following Clean Architecture with 4 main layer
 
 ### 🚀 Future Implementations
 
-- **Microservices Architecture** - Distributed services with API Gateway
-- **Event-Driven Architecture** - Message-driven communication
-- **CQRS with Event Sourcing** - Advanced CQRS implementation
-- **Serverless Architecture** - Cloud-native serverless approach
+- **Microservices Architecture** - Distributed services with API Gateway (Partially Implemented)
+- **Event-Driven Architecture** - Message-driven communication (Planned)
+- **CQRS with Event Sourcing** - Advanced CQRS implementation (Planned)
+- **Serverless Architecture** - Cloud-native serverless approach (Planned)
 
 ## 📁 Project Structure
 
 ```
 src/
-├── MonolithArchitecture/           # 🏛️ Production-Ready Monolithic Implementation
+├── MonolithArchitecture/           # 🏛️ Monolithic Architecture Implementation
 │   ├── src/
 │   │   ├── Application/           # Application layer
 │   │   │   ├── ProductManager.Application/    # Use cases, CQRS handlers
@@ -112,43 +133,43 @@ src/
 │   │       ├── ProductManager.Shared/         # Common utilities, DTOs
 │   │       └── ProductManager.Constants/      # Application constants
 │   ├── tests/                     # Test projects
-│   │   ├── UnitTests/             # Unit tests (62/62 passing)
-│   │   └── IntegrationTests/      # Integration tests (75/75 passing)
+│   │   ├── UnitTests/             # Unit tests
+│   │   └── IntegrationTests/      # Integration tests
 │   ├── docs/                      # Documentation
 │   │   ├── OData_Integration_Guide.md
-│   │   ├── API_Documentation.md
-│   │   └── Architecture_Decisions.md
+│   │   ├── OData_Integration_Summary.md
+│   │   └── RESTful_API_Analysis.md
+│   ├── docker-compose.yml         # Docker compose configuration
+│   ├── Dockerfile                 # Docker configuration
+│   ├── MonolithArchitecture.sln   # Solution file
 │   └── README.md                  # Detailed setup and implementation guide
-├── MicroservicesArchitecture/      # 🔮 Planned Q3 2025: Microservices implementation
+├── MicroservicesArchitecture/      # � Microservices Architecture (Partial Implementation)
 │   ├── src/
-│   │   ├── ApiGateway/            # API Gateway and routing
-│   │   ├── ProductCatalog/        # Product management service
-│   │   ├── OrderManagement/       # Order processing service
-│   │   ├── CustomerManagement/    # Customer service
-│   │   ├── InventoryManagement/   # Inventory service
-│   │   └── Identity/              # Authentication service
-│   ├── infrastructure/            # Kubernetes, Docker, configs
-│   ├── tests/                     # Service tests, contract tests
+│   │   ├── Gateway/
+│   │   │   └── ApiGateway/        # API Gateway service
+│   │   ├── Services/
+│   │   │   ├── CustomerManagement/# Customer management service
+│   │   │   │   ├── CustomerManagement.API/
+│   │   │   │   ├── CustomerManagement.Application/
+│   │   │   │   ├── CustomerManagement.Domain/
+│   │   │   │   └── CustomerManagement.Infrastructure/
+│   │   │   └── ProductCatalog/    # Product catalog service
+│   │   │       ├── ProductCatalog.API/
+│   │   │       ├── ProductCatalog.Application/
+│   │   │       ├── ProductCatalog.Domain/
+│   │   │       └── ProductCatalog.Infrastructure/
+│   │   └── Shared/                # Shared libraries and contracts
+│   │       ├── Shared.Common/     # Common utilities
+│   │       ├── Shared.Contracts/  # Service contracts
+│   │       └── Shared.Events/     # Domain events
+│   ├── tests/
+│   │   └── UnitTests/             # Unit tests for services
+│   ├── MicroservicesArchitecture.sln
 │   └── README.md                  # Microservices setup guide
-├── EventDrivenArchitecture/        # 🔮 Planned Q4 2025: Event-driven implementation
-│   ├── src/
-│   │   ├── EventStore/            # Event sourcing implementation
-│   │   ├── CommandHandlers/       # Command processing
-│   │   ├── EventHandlers/         # Event processing
-│   │   ├── ReadModels/            # Query projections
-│   │   └── Sagas/                 # Workflow coordination
-│   ├── infrastructure/            # Event infrastructure
-│   ├── tests/                     # Event-driven tests
-│   └── README.md                  # Event-driven setup guide
-└── ServerlessArchitecture/         # 🔮 Planned Q1 2026: Serverless implementation
-    ├── src/
-    │   ├── Functions/             # Azure Functions
-    │   ├── Orchestrators/         # Durable Functions
-    │   ├── Triggers/              # Event triggers
-    │   └── Shared/                # Shared libraries
-    ├── infrastructure/            # ARM templates, Bicep
-    ├── tests/                     # Serverless function tests
-    └── README.md                  # Serverless setup guide
+├── EventDrivenArchitecture/        # 🔮 Event-Driven Architecture (Planned)
+│   └── README.md                  # Architecture planning document
+└── ServerlessArchitecture/         # 🔮 Serverless Architecture (Planned)
+    └── README.md                  # Architecture planning document
 ```
 
 ## 🛠️ Technologies Used
@@ -181,66 +202,127 @@ src/
 
 ## 🎯 Key Features
 
-### 🏛️ Monolithic Architecture (Current - Production Ready)
+### 🏛️ Monolithic Architecture (Current - Implementation Foundation)
 
-#### Business Modules (10 modules with full CRUD + Enhanced Features)
+#### Business Modules (2 Core Modules Fully Implemented)
 
-- ✅ **Product Management** - Complete product lifecycle management with advanced validation
-- ✅ **Category Management** - Hierarchical product categorization system
-- ✅ **Supplier Management** - Vendor and supplier information management
-- ✅ **Customer Management** - Customer profiles and contact information
-- ✅ **Employee Management** - Staff and employee records with roles
-- ✅ **Order Management** - Order processing and tracking with comprehensive workflow
-- ✅ **OrderDetail Management** - Detailed order line items management
-- ✅ **Shipper Management** - Shipping and logistics provider management
-- ✅ **Region Management** - Geographic region management for shipping
-- ✅ **Territory Management** - Sales territory organization and management
+- ✅ **Product Management** - Complete CRUD with Commands (AddOrUpdate, Delete) and Queries (GetById, Gets)
+  - Product entity with category relationship, pricing, stock management
+  - Full CQRS implementation with MediatR handlers
+  - Entity locking support for concurrent modification prevention
+  - Comprehensive validation and error handling
+- ✅ **Category Management** - Complete CRUD with hierarchical support
+  - Category entity with product relationships
+  - Full CQRS implementation with event handlers
+  - Support for category images and descriptions
+  - Comprehensive audit logging
 
-#### Enterprise Technical Features
+#### Enterprise Technical Features Implemented
 
-- 🔐 **Advanced Authentication & Authorization** - JWT-based security with role management
-- �️ **Enhanced Security** - CORS policies, IP whitelisting, request signing, rate limiting
-- 📊 **API Versioning** - Support for multiple API versions (v1.0, v2.0) with flexible strategies
-- 🚀 **Performance Optimization** - Response caching, compression (Gzip/Brotli), entity locking
-- 📝 **Rich API Documentation** - Enhanced Swagger UI with comprehensive documentation
-- � **Entity Locking** - Distributed locking system for concurrent data modification prevention
-- 📈 **Monitoring & Logging** - Comprehensive structured logging with Serilog
-- 🔍 **Health Checks** - Application health monitoring and diagnostics
-- 🛡️ **Security Headers** - Production-grade security headers and best practices
-- 🧪 **Test Coverage** - 137/137 tests passing (Integration + Unit tests)
-- 🏗️ **Clean Domain Models** - Pure domain entities with separate configuration
-- 🎯 **CQRS Implementation** - Complete Command Query Responsibility Segregation
+- 🔐 **Authentication & Authorization** - Complete JWT-based security
 
-### 🔮 Future Architecture Implementations
+  - User login and registration with Identity framework
+  - Refresh token support
+  - Role-based authorization ready
+  - Password validation and security
 
-#### Microservices Architecture (Planned - 2025)
+- 🛡️ **Security Middleware** - 8 middleware components:
 
-- 🌐 **API Gateway** - Centralized entry point with routing and load balancing
-- 🔄 **Service-to-Service Communication** - gRPC/HTTP with service mesh
-- 📨 **Message Queues** - Asynchronous communication with RabbitMQ/Azure Service Bus
-- 🗃️ **Database per Service** - Data isolation and service autonomy
-- 🐳 **Container Orchestration** - Kubernetes deployment with auto-scaling
-- 📊 **Distributed Tracing** - Observability across services with OpenTelemetry
-- 🔒 **Service Security** - OAuth2, mTLS, and service-to-service authentication
-- 🚀 **Independent Deployment** - CI/CD pipelines per service
+  - GlobalExceptionHandlerMiddleware - Centralized exception handling
+  - ApiRequestLoggingMiddleware - Request/response logging
+  - RateLimitingMiddleware - Request throttling (100 req/min default)
+  - AutoEntityLockMiddleware - Automatic entity locking
+  - ActionLoggingFilter - Action-level logging
+  - LoggingStatusCodeMiddleware - Status code logging
+  - CORS Configuration - Environment-specific policies
+  - Response Compression - Gzip and Brotli support
 
-#### Event-Driven Architecture (Planned - 2025)
+- � **API Features**:
 
-- 📡 **Event Sourcing** - Event-based state management with event store
-- 🔔 **Event Bus** - Event distribution mechanism with publish-subscribe patterns
-- 📝 **Saga Pattern** - Distributed transaction management across services
-- 🔄 **CQRS with Event Store** - Advanced CQRS implementation with event replay
-- 🎯 **Event-Driven Microservices** - Services communicating through domain events
-- 📊 **Event Analytics** - Real-time event stream processing and analytics
+  - API Versioning (v1.0, v2.0) with Asp.Versioning
+  - OData support for advanced querying
+  - Swagger/OpenAPI with enhanced UI
+  - Health checks (Database & Application)
+  - XML documentation support
 
-#### Serverless Architecture (Planned - 2025)
+- 🗄️ **Data Access**:
 
-- ⚡ **Azure Functions** - Serverless compute with auto-scaling
-- 🌩️ **Event-driven Triggers** - HTTP, Queue, Timer, and Blob triggers
-- 💰 **Cost-effective Scaling** - Pay-per-execution pricing model
-- 🔗 **Managed Services Integration** - Azure Cosmos DB, Storage, Service Bus
-- 🚀 **Serverless APIs** - HTTP-triggered functions with API Management
-- 📊 **Serverless Analytics** - Event-driven data processing workflows
+  - Entity Framework Core with SQL Server
+  - Repository pattern implementation
+  - Unit of Work pattern
+  - Generic repository with CRUD operations
+  - Audit logging and entity tracking
+
+- � **Logging & Monitoring**:
+
+  - Serilog for structured logging
+  - File and console logging
+  - Request/response logging
+  - Performance monitoring
+  - Audit log entries tracking
+
+- 🧪 **Testing Infrastructure** (17 test files):
+  - **Product Tests** (6 files): AddOrUpdate, Delete, GetById, Gets, CommandQuery, FeatureSummary
+  - **Category Tests** (6 files): AddOrUpdate, Delete, GetById, Gets, CommandQuery, FeatureSummary
+  - **Integration Tests** (5 files): Category, Product, Health, Identity, Logs Controllers
+
+### 🔄 Microservices Architecture (Partial Implementation)
+
+#### Infrastructure Components
+
+- 🌐 **API Gateway** - Fully implemented gateway service:
+
+  - JWT authentication integration
+  - Service proxy with HTTP client
+  - Swagger documentation
+  - Health monitoring
+  - Controllers: Auth, Categories, Products, Orders, Gateway, Health
+  - Request routing and load balancing foundation
+
+- � **CustomerManagement Service** - Complete Clean Architecture layers:
+
+  - **API Layer**: RESTful endpoints with Swagger
+  - **Application Layer**: CQRS with MediatR, validators, mappers
+  - **Domain Layer**: Customer entities, repositories, domain services
+  - **Infrastructure Layer**: EF Core, DbContext, data access
+  - Full dependency injection configuration
+
+- 📦 **ProductCatalog Service** - Complete Clean Architecture layers:
+  - **API Layer**: Product endpoints with full CRUD
+  - **Application Layer**: CQRS implementation
+  - **Domain Layer**: Product domain models
+  - **Infrastructure Layer**: Database access layer
+
+#### Shared Libraries
+
+- **Shared.Common**: String extensions, domain events, EventBus interfaces, exception handling
+- **Shared.Contracts**: BaseContract, Customer/Order/Product contracts for service communication
+- **Shared.Events**: Integration event definitions for order and product events
+
+#### Testing
+
+- Unit test structure for ProductCatalog service
+- Test infrastructure ready for expansion
+
+### � Future Architecture Implementations
+
+#### Event-Driven Architecture (Planned - 2026)
+
+- 📡 **Event Sourcing** - Event-based state management
+- 🔔 **Event Store** - Durable event storage with replay capability
+- 📝 **Saga Pattern** - Distributed transaction management
+- 🔄 **CQRS Enhancement** - Advanced read/write model separation
+- 🎯 **Event Handlers** - Asynchronous event processing
+- 📊 **Event Analytics** - Real-time stream processing
+
+#### Serverless Architecture (Planned - 2026)
+
+- ⚡ **Azure Functions** - HTTP, Event, Timer, Queue functions
+- 🌩️ **Event Triggers** - Event-driven function execution
+- 💰 **Cost Optimization** - Pay-per-execution model
+- 🔗 **Managed Services** - Cosmos DB, Service Bus, Storage integration
+- 🚀 **Auto-scaling** - Serverless compute scaling
+- 📊 **Function Monitoring** - Application Insights integration
 
 ## 🚀 Getting Started
 
@@ -250,31 +332,34 @@ Choose the architectural pattern you want to explore. Each implementation has it
 
 #### ✅ [Monolithic Architecture](src/MonolithArchitecture/README.md)
 
-**Status**: 🟢 **Production Ready** (July 2025)
+**Status**: 🟡 **Implementation Foundation** (October 2025)
 
-- Complete enterprise e-commerce product management system
-- 10 business modules with full CRUD operations and enhanced features
-- 137/137 tests passing (Unit + Integration tests)
-- Advanced API features (versioning, caching, security, documentation)
-- Enterprise-grade security (JWT, CORS, rate limiting, IP whitelisting)
-- Performance optimizations (response caching, compression, entity locking)
-- Docker support with docker-compose for easy deployment
-- **[📖 View Complete Setup Guide →](src/MonolithArchitecture/README.md)**
+- **2 Core Business Modules**: Product Management and Category Management with full CQRS
+- **5 API Controllers**: Product, Category, Identity, Health, Logs
+- **8 Middleware Components**: Exception handling, logging, rate limiting, entity locking, CORS, compression
+- **Enterprise Security**: JWT authentication, refresh tokens, Identity framework
+- **17 Test Files**: 12 unit tests (Product & Category), 5 integration tests
+- **Advanced Features**: API versioning (v1.0, v2.0), OData, Swagger UI, health checks
+- **Note**: Requires solution file path fixes (currently references old paths)
+- **[📖 View Implementation Guide →](src/MonolithArchitecture/README.md)**
 
-#### 🔮 [Microservices Architecture](src/MicroservicesArchitecture/README.md)
+#### 🔄 [Microservices Architecture](src/MicroservicesArchitecture/README.md)
 
-**Status**: 🟡 **Planned for 2025**
+**Status**: 🟡 **Partial Implementation** (October 2025)
 
-- Distributed services architecture based on the proven monolith
-- API Gateway with service mesh and load balancing
-- Service-to-service communication (gRPC/HTTP)
-- Container orchestration with Kubernetes
-- Event-driven communication patterns
-- **[📖 View Architecture Planning →](src/MicroservicesArchitecture/README.md)**
+- **API Gateway**: Complete with 6 controllers (Auth, Categories, Products, Orders, Gateway, Health)
+- **2 Microservices Implemented**:
+  - **CustomerManagement**: Full Clean Architecture (API, Application, Domain, Infrastructure layers)
+  - **ProductCatalog**: Full Clean Architecture with CQRS implementation
+- **Shared Libraries**: 3 shared projects (Common, Contracts, Events)
+- **Event Infrastructure**: EventBus interfaces and integration event support
+- **Testing**: Unit test structure for ProductCatalog
+- **Next Steps**: Add OrderManagement, Inventory, Identity services
+- **[📖 View Implementation Guide →](src/MicroservicesArchitecture/README.md)**
 
 #### 🔮 [Event-Driven Architecture](src/EventDrivenArchitecture/README.md)
 
-**Status**: 🟡 **Planned for 2025**
+**Status**: 🟡 **Planned for 2026**
 
 - Event Sourcing implementation with event store
 - Message-driven communication with publish-subscribe patterns
@@ -284,7 +369,7 @@ Choose the architectural pattern you want to explore. Each implementation has it
 
 #### 🔮 [Serverless Architecture](src/ServerlessArchitecture/README.md)
 
-**Status**: 🟡 **Planned for 2025**
+**Status**: 🟡 **Planned for 2026**
 
 - Azure Functions implementation
 - Event-driven triggers with auto-scaling
@@ -332,34 +417,40 @@ All implementations share these common requirements:
 
 **Recommended order for studying the implementations:**
 
-1. **🏛️ Monolithic Architecture** (Available Now)
+1. **🏛️ Monolithic Architecture** (Available Now - 70% Complete)
 
-   - Master Clean Architecture fundamentals
-   - Understand DDD principles and patterns
-   - Learn enterprise-grade API development
-   - Experience comprehensive testing strategies
+   - Master Clean Architecture fundamentals with 4-layer separation
+   - Understand DDD principles through Product and Category modules
+   - Learn CQRS pattern with MediatR implementation
+   - Experience enterprise API development with versioning and OData
+   - Study comprehensive security implementation (JWT, middleware, rate limiting)
+   - Practice testing strategies with 17 test examples
 
-2. **🔮 Microservices Architecture** (Planned 2025)
+2. **� Microservices Architecture** (In Progress - 40% Complete)
 
-   - Learn distributed systems concepts
-   - Understand service decomposition strategies
-   - Master inter-service communication patterns
-   - Explore container orchestration
+   - Learn service decomposition strategies
+   - Understand API Gateway patterns and routing
+   - Master inter-service communication with shared contracts
+   - Explore database-per-service pattern
+   - Study event-driven communication infrastructure
+   - Practice distributed system testing
 
-3. **🔮 Event-Driven Architecture** (Planned 2025)
+3. **🔮 Event-Driven Architecture** (Planned 2026)
 
-   - Understand event-based patterns
-   - Learn event sourcing and CQRS advanced concepts
-   - Master asynchronous communication
+   - Understand event-based patterns and event sourcing
+   - Learn CQRS advanced concepts with event store
+   - Master asynchronous communication patterns
    - Explore saga patterns for distributed transactions
+   - Study eventual consistency strategies
 
-4. **🔮 Serverless Architecture** (Planned 2025)
+4. **🔮 Serverless Architecture** (Planned 2026)
    - Explore cloud-native serverless approaches
-   - Learn function-based architecture
-   - Understand event-driven triggers
-   - Master cost-effective scaling strategies
+   - Learn function-based architecture patterns
+   - Understand event-driven triggers and scaling
+   - Master Azure managed services integration
+   - Study cost-effective scaling strategies
 
-Each architectural pattern builds upon concepts from the previous ones, creating a comprehensive learning experience that covers the spectrum from monolithic to distributed systems.
+Each architectural pattern builds upon concepts from the previous ones, creating a comprehensive learning experience from monolithic to distributed systems.
 
 ## 👨‍💻 Development Guide
 
@@ -385,40 +476,62 @@ Each architectural pattern builds upon concepts from the previous ones, creating
 
 ## 🧪 Testing
 
-The project has comprehensive test coverage with enterprise-grade testing strategies:
+The project has comprehensive test infrastructure with enterprise-grade testing strategies:
 
-### Current Test Status (137/137 Passing)
+### Current Test Status
 
-#### Unit Tests (62/62 Passing)
+#### Monolithic Architecture - 17 Test Files
 
-- **Application Layer Tests** - Complete coverage of CQRS handlers
-- **Domain Logic Tests** - Business rules and entity validation
-- **Product Feature Tests** - Full CRUD operations testing
-- **Command/Query Tests** - Comprehensive command and query validation
-- **Error Handling Tests** - Exception scenarios and edge cases
-- **Mock Integration Tests** - Proper dependency mocking with Moq
+**Unit Tests** (12 files in `tests/UnitTests/Application/`):
 
-#### Integration Tests (75/75 Passing)
+- **Product Module Tests** (6 files):
 
-- **API Endpoint Tests** - End-to-end API testing for all modules
-- **Database Tests** - Data access layer validation
-- **Controller Tests** - HTTP response validation and status codes
-- **Business Module Tests** - Complete CRUD testing for 10 modules
-- **Authentication Tests** - JWT and security feature testing
-- **Middleware Tests** - Request/response pipeline validation
+  - `AddOrUpdateProductHandlerTests.cs` - Create/update product tests
+  - `DeleteProductHandlerTests.cs` - Product deletion tests
+  - `GetProductByIdHandlerTests.cs` - Single product retrieval tests
+  - `GetProductsHandlerTests.cs` - Product list query tests
+  - `ProductCommandQueryTests.cs` - Command/query validation tests
+  - `ProductFeatureSummaryTests.cs` - Feature integration tests
+
+- **Category Module Tests** (6 files):
+  - `AddOrUpdateCategoryHandlerTests.cs` - Create/update category tests
+  - `DeleteCategoryHandlerTests.cs` - Category deletion tests
+  - `GetCategoryByIdHandlerTests.cs` - Single category retrieval tests
+  - `GetCategoriesHandlerTests.cs` - Category list query tests
+  - `CategoryCommandQueryTests.cs` - Command/query validation tests
+  - `CategoryFeatureSummaryTests.cs` - Feature integration tests
+
+**Integration Tests** (5 files in `tests/IntegrationTests/Controllers/`):
+
+- `ProductControllerTests.cs` - Product API endpoint tests
+- `CategoryControllerTests.cs` - Category API endpoint tests
+- `HealthControllerTests.cs` - Health check endpoint tests
+- `IdentityControllerTests.cs` - Authentication/authorization tests
+- `LogsControllerTests.cs` - Logging endpoint tests
+
+#### Microservices Architecture
+
+- Unit test structure available for ProductCatalog service
+- Test infrastructure ready for expansion
 
 ### Test Architecture
 
-- **Test Isolation** - Each test runs in isolation with proper cleanup
+- **Test Isolation** - Each test runs independently with proper setup/cleanup
 - **Realistic Data** - AutoFixture for generating test data
-- **Dependency Mocking** - Moq framework for clean unit tests
-- **Test Patterns** - Standardized AAA (Arrange-Act-Assert) pattern
-- **CI/CD Integration** - Automated testing in build pipelines
+- **Dependency Mocking** - Moq framework for unit tests
+- **Test Patterns** - AAA (Arrange-Act-Assert) pattern
+- **Custom Factory** - `CustomWebApplicationFactory.cs` for integration tests
 
 ### Running Tests
 
 ```bash
-# Run all tests
+# Navigate to the monolithic architecture
+cd src/MonolithArchitecture
+
+# Restore dependencies (required due to solution file path issues)
+dotnet restore
+
+# Run all tests (after fixing solution file paths)
 dotnet test
 
 # Run with detailed output
@@ -436,6 +549,10 @@ dotnet test tests/UnitTests/
 # Run specific test category
 dotnet test --filter Category=Product
 ```
+
+### Known Issues
+
+⚠️ **Solution File Path Issue**: The `MonolithArchitecture.sln` file contains references to old paths (`d:\NetCore\CleanArchitecture\...`). Tests can be run individually from project directories, but the solution file needs path corrections.
 
 ## 📚 Documentation
 
@@ -477,19 +594,42 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ### 🎯 Project Roadmap
 
-- **Q3 2025**: Microservices Architecture implementation
-- **Q4 2025**: Event-Driven Architecture with Event Sourcing
-- **Q1 2026**: Serverless Architecture with Azure Functions
-- **Q2 2026**: Performance benchmarking across all architectures
+- **Q4 2025**:
+  - Fix Monolithic solution file path issues
+  - Complete testing and validation of existing features
+  - Add more business modules to Monolithic architecture
+- **Q1 2026**:
+  - Complete Microservices Architecture with OrderManagement and Inventory services
+  - Implement inter-service communication patterns
+  - Add distributed tracing and monitoring
+- **Q2 2026**:
+  - Event-Driven Architecture implementation
+  - Event Sourcing with event store
+  - Saga pattern for distributed transactions
+- **Q3 2026**:
+  - Serverless Architecture with Azure Functions
+  - Cloud-native managed services integration
+- **Q4 2026**:
+  - Performance benchmarking across all architectures
+  - Complete documentation and deployment guides
 
 ### 🔄 Architecture Evolution
 
 This project demonstrates the evolution from a well-designed monolith to distributed architectures:
 
-1. **Monolithic Foundation** (Current) - Solid, production-ready base
-2. **Microservices Decomposition** - Service boundary identification
-3. **Event-Driven Transformation** - Async communication patterns
-4. **Serverless Optimization** - Cloud-native scaling strategies
+1. **Monolithic Foundation** (Current) - 2 core modules with full CQRS, JWT security, and enterprise middleware
+2. **Microservices Decomposition** (In Progress) - API Gateway + 2 services with shared libraries and event infrastructure
+3. **Event-Driven Transformation** (Planned) - Async communication with event sourcing
+4. **Serverless Optimization** (Planned) - Cloud-native scaling with Azure Functions
+
+### 📊 Current Implementation Status
+
+| Architecture      | Status              | Progress | Core Features                                    |
+| ----------------- | ------------------- | -------- | ------------------------------------------------ |
+| **Monolithic**    | 🟡 Foundation Ready | 70%      | 2 modules, 5 controllers, 8 middleware, 17 tests |
+| **Microservices** | 🟡 Partial          | 40%      | API Gateway, 2 services, shared libraries        |
+| **Event-Driven**  | 🔵 Planned          | 0%       | Documentation ready                              |
+| **Serverless**    | 🔵 Planned          | 0%       | Documentation ready                              |
 
 ---
 
