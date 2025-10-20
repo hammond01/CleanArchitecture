@@ -6,33 +6,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.IntegrationTests", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\tests\IntegrationTests\ProductManager.IntegrationTests.csproj", "{9C9DA5DB-D04C-5E6D-AC3A-478E84A2C741}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.IntegrationTests", "tests\IntegrationTests\ProductManager.IntegrationTests.csproj", "{9C9DA5DB-D04C-5E6D-AC3A-478E84A2C741}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.UnitTests", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\tests\UnitTests\ProductManager.UnitTests.csproj", "{39FE01DB-6439-52A4-6E02-AA57C0CAB618}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.UnitTests", "tests\UnitTests\ProductManager.UnitTests.csproj", "{39FE01DB-6439-52A4-6E02-AA57C0CAB618}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{22BAF98C-8415-17C4-B26A-D537657BC863}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Application", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\src\Application\ProductManager.Application\ProductManager.Application.csproj", "{8ED1B129-3A95-292C-C6DF-1FF71F209F42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Application", "src\Application\ProductManager.Application\ProductManager.Application.csproj", "{8ED1B129-3A95-292C-C6DF-1FF71F209F42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Domain", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\src\Application\ProductManager.Domain\ProductManager.Domain.csproj", "{04E35B1A-ECA0-89C3-0DF3-39EF55BC20D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Domain", "src\Application\ProductManager.Domain\ProductManager.Domain.csproj", "{04E35B1A-ECA0-89C3-0DF3-39EF55BC20D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCuttingConcerns", "CrossCuttingConcerns", "{2AD9C66C-F8F2-920F-8520-F9A39D45BA08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Constants", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\src\CrossCuttingConcerns\ProductManager.Constants\ProductManager.Constants.csproj", "{0A02AADE-F616-8AB4-A904-4A04174BFAE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Constants", "src\CrossCuttingConcerns\ProductManager.Constants\ProductManager.Constants.csproj", "{0A02AADE-F616-8AB4-A904-4A04174BFAE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Shared", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\src\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj", "{1549E25F-BF37-ED84-F098-45DA3D8EB898}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Shared", "src\CrossCuttingConcerns\ProductManager.Shared\ProductManager.Shared.csproj", "{1549E25F-BF37-ED84-F098-45DA3D8EB898}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{9048EB7F-3875-A59E-E36B-5BD4C6F2A282}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Infrastructure", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\src\Infrastructure\ProductManager.Infrastructure\ProductManager.Infrastructure.csproj", "{16F9A533-0FBF-22EE-42F4-CE626C26DA24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Infrastructure", "src\Infrastructure\ProductManager.Infrastructure\ProductManager.Infrastructure.csproj", "{16F9A533-0FBF-22EE-42F4-CE626C26DA24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Persistence", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\src\Infrastructure\ProductManager.Persistence\ProductManager.Persistence.csproj", "{8C5FA0C7-59CB-E674-63E3-EA74A62A4F7B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Persistence", "src\Infrastructure\ProductManager.Persistence\ProductManager.Persistence.csproj", "{8C5FA0C7-59CB-E674-63E3-EA74A62A4F7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{6996BBF7-DB31-59BC-C7DD-9A7CCC6138C4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIs", "APIs", "{B30188F9-C182-205C-1345-556CCEAD2DA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Api", "d:\NetCore\CleanArchitecture\src\MonolithArchitecture\src\Presentation\APIs\ProductManager.Api\ProductManager.Api.csproj", "{365DC247-F572-E1C2-99D7-B6DED8863B6D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Api", "src\Presentation\APIs\ProductManager.Api\ProductManager.Api.csproj", "{365DC247-F572-E1C2-99D7-B6DED8863B6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
