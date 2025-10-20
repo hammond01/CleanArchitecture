@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using ProductManager.Shared.DTOs.ProductDto;
 using Xunit;
+
 namespace ProductManager.IntegrationTests.Controllers;
 
 public class ProductControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
@@ -65,8 +66,22 @@ public class ProductControllerTests : IClassFixture<CustomWebApplicationFactory<
     [Fact]
     public async Task GetProduct_WithValidId_ShouldReturnOkResult()
     {
-        // Arrange
-        var productId = "test-product-1"; // Use seeded test data
+        // Arrange - First create a product
+        var createDto = new CreateProductDto
+        {
+            ProductName = "Test Product for Get",
+            CategoryId = "test-cat-get",
+            UnitPrice = 99.99m,
+            UnitsInStock = 10,
+            UnitsOnOrder = 0,
+            Discontinued = false,
+            QuantityPerUnit = "1 unit",
+            ReorderLevel = 5
+        };
+
+        var createResponse = await _client.PostAsJsonAsync("/api/v1.0/products", createDto);
+        var createdProduct = await createResponse.Content.ReadFromJsonAsync<GetProductDto>();
+        var productId = createdProduct?.Id;
 
         // Act
         var response = await _client.GetAsync($"/api/v1.0/products/{productId}");
