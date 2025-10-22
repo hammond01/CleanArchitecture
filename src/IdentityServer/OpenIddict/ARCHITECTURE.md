@@ -109,10 +109,11 @@ Presentation ──> Application ──> Domain <── Infrastructure
 ```
 
 **Rules:**
-- Domain has NO dependencies (pure business logic)
-- Application depends ONLY on Domain
-- Infrastructure depends on Domain and Application (implements interfaces)
-- Presentation depends on all layers (composition root)
+
+-   Domain has NO dependencies (pure business logic)
+-   Application depends ONLY on Domain
+-   Infrastructure depends on Domain and Application (implements interfaces)
+-   Presentation depends on all layers (composition root)
 
 ---
 
@@ -432,109 +433,123 @@ OpenIddictTokens
 ## Technology Stack
 
 ### Backend
-- **.NET 8.0** - Latest LTS
-- **ASP.NET Core Identity** - User management
-- **OpenIddict** - OAuth2/OIDC server
-- **Entity Framework Core** - ORM
-- **SQL Server** - Database
-- **Mediator** - CQRS pattern (source generator)
-- **MailKit** - Email sending
-- **QRCoder** - QR code generation
+
+-   **.NET 8.0** - Latest LTS
+-   **ASP.NET Core Identity** - User management
+-   **OpenIddict** - OAuth2/OIDC server
+-   **Entity Framework Core** - ORM
+-   **SQL Server** - Database
+-   **Mediator** - CQRS pattern (source generator)
+-   **MailKit** - Email sending
+-   **QRCoder** - QR code generation
 
 ### Frontend
-- **Razor Pages** - Server-side rendering
-- **Tailwind CSS** - Utility-first CSS
-- **Alpine.js** - Lightweight JavaScript
-- **Chart.js** - Data visualization
+
+-   **Razor Pages** - Server-side rendering
+-   **Tailwind CSS** - Utility-first CSS
+-   **Alpine.js** - Lightweight JavaScript
+-   **Chart.js** - Data visualization
 
 ### Testing
-- **xUnit** - Test framework
-- **Moq** - Mocking
-- **FluentAssertions** - Fluent assertions
-- **TestContainers** - Docker containers for testing
+
+-   **xUnit** - Test framework
+-   **Moq** - Mocking
+-   **FluentAssertions** - Fluent assertions
+-   **TestContainers** - Docker containers for testing
 
 ### DevOps
-- **Docker** - Containerization
-- **GitHub Actions** - CI/CD
-- **Azure** / **AWS** - Cloud hosting
+
+-   **Docker** - Containerization
+-   **GitHub Actions** - CI/CD
+-   **Azure** / **AWS** - Cloud hosting
 
 ---
 
 ## Security Measures
 
 ### Password Security
-- [x] Minimum 8 characters
-- [x] Require uppercase, lowercase, digit, special char
-- [x] Password hashing (ASP.NET Core Identity default)
-- [x] Account lockout after 5 failed attempts
-- [ ] Password history (prevent reuse)
-- [ ] Password expiration policy
+
+-   [x] Minimum 8 characters
+-   [x] Require uppercase, lowercase, digit, special char
+-   [x] Password hashing (ASP.NET Core Identity default)
+-   [x] Account lockout after 5 failed attempts
+-   [ ] Password history (prevent reuse)
+-   [ ] Password expiration policy
 
 ### Account Security
-- [x] Email confirmation required
-- [ ] Two-factor authentication (TOTP)
-- [ ] Session management
-- [ ] Security audit logs
-- [ ] Suspicious activity alerts
+
+-   [x] Email confirmation required
+-   [ ] Two-factor authentication (TOTP)
+-   [ ] Session management
+-   [ ] Security audit logs
+-   [ ] Suspicious activity alerts
 
 ### API Security
-- [ ] Rate limiting (per IP, per user)
-- [ ] CORS configuration
-- [ ] Security headers (CSP, HSTS, etc.)
-- [ ] Input validation
-- [ ] SQL injection prevention (EF Core)
-- [ ] XSS prevention (Razor encoding)
-- [ ] CSRF protection (anti-forgery tokens)
+
+-   [ ] Rate limiting (per IP, per user)
+-   [ ] CORS configuration
+-   [ ] Security headers (CSP, HSTS, etc.)
+-   [ ] Input validation
+-   [ ] SQL injection prevention (EF Core)
+-   [ ] XSS prevention (Razor encoding)
+-   [ ] CSRF protection (anti-forgery tokens)
 
 ### Token Security
-- [x] JWT tokens with expiration
-- [x] Refresh token rotation
-- [ ] Token revocation
-- [x] HTTPS only
-- [x] Secure cookie flags
+
+-   [x] JWT tokens with expiration
+-   [x] Refresh token rotation
+-   [ ] Token revocation
+-   [x] HTTPS only
+-   [x] Secure cookie flags
 
 ---
 
 ## Performance Optimization
 
 ### Database
-- [ ] Proper indexing (Email, UserName, CreatedAt)
-- [ ] Query optimization (eager loading vs lazy loading)
-- [ ] Connection pooling
-- [ ] Pagination for large datasets
+
+-   [ ] Proper indexing (Email, UserName, CreatedAt)
+-   [ ] Query optimization (eager loading vs lazy loading)
+-   [ ] Connection pooling
+-   [ ] Pagination for large datasets
 
 ### Caching
-- [ ] Memory cache for frequently accessed data
-- [ ] Distributed cache (Redis) for scalability
-- [ ] Response caching for static content
+
+-   [ ] Memory cache for frequently accessed data
+-   [ ] Distributed cache (Redis) for scalability
+-   [ ] Response caching for static content
 
 ### API
-- [ ] Async/await everywhere
-- [ ] Compression (Gzip, Brotli)
-- [ ] CDN for static assets
-- [ ] API versioning
+
+-   [ ] Async/await everywhere
+-   [ ] Compression (Gzip, Brotli)
+-   [ ] CDN for static assets
+-   [ ] API versioning
 
 ---
 
 ## Scalability Considerations
 
 ### Horizontal Scaling
-- [ ] Stateless API design
-- [ ] Distributed caching (Redis)
-- [ ] Load balancer configuration
-- [ ] Session affinity (if needed)
+
+-   [ ] Stateless API design
+-   [ ] Distributed caching (Redis)
+-   [ ] Load balancer configuration
+-   [ ] Session affinity (if needed)
 
 ### Database Scaling
-- [ ] Read replicas for queries
-- [ ] Write master for commands
-- [ ] Database sharding (future)
-- [ ] Connection pooling
+
+-   [ ] Read replicas for queries
+-   [ ] Write master for commands
+-   [ ] Database sharding (future)
+-   [ ] Connection pooling
 
 ### Monitoring
-- [ ] Application Insights / Prometheus
-- [ ] Health checks endpoint
-- [ ] Log aggregation (ELK stack)
-- [ ] Performance metrics
+
+-   [ ] Application Insights / Prometheus
+-   [ ] Health checks endpoint
+-   [ ] Log aggregation (ELK stack)
+-   [ ] Performance metrics
 
 ---
 
@@ -580,29 +595,32 @@ OpenIddictTokens
 ## Best Practices
 
 ### Code Quality
-- Follow SOLID principles
-- Keep Clean Architecture boundaries
-- Write unit and integration tests
-- Use meaningful names
-- Document complex logic
-- Code reviews
+
+-   Follow SOLID principles
+-   Keep Clean Architecture boundaries
+-   Write unit and integration tests
+-   Use meaningful names
+-   Document complex logic
+-   Code reviews
 
 ### Security
-- Never trust user input
-- Validate everything
-- Use parameterized queries
-- Keep dependencies updated
-- Regular security audits
-- Follow OWASP guidelines
+
+-   Never trust user input
+-   Validate everything
+-   Use parameterized queries
+-   Keep dependencies updated
+-   Regular security audits
+-   Follow OWASP guidelines
 
 ### Performance
-- Minimize database round-trips
-- Use async/await properly
-- Cache appropriately
-- Monitor and profile
-- Optimize hot paths
+
+-   Minimize database round-trips
+-   Use async/await properly
+-   Cache appropriately
+-   Monitor and profile
+-   Optimize hot paths
 
 ---
 
-**Last Updated**: October 22, 2025  
+**Last Updated**: October 22, 2025
 **Version**: 1.0.0-alpha
