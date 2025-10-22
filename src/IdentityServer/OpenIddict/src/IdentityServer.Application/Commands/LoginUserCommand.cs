@@ -1,4 +1,4 @@
-using IdentityServer.Application.DTOs;
+using IdentityServer.Domain.Contracts;
 using IdentityServer.Domain.Common;
 using Mediator;
 

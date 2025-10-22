@@ -1,12 +1,9 @@
 using IdentityServer.Domain.Entities;
+using IdentityServer.Domain.Contracts;
 using IdentityServer.Infrastructure.Data;
+using IdentityServer.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using OpenIddict.Abstractions;
-using static OpenIddict.Abstractions.OpenIddictConstants;
-using Mediator;
-using IdentityServer.Application.Interfaces;
-using IdentityServer.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -108,7 +105,7 @@ builder.Services.AddMediator(options =>
 });
 
 // Register IdentityService implementation
-builder.Services.AddScoped<IdentityServer.Application.Interfaces.IIdentityService, IdentityServer.Infrastructure.Services.IdentityService>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 // Add API explorer and Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -138,5 +135,12 @@ app.MapControllers();
 app.MapRazorPages();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
+
+// Seed OpenIddict clients and scopes
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = new OpenIddictSeeder(scope.ServiceProvider);
+    await seeder.SeedAsync();
+}
 
 app.Run();

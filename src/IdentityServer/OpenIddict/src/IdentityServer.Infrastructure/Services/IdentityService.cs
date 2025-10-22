@@ -1,5 +1,4 @@
-using IdentityServer.Application.DTOs;
-using IdentityServer.Application.Interfaces;
+using IdentityServer.Domain.Contracts;
 using IdentityServer.Domain.Entities;
 using IdentityServer.Domain.Common;
 using IdentityServer.Infrastructure.Data;

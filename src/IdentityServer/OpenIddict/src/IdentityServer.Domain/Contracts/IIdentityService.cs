@@ -1,7 +1,6 @@
-using IdentityServer.Application.DTOs;
 using IdentityServer.Domain.Common;
 
-namespace IdentityServer.Application.Interfaces;
+namespace IdentityServer.Domain.Contracts;
 
 public interface IIdentityService
 {
