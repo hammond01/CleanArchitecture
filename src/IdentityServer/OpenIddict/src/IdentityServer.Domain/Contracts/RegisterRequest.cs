@@ -1,4 +1,4 @@
-namespace IdentityServer.Application.DTOs;
+namespace IdentityServer.Domain.Contracts;
 
 public class RegisterRequest
 {

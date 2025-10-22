@@ -1,0 +1,89 @@
+### Identity Server API Tests
+
+@baseUrl = http://localhost:5218
+@contentType = application/json
+
+### 1. Health Check - Get Swagger
+GET {{baseUrl}}/swagger/index.html
+
+### 2. Register a new user
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "userName": "testuser",
+  "email": "testuser@example.com",
+  "password": "Test@123456",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+### 3. Login with username
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "userNameOrEmail": "testuser",
+  "password": "Test@123456",
+  "rememberMe": true
+}
+
+### 4. Login with email
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "userNameOrEmail": "testuser@example.com",
+  "password": "Test@123456",
+  "rememberMe": false
+}
+
+### 5. Get current user info (requires token)
+GET {{baseUrl}}/api/auth/me
+Authorization: Bearer YOUR_TOKEN_HERE
+
+### 6. Register - Test validation error (empty fields)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "userName": "",
+  "email": "",
+  "password": "",
+  "firstName": "",
+  "lastName": ""
+}
+
+### 7. Register - Test duplicate username
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "userName": "testuser",
+  "email": "another@example.com",
+  "password": "Test@123456",
+  "firstName": "Another",
+  "lastName": "User"
+}
+
+### 8. Login - Test wrong password
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "userNameOrEmail": "testuser",
+  "password": "WrongPassword123",
+  "rememberMe": false
+}
+
+### 9. Register another user
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "userName": "john.doe",
+  "email": "john.doe@example.com",
+  "password": "JohnDoe@2024",
+  "firstName": "John",
+  "lastName": "Doe"
+}

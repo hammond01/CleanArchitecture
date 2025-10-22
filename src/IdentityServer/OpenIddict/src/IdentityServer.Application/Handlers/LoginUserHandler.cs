@@ -1,5 +1,5 @@
 using Mediator;
-using IdentityServer.Application.Interfaces;
+using IdentityServer.Domain.Contracts;
 using IdentityServer.Domain.Common;
 
 namespace IdentityServer.Application.Handlers;
