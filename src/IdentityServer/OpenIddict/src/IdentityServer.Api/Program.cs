@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
+using Mediator;
+using IdentityServer.Application.Interfaces;
+using IdentityServer.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,6 +99,16 @@ builder.Services.AddAuthorization();
 // Add controllers and Razor Pages
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
+
+// Register Mediator (source generator will wire handlers automatically)
+// Use Scoped lifetime for handlers to match scoped dependencies (like IIdentityService)
+builder.Services.AddMediator(options =>
+{
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+});
+
+// Register IdentityService implementation
+builder.Services.AddScoped<IdentityServer.Application.Interfaces.IIdentityService, IdentityServer.Infrastructure.Services.IdentityService>();
 
 // Add API explorer and Swagger
 builder.Services.AddEndpointsApiExplorer();
