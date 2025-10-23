@@ -1,0 +1,16 @@
+### Simple JSON Login (sử dụng cho Web UI)
+POST http://localhost:5000/api/authentication/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@123456"
+}
+
+### Test JWT Protected Endpoint - Dashboard Stats
+GET http://localhost:5000/api/admin/dashboard/stats
+Authorization: Bearer {{$dotenv ACCESS_TOKEN}}
+
+### Test JWT Protected Endpoint - Users List
+GET http://localhost:5000/api/admin/users?page=1&pageSize=10
+Authorization: Bearer {{$dotenv ACCESS_TOKEN}}
