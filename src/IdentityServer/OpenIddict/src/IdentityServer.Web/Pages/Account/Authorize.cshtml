@@ -1,0 +1,190 @@
+@page
+@model IdentityServer.Web.Pages.Account.AuthorizeModel
+@{
+    ViewData["Title"] = "Authorization Required";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div
+    class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="max-w-md w-full">
+        <!-- Card Container -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-8 text-center">
+                <div class="mx-auto w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-white mb-2">
+                    Authorization Request
+                </h1>
+                <p class="text-primary-100 text-sm">
+                    @Model.ApplicationName wants to access your account
+                </p>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-8">
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg" role="alert">
+                        <p class="font-medium">@Model.ErrorMessage</p>
+                    </div>
+                }
+
+                <!-- User Info -->
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-primary-700 font-semibold text-lg">
+                                @Model.UserName?.Substring(0, 1).ToUpper()
+                            </span>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Signing in as</p>
+                            <p class="font-medium text-gray-900">@Model.UserName</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Application Info -->
+                <div class="mb-6">
+                    <h3 class="font-semibold text-gray-900 mb-2">Application Details</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Client ID:</span>
+                            <span class="font-mono text-gray-900">@Model.ClientId</span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.RedirectUri))
+                        {
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Redirect URI:</span>
+                                <span class="font-mono text-xs text-gray-900 truncate max-w-xs" title="@Model.RedirectUri">
+                                    @Model.RedirectUri
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Requested Scopes/Permissions -->
+                @if (Model.RequestedScopes?.Any() == true)
+                {
+                    <div class="mb-6">
+                        <h3 class="font-semibold text-gray-900 mb-3">This application will be able to:</h3>
+                        <ul class="space-y-2">
+                            @foreach (var scope in Model.RequestedScopes)
+                            {
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <p class="text-gray-900 font-medium">@GetScopeDisplayName(scope)</p>
+                                        <p class="text-xs text-gray-600">@GetScopeDescription(scope)</p>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <!-- Warning Message -->
+                <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                    <div class="flex">
+                        <svg class="w-5 h-5 text-amber-600 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div class="text-sm text-amber-800">
+                            <p class="font-medium mb-1">Only authorize applications you trust</p>
+                            <p>By allowing this, you give the application access to your information according to their
+                                terms of service and privacy policy.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <form method="post">
+                    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+
+                    <div class="flex space-x-3">
+                        <button type="submit" name="action" value="deny"
+                            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-150">
+                            <span class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Deny
+                            </span>
+                        </button>
+
+                        <button type="submit" name="action" value="allow"
+                            class="flex-1 px-4 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-150">
+                            <span class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Allow
+                            </span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Not You Link -->
+                <div class="mt-6 text-center">
+                    <a asp-page="/Account/Logout" asp-route-returnUrl="@Model.ReturnUrl"
+                        class="text-sm text-primary-600 hover:text-primary-500">
+                        Not you? Sign in with a different account
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Privacy Notice -->
+        <div class="mt-6 text-center">
+            <p class="text-xs text-gray-600">
+                By continuing, you agree to our
+                <a href="/terms" class="text-primary-600 hover:underline">Terms of Service</a>
+                and
+                <a href="/privacy" class="text-primary-600 hover:underline">Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private string GetScopeDisplayName(string scope)
+    {
+        return scope switch
+        {
+            "openid" => "Access your basic profile",
+            "profile" => "Access your full profile information",
+            "email" => "Access your email address",
+            "offline_access" => "Access your data offline",
+            "roles" => "Access your roles and permissions",
+            _ => $"Access '{scope}'"
+        };
+    }
+
+    private string GetScopeDescription(string scope)
+    {
+        return scope switch
+        {
+            "openid" => "Your unique identifier and basic profile",
+            "profile" => "Name, username, and profile picture",
+            "email" => "Your email address for communication",
+            "offline_access" => "Refresh tokens for long-term access",
+            "roles" => "Your assigned roles and permissions",
+            _ => $"Additional permission: {scope}"
+        };
+    }
+}

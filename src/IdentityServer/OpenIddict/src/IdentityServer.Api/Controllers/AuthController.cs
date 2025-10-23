@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
         _logger.LogWarning("Registration failed for {Email}: {Error}", request.Email, result.ErrorMessage);
         return BadRequest(new ErrorResponse
         {
-            Error = result.ErrorMessage,
+            Error = result.ErrorMessage ?? "",
             Errors = result.Errors
         });
     }

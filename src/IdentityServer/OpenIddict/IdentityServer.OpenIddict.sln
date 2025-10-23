@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.Api", "src\IdentityServer.Api\IdentityServer.Api.csproj", "{C644F94C-89A4-41C0-A15B-D1AE84FEA04C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.Web", "src\IdentityServer.Web\IdentityServer.Web.csproj", "{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,18 @@ Global
 		{C644F94C-89A4-41C0-A15B-D1AE84FEA04C}.Release|x64.Build.0 = Release|Any CPU
 		{C644F94C-89A4-41C0-A15B-D1AE84FEA04C}.Release|x86.ActiveCfg = Release|Any CPU
 		{C644F94C-89A4-41C0-A15B-D1AE84FEA04C}.Release|x86.Build.0 = Release|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Debug|x64.Build.0 = Debug|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Debug|x86.Build.0 = Debug|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Release|x64.ActiveCfg = Release|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Release|x64.Build.0 = Release|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Release|x86.ActiveCfg = Release|Any CPU
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +94,6 @@ Global
 		{4EE7A650-8A6B-4D03-91ED-320370773CDF} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{FB0BCFA0-9CCF-4789-825A-3FF5E828E0C9} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{C644F94C-89A4-41C0-A15B-D1AE84FEA04C} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{901E07BC-CAB3-4E2F-8035-2107B1ECA15E} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

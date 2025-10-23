@@ -2,6 +2,7 @@ using IdentityServer.Domain.Entities;
 using IdentityServer.Domain.Contracts;
 using IdentityServer.Infrastructure.Data;
 using IdentityServer.Infrastructure.Services;
+using IdentityServer.Api.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,11 +53,9 @@ builder.Services.AddOpenIddict()
     // Register the OpenIddict server components
     .AddServer(options =>
     {
-        // Enable authorization, logout, token and userinfo endpoints
+        // Enable authorization and token endpoints (OpenIddict 7.x simplified API)
         options.SetAuthorizationEndpointUris("/connect/authorize")
-            .SetLogoutEndpointUris("/connect/logout")
-            .SetTokenEndpointUris("/connect/token")
-            .SetUserinfoEndpointUris("/connect/userinfo");
+            .SetTokenEndpointUris("/connect/token");
 
         // Enable authorization code, refresh token, and client credentials flows
         options.AllowAuthorizationCodeFlow()
@@ -74,10 +73,9 @@ builder.Services.AddOpenIddict()
         // Register ASP.NET Core host
         options.UseAspNetCore()
             .EnableAuthorizationEndpointPassthrough()
-            .EnableLogoutEndpointPassthrough()
             .EnableTokenEndpointPassthrough()
-            .EnableUserinfoEndpointPassthrough()
-            .EnableStatusCodePagesIntegration();
+            .EnableStatusCodePagesIntegration()
+            .DisableTransportSecurityRequirement(); // Allow HTTP for development
     })
 
     // Register the OpenIddict validation components
@@ -87,11 +85,30 @@ builder.Services.AddOpenIddict()
         options.UseAspNetCore();
     });
 
-// Add authentication
-builder.Services.AddAuthentication();
+// Configure authentication with OpenIddict
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+});
 
 // Add authorization
 builder.Services.AddAuthorization();
+
+// Configure CORS for Web Admin UI
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AdminUI", policy =>
+    {
+        policy.WithOrigins(
+                "https://localhost:5003", // Web project HTTPS
+                "http://localhost:5002"   // Web project HTTP
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 // Add controllers and Razor Pages
 builder.Services.AddControllers();
@@ -107,14 +124,58 @@ builder.Services.AddMediator(options =>
 // Register IdentityService implementation
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 
+// Register JWT Token Service
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+// Register HttpClient for internal API calls
+builder.Services.AddHttpClient();
+
 // Add API explorer and Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new() { Title = "Identity Server API", Version = "v1" });
+
+    // Add JWT Bearer authentication to Swagger
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token",
+        Name = "Authorization",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 var app = builder.Build();
+
+// Log cookies for debugging
+app.Use(async (context, next) =>
+{
+    var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+    logger.LogInformation("=== Request: {Method} {Path}", context.Request.Method, context.Request.Path);
+    logger.LogInformation("Cookies: {Cookies}", string.Join(", ", context.Request.Cookies.Select(c => $"{c.Key}={c.Value.Substring(0, Math.Min(20, c.Value.Length))}...")));
+    logger.LogInformation("User authenticated: {IsAuth}, Identity: {Identity}", context.User?.Identity?.IsAuthenticated, context.User?.Identity?.Name);
+
+    await next();
+
+    logger.LogInformation("Response: {StatusCode}, User after auth: {IsAuth}", context.Response.StatusCode, context.User?.Identity?.IsAuthenticated);
+});
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
@@ -128,6 +189,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// Enable CORS
+app.UseCors("AdminUI");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -136,11 +200,16 @@ app.MapRazorPages();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
-// Seed OpenIddict clients and scopes
+// Seed data
 using (var scope = app.Services.CreateScope())
 {
-    var seeder = new OpenIddictSeeder(scope.ServiceProvider);
-    await seeder.SeedAsync();
+    // Seed OpenIddict clients and scopes
+    var openIddictSeeder = new OpenIddictSeeder(scope.ServiceProvider);
+    await openIddictSeeder.SeedAsync();
+
+    // Seed Identity roles and admin user
+    var identitySeeder = new IdentityServer.Infrastructure.Data.IdentitySeeder(scope.ServiceProvider);
+    await identitySeeder.SeedAsync();
 }
 
 app.Run();

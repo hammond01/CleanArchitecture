@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Identity Server</title>
+
+    <!-- Tailwind CSS CDN (for development - replace with compiled CSS in production) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+
+<body class="antialiased bg-gray-50">
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/"
+                            class="text-xl font-bold text-gradient bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
+                            Identity Server
+                        </a>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="/"
+                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Home
+                        </a>
+                        <a href="/swagger"
+                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            API Docs
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="ml-3 relative" x-data="{ open: false }">
+                            <button @@click="open = !open"
+                                class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                <span class="sr-only">Open user menu</span>
+                                <div
+                                    class="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center text-white font-medium">
+                                    @User.Identity.Name?.Substring(0, 1).ToUpper()
+                                </div>
+                            </button>
+                            <div x-show="open" @@click.away="open = false"
+                                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
+                                x-cloak>
+                                <a href="/account/profile"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
+                                <a href="/account/settings"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                                <form method="post" asp-page="/Account/Logout" asp-antiforgery="true" class="m-0">
+                                    <button type="submit"
+                                        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign
+                                        out</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="/account/login"
+                            class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                            Sign in
+                        </a>
+                        <a href="/account/register"
+                            class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Sign up
+                        </a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-6">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">
+                &copy; 2025 Identity Server with OpenIddict. Built with Clean Architecture.
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
