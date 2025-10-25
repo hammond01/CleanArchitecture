@@ -2,6 +2,7 @@ using IdentityServer.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
+using static OpenIddict.Abstractions.OpenIddictConstants.Permissions;
 
 namespace IdentityServer.Infrastructure.Data;
 
@@ -33,21 +34,21 @@ public class OpenIddictSeeder
                 DisplayName = "Postman Test Client",
                 Permissions =
                 {
-                    OpenIddictConstants.Permissions.Endpoints.Token,
-                    OpenIddictConstants.Permissions.Endpoints.Authorization,
-                    OpenIddictConstants.Permissions.Endpoints.Introspection,
-                    OpenIddictConstants.Permissions.Endpoints.Revocation,
+                    Endpoints.Token,
+                    Endpoints.Authorization,
+                    Endpoints.Introspection,
+                    Endpoints.Revocation,
 
-                    OpenIddictConstants.Permissions.GrantTypes.Password,
-                    OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
-                    OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
-                    OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                    GrantTypes.Password,
+                    GrantTypes.RefreshToken,
+                    GrantTypes.AuthorizationCode,
+                    GrantTypes.ClientCredentials,
 
-                    OpenIddictConstants.Permissions.ResponseTypes.Code,
+                    ResponseTypes.Code,
 
-                    OpenIddictConstants.Permissions.Scopes.Email,
-                    OpenIddictConstants.Permissions.Scopes.Profile,
-                    OpenIddictConstants.Permissions.Scopes.Roles
+                    Scopes.Email,
+                    Scopes.Profile,
+                    Scopes.Roles
                 },
                 RedirectUris =
                 {
@@ -72,17 +73,17 @@ public class OpenIddictSeeder
                 DisplayName = "Swagger UI",
                 Permissions =
                 {
-                    OpenIddictConstants.Permissions.Endpoints.Token,
-                    OpenIddictConstants.Permissions.Endpoints.Authorization,
+                    Endpoints.Token,
+                    Endpoints.Authorization,
 
-                    OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
-                    OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+                    GrantTypes.AuthorizationCode,
+                    GrantTypes.RefreshToken,
 
-                    OpenIddictConstants.Permissions.ResponseTypes.Code,
+                    ResponseTypes.Code,
 
-                    OpenIddictConstants.Permissions.Scopes.Email,
-                    OpenIddictConstants.Permissions.Scopes.Profile,
-                    OpenIddictConstants.Permissions.Scopes.Roles
+                    Scopes.Email,
+                    Scopes.Profile,
+                    Scopes.Roles
                 },
                 RedirectUris =
                 {
