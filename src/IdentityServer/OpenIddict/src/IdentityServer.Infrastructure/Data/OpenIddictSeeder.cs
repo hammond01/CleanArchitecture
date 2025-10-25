@@ -105,5 +105,35 @@ public class OpenIddictSeeder
                 Resources = { "resource_server" }
             });
         }
+
+        // Register standard OpenID Connect scopes
+        await CreateOrUpdateScopeAsync(scopeManager, "openid", "OpenID Connect", "Allow access to the user identifier");
+        await CreateOrUpdateScopeAsync(scopeManager, "profile", "Profile", "Allow access to the user's profile information");
+        await CreateOrUpdateScopeAsync(scopeManager, "email", "Email", "Allow access to the user's email address");
+        await CreateOrUpdateScopeAsync(scopeManager, "roles", "Roles", "Allow access to the user's roles");
+    }
+
+    private async Task CreateOrUpdateScopeAsync(IOpenIddictScopeManager manager, string name, string displayName, string description)
+    {
+        var scope = await manager.FindByNameAsync(name);
+        if (scope == null)
+        {
+            await manager.CreateAsync(new OpenIddictScopeDescriptor
+            {
+                Name = name,
+                DisplayName = displayName,
+                Description = description
+            });
+        }
+        else
+        {
+            // Update existing scope if needed
+            await manager.UpdateAsync(scope, new OpenIddictScopeDescriptor
+            {
+                Name = name,
+                DisplayName = displayName,
+                Description = description
+            });
+        }
     }
 }
