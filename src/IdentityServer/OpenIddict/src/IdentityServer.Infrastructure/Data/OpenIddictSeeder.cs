@@ -93,6 +93,40 @@ public class OpenIddictSeeder
             });
         }
 
+        // Create a client for Web Application
+        if (await manager.FindByClientIdAsync("web-client") == null)
+        {
+            await manager.CreateAsync(new OpenIddictApplicationDescriptor
+            {
+                ClientId = "web-client",
+                DisplayName = "Web Application Client",
+                Permissions =
+                {
+                    Endpoints.Token,
+                    Endpoints.Authorization,
+
+                    GrantTypes.AuthorizationCode,
+                    GrantTypes.RefreshToken,
+
+                    ResponseTypes.Code,
+
+                    Scopes.Email,
+                    Scopes.Profile,
+                    Scopes.Roles
+                },
+                RedirectUris =
+                {
+                    new Uri("http://localhost:3000/callback"),
+                    new Uri("https://localhost:3001/callback")
+                },
+                PostLogoutRedirectUris =
+                {
+                    new Uri("http://localhost:3000/"),
+                    new Uri("https://localhost:3001/")
+                }
+            });
+        }
+
         // Seed scopes
         var scopeManager = scope.ServiceProvider.GetRequiredService<IOpenIddictScopeManager>();
 
