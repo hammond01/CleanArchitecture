@@ -57,7 +57,7 @@ public class UserinfoController : ControllerBase
             claims[Claims.GivenName] = user.FirstName ?? string.Empty;
             claims[Claims.FamilyName] = user.LastName ?? string.Empty;
             claims[Claims.PreferredUsername] = user.UserName ?? string.Empty;
-            
+
             if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
             {
                 claims[Claims.Picture] = user.ProfilePictureUrl;
