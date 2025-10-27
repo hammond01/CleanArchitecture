@@ -55,7 +55,7 @@ public class RevocationController : ControllerBase
         {
             // Get the authorization ID associated with the token
             var authorizationId = await _tokenManager.GetAuthorizationIdAsync(tokenEntry);
-            
+
             // Revoke the specific token
             await _tokenManager.TryRevokeAsync(tokenEntry);
 
