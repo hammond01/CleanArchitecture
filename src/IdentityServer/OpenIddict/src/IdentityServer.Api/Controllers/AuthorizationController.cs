@@ -42,7 +42,7 @@ public class AuthorizationController : ControllerBase
     [IgnoreAntiforgeryToken]
     public async Task<IActionResult> Authorize()
     {
-        var request = HttpContext.GetOpenIddictServerRequest() 
+        var request = HttpContext.GetOpenIddictServerRequest()
             ?? throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
 
         // Try to retrieve the user principal stored in the authentication cookie
@@ -76,11 +76,11 @@ public class AuthorizationController : ControllerBase
         }
 
         // Retrieve the profile of the logged in user
-        var user = await _userManager.GetUserAsync(result.Principal) 
+        var user = await _userManager.GetUserAsync(result.Principal)
             ?? throw new InvalidOperationException("The user details cannot be retrieved.");
 
         // Retrieve the application details from the database
-        var application = await _applicationManager.FindByClientIdAsync(request.ClientId!) 
+        var application = await _applicationManager.FindByClientIdAsync(request.ClientId!)
             ?? throw new InvalidOperationException("The application details cannot be found in the database.");
 
         // Retrieve the permanent authorizations associated with the user and the calling client application
@@ -90,7 +90,7 @@ public class AuthorizationController : ControllerBase
             status: Statuses.Valid,
             type: AuthorizationTypes.Permanent,
             scopes: request.GetScopes());
-        
+
         var authorizations = new List<object>();
         await foreach (var auth in authorizationsEnumerable)
         {
@@ -132,7 +132,7 @@ public class AuthorizationController : ControllerBase
                 // but you may want to allow the user to uncheck specific scopes.
                 // For that, simply restrict the list of scopes before calling SetScopes
                 identity.SetScopes(request.GetScopes());
-                
+
                 var resources = new List<string>();
                 await foreach (var resource in _scopeManager.ListResourcesAsync(identity.GetScopes()))
                 {
@@ -181,13 +181,13 @@ public class AuthorizationController : ControllerBase
     [IgnoreAntiforgeryToken]
     public async Task<IActionResult> Accept()
     {
-        var request = HttpContext.GetOpenIddictServerRequest() 
+        var request = HttpContext.GetOpenIddictServerRequest()
             ?? throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
 
-        var user = await _userManager.GetUserAsync(User) 
+        var user = await _userManager.GetUserAsync(User)
             ?? throw new InvalidOperationException("The user details cannot be retrieved.");
 
-        var application = await _applicationManager.FindByClientIdAsync(request.ClientId!) 
+        var application = await _applicationManager.FindByClientIdAsync(request.ClientId!)
             ?? throw new InvalidOperationException("The application details cannot be found.");
 
         return await AcceptConsent(request, user, application);
@@ -222,7 +222,7 @@ public class AuthorizationController : ControllerBase
 
         // Note: in this sample, the granted scopes match the requested scope
         identity.SetScopes(request.GetScopes());
-        
+
         var resources = new List<string>();
         await foreach (var resource in _scopeManager.ListResourcesAsync(identity.GetScopes()))
         {
