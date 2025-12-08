@@ -57,10 +57,28 @@ public class IdentityService : IIdentityService
         if (user == null)
             return Result<string>.Failure("Invalid credentials");
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
+        // Check if email is confirmed
+        if (!user.EmailConfirmed)
+            return Result<string>.Failure("Email not confirmed. Please confirm your email before logging in.");
+
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
+
+        if (result.IsLockedOut)
+            return Result<string>.Failure("Account locked due to multiple failed login attempts. Please try again later.");
+
+        if (result.IsNotAllowed)
+            return Result<string>.Failure("Login not allowed. Please confirm your email or contact support.");
+
+        if (result.RequiresTwoFactor)
+            return Result<string>.Failure("Two-factor authentication required.");
+
         if (!result.Succeeded)
             return Result<string>.Failure("Invalid credentials");
 
-        return Result<string>.Success("Authenticated");
+        // Update last login time
+        user.LastLoginAt = DateTime.UtcNow;
+        await _userManager.UpdateAsync(user);
+
+        return Result<string>.Success(user.Id.ToString());
     }
 }
