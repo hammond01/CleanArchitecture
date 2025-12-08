@@ -92,8 +92,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = OpenIddict.Validation.AspNetCore.OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
 });
 
-// Add authorization
-builder.Services.AddAuthorization();
+// Add permission-based authorization
+builder.Services.AddPermissionAuthorization();
 
 // Configure CORS for Web Admin UI
 builder.Services.AddCors(options =>
@@ -124,8 +124,10 @@ builder.Services.AddMediator(options =>
 // Register IdentityService implementation
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 
-// Register JWT Token Service
-builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+// Register Email Service
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
 // Register HttpClient for internal API calls
 builder.Services.AddHttpClient();
@@ -210,6 +212,10 @@ using (var scope = app.Services.CreateScope())
     // Seed Identity roles and admin user
     var identitySeeder = new IdentityServer.Infrastructure.Data.IdentitySeeder(scope.ServiceProvider);
     await identitySeeder.SeedAsync();
+
+    // Seed Permissions and assign to roles
+    var permissionSeeder = new IdentityServer.Infrastructure.Authorization.PermissionSeeder(scope.ServiceProvider);
+    await permissionSeeder.SeedAsync();
 }
 
 app.Run();
