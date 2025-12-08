@@ -1,3 +1,4 @@
+using IdentityServer.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ namespace IdentityServer.Api.Controllers.Admin;
 
 [ApiController]
 [Route("api/admin/clients")]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class ClientsAdminController : ControllerBase
 {
     private readonly IOpenIddictApplicationManager _applicationManager;
@@ -22,6 +23,7 @@ public class ClientsAdminController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = Policies.ClientsView)]
     public async Task<IActionResult> GetClients()
     {
         try
