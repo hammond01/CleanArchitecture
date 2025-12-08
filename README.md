@@ -4,13 +4,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-brightgreen.svg)](#clean-architecture)
 [![DDD](https://img.shields.io/badge/Design-Domain%20Driven-blue.svg)](#domain-driven-design)
-
-# Clean Architecture with Domain-Driven Design (DDD)
-
-[![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-brightgreen.svg)](#clean-architecture)
-[![DDD](https://img.shields.io/badge/Design-Domain%20Driven-blue.svg)](#domain-driven-design)
 [![Build Status](https://img.shields.io/badge/build-foundation%20complete-yellow.svg)](#)
 [![Tests](https://img.shields.io/badge/tests-infrastructure%20ready-yellow.svg)](#testing)
 [![Production Ready](https://img.shields.io/badge/status-implementation%20foundation-yellow.svg)](#status)
