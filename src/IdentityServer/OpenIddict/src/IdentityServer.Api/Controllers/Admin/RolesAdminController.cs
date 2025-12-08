@@ -1,14 +1,15 @@
+using IdentityServer.Domain.Entities;
+using IdentityServer.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IdentityServer.Domain.Entities;
 
 namespace IdentityServer.Api.Controllers.Admin;
 
 [ApiController]
 [Route("api/admin/roles")]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class RolesAdminController : ControllerBase
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
@@ -26,22 +27,29 @@ public class RolesAdminController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = Policies.RolesView)]
     public async Task<IActionResult> GetRoles()
     {
         try
         {
-            var roles = await _roleManager.Roles
-                .Select(r => new
-                {
-                    r.Id,
-                    r.Name,
-                    r.Description,
-                    UserCount = _userManager.GetUsersInRoleAsync(r.Name!).Result.Count,
-                    Permissions = r.RolePermissions.Select(rp => rp.Permission.Name).ToList()
-                })
-                .ToListAsync();
+            var rolesList = await _roleManager.Roles.ToListAsync();
 
-            return Ok(roles);
+            // Load user counts separately to avoid .Result in LINQ
+            var rolesWithDetails = new List<object>();
+            foreach (var role in rolesList)
+            {
+                var usersInRole = await _userManager.GetUsersInRoleAsync(role.Name!);
+                rolesWithDetails.Add(new
+                {
+                    role.Id,
+                    role.Name,
+                    role.Description,
+                    UserCount = usersInRole.Count,
+                    Permissions = role.RolePermissions.Select(rp => rp.Permission.Name).ToList()
+                });
+            }
+
+            return Ok(rolesWithDetails);
         }
         catch (Exception ex)
         {

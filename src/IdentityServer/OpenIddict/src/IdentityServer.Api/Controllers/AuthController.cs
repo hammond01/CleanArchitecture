@@ -2,6 +2,7 @@ using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using IdentityServer.Application.Commands;
+using IdentityServer.Domain.Common;
 using IdentityServer.Domain.Contracts;
 
 namespace IdentityServer.Api.Controllers;
@@ -55,10 +56,11 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Login with username and password
+    /// Login with username and password - Returns OpenIddict token endpoint URL
+    /// For actual token, POST to /connect/token with grant_type=password
     /// </summary>
     /// <param name="request">Login credentials</param>
-    /// <returns>Authentication token if successful</returns>
+    /// <returns>Token endpoint information</returns>
     [HttpPost("login")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
@@ -72,11 +74,16 @@ public class AuthController : ControllerBase
 
         if (result.IsSuccess)
         {
-            _logger.LogInformation("User logged in successfully: {UserNameOrEmail}", request.UserNameOrEmail);
+            _logger.LogInformation("Credentials validated successfully for: {UserNameOrEmail}", request.UserNameOrEmail);
+
+            // Return instructions to get token from OpenIddict endpoint
             return Ok(new LoginResponse
             {
-                Token = result.Data ?? string.Empty,
-                Message = "Login successful"
+                Message = "Credentials validated. Use /connect/token endpoint to obtain access token.",
+                TokenEndpoint = $"{Request.Scheme}://{Request.Host}/connect/token",
+                GrantType = "password",
+                Username = request.UserNameOrEmail,
+                RequiresTokenExchange = true
             });
         }
 
@@ -114,6 +121,152 @@ public class AuthController : ControllerBase
             UserName = userName
         });
     }
+
+    /// <summary>
+    /// Send email confirmation link
+    /// </summary>
+    /// <param name="request">Email confirmation request</param>
+    /// <returns>Success message</returns>
+    [HttpPost("send-confirmation-email")]
+    [Authorize]
+    [ProducesResponseType(typeof(MessageResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SendConfirmationEmail([FromBody] SendConfirmationEmailRequest request)
+    {
+        _logger.LogInformation("Email confirmation request for user: {UserId}", request.UserId);
+
+        var command = new SendConfirmationEmailCommand
+        {
+            UserId = request.UserId,
+            Email = request.Email,
+            FirstName = request.FirstName
+        };
+
+        var result = await _mediator.Send(command);
+
+        if (result.IsSuccess)
+        {
+            _logger.LogInformation("Confirmation email sent successfully to {Email}", request.Email);
+            return Ok(new MessageResponse { Message = result.Data });
+        }
+
+        _logger.LogWarning("Failed to send confirmation email to {Email}: {Error}", request.Email, result.ErrorMessage);
+        return BadRequest(new ErrorResponse { Error = result.ErrorMessage ?? "Failed to send confirmation email" });
+    }
+
+    /// <summary>
+    /// Confirm email address
+    /// </summary>
+    /// <param name="request">Email confirmation details</param>
+    /// <returns>Success message</returns>
+    [HttpPost("confirm-email")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(MessageResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request)
+    {
+        _logger.LogInformation("Email confirmation attempt for user: {UserId}", request.UserId);
+
+        var command = new ConfirmEmailCommand
+        {
+            UserId = request.UserId,
+            Token = request.Token
+        };
+
+        var result = await _mediator.Send(command);
+
+        if (result.IsSuccess)
+        {
+            _logger.LogInformation("Email confirmed successfully for user: {UserId}", request.UserId);
+            return Ok(new MessageResponse { Message = result.Data });
+        }
+
+        _logger.LogWarning("Email confirmation failed for user {UserId}: {Error}", request.UserId, result.ErrorMessage);
+        return BadRequest(new ErrorResponse { Error = result.ErrorMessage ?? "Email confirmation failed" });
+    }
+
+    /// <summary>
+    /// Request password reset
+    /// </summary>
+    /// <param name="request">Password reset request</param>
+    /// <returns>Success message</returns>
+    [HttpPost("forgot-password")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(MessageResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        _logger.LogInformation("Password reset request for email: {Email}", request.Email);
+
+        var command = new ForgotPasswordCommand
+        {
+            Email = request.Email
+        };
+
+        var result = await _mediator.Send(command);
+
+        // Always return success for security reasons (don't reveal if email exists)
+        _logger.LogInformation("Password reset processed for {Email}", request.Email);
+        return Ok(new MessageResponse { Message = result.Data });
+    }
+
+    /// <summary>
+    /// Reset password with token
+    /// </summary>
+    /// <param name="request">Password reset details</param>
+    /// <returns>Success message</returns>
+    [HttpPost("reset-password")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(MessageResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        _logger.LogInformation("Password reset attempt for user: {UserId}", request.UserId);
+
+        var command = new ResetPasswordCommand
+        {
+            UserId = request.UserId,
+            Token = request.Token,
+            NewPassword = request.NewPassword
+        };
+
+        var result = await _mediator.Send(command);
+
+        if (result.IsSuccess)
+        {
+            _logger.LogInformation("Password reset successfully for user: {UserId}", request.UserId);
+            return Ok(new MessageResponse { Message = result.Data });
+        }
+
+        _logger.LogWarning("Password reset failed for user {UserId}: {Error}", request.UserId, result.ErrorMessage);
+        return BadRequest(new ErrorResponse { Error = result.ErrorMessage ?? "Password reset failed" });
+    }
+}
+
+// Request DTOs
+public class SendConfirmationEmailRequest
+{
+    public string UserId { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+}
+
+public class ConfirmEmailRequest
+{
+    public string UserId { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+}
+
+public class ForgotPasswordRequest
+{
+    public string Email { get; set; } = string.Empty;
+}
+
+public class ResetPasswordRequest
+{
+    public string UserId { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
 }
 
 // Response DTOs
@@ -125,7 +278,20 @@ public class RegisterResponse
 
 public class LoginResponse
 {
-    public string Token { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+    public string? TokenEndpoint { get; set; }
+    public string? GrantType { get; set; }
+    public string? Username { get; set; }
+    public bool RequiresTokenExchange { get; set; }
+}
+
+public class MessageResponse
+{
+    public string Message { get; set; } = string.Empty;
+}
+
+public class MessageResponse
+{
     public string Message { get; set; } = string.Empty;
 }
 

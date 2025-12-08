@@ -2,6 +2,7 @@ using IdentityServer.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 namespace IdentityServer.Api.Controllers;
 
@@ -12,25 +13,24 @@ public class AuthenticationController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly ILogger<AuthenticationController> _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
 
     public AuthenticationController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ILogger<AuthenticationController> logger,
-        IHttpClientFactory httpClientFactory)
+        ILogger<AuthenticationController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
-        _httpClientFactory = httpClientFactory;
     }
 
     /// <summary>
-    /// Simple login endpoint that internally calls OpenIddict token endpoint
+    /// Login endpoint - Use OpenIddict's /connect/token endpoint directly for production
+    /// This endpoint is for demonstration/migration purposes only
     /// </summary>
     [HttpPost("login")]
     [AllowAnonymous]
+    [Obsolete("Use /connect/token with grant_type=password instead")]
     public async Task<IActionResult> Login([FromBody] JwtLoginRequest request)
     {
         if (!ModelState.IsValid)
@@ -44,41 +44,27 @@ public class AuthenticationController : ControllerBase
             return Unauthorized(new { message = "Invalid email or password" });
         }
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
         if (!result.Succeeded)
         {
+            if (result.IsLockedOut)
+                return Unauthorized(new { message = "Account locked. Please try again later." });
+
             return Unauthorized(new { message = "Invalid email or password" });
         }
 
-        // Call OpenIddict token endpoint internally
-        var client = _httpClientFactory.CreateClient();
-        var tokenRequest = new Dictionary<string, string>
-        {
-            ["grant_type"] = "password",
-            ["username"] = request.Email,
-            ["password"] = request.Password,
-            ["scope"] = "openid profile email roles"
-        };
-
-        var tokenResponse = await client.PostAsync(
-            "http://localhost:5000/connect/token",
-            new FormUrlEncodedContent(tokenRequest));
-
-        if (!tokenResponse.IsSuccessStatusCode)
-        {
-            return StatusCode((int)tokenResponse.StatusCode, new { message = "Failed to generate token" });
-        }
-
-        var tokenData = await tokenResponse.Content.ReadFromJsonAsync<TokenResponse>();
         var roles = await _userManager.GetRolesAsync(user);
 
-        _logger.LogInformation("User {Email} logged in successfully", user.Email);
+        _logger.LogInformation("User {Email} validated. Redirect to /connect/token for actual token", user.Email);
 
+        // Return instructions to use proper OpenIddict endpoint
         return Ok(new
         {
-            access_token = tokenData?.AccessToken,
-            token_type = "Bearer",
-            expires_in = tokenData?.ExpiresIn ?? 3600,
+            message = "Credentials validated. Please use /connect/token endpoint for token generation.",
+            token_endpoint = $"{Request.Scheme}://{Request.Host}/connect/token",
+            grant_type = "password",
+            username = request.Email,
+            recommended_scopes = "openid profile email roles",
             user = new
             {
                 id = user.Id,
@@ -90,9 +76,7 @@ public class AuthenticationController : ControllerBase
             }
         });
     }
-}
-
-public class JwtLoginRequest
+}public class JwtLoginRequest
 {
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;

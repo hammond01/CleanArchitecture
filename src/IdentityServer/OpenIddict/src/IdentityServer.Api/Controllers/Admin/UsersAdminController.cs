@@ -1,4 +1,5 @@
 using IdentityServer.Domain.Entities;
+using IdentityServer.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace IdentityServer.Api.Controllers.Admin;
 
 [ApiController]
 [Route("api/admin/users")]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class UsersAdminController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -22,6 +23,7 @@ public class UsersAdminController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy = Policies.UsersView)]
     public async Task<IActionResult> GetUsers(
         [FromQuery] string? search,
         [FromQuery] string? status,
@@ -51,26 +53,33 @@ public class UsersAdminController : ControllerBase
 
             var totalCount = await query.CountAsync();
 
-            var users = await query
+            var usersList = await query
                 .OrderByDescending(u => u.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(u => new
-                {
-                    u.Id,
-                    u.UserName,
-                    u.Email,
-                    u.EmailConfirmed,
-                    FullName = u.FirstName + " " + u.LastName,
-                    u.IsActive,
-                    u.CreatedAt,
-                    Roles = _userManager.GetRolesAsync(u).Result
-                })
                 .ToListAsync();
+
+            // Load roles separately to avoid .Result in LINQ
+            var usersWithRoles = new List<object>();
+            foreach (var user in usersList)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                usersWithRoles.Add(new
+                {
+                    user.Id,
+                    user.UserName,
+                    user.Email,
+                    user.EmailConfirmed,
+                    FullName = user.FirstName + " " + user.LastName,
+                    user.IsActive,
+                    user.CreatedAt,
+                    Roles = roles
+                });
+            }
 
             return Ok(new
             {
-                data = users,
+                data = usersWithRoles,
                 totalCount,
                 page,
                 pageSize,
@@ -120,6 +129,7 @@ public class UsersAdminController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = Policies.UsersCreate)]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         try
@@ -164,6 +174,7 @@ public class UsersAdminController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Policy = Policies.UsersUpdate)]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request)
     {
         try
@@ -206,6 +217,7 @@ public class UsersAdminController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy = Policies.UsersDelete)]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
         try
