@@ -1,0 +1,76 @@
+### ============================================
+### Session Management API Examples
+### ============================================
+
+@baseUrl = https://localhost:5219
+@tokenEndpoint = {{baseUrl}}/connect/token
+@sessionsEndpoint = {{baseUrl}}/api/sessions
+
+### Variables
+@username = admin@example.com
+@password = Admin@123456
+
+### ============================================
+### 1. LOGIN WITH OFFLINE_ACCESS (Creates Session)
+### ============================================
+# @name login
+POST {{tokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password
+&username={{username}}
+&password={{password}}
+&scope=openid profile email roles offline_access
+
+### Extract access token
+@accessToken = {{login.response.body.access_token}}
+
+### ============================================
+### 2. GET MY ACTIVE SESSIONS
+### ============================================
+GET {{sessionsEndpoint}}
+Authorization: Bearer {{accessToken}}
+
+### ============================================
+### 3. REVOKE SPECIFIC SESSION
+### ============================================
+### Replace {sessionId} with actual session ID from step 2
+DELETE {{sessionsEndpoint}}/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{accessToken}}
+
+### ============================================
+### 4. LOGOUT FROM OTHER DEVICES (Keep Current Session)
+### ============================================
+POST {{sessionsEndpoint}}/revoke-others
+Authorization: Bearer {{accessToken}}
+
+### ============================================
+### 5. LOGOUT FROM ALL DEVICES (Including Current)
+### ============================================
+POST {{sessionsEndpoint}}/revoke-all
+Authorization: Bearer {{accessToken}}
+
+### ============================================
+### 6. LOGIN FROM DIFFERENT "DEVICE" (Different User-Agent)
+### ============================================
+POST {{tokenEndpoint}}
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)
+
+grant_type=password
+&username={{username}}
+&password={{password}}
+&scope=openid profile email roles offline_access
+
+### ============================================
+### 7. VERIFY MULTIPLE SESSIONS EXIST
+### ============================================
+GET {{sessionsEndpoint}}
+Authorization: Bearer {{accessToken}}
+
+### ============================================
+### ADMIN: View User Sessions (For Admin Controllers)
+### ============================================
+### This would be in Admin controller (not implemented yet)
+# GET {{baseUrl}}/api/admin/users/{userId}/sessions
+# Authorization: Bearer {{adminToken}}
