@@ -129,6 +129,9 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
+// Register Session Service
+builder.Services.AddScoped<ISessionService, SessionService>();
+
 // Register HttpClient for internal API calls
 builder.Services.AddHttpClient();
 
