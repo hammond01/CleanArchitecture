@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Security.Claims;
+using IdentityServer.Domain.Contracts;
 using IdentityServer.Domain.Entities;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -19,17 +20,23 @@ public class TokenController : ControllerBase
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IOpenIddictApplicationManager _applicationManager;
     private readonly IOpenIddictScopeManager _scopeManager;
+    private readonly ISessionService _sessionService;
+    private readonly ILogger<TokenController> _logger;
 
     public TokenController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IOpenIddictApplicationManager applicationManager,
-        IOpenIddictScopeManager scopeManager)
+        IOpenIddictScopeManager scopeManager,
+        ISessionService sessionService,
+        ILogger<TokenController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _applicationManager = applicationManager;
         _scopeManager = scopeManager;
+        _sessionService = sessionService;
+        _logger = logger;
     }
 
     [HttpPost("~/connect/token")]
@@ -100,6 +107,32 @@ public class TokenController : ControllerBase
                 .SetClaims(Claims.Role, (await _userManager.GetRolesAsync(user)).ToImmutableArray());
 
         identity.SetDestinations(GetDestinations);
+
+        // Create session tracking (on password grant with refresh token)
+        if (request.GetScopes().Contains("offline_access"))
+        {
+            try
+            {
+                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+                var userAgent = HttpContext.Request.Headers["User-Agent"].ToString();
+
+                // We'll store the session ID in a claim to track it
+                var sessionId = await _sessionService.CreateSessionAsync(
+                    user.Id,
+                    refreshToken: null, // Will be set when refresh token is generated
+                    ipAddress,
+                    userAgent);
+
+                identity.SetClaim("session_id", sessionId.ToString());
+
+                _logger.LogInformation("Created session {SessionId} for user {UserId}", sessionId, user.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create session for user {UserId}", user.Id);
+                // Continue anyway - session tracking is not critical for authentication
+            }
+        }
 
         return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
