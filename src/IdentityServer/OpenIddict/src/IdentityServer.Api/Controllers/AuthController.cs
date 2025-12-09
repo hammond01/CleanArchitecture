@@ -290,11 +290,6 @@ public class MessageResponse
     public string Message { get; set; } = string.Empty;
 }
 
-public class MessageResponse
-{
-    public string Message { get; set; } = string.Empty;
-}
-
 public class ErrorResponse
 {
     public string Error { get; set; } = string.Empty;
