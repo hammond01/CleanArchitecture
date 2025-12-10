@@ -378,6 +378,6 @@ MIT License - see LICENSE file for details
 
 ---
 
-**Status**: 🚧 In Development  
-**Version**: 1.0.0-alpha  
+**Status**: 🚧 In Development
+**Version**: 1.0.0-alpha
 **Last Updated**: December 2025
