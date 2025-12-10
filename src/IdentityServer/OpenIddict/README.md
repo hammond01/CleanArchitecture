@@ -12,7 +12,7 @@ A complete, production-ready Identity Server built with **OpenIddict** and **Cle
 - ✅ **Role-Based Authorization** - Flexible role management
 - ✅ **Permission-Based Authorization** - Granular permission control
 - ✅ **JWT Tokens** - Access & Refresh token support
-- ✅ **Two-Factor Authentication (2FA)** - TOTP authenticator apps
+- ✅ **Session Management** - Track and manage user sessions with device detection
 - ✅ **Email Confirmation** - Secure email verification
 - ✅ **Password Reset** - Secure password recovery flow
 
@@ -20,16 +20,18 @@ A complete, production-ready Identity Server built with **OpenIddict** and **Cle
 
 - ✅ **Modern Login/Register Pages** - Beautiful, responsive UI
 - ✅ **User Management Dashboard** - Admin panel for user management
+- ✅ **Real-time Dashboard Statistics** - Live metrics and user activity monitoring
 - ✅ **Role & Permission Management** - UI for authorization configuration
 - ✅ **Profile Management** - User profile editing
 - ✅ **Session Management** - View and revoke active sessions
-- ✅ **Audit Logging** - Track user actions and security events
+- ✅ **Admin Session Control** - Monitor and manage all user sessions
 
 ### Technical Features
 
 - ✅ **Clean Architecture** - Domain, Application, Infrastructure, Presentation layers
 - ✅ **CQRS Pattern** - MediatR for command/query separation
 - ✅ **Entity Framework Core** - SQL Server database
+- ✅ **UAParser Integration** - Device and browser detection for sessions
 - ✅ **Docker Support** - Containerized deployment
 - ✅ **Health Checks** - Endpoint monitoring
 - ✅ **Serilog Logging** - Structured logging
@@ -44,9 +46,10 @@ src/
 │   │   ├── User.cs
 │   │   ├── Role.cs
 │   │   ├── Permission.cs
-│   │   └── UserSession.cs
+│   │   └── UserSession.cs          # NEW: Session tracking entity
 │   ├── Enums/
 │   └── Interfaces/
+│       └── ISessionService.cs      # NEW: Session management interface
 │
 ├── IdentityServer.Application/     # Business logic, CQRS handlers
 │   ├── Commands/
@@ -65,9 +68,14 @@ src/
 │   ├── Identity/
 │   ├── OpenIddict/
 │   └── Services/
+│       └── SessionService.cs       # NEW: Session management implementation
 │
 └── IdentityServer.Api/             # Presentation layer (API + UI)
     ├── Controllers/
+    │   ├── AuthController.cs
+    │   ├── SessionsController.cs   # NEW: User session management
+    │   ├── UsersAdminController.cs # ENHANCED: Admin session control
+    │   └── DashboardAdminController.cs # ENHANCED: Real-time statistics
     ├── Pages/                      # Razor Pages for UI
     │   ├── Account/
     │   ├── Admin/
@@ -200,6 +208,49 @@ var client = new OpenIddictApplicationDescriptor
 }
 ```
 
+## 🔐 Session Management
+
+### Features
+
+- **Device Detection** - Automatically detect device type, OS, and browser using UAParser
+- **Session Tracking** - Track login sessions with IP address and user agent
+- **Session Control** - Users can view and revoke their active sessions
+- **Admin Oversight** - Administrators can monitor and revoke any user's sessions
+- **Security Enhancement** - Force logout suspicious sessions remotely
+
+### Device Information
+
+Sessions display user-friendly device information:
+- `Desktop - Windows 10 - Chrome 120`
+- `Mobile - iOS 17 - Safari 17`
+- `Tablet - Android 13 - Chrome 120`
+
+### Admin Session Control
+
+Administrators can:
+- View all active sessions for any user
+- Force logout specific users
+- Monitor session activity across the system
+- Enhance security by revoking compromised sessions
+
+## 📊 Dashboard Statistics
+
+### Real-time Metrics
+
+The admin dashboard provides live statistics including:
+- **Total Users** - Current user count
+- **Active Users** - Users with recent activity
+- **Active Sessions** - Current login sessions
+- **Total Clients** - Registered OAuth clients
+- **Recent Registrations** - New users in last 30 days
+- **Admin/User Distribution** - Role-based user counts
+
+### Recent Activities
+
+- **Login History** - Recent user logins with device information
+- **Session Monitoring** - Track user session activity
+- **Security Overview** - Monitor system access patterns
+
 ## 🔑 Role & Permission System
 
 ### Roles
@@ -237,7 +288,14 @@ public async Task<IActionResult> DeleteUser(string userId)
 - `POST /api/auth/forgot-password` - Request password reset
 - `POST /api/auth/reset-password` - Reset password
 - `POST /api/auth/confirm-email` - Confirm email address
-- `POST /api/auth/enable-2fa` - Enable two-factor authentication
+- `POST /api/auth/send-confirmation-email` - Resend email confirmation
+
+### Session Management
+
+- `GET /api/sessions` - Get current user's active sessions
+- `DELETE /api/sessions/{id}` - Revoke specific session
+- `POST /api/sessions/revoke-others` - Revoke all other sessions
+- `POST /api/sessions/revoke-all` - Revoke all sessions (logout everywhere)
 
 ### User Management
 
@@ -247,6 +305,20 @@ public async Task<IActionResult> DeleteUser(string userId)
 - `DELETE /api/users/{id}` - Delete user
 - `GET /api/users/{id}/roles` - Get user roles
 - `POST /api/users/{id}/roles` - Assign role to user
+
+### Admin User Management
+
+- `GET /api/admin/users` - List all users (Admin only)
+- `GET /api/admin/users/{id}` - Get user details (Admin only)
+- `PUT /api/admin/users/{id}` - Update user (Admin only)
+- `DELETE /api/admin/users/{id}` - Delete user (Admin only)
+- `GET /api/admin/users/{id}/sessions` - View user's sessions (Admin only)
+- `POST /api/admin/users/{id}/sessions/revoke-all` - Revoke all user sessions (Admin only)
+
+### Admin Dashboard
+
+- `GET /api/admin/dashboard/stats` - Get real-time dashboard statistics
+- `GET /api/admin/dashboard/activities` - Get recent user activities
 
 ### Role Management
 
@@ -308,4 +380,4 @@ MIT License - see LICENSE file for details
 
 **Status**: 🚧 In Development  
 **Version**: 1.0.0-alpha  
-**Last Updated**: October 2025
+**Last Updated**: December 2025
