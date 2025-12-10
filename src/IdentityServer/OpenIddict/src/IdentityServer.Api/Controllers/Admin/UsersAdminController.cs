@@ -1,3 +1,4 @@
+using IdentityServer.Domain.Contracts;
 using IdentityServer.Domain.Entities;
 using IdentityServer.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
@@ -12,13 +13,16 @@ namespace IdentityServer.Api.Controllers.Admin;
 public class UsersAdminController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ISessionService _sessionService;
     private readonly ILogger<UsersAdminController> _logger;
 
     public UsersAdminController(
         UserManager<ApplicationUser> userManager,
+        ISessionService sessionService,
         ILogger<UsersAdminController> logger)
     {
         _userManager = userManager;
+        _sessionService = sessionService;
         _logger = logger;
     }
 
@@ -242,6 +246,75 @@ public class UsersAdminController : ControllerBase
         {
             _logger.LogError(ex, "Error deleting user {UserId}", id);
             return StatusCode(500, new { error = "Failed to delete user" });
+        }
+    }
+
+    /// <summary>
+    /// Get all sessions for a specific user (Admin only)
+    /// </summary>
+    [HttpGet("{id}/sessions")]
+    [Authorize(Policy = Policies.SessionsView)]
+    [ProducesResponseType(typeof(List<UserSessionDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserSessions(Guid id)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return NotFound(new { error = "User not found" });
+            }
+
+            var sessions = await _sessionService.GetUserSessionsAsync(id);
+
+            return Ok(new
+            {
+                userId = id,
+                userName = user.UserName,
+                email = user.Email,
+                totalSessions = sessions.Count,
+                sessions
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving sessions for user {UserId}", id);
+            return StatusCode(500, new { error = "Failed to retrieve user sessions" });
+        }
+    }
+
+    /// <summary>
+    /// Revoke all sessions for a specific user (Admin only)
+    /// </summary>
+    [HttpPost("{id}/sessions/revoke-all")]
+    [Authorize(Policy = Policies.SessionsRevoke)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RevokeAllUserSessions(Guid id)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return NotFound(new { error = "User not found" });
+            }
+
+            var revokedCount = await _sessionService.RevokeAllUserSessionsAsync(id, "Revoked by administrator");
+
+            _logger.LogInformation("Admin revoked {Count} sessions for user {UserId}", revokedCount, id);
+
+            return Ok(new
+            {
+                message = $"Revoked {revokedCount} session(s) for user {user.UserName}",
+                revokedCount
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error revoking sessions for user {UserId}", id);
+            return StatusCode(500, new { error = "Failed to revoke user sessions" });
         }
     }
 }
