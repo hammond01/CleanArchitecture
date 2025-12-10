@@ -1,0 +1,74 @@
+@baseUrl = https://localhost:5001/api
+@adminUsername = admin@example.com
+@adminPassword = Admin@123456
+@testUserId = 00000000-0000-0000-0000-000000000000
+
+### 1. Admin Login
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminUsername}}",
+  "password": "{{adminPassword}}"
+}
+
+### Extract Token
+@adminToken = {{adminLogin.response.body.$.token}}
+
+### 2. Get All Users
+GET {{baseUrl}}/admin/users
+Authorization: Bearer {{adminToken}}
+
+### 3. Get User by ID
+GET {{baseUrl}}/admin/users/{{testUserId}}
+Authorization: Bearer {{adminToken}}
+
+### 4. View User's Sessions (Admin)
+# View all active sessions for a specific user
+GET {{baseUrl}}/admin/users/{{testUserId}}/sessions
+Authorization: Bearer {{adminToken}}
+
+### 5. Revoke All User Sessions (Admin)
+# Force logout a user by revoking all their sessions
+POST {{baseUrl}}/admin/users/{{testUserId}}/sessions/revoke-all
+Authorization: Bearer {{adminToken}}
+
+### 6. Update User
+PUT {{baseUrl}}/admin/users/{{testUserId}}
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "newemail@example.com",
+  "userName": "newusername",
+  "phoneNumber": "+1234567890"
+}
+
+### 7. Delete User
+DELETE {{baseUrl}}/admin/users/{{testUserId}}
+Authorization: Bearer {{adminToken}}
+
+### 8. Assign Role to User
+POST {{baseUrl}}/admin/users/{{testUserId}}/roles/User
+Authorization: Bearer {{adminToken}}
+
+### 9. Remove Role from User
+DELETE {{baseUrl}}/admin/users/{{testUserId}}/roles/Admin
+Authorization: Bearer {{adminToken}}
+
+###
+# Workflow Example: Monitor and Force Logout User
+###
+
+### Step 1: Check user's active sessions
+GET {{baseUrl}}/admin/users/{{testUserId}}/sessions
+Authorization: Bearer {{adminToken}}
+
+### Step 2: If suspicious activity detected, revoke all sessions
+POST {{baseUrl}}/admin/users/{{testUserId}}/sessions/revoke-all
+Authorization: Bearer {{adminToken}}
+
+### Step 3: Verify sessions are revoked
+GET {{baseUrl}}/admin/users/{{testUserId}}/sessions
+Authorization: Bearer {{adminToken}}
