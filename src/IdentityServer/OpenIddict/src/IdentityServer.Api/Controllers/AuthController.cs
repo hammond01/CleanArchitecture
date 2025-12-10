@@ -147,11 +147,11 @@ public class AuthController : ControllerBase
         if (result.IsSuccess)
         {
             _logger.LogInformation("Confirmation email sent successfully to {Email}", request.Email);
-            return Ok(new MessageResponse { Message = result.Data });
+            return Ok(new MessageResponse { Message = result.Data! });
         }
 
         _logger.LogWarning("Failed to send confirmation email to {Email}: {Error}", request.Email, result.ErrorMessage);
-        return BadRequest(new ErrorResponse { Error = result.ErrorMessage ?? "Failed to send confirmation email" });
+        return BadRequest(new ErrorResponse { Error = (result.ErrorMessage ?? "Failed to send confirmation email")! });
     }
 
     /// <summary>
@@ -178,11 +178,11 @@ public class AuthController : ControllerBase
         if (result.IsSuccess)
         {
             _logger.LogInformation("Email confirmed successfully for user: {UserId}", request.UserId);
-            return Ok(new MessageResponse { Message = result.Data });
+            return Ok(new MessageResponse { Message = result.Data! });
         }
 
         _logger.LogWarning("Email confirmation failed for user {UserId}: {Error}", request.UserId, result.ErrorMessage);
-        return BadRequest(new ErrorResponse { Error = result.ErrorMessage ?? "Email confirmation failed" });
+        return BadRequest(new ErrorResponse { Error = (result.ErrorMessage ?? "Email confirmation failed")! });
     }
 
     /// <summary>
@@ -207,7 +207,7 @@ public class AuthController : ControllerBase
 
         // Always return success for security reasons (don't reveal if email exists)
         _logger.LogInformation("Password reset processed for {Email}", request.Email);
-        return Ok(new MessageResponse { Message = result.Data });
+        return Ok(new MessageResponse { Message = result.Data! });
     }
 
     /// <summary>
@@ -235,11 +235,11 @@ public class AuthController : ControllerBase
         if (result.IsSuccess)
         {
             _logger.LogInformation("Password reset successfully for user: {UserId}", request.UserId);
-            return Ok(new MessageResponse { Message = result.Data });
+            return Ok(new MessageResponse { Message = result.Data! });
         }
 
         _logger.LogWarning("Password reset failed for user {UserId}: {Error}", request.UserId, result.ErrorMessage);
-        return BadRequest(new ErrorResponse { Error = result.ErrorMessage ?? "Password reset failed" });
+        return BadRequest(new ErrorResponse { Error = (result.ErrorMessage ?? "Password reset failed")! });
     }
 }
 
