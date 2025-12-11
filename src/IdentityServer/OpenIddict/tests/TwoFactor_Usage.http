@@ -1,0 +1,115 @@
+@baseUrl = https://localhost:5001/api
+@userEmail = test@example.com
+@userPassword = Test@123456
+@adminEmail = admin@example.com
+@adminPassword = Admin@123456
+
+### 1. User Login (without 2FA)
+# @name userLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{userEmail}}",
+  "password": "{{userPassword}}"
+}
+
+### Extract Token
+@userToken = {{userLogin.response.body.$.token}}
+
+### 2. Get 2FA Status
+GET {{baseUrl}}/2fa/status
+Authorization: Bearer {{userToken}}
+
+### 3. Setup 2FA (Generate QR Code & Secret)
+POST {{baseUrl}}/2fa/setup
+Authorization: Bearer {{userToken}}
+
+### Extract 2FA Secret (for manual testing)
+@twoFactorSecret = {{setup2fa.response.body.$.manualEntryKey}}
+
+### 4. Verify TOTP Code (use authenticator app to get code)
+POST {{baseUrl}}/2fa/verify-code
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+### 5. Enable 2FA (with valid TOTP code)
+POST {{baseUrl}}/2fa/enable
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "totpCode": "123456"
+}
+
+### 6. Login with 2FA Required
+POST {{baseUrl}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&username={{userEmail}}&password={{userPassword}}&2fa_code=123456&scope=offline_access
+
+### 7. Regenerate Backup Codes
+POST {{baseUrl}}/2fa/regenerate-backup-codes
+Authorization: Bearer {{userToken}}
+
+### 8. Verify Backup Code
+POST {{baseUrl}}/2fa/verify-backup-code
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "code": "123456"
+}
+
+### 9. Disable 2FA
+POST {{baseUrl}}/2fa/disable
+Authorization: Bearer {{userToken}}
+
+### ========================================
+### Admin 2FA Management
+### ========================================
+
+### Admin Login
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+### Extract Admin Token
+@adminToken = {{adminLogin.response.body.$.token}}
+
+### 10. Admin: Get User 2FA Status
+GET {{baseUrl}}/2fa/admin/00000000-0000-0000-0000-000000000000/status
+Authorization: Bearer {{adminToken}}
+
+### 11. Admin: Disable User 2FA
+POST {{baseUrl}}/2fa/admin/00000000-0000-0000-0000-000000000000/disable
+Authorization: Bearer {{adminToken}}
+
+### 12. Admin: Reset User 2FA Setup
+POST {{baseUrl}}/2fa/admin/00000000-0000-0000-0000-000000000000/reset
+Authorization: Bearer {{adminToken}}
+
+###
+# 2FA Setup Workflow:
+# 1. Call /2fa/setup to get QR code and backup codes
+# 2. Scan QR code with authenticator app (Google Authenticator, Authy, etc.)
+# 3. Call /2fa/verify-code to test the TOTP code
+# 4. Call /2fa/enable with valid TOTP code to enable 2FA
+# 5. From now on, login requires 2fa_code parameter
+#
+# Login with 2FA:
+# POST /connect/token
+# grant_type=password&username=user&password=pass&2fa_code=123456&scope=offline_access
+#
+# Backup codes can be used if authenticator is lost:
+# POST /2fa/verify-backup-code with backup code
+#

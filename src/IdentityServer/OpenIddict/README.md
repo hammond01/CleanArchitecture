@@ -13,6 +13,8 @@ A complete, production-ready Identity Server built with **OpenIddict** and **Cle
 - ✅ **Permission-Based Authorization** - Granular permission control
 - ✅ **JWT Tokens** - Access & Refresh token support
 - ✅ **Session Management** - Track and manage user sessions with device detection
+- ✅ **Real-time Dashboard Statistics** - Live metrics and user activity monitoring
+- ✅ **Two-Factor Authentication (2FA)** - TOTP authenticator apps with backup codes
 - ✅ **Email Confirmation** - Secure email verification
 - ✅ **Password Reset** - Secure password recovery flow
 
@@ -251,7 +253,42 @@ The admin dashboard provides live statistics including:
 - **Session Monitoring** - Track user session activity
 - **Security Overview** - Monitor system access patterns
 
-## 🔑 Role & Permission System
+## � Two-Factor Authentication (2FA)
+
+### Features
+
+- **TOTP Standard** - Time-based One-Time Password using authenticator apps
+- **QR Code Setup** - Easy setup with QR codes for Google Authenticator, Authy, etc.
+- **Backup Codes** - 10 recovery codes for when authenticator is lost
+- **Admin Management** - Administrators can disable/reset 2FA for users
+- **Secure Login** - 2FA codes required on password grant with offline_access
+
+### Setup Process
+
+1. **Generate Setup** - Call `POST /api/2fa/setup` to get QR code and backup codes
+2. **Scan QR Code** - Use authenticator app to scan QR code
+3. **Verify Code** - Test with `POST /api/2fa/verify-code`
+4. **Enable 2FA** - Call `POST /api/2fa/enable` with valid TOTP code
+
+### Login with 2FA
+
+When 2FA is enabled, password grant requires additional `2fa_code` parameter:
+
+```bash
+POST /connect/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=password&username=user&password=pass&2fa_code=123456&scope=offline_access
+```
+
+### Backup Codes
+
+- Generated automatically when enabling 2FA
+- Each code can be used only once
+- Regenerate with `POST /api/2fa/regenerate-backup-codes`
+- Use `POST /api/2fa/verify-backup-code` when authenticator is unavailable
+
+## �🔑 Role & Permission System
 
 ### Roles
 
@@ -319,6 +356,22 @@ public async Task<IActionResult> DeleteUser(string userId)
 
 - `GET /api/admin/dashboard/stats` - Get real-time dashboard statistics
 - `GET /api/admin/dashboard/activities` - Get recent user activities
+
+### Two-Factor Authentication
+
+- `GET /api/2fa/status` - Get current user's 2FA status
+- `POST /api/2fa/setup` - Generate QR code and setup information
+- `POST /api/2fa/enable` - Enable 2FA with TOTP code verification
+- `POST /api/2fa/disable` - Disable 2FA
+- `POST /api/2fa/regenerate-backup-codes` - Generate new backup codes
+- `POST /api/2fa/verify-code` - Verify TOTP code
+- `POST /api/2fa/verify-backup-code` - Verify backup code
+
+### Admin 2FA Management
+
+- `GET /api/2fa/admin/{userId}/status` - Get user's 2FA status (Admin only)
+- `POST /api/2fa/admin/{userId}/disable` - Disable user's 2FA (Admin only)
+- `POST /api/2fa/admin/{userId}/reset` - Reset user's 2FA setup (Admin only)
 
 ### Role Management
 
