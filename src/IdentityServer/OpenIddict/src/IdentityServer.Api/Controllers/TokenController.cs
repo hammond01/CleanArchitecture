@@ -21,6 +21,7 @@ public class TokenController : ControllerBase
     private readonly IOpenIddictApplicationManager _applicationManager;
     private readonly IOpenIddictScopeManager _scopeManager;
     private readonly ISessionService _sessionService;
+    private readonly ITwoFactorService _twoFactorService;
     private readonly ILogger<TokenController> _logger;
 
     public TokenController(
@@ -29,6 +30,7 @@ public class TokenController : ControllerBase
         IOpenIddictApplicationManager applicationManager,
         IOpenIddictScopeManager scopeManager,
         ISessionService sessionService,
+        ITwoFactorService twoFactorService,
         ILogger<TokenController> logger)
     {
         _userManager = userManager;
@@ -36,6 +38,7 @@ public class TokenController : ControllerBase
         _applicationManager = applicationManager;
         _scopeManager = scopeManager;
         _sessionService = sessionService;
+        _twoFactorService = twoFactorService;
         _logger = logger;
     }
 
@@ -91,6 +94,42 @@ public class TokenController : ControllerBase
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "The username/password couple is invalid."
                 }));
+        }
+
+        // Check if 2FA is enabled for this user
+        if (await _twoFactorService.IsEnabledAsync(user.Id))
+        {
+            // Check if 2FA code is provided
+            var twoFactorCode = request.GetParameter("2fa_code")?.ToString();
+            if (string.IsNullOrEmpty(twoFactorCode))
+            {
+                return Forbid(
+                    authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
+                    properties: new AuthenticationProperties(new Dictionary<string, string?>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Two-factor authentication code is required."
+                    }));
+            }
+
+            // Verify 2FA code
+            var isValidCode = await _twoFactorService.VerifyCodeAsync(user.Id, twoFactorCode);
+            if (!isValidCode)
+            {
+                // Try backup code if TOTP failed
+                isValidCode = await _twoFactorService.VerifyBackupCodeAsync(user.Id, twoFactorCode);
+            }
+
+            if (!isValidCode)
+            {
+                return Forbid(
+                    authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
+                    properties: new AuthenticationProperties(new Dictionary<string, string?>
+                    {
+                        [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
+                        [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid two-factor authentication code."
+                    }));
+            }
         }
 
         // Create the claims-based identity
