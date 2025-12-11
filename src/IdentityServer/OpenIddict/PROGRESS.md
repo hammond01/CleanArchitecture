@@ -67,12 +67,19 @@
    - Roles CRUD with permission checks
    - OAuth Clients CRUD
    - Scopes CRUD
-   - Dashboard (stub data)
+   - Dashboard with real-time statistics
+   - Session management (view & revoke user sessions)
 
 4. **Authorization**
    - Permission-based access control
    - Database-driven permissions
    - Auto-seeding on startup
+
+5. **Session Management**
+   - Track login sessions with device detection
+   - View active sessions (user & admin)
+   - Revoke specific/all sessions
+   - UAParser for device info (Desktop - Windows 10 - Chrome)
 
 ### ⚠️ Needs Configuration
 - Email SMTP settings (currently using Ethereal placeholders)
@@ -82,21 +89,30 @@
 ### 🚧 TODO Next
 
 #### High Priority
-1. **Session Management** ⏰ 2 hours
-   - Track login sessions in `UserSession` table
-   - API to view active sessions
-   - Logout from all devices
-   - Revoke specific session
-
-2. **Dashboard Real Statistics** ⏰ 1 hour
-   - Replace stub data with actual queries
-   - Total users, active users, sessions, clients
-
-3. **Two-Factor Authentication (2FA)** ⏰ 3-4 hours
+1. **Two-Factor Authentication (2FA)** ⏰ 3-4 hours
    - TOTP setup with QR code
    - Verify 2FA code on login
    - Backup codes generation
    - Disable 2FA endpoint
+
+#### Medium Priority
+2. **Audit Logging** ⏰ 2 hours
+   - Middleware to log all API calls
+   - Store in `AuditLog` table
+   - Filter & search audit logs
+   - Admin API to view logs
+
+3. **Consent Page** ⏰ 3 hours
+   - Razor Page for OAuth consent
+   - Show client info & requested scopes
+   - Remember consent checkbox
+   - Allow/Deny buttons
+
+4. **External Login Providers** ⏰ 2-3 hours each
+   - Google OAuth
+   - GitHub OAuth
+   - Microsoft OAuth
+   - Link/unlink external accounts
 
 #### Medium Priority
 4. **Audit Logging** ⏰ 2 hours

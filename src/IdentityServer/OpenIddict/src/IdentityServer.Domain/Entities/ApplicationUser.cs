@@ -16,6 +16,11 @@ public class ApplicationUser : IdentityUser<Guid>
     public DateTime? LastLoginAt { get; set; }
     public bool IsActive { get; set; } = true;
 
+    // Two-Factor Authentication
+    public string? TwoFactorSecret { get; set; }
+    public List<string> BackupCodes { get; set; } = new();
+    public DateTime? TwoFactorEnabledAt { get; set; }
+
     // Navigation properties
     public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
     public virtual ICollection<UserSession> Sessions { get; set; } = new List<UserSession>();
