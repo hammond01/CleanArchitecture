@@ -132,6 +132,9 @@ builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 // Register Session Service
 builder.Services.AddScoped<ISessionService, SessionService>();
 
+// Register Two-Factor Authentication Service
+builder.Services.AddScoped<ITwoFactorService, TwoFactorService>();
+
 // Register HttpClient for internal API calls
 builder.Services.AddHttpClient();
 
