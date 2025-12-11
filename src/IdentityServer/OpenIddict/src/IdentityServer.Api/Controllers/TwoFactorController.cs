@@ -1,6 +1,7 @@
 using IdentityServer.Domain.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static IdentityServer.Api.Policies;
 
 namespace IdentityServer.Api.Controllers;
 
@@ -195,6 +196,85 @@ public class TwoFactorController : ControllerBase
         catch (Exception ex)
         {
             return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Admin: Get 2FA status for any user
+    /// </summary>
+    [HttpGet("admin/{userId}/status")]
+    [Authorize(Policy = Policies.UsersView)]
+    [ProducesResponseType(typeof(TwoFactorStatus), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserTwoFactorStatus(Guid userId)
+    {
+        try
+        {
+            var status = await _twoFactorService.GetStatusAsync(userId);
+            return Ok(status);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Admin: Disable 2FA for any user
+    /// </summary>
+    [HttpPost("admin/{userId}/disable")]
+    [Authorize(Policy = Policies.UsersManage)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AdminDisableTwoFactor(Guid userId)
+    {
+        try
+        {
+            var success = await _twoFactorService.DisableAsync(userId);
+            if (!success)
+            {
+                return BadRequest(new { error = "Failed to disable two-factor authentication" });
+            }
+
+            return Ok(new { message = $"Two-factor authentication disabled for user {userId}" });
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Admin: Reset 2FA setup for any user (allows user to setup again)
+    /// </summary>
+    [HttpPost("admin/{userId}/reset")]
+    [Authorize(Policy = Policies.UsersManage)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AdminResetTwoFactor(Guid userId)
+    {
+        try
+        {
+            // Get user to check current status
+            var status = await _twoFactorService.GetStatusAsync(userId);
+
+            // If 2FA is enabled, disable it first
+            if (status.IsEnabled)
+            {
+                var disabled = await _twoFactorService.DisableAsync(userId);
+                if (!disabled)
+                {
+                    return BadRequest(new { error = "Failed to reset two-factor authentication" });
+                }
+            }
+
+            return Ok(new { message = $"Two-factor authentication reset for user {userId}. User can now setup 2FA again." });
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { error = ex.Message });
         }
     }
 
