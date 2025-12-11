@@ -146,6 +146,58 @@ public class TwoFactorController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Verify TOTP code (for testing during setup)
+    /// </summary>
+    [HttpPost("verify-code")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> VerifyCode([FromBody] VerifyCodeRequest request)
+    {
+        try
+        {
+            var userId = GetCurrentUserId();
+            var isValid = await _twoFactorService.VerifyCodeAsync(userId, request.Code);
+
+            if (!isValid)
+            {
+                return BadRequest(new { error = "Invalid TOTP code" });
+            }
+
+            return Ok(new { message = "TOTP code verified successfully" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Verify backup code (for testing)
+    /// </summary>
+    [HttpPost("verify-backup-code")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> VerifyBackupCode([FromBody] VerifyCodeRequest request)
+    {
+        try
+        {
+            var userId = GetCurrentUserId();
+            var isValid = await _twoFactorService.VerifyBackupCodeAsync(userId, request.Code);
+
+            if (!isValid)
+            {
+                return BadRequest(new { error = "Invalid backup code" });
+            }
+
+            return Ok(new { message = "Backup code verified and consumed successfully" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
     private Guid GetCurrentUserId()
     {
         var userIdClaim = User.FindFirst("sub")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
@@ -163,4 +215,12 @@ public class TwoFactorController : ControllerBase
 public class EnableTwoFactorRequest
 {
     public string TotpCode { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// Request model for verifying codes
+/// </summary>
+public class VerifyCodeRequest
+{
+    public string Code { get; set; } = string.Empty;
 }
