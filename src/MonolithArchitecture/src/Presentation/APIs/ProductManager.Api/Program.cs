@@ -1,7 +1,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using ProductManager.Api.Versioning; // Add this for API versioning
 using ProductManager.Application;
@@ -67,8 +69,8 @@ builder.Host.UseSerilog();
     builder.Services.AddApiVersioningConfiguration();
     builder.Services.AddSwaggerVersioning();    // Add Health Checks
     builder.Services.AddHealthChecks()
-        .AddCheck<DatabaseHealthCheck>("database")
-        .AddCheck<ApplicationHealthCheck>("application");
+        .AddCheck<DatabaseHealthCheck>("database", tags: new[] { "ready" })
+        .AddCheck<ApplicationHealthCheck>("application", tags: new[] { "ready" });
 
     // Configure AppSettings and Infrastructure FIRST
     builder.Services.InfrastructureConfigureServices(builder.Configuration);
@@ -215,6 +217,17 @@ var app = builder.Build();
 
     app.UseAuthorization();
     app.MapControllers();
+
+    // Map Health Checks endpoints
+    app.MapHealthChecks("/health");
+    app.MapHealthChecks("/health/ready", new HealthCheckOptions
+    {
+        Predicate = healthCheck => healthCheck.Tags.Contains("ready")
+    });
+    app.MapHealthChecks("/health/live", new HealthCheckOptions
+    {
+        Predicate = _ => false // Liveness probe - always returns healthy if app is running
+    });
 
     // Log that the server is ready
     Log.Information("✅ ProductManager API is ready!");
