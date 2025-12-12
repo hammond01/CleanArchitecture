@@ -295,7 +295,9 @@ A modern e-commerce product management system built with **Clean Architecture** 
 app.UseSerilogRequestLogging();           // Request logging
 app.UseCompressionConfiguration();        // Response compression
 app.UseCors("Development|AllowedOrigins"); // CORS policies
-app.UseHealthChecks("/health");           // Health monitoring
+app.MapHealthChecks("/health");           // Basic health check
+app.MapHealthChecks("/health/ready");     // Readiness probe
+app.MapHealthChecks("/health/live");      // Liveness probe
 app.UseSwaggerVersioning();               // API documentation
 app.UseGlobalExceptionHandlerMiddleware(); // Global error handling
 app.UseMiddleware<ApiRequestLoggingMiddleware>(); // API logging
@@ -429,7 +431,11 @@ src/
     - **Main Documentation**: `https://localhost:5001/swagger`
     - **API v1.0**: Full feature set with all business modules
     - **API v2.0**: Enhanced version with additional features
-    - **Health Monitoring**: `https://localhost:5001/health/detailed` (Development only)
+    - **Health Checks**:
+        - `https://localhost:5001/health` - Basic health status
+        - `https://localhost:5001/health/ready` - Readiness probe (database connectivity)
+        - `https://localhost:5001/health/live` - Liveness probe (app responsiveness)
+        - `https://localhost:5001/api/v1.0/health/detailed` - Detailed health info
 
 7. **Test the API with authentication**
 
@@ -900,7 +906,7 @@ Access comprehensive API documentation at `/swagger` with:
 -   🎯 **Action Logging Filter** - Automatic logging of controller actions and performance metrics
 -   📝 **Audit Trail** - Complete system change tracking via AuditLogEntry
 -   📊 **API Monitoring** - Request/response logging with ApiLogItem
--   🏥 **Health Checks** - Application monitoring (planned)
+-   🏥 **Health Checks** - Application monitoring with readiness/liveness probes
 -   📚 **API Documentation** - Comprehensive Swagger documentation
 -   🔄 **Real-time Updates** - SignalR integration (planned)
 -   🌐 **Multi-database Support** - Separate databases for main data and identity
