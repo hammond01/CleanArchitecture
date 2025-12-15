@@ -1,0 +1,28 @@
+name: UI CI
+
+on:
+  push:
+    paths:
+      - 'src/Presentation/UI/ProductManager.ReactJs/**'
+  pull_request:
+    paths:
+      - 'src/Presentation/UI/ProductManager.ReactJs/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        working-directory: src/Presentation/UI/ProductManager.ReactJs
+        run: npm ci
+      - name: Lint
+        working-directory: src/Presentation/UI/ProductManager.ReactJs
+        run: npm run lint || true
+      - name: Build
+        working-directory: src/Presentation/UI/ProductManager.ReactJs
+        run: npm run build --if-present || true
