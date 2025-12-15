@@ -52,6 +52,7 @@ const ProductList: React.FC = () => {
       title: 'Unit Price',
       dataIndex: 'unitPrice',
       valueType: 'money',
+      responsive: ['md'],
       renderText: (val: number) => `$${val?.toFixed(2) || '0.00'}`,
     },
     {
@@ -63,16 +64,19 @@ const ProductList: React.FC = () => {
       title: 'Units On Order',
       dataIndex: 'unitsOnOrder',
       valueType: 'digit',
+      responsive: ['md'],
     },
     {
       title: 'Reorder Level',
       dataIndex: 'reorderLevel',
       valueType: 'digit',
+      responsive: ['lg'],
     },
     {
       title: 'Discontinued',
       dataIndex: 'discontinued',
       valueType: 'switch',
+      responsive: ['sm'],
       render: (_dom, entity) => (entity.discontinued ? 'Yes' : 'No'),
     },
     {
