@@ -139,6 +139,43 @@ const ProductList: React.FC = () => {
           >
             <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
+          <Button
+            key="export"
+            onClick={async () => {
+              try {
+                const res = await productApi.getAll();
+                if (res && res.statusCode === 200) {
+                  const csv = [
+                    ['Id', 'ProductName', 'UnitPrice', 'UnitsInStock', 'UnitsOnOrder', 'ReorderLevel', 'Discontinued'],
+                    ...res.data.map((p) => [
+                      p.id,
+                      p.productName,
+                      p.unitPrice,
+                      p.unitsInStock,
+                      p.unitsOnOrder,
+                      p.reorderLevel,
+                      p.discontinued,
+                    ]),
+                  ]
+                    .map((r) => r.join(','))
+                    .join('\n');
+
+                  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                  const url = URL.createObjectURL(blob);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', `products-${Date.now()}.csv`);
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+              } catch (_error) {
+                message.error('Failed to export products');
+              }
+            }}
+          >
+            <FormattedMessage id="pages.searchTable.export" defaultMessage="Export CSV" />
+          </Button>,
         ]}
         request={async (_params) => {
           try {
