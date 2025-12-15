@@ -67,7 +67,7 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
               discontinued: !!value.discontinued,
             } as any;
 
-            let response;
+            let response: any = null;
             if (productId) {
               // update
               response = await productApi.update(String(productId), payload);
@@ -86,7 +86,7 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
 
             messageApi.error(response?.message || 'Failed to save product');
             return false;
-          } catch (error) {
+          } catch (_error) {
             messageApi.error('Failed to save product');
             return false;
           }

@@ -43,7 +43,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
               messageApi.error(response.message || 'Failed to create product');
               return false;
             }
-          } catch (error) {
+          } catch (_error) {
             messageApi.error('Failed to create product');
             return false;
           }
