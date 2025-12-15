@@ -34,7 +34,8 @@ const ProductList: React.FC = () => {
         return (
           <a
             onClick={() => {
-              setCurrentRow(entity);
+              // Navigate to product detail page
+              window.location.href = `/products/${entity.id}`;
             }}
           >
             {dom}
@@ -72,7 +73,7 @@ const ProductList: React.FC = () => {
       title: 'Discontinued',
       dataIndex: 'discontinued',
       valueType: 'switch',
-      render: (dom, entity) => (entity.discontinued ? 'Yes' : 'No'),
+      render: (_dom, entity) => (entity.discontinued ? 'Yes' : 'No'),
     },
     {
       title: 'Actions',
@@ -96,7 +97,7 @@ const ProductList: React.FC = () => {
               await productApi.delete(record.id);
               messageApi.success('Product deleted successfully');
               actionRef.current?.reload();
-            } catch (error) {
+            } catch (_error) {
               messageApi.error('Failed to delete product');
             }
           }}
@@ -135,7 +136,7 @@ const ProductList: React.FC = () => {
             <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
-        request={async (params) => {
+        request={async (_params) => {
           try {
             const response = await productApi.getAll();
             if (response.statusCode === 200) {
@@ -208,7 +209,7 @@ const ProductList: React.FC = () => {
                 messageApi.success('Products deleted successfully');
                 setSelectedRows([]);
                 actionRef.current?.reload();
-              } catch (error) {
+              } catch (_error) {
                 messageApi.error('Failed to delete some products');
               }
             }}

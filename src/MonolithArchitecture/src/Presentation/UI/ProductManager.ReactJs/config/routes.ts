@@ -262,6 +262,18 @@ export default [
     redirect: '/dashboard/analysis',
   },
   {
+    name: 'products',
+    icon: 'database',
+    path: '/products',
+    component: './products',
+    routes: [
+      {
+        path: '/products/:id',
+        component: './products/detail',
+      },
+    ],
+  },
+  {
     component: '404',
     path: './*',
   },

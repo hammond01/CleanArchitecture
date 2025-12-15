@@ -1,3 +1,33 @@
+# ProductManager UI (React)
+
+Quick guide to run the Ant Design Pro UI locally and connect it to the ProductManager API.
+
+Prerequisites
+- Node.js (>=18 recommended)
+- npm or yarn
+
+Run locally (development)
+
+```bash
+# Install deps
+npm install
+
+# Start dev server (default port 8000)
+npm start
+```
+
+Proxy (development)
+- The app uses `config/proxy.ts` to forward `/api` requests to `http://localhost:5000` by default.
+
+Tests
+
+```bash
+# Run Jest tests
+npm test
+```
+
+Notes
+- Some project test utilities depend on `@umijs/max/test` and related packages — if tests fail to start, run `npm install` and ensure the workspace dependencies are installed.
 # Ant Design Pro
 
 This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
