@@ -144,10 +144,16 @@ const ProductList: React.FC = () => {
           try {
             const response = await productApi.getAll();
             if (response.statusCode === 200) {
+              let data = response.data || [];
+              // Simple client-side filtering when search is used
+              if (_params && _params.productName) {
+                const q = String(_params.productName).toLowerCase();
+                data = data.filter((p) => p.productName?.toLowerCase().includes(q));
+              }
               return {
-                data: response.data || [],
+                data,
                 success: true,
-                total: response.data?.length || 0,
+                total: data.length,
               };
             }
             return {
@@ -155,8 +161,8 @@ const ProductList: React.FC = () => {
               success: false,
               total: 0,
             };
-          } catch (error) {
-            console.error('Failed to fetch products:', error);
+          } catch (_error) {
+            console.error('Failed to fetch products:', _error);
             return {
               data: [],
               success: false,
