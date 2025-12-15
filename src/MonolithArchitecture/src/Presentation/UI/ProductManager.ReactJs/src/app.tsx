@@ -11,7 +11,7 @@ import {
   Question,
   SelectLang,
 } from '@/components';
-import { currentUser as queryCurrentUser } from '@/services/ant-design-pro/api';
+import { authApi } from '@/services/api';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import '@ant-design/v5-patch-for-react-19';
@@ -31,10 +31,13 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser({
-        skipErrorHandler: true,
-      });
-      return msg.data;
+      const response = await authApi.getProfile();
+      if (response.statusCode === 200 && response.data) {
+        return {
+          ...response.data,
+          access: 'admin', // Map to admin access for now
+        };
+      }
     } catch (_error) {
       history.push(loginPath);
     }
