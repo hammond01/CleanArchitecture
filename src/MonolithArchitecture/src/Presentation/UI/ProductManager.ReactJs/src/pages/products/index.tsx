@@ -145,7 +145,7 @@ const ProductList: React.FC = () => {
               try {
                 const res = await productApi.getAll();
                 if (res && res.statusCode === 200) {
-                  const csv = [
+                  const rows = [
                     ['Id', 'ProductName', 'UnitPrice', 'UnitsInStock', 'UnitsOnOrder', 'ReorderLevel', 'Discontinued'],
                     ...res.data.map((p) => [
                       p.id,
@@ -156,18 +156,10 @@ const ProductList: React.FC = () => {
                       p.reorderLevel,
                       p.discontinued,
                     ]),
-                  ]
-                    .map((r) => r.join(','))
-                    .join('\n');
-
-                  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                  const url = URL.createObjectURL(blob);
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.setAttribute('download', `products-${Date.now()}.csv`);
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
+                  ];
+                  import('@/services/utils').then(({ exportToCsv }) => {
+                    exportToCsv(`products-${Date.now()}.csv`, rows);
+                  });
                 }
               } catch (_error) {
                 message.error('Failed to export products');
