@@ -63,12 +63,14 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
           ]}
           width="md"
           name="productName"
+          fieldProps={{ 'aria-label': 'Product Name' }}
           label={<FormattedMessage id="pages.searchTable.productName" defaultMessage="Product Name" />}
         />
 
         <ProFormNumber
           width="md"
           name="unitPrice"
+          fieldProps={{ 'aria-label': 'Unit Price' }}
           label={<FormattedMessage id="pages.searchTable.unitPrice" defaultMessage="Unit Price" />}
           min={0}
           fieldProps={{ precision: 2 }}
@@ -77,6 +79,7 @@ const CreateProductForm: React.FC<CreateProductFormProps> = ({
         <ProFormNumber
           width="md"
           name="unitsInStock"
+          fieldProps={{ 'aria-label': 'Units In Stock' }}
           label={<FormattedMessage id="pages.searchTable.unitsInStock" defaultMessage="Units In Stock" />}
           min={0}
         />
