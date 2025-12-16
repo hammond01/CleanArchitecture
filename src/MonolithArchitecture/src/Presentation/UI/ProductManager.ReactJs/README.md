@@ -19,6 +19,13 @@ npm start
 Proxy (development)
 - The app uses `config/proxy.ts` to forward `/api` requests to `http://localhost:5000` by default.
 
+Product Pages
+- The UI includes a Product Management section at `/products` with list, create, edit and detail views.
+- The Product list supports client-side searching and CSV export.
+
+Health Checks
+- Ensure the API is running and health endpoints are available at `/health`, `/health/ready`, and `/health/live` for monitoring and Kubernetes probes.
+
 Tests
 
 ```bash
