@@ -8,16 +8,22 @@ export async function queryProjectNotice(): Promise<{ data: NoticeType[] }> {
       {
         id: '1',
         title: 'Welcome to ProductManager',
+        logo: '',
         description: 'Your enterprise product management system is ready',
-        extra: 'Now',
-        status: 'todo',
+        updatedAt: new Date().toISOString(),
+        member: 'Product Team',
+        href: '',
+        memberLink: '',
       },
       {
         id: '2',
         title: 'API Documentation',
+        logo: '',
         description: 'Check out the comprehensive API documentation',
-        extra: '1 hour ago',
-        status: 'urgent',
+        updatedAt: new Date().toISOString(),
+        member: 'Docs Team',
+        href: '',
+        memberLink: '',
       },
     ],
   };
@@ -29,27 +35,25 @@ export async function queryActivities(): Promise<{ data: ActivitiesType[] }> {
     data: [
       {
         id: '1',
+        updatedAt: '2025-12-12T10:00:00Z',
         user: {
-          nickname: 'Admin',
+          name: 'Admin',
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
         },
-        project: {
-          name: 'Product Management',
-          action: 'created',
-        },
-        time: '2025-12-12 10:00:00',
+        group: { name: 'Product Management', link: '' },
+        project: { name: 'Product Management', link: '' },
+        template: '',
       },
       {
         id: '2',
+        updatedAt: '2025-12-12T09:30:00Z',
         user: {
-          nickname: 'System',
+          name: 'System',
           avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
         },
-        project: {
-          name: 'Health Check',
-          action: 'completed',
-        },
-        time: '2025-12-12 09:30:00',
+        group: { name: 'Health', link: '' },
+        project: { name: 'Health Check', link: '' },
+        template: '',
       },
     ],
   };
@@ -74,11 +78,8 @@ export async function fakeChartData(): Promise<{ data: AnalysisData }> {
 
     return {
       data: {
-        users: customerCount,
-        categories: categoryCount,
-        products: productCount,
-        suppliers: supplierCount,
-        orders: orderCount,
+        visitData: [],
+        visitData2: [],
         salesData: [
           { x: '1月', y: Math.floor(Math.random() * 1000) },
           { x: '2月', y: Math.floor(Math.random() * 1000) },
@@ -93,31 +94,34 @@ export async function fakeChartData(): Promise<{ data: AnalysisData }> {
           { x: '11月', y: Math.floor(Math.random() * 1000) },
           { x: '12月', y: Math.floor(Math.random() * 1000) },
         ],
-        cpu: {
-          used: 75,
-          total: 100,
-        },
+        searchData: [],
+        offlineData: [],
+        offlineChartData: [],
+        salesTypeData: [],
+        salesTypeDataOnline: [],
+        salesTypeDataOffline: [],
         radarData: [
-          { name: 'Products', value: productCount },
-          { name: 'Categories', value: categoryCount },
-          { name: 'Suppliers', value: supplierCount },
-          { name: 'Customers', value: customerCount },
-          { name: 'Orders', value: orderCount },
+          { name: 'Products', label: 'Products', value: productCount },
+          { name: 'Categories', label: 'Categories', value: categoryCount },
+          { name: 'Suppliers', label: 'Suppliers', value: supplierCount },
+          { name: 'Customers', label: 'Customers', value: customerCount },
+          { name: 'Orders', label: 'Orders', value: orderCount },
         ],
       },
-    };
-  } catch (error) {
+    };  } catch (error) {
     console.error('Failed to fetch dashboard data:', error);
     // Return mock data as fallback
     return {
       data: {
-        users: 0,
-        categories: 0,
-        products: 0,
-        suppliers: 0,
-        orders: 0,
+        visitData: [],
+        visitData2: [],
         salesData: [],
-        cpu: { used: 0, total: 100 },
+        searchData: [],
+        offlineData: [],
+        offlineChartData: [],
+        salesTypeData: [],
+        salesTypeDataOnline: [],
+        salesTypeDataOffline: [],
         radarData: [],
       },
     };
