@@ -14,7 +14,8 @@
     "i18n-remove": "pro i18n-remove --locale=zh-CN --write",
     "postinstall": "max setup",
     "jest": "jest",
-    "lint": "npm run biome:lint && npn run tsc --noEmit",
+    "lint": "npm run biome:lint && npm run tsc --noEmit",
+    "lint:fix": "npx @biomejs/biome lint --fix",
     "lint-staged": "lint-staged",
     "openapi": "max openapi",
     "prepare": "husky",
@@ -31,7 +32,9 @@
     "test:update": "npm run jest -- -u",
     "tsc": "tsc --noEmit"
   },
-  "browserslist": ["defaults"],
+  "browserslist": [
+    "defaults"
+  ],
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
     "@ant-design/plots": "^2.6.0",
@@ -54,7 +57,9 @@
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.6.1",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.10",
@@ -72,9 +77,11 @@
     "lint-staged": "^16.1.2",
     "mockjs": "^1.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3",
+    "typescript": "^5.9.3",
     "umi-presets-pro": "^2.0.3",
     "umi-serve": "^1.9.11"
   },
-  "engines": { "node": ">=20.0.0" }
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }
