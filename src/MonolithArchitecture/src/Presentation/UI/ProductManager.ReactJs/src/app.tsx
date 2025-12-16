@@ -18,7 +18,6 @@ import '@ant-design/v5-patch-for-react-19';
 
 const isDev =
   process.env.NODE_ENV === 'development' || process.env.CI;
-const loginPath = '/user/login';
 
 /**
  * @see https://umijs.org/docs/api/runtime-config#getinitialstate
@@ -39,17 +38,13 @@ export async function getInitialState(): Promise<{
         };
       }
     } catch (_error) {
-      history.push(loginPath);
+      // Login temporarily disabled — do not redirect to login
     }
     return undefined;
   };
-  // 如果不是登录页面，执行
+  // If on registration or login page skip fetching user info
   const { location } = history;
-  if (
-    ![loginPath, '/user/register', '/user/register-result'].includes(
-      location.pathname,
-    )
-  ) {
+  if (!['/user/register', '/user/register-result'].includes(location.pathname)) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
@@ -85,11 +80,7 @@ export const layout: RunTimeLayoutConfig = ({
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      const { location } = history;
-      // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
-      }
+      // Login is temporarily disabled — do not redirect to login page on page change
     },
     bgLayoutImgList: [
       {
