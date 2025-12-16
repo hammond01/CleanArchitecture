@@ -11,12 +11,13 @@ import { FormattedMessage, useIntl } from '@umijs/max';
 import { Button, message, Popconfirm } from 'antd';
 import React, { useRef, useState } from 'react';
 import { productApi } from '@/services/api';
+import { exportToCsv } from '@/services/utils';
 import type { Product } from '@/services/api';
 import CreateProductForm from './components/CreateProductForm';
 import UpdateProductForm from './components/UpdateProductForm';
 
 const ProductList: React.FC = () => {
-  const actionRef = useRef<ActionType>();
+  const actionRef = useRef<ActionType>(null);
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<Product>();
@@ -147,7 +148,7 @@ const ProductList: React.FC = () => {
                 if (res && res.statusCode === 200) {
                   const rows = [
                     ['Id', 'ProductName', 'UnitPrice', 'UnitsInStock', 'UnitsOnOrder', 'ReorderLevel', 'Discontinued'],
-                    ...res.data.map((p) => [
+                    ...((res.data || []) as any[]).map((p) => [
                       p.id,
                       p.productName,
                       p.unitPrice,
@@ -157,9 +158,7 @@ const ProductList: React.FC = () => {
                       p.discontinued,
                     ]),
                   ];
-                  import('@/services/utils').then(({ exportToCsv }) => {
-                    exportToCsv(`products-${Date.now()}.csv`, rows);
-                  });
+                  exportToCsv(`products-${Date.now()}.csv`, rows);
                 }
               } catch (_error) {
                 message.error('Failed to export products');
@@ -175,7 +174,7 @@ const ProductList: React.FC = () => {
             if (response.statusCode === 200) {
               let data = response.data || [];
               // Simple client-side filtering when search is used
-              if (_params && _params.productName) {
+              if (_params?.productName) {
                 const q = String(_params.productName).toLowerCase();
                 data = data.filter((p) => p.productName?.toLowerCase().includes(q));
               }

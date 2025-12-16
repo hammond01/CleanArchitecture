@@ -1,6 +1,6 @@
-import { ModalForm, ProFormText, ProFormNumber, ProFormSwitch } from '@ant-design/pro-components';
+import { ModalForm, ProFormText, ProFormDigit, ProFormSwitch } from '@ant-design/pro-components';
 import { FormattedMessage } from '@umijs/max';
-import { message } from 'antd';
+import { message, Form } from 'antd';
 import React, { useEffect } from 'react';
 import { productApi } from '@/services/api';
 
@@ -18,7 +18,8 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
   productId,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
-  const [form] = ModalForm.useForm();
+  const [form] = Form.useForm();
+
 
   useEffect(() => {
     let mounted = true;
@@ -110,30 +111,29 @@ const UpdateProductForm: React.FC<UpdateProductFormProps> = ({
           label={<FormattedMessage id="pages.searchTable.productName" defaultMessage="Product Name" />}
         />
 
-        <ProFormNumber
+        <ProFormDigit
           width="md"
           name="unitPrice"
-          fieldProps={{ 'aria-label': 'Unit Price' }}
+          fieldProps={{ 'aria-label': 'Unit Price', precision: 2}}
           label={<FormattedMessage id="pages.searchTable.unitPrice" defaultMessage="Unit Price" />}
           min={0}
-          fieldProps={{ precision: 2 }}
         />
 
-        <ProFormNumber
+        <ProFormDigit
           width="md"
           name="unitsInStock"
           label={<FormattedMessage id="pages.searchTable.unitsInStock" defaultMessage="Units In Stock" />}
           min={0}
         />
 
-        <ProFormNumber
+        <ProFormDigit
           width="md"
           name="unitsOnOrder"
           label={<FormattedMessage id="pages.searchTable.unitsOnOrder" defaultMessage="Units On Order" />}
           min={0}
         />
 
-        <ProFormNumber
+        <ProFormDigit
           width="md"
           name="reorderLevel"
           label={<FormattedMessage id="pages.searchTable.reorderLevel" defaultMessage="Reorder Level" />}
