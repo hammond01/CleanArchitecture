@@ -1,4 +1,3 @@
-// @ts-expect-error
 /* eslint-disable */
 import { request } from "@umijs/max";
 import type { TableListItem } from "./data";
