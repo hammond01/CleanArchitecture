@@ -188,6 +188,77 @@ export const orderApi = {
   delete: (id: string) => request.delete<ApiResponse<Order>>(`/api/v1/orders/${id}`),
 };
 
+// Logs API
+export interface ApiLog {
+  id: string;
+  method: string;
+  path: string;
+  statusCode: number;
+  responseTimeMs?: number;
+  userId?: string | null;
+  clientIpAddress?: string | null;
+  timestamp: string;
+  queryString?: string | null;
+  requestBody?: string | null;
+  responseBody?: string | null;
+}
+
+export interface ActionLog {
+  id: string;
+  actionName: string;
+  userId?: string | null;
+  objectId?: string | null;
+  log?: string | null;
+  timestamp: string;
+}
+
+export interface LogStatistics {
+  ApiLogs: {
+    TotalRequests: number;
+    SuccessfulRequests: number;
+    ErrorRequests: number;
+    AverageResponseTime: number;
+  };
+  ActionLogs: {
+    TotalActions: number;
+  };
+  TopEndpoints: Array<{
+    Endpoint: string;
+    Count: number;
+    AverageResponseTime: number;
+  }>;
+}
+
+export const logsApi = {
+  getApiLogs: (
+    page = 1,
+    pageSize = 50,
+    userId?: string,
+    fromDate?: string,
+    toDate?: string,
+  ) =>
+    request.get<any>(
+      `/api/v1/logs/api?page=${page}&pageSize=${pageSize}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}${fromDate ? `&fromDate=${encodeURIComponent(fromDate)}` : ''}${toDate ? `&toDate=${encodeURIComponent(toDate)}` : ''}`,
+    ),
+
+  getActionLogs: (
+    page = 1,
+    pageSize = 50,
+    userId?: string,
+    actionName?: string,
+    fromDate?: string,
+    toDate?: string,
+  ) =>
+    request.get<any>(
+      `/api/v1/logs/actions?page=${page}&pageSize=${pageSize}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}${actionName ? `&actionName=${encodeURIComponent(actionName)}` : ''}${fromDate ? `&fromDate=${encodeURIComponent(fromDate)}` : ''}${toDate ? `&toDate=${encodeURIComponent(toDate)}` : ''}`,
+    ),
+
+  getStatistics: (fromDate?: string, toDate?: string) =>
+    request.get<ApiResponse<LogStatistics>>(
+      `/api/v1/logs/statistics${fromDate ? `?fromDate=${encodeURIComponent(fromDate)}` : ''}${toDate ? `${fromDate ? `&` : `?`}toDate=${encodeURIComponent(toDate)}` : ''}`,
+    ),
+};
+
 // Authentication API
 export const authApi = {
   login: (credentials: LoginRequest) =>
