@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "target": "esnext",
+    "module": "es2020",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "esModuleInterop": true,
@@ -9,7 +9,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "declaration": true,
+    "declaration": false,
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
