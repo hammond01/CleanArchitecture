@@ -272,4 +272,56 @@ public class IdentityRepository : IIdentityRepository
 
         return new ApiResponse(Status200OK, IdentityMessage.EmailVerificationSuccessful);
     }
+
+    public async Task<ApiResponse> RequestPasswordReset(string userName)
+    {
+        var user = await _userManager.FindByNameAsync(userName) ?? await _userManager.FindByEmailAsync(userName);
+        if (user == null)
+        {
+            _logger.LogInformation($"Password reset requested for non-existent user {userName}");
+            return new ApiResponse(Status404NotFound, IdentityMessage.UserDoesNotExist);
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        // Encode token for safe transport (base64)
+        var encodedToken = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(token));
+
+        // In a real system we would send this token via email. For now, return token in response for test/dev.
+        return new ApiResponse(Status200OK, IdentityMessage.PasswordResetTokenGenerated, new { UserId = user.Id, Token = encodedToken });
+    }
+
+    public async Task<ApiResponse> ResetPassword(ResetPasswordRequestDto parameters)
+    {
+        var user = await _userManager.FindByIdAsync(parameters.UserId);
+        if (user == null)
+        {
+            _logger.LogInformation($"Reset password attempted for non-existent user {parameters.UserId}");
+            return new ApiResponse(Status404NotFound, IdentityMessage.UserDoesNotExist);
+        }
+
+        if (parameters.Password != parameters.ConfirmPassword)
+        {
+            return new ApiResponse(Status400BadRequest, IdentityMessage.PasswordsDoNotMatch);
+        }
+
+        // Decode token
+        string token;
+        try
+        {
+            token = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(parameters.Token));
+        }
+        catch
+        {
+            return new ApiResponse(Status400BadRequest, IdentityMessage.InvalidResetToken);
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, token, parameters.Password);
+        if (!result.Succeeded)
+        {
+            var msg = result.GetErrors();
+            return new ApiResponse(Status400BadRequest, msg);
+        }
+
+        return new ApiResponse(Status200OK, IdentityMessage.PasswordResetSuccess);
+    }
 }

@@ -11,4 +11,8 @@ public interface IIdentityRepository
     Task<ApiResponse> Logout(ClaimsPrincipal authenticatedUser);
     Task<ApiResponse> Register(RegisterRequest parameters);
     Task<ApiResponse> ConfirmEmail(ConfirmEmailDto parameters);
+
+    // Password reset flows
+    Task<ApiResponse> RequestPasswordReset(string userName);
+    Task<ApiResponse> ResetPassword(ResetPasswordRequestDto parameters);
 }
