@@ -16,4 +16,8 @@ public static class IdentityMessage
     public static string UserAlreadyExists => "User already exists";
     public static string UserDoesNotExist => "The user doesn't exist.";
     public static string UserNameAndPassRequired => "Username and password are required.";
+    public static string PasswordResetTokenGenerated => "Password reset token generated";
+    public static string PasswordResetSuccess => "Password reset successful";
+    public static string PasswordsDoNotMatch => "Passwords do not match";
+    public static string InvalidResetToken => "Invalid reset token";
 }
