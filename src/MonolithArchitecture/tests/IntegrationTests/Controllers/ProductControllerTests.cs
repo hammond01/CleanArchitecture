@@ -121,4 +121,20 @@ public class ProductControllerTests : IClassFixture<CustomWebApplicationFactory<
         // Assert
         response.StatusCode.Should().BeOneOf(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
     }
+
+    [Fact]
+    public async Task ExportProducts_ShouldReturnCsvFile()
+    {
+        // Act
+        var response = await _client.GetAsync("/api/v1.0/products/export");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.Content.Headers.ContentType?.MediaType.Should().Be("text/csv");
+        response.Content.Headers.ContentDisposition?.FileName.Should().Be("products.csv");
+
+        var content = await response.Content.ReadAsStringAsync();
+        content.Should().NotBeNullOrEmpty();
+        content.Should().Contain("ProductName"); // CSV header
+    }
 }
