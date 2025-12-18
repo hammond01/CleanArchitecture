@@ -149,4 +149,19 @@ public class ProductController : ControllerBase
         await _dispatcher.DispatchAsync(new DeleteProductCommand(product));
         return NoContent();
     }
+
+    /// <summary>
+    /// Export products to CSV
+    /// </summary>
+    /// <returns>CSV file</returns>
+    [HttpGet("export")]
+    [LogAction("Export products to CSV")]
+    [AllowAnonymous]
+    [Produces("text/csv")]
+    [ProducesResponseType(200)]
+    public async Task<IActionResult> ExportProducts()
+    {
+        var csvBytes = await _dispatcher.DispatchAsync(new ExportProducts());
+        return File(csvBytes, "text/csv", "products.csv");
+    }
 }
