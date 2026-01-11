@@ -1,3 +1,5 @@
+using Catalog.Application.Features.Products.Commands;
+using Catalog.Application.Features.Products.Queries;
 using Catalog.Domain.Repositories;
 using Catalog.Infrastructure.Persistence;
 using Catalog.Infrastructure.Repositories;
@@ -25,8 +27,11 @@ public static class CatalogModuleExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-        // Register MediatR (if Application layer has handlers)
-        // services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(CatalogModuleExtensions).Assembly));
+        // Register handlers
+        services.AddScoped<GetProductsQueryHandler>();
+        services.AddScoped<GetProductByIdQueryHandler>();
+        services.AddScoped<CreateOrUpdateProductCommandHandler>();
+        services.AddScoped<DeleteProductCommandHandler>();
 
         return services;
     }
