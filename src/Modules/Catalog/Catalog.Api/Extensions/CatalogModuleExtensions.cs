@@ -1,3 +1,5 @@
+using Catalog.Application.Features.Categories.Commands;
+using Catalog.Application.Features.Categories.Queries;
 using Catalog.Application.Features.Products.Commands;
 using Catalog.Application.Features.Products.Queries;
 using Catalog.Domain.Repositories;
@@ -23,15 +25,25 @@ public static class CatalogModuleExtensions
         services.AddDbContext<CatalogDbContext>(options =>
             options.UseSqlServer(connectionString));
 
+        // Register UnitOfWork
+        services.AddScoped<BuildingBlocks.Domain.Repositories.IUnitOfWork>(provider =>
+            provider.GetRequiredService<CatalogDbContext>());
+
         // Register repositories
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-        // Register handlers
+        // Register Product handlers
         services.AddScoped<GetProductsQueryHandler>();
         services.AddScoped<GetProductByIdQueryHandler>();
         services.AddScoped<CreateOrUpdateProductCommandHandler>();
         services.AddScoped<DeleteProductCommandHandler>();
+
+        // Register Category handlers
+        services.AddScoped<GetCategoriesQueryHandler>();
+        services.AddScoped<GetCategoryByIdQueryHandler>();
+        services.AddScoped<CreateOrUpdateCategoryCommandHandler>();
+        services.AddScoped<DeleteCategoryCommandHandler>();
 
         return services;
     }
