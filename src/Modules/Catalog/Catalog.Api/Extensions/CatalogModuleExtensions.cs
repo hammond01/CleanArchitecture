@@ -5,6 +5,7 @@ using Catalog.Application.Features.Products.Queries;
 using Catalog.Domain.Repositories;
 using Catalog.Infrastructure.Persistence;
 using Catalog.Infrastructure.Repositories;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,9 @@ public static class CatalogModuleExtensions
         services.AddScoped<GetCategoryByIdQueryHandler>();
         services.AddScoped<CreateOrUpdateCategoryCommandHandler>();
         services.AddScoped<DeleteCategoryCommandHandler>();
+
+        // Register FluentValidation validators
+        services.AddValidatorsFromAssemblyContaining<Application.Validators.CreateOrUpdateProductCommandValidator>();
 
         return services;
     }
