@@ -1,4 +1,5 @@
 using BuildingBlocks.Api.Controllers;
+using BuildingBlocks.Application.Dispatcher;
 using Catalog.Application.DTOs;
 using Catalog.Application.Features.Products.Commands;
 using Catalog.Application.Features.Products.Queries;
@@ -13,21 +14,11 @@ namespace Catalog.Api.Controllers;
 [Route("api/v1/[controller]")]
 public class ProductsController : BaseController
 {
-    private readonly GetProductsQueryHandler _getProductsHandler;
-    private readonly GetProductByIdQueryHandler _getProductByIdHandler;
-    private readonly CreateOrUpdateProductCommandHandler _createOrUpdateHandler;
-    private readonly DeleteProductCommandHandler _deleteHandler;
+    private readonly IDispatcher _dispatcher;
 
-    public ProductsController(
-        GetProductsQueryHandler getProductsHandler,
-        GetProductByIdQueryHandler getProductByIdHandler,
-        CreateOrUpdateProductCommandHandler createOrUpdateHandler,
-        DeleteProductCommandHandler deleteHandler)
+    public ProductsController(IDispatcher dispatcher)
     {
-        _getProductsHandler = getProductsHandler;
-        _getProductByIdHandler = getProductByIdHandler;
-        _createOrUpdateHandler = createOrUpdateHandler;
-        _deleteHandler = deleteHandler;
+        _dispatcher = dispatcher;
     }
 
     /// <summary>
@@ -48,8 +39,18 @@ public class ProductsController : BaseController
             PageSize = pageSize
         };
 
-        var products = await _getProductsHandler.HandleAsync(query);
+        var products = await _dispatcher.DispatchAsync(query);
         return Ok(products);
+    }
+
+    /// <summary>
+    /// Export all products as a CSV file
+    /// </summary>
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportProducts(CancellationToken cancellationToken = default)
+    {
+        var csvBytes = await _dispatcher.DispatchAsync(new ExportProductsQuery(), cancellationToken);
+        return File(csvBytes, "text/csv", $"products_{DateTime.UtcNow:yyyyMMdd_HHmmss}.csv");
     }
 
     /// <summary>
@@ -59,7 +60,7 @@ public class ProductsController : BaseController
     public async Task<IActionResult> GetProductById(string id)
     {
         var query = new GetProductByIdQuery(id);
-        var product = await _getProductByIdHandler.HandleAsync(query);
+        var product = await _dispatcher.DispatchAsync(query);
 
         if (product == null)
         {
@@ -75,7 +76,7 @@ public class ProductsController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateProduct([FromBody] CreateOrUpdateProductCommand command)
     {
-        var productId = await _createOrUpdateHandler.HandleAsync(command);
+        var productId = await _dispatcher.DispatchAsync(command);
         return Created($"/api/v1/products/{productId}", new { id = productId });
     }
 
@@ -86,7 +87,7 @@ public class ProductsController : BaseController
     public async Task<IActionResult> UpdateProduct(string id, [FromBody] CreateOrUpdateProductCommand command)
     {
         var updateCommand = command with { Id = id };
-        var productId = await _createOrUpdateHandler.HandleAsync(updateCommand);
+        var productId = await _dispatcher.DispatchAsync(updateCommand);
         return Ok(new { id = productId });
     }
 
@@ -97,7 +98,7 @@ public class ProductsController : BaseController
     public async Task<IActionResult> DeleteProduct(string id)
     {
         var command = new DeleteProductCommand(id);
-        var result = await _deleteHandler.HandleAsync(command);
+        var result = await _dispatcher.DispatchAsync(command);
 
         if (!result)
         {

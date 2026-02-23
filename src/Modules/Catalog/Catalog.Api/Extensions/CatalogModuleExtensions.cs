@@ -1,12 +1,8 @@
-using Catalog.Application.Features.Categories.Commands;
-using Catalog.Application.Features.Categories.Queries;
-using Catalog.Application.Features.Products.Commands;
-using Catalog.Application.Features.Products.Queries;
 using Catalog.Domain.Repositories;
 using Catalog.Infrastructure.Persistence;
 using Catalog.Infrastructure.Repositories;
 using FluentValidation;
-using MediatR;
+using BuildingBlocks.Application;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,9 +16,9 @@ public static class CatalogModuleExtensions
         IConfiguration configuration)
     {
         // Register DbContext
-        var connectionString = configuration.GetConnectionString("Catalog")
-            ?? configuration.GetConnectionString("Default");
-            
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
         services.AddDbContext<CatalogDbContext>(options =>
             options.UseSqlServer(connectionString));
 
@@ -34,17 +30,9 @@ public static class CatalogModuleExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-        // Register Product handlers
-        services.AddScoped<GetProductsQueryHandler>();
-        services.AddScoped<GetProductByIdQueryHandler>();
-        services.AddScoped<CreateOrUpdateProductCommandHandler>();
-        services.AddScoped<DeleteProductCommandHandler>();
-
-        // Register Category handlers
-        services.AddScoped<GetCategoriesQueryHandler>();
-        services.AddScoped<GetCategoryByIdQueryHandler>();
-        services.AddScoped<CreateOrUpdateCategoryCommandHandler>();
-        services.AddScoped<DeleteCategoryCommandHandler>();
+        // Register custom Dispatcher and all handlers from Catalog.Application
+        services.AddApplicationServices();
+        services.AddHandlersFromAssembly(typeof(Application.Features.Products.Queries.GetProductsQuery).Assembly);
 
         // Register FluentValidation validators
         services.AddValidatorsFromAssemblyContaining<Application.Validators.CreateOrUpdateProductCommandValidator>();

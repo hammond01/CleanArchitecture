@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Catalog.Application.Features.Products.Commands;
 
 /// <summary>
-/// Handler for CreateOrUpdateProductCommand
+/// Handler for CreateOrUpdateProductCommand - Uses domain methods for business logic
 /// </summary>
 public class CreateOrUpdateProductCommandHandler : ICommandHandler<CreateOrUpdateProductCommand, string>
 {
@@ -28,25 +28,22 @@ public class CreateOrUpdateProductCommandHandler : ICommandHandler<CreateOrUpdat
 
         if (string.IsNullOrEmpty(command.Id))
         {
-            // Create new product
-            product = new Product
-            {
-                Id = Guid.NewGuid().ToString(),
-                ProductName = command.ProductName,
-                CategoryId = command.CategoryId,
-                QuantityPerUnit = command.QuantityPerUnit,
-                UnitPrice = command.UnitPrice,
-                UnitsInStock = command.UnitsInStock,
-                UnitsOnOrder = command.UnitsOnOrder,
-                ReorderLevel = command.ReorderLevel,
-                Discontinued = command.Discontinued
-            };
+            // Create new product using factory method
+            product = Product.Create(
+                command.ProductName,
+                command.CategoryId,
+                command.QuantityPerUnit,
+                command.UnitPrice,
+                command.UnitsInStock,
+                command.UnitsOnOrder,
+                command.ReorderLevel,
+                command.Discontinued);
 
             await _productRepository.AddAsync(product, cancellationToken);
         }
         else
         {
-            // Update existing product
+            // Update existing product using domain methods
             var existingProduct = await _productRepository
                 .GetQueryableSet()
                 .FirstOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
@@ -56,14 +53,25 @@ public class CreateOrUpdateProductCommandHandler : ICommandHandler<CreateOrUpdat
                 throw new KeyNotFoundException($"Product with ID {command.Id} not found");
             }
 
-            existingProduct.ProductName = command.ProductName;
-            existingProduct.CategoryId = command.CategoryId;
-            existingProduct.QuantityPerUnit = command.QuantityPerUnit;
-            existingProduct.UnitPrice = command.UnitPrice;
-            existingProduct.UnitsInStock = command.UnitsInStock;
-            existingProduct.UnitsOnOrder = command.UnitsOnOrder;
-            existingProduct.ReorderLevel = command.ReorderLevel;
-            existingProduct.Discontinued = command.Discontinued;
+            // Use domain methods to update
+            existingProduct.UpdateDetails(
+                command.ProductName,
+                command.QuantityPerUnit,
+                command.UnitPrice,
+                command.ReorderLevel);
+
+            existingProduct.UpdateStock(
+                command.UnitsInStock ?? 0,
+                command.UnitsOnOrder ?? 0);
+
+            if (command.Discontinued)
+            {
+                existingProduct.Discontinue();
+            }
+            else
+            {
+                existingProduct.Reactivate();
+            }
 
             await _productRepository.UpdateAsync(existingProduct, cancellationToken);
             product = existingProduct;

@@ -54,12 +54,24 @@ public abstract class BaseSpecification<T> : ISpecification<T>
     }
 
     /// <summary>
+    /// Alias for ApplyOrderBy — consistent with AddInclude naming convention
+    /// </summary>
+    protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+        => ApplyOrderBy(orderByExpression);
+
+    /// <summary>
     /// Apply ordering (descending)
     /// </summary>
     protected virtual void ApplyOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
     {
         OrderByDescending = orderByDescExpression;
     }
+
+    /// <summary>
+    /// Alias for ApplyOrderByDescending — consistent with AddInclude naming convention
+    /// </summary>
+    protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
+        => ApplyOrderByDescending(orderByDescExpression);
 
     /// <summary>
     /// Apply grouping
@@ -70,6 +82,12 @@ public abstract class BaseSpecification<T> : ISpecification<T>
     }
 
     /// <summary>
+    /// Alias for ApplyGroupBy — consistent with AddInclude naming convention
+    /// </summary>
+    protected void AddGroupBy(Expression<Func<T, object>> groupByExpression)
+        => ApplyGroupBy(groupByExpression);
+
+    /// <summary>
     /// Apply pagination
     /// </summary>
     protected virtual void ApplyPaging(int skip, int take)
@@ -77,6 +95,12 @@ public abstract class BaseSpecification<T> : ISpecification<T>
         Skip = skip;
         Take = take;
     }
+
+    /// <summary>
+    /// Alias for ApplyPaging — consistent with AddInclude naming convention
+    /// </summary>
+    protected void AddPaging(int skip, int take)
+        => ApplyPaging(skip, take);
 
     /// <summary>
     /// Enable query splitting for better performance with multiple includes

@@ -1,4 +1,5 @@
 using BuildingBlocks.Api.Controllers;
+using BuildingBlocks.Application.Dispatcher;
 using Catalog.Application.DTOs;
 using Catalog.Application.Features.Categories.Commands;
 using Catalog.Application.Features.Categories.Queries;
@@ -13,21 +14,11 @@ namespace Catalog.Api.Controllers;
 [Route("api/v1/[controller]")]
 public class CategoriesController : BaseController
 {
-    private readonly GetCategoriesQueryHandler _getCategoriesHandler;
-    private readonly GetCategoryByIdQueryHandler _getCategoryByIdHandler;
-    private readonly CreateOrUpdateCategoryCommandHandler _createOrUpdateHandler;
-    private readonly DeleteCategoryCommandHandler _deleteHandler;
+    private readonly IDispatcher _dispatcher;
 
-    public CategoriesController(
-        GetCategoriesQueryHandler getCategoriesHandler,
-        GetCategoryByIdQueryHandler getCategoryByIdHandler,
-        CreateOrUpdateCategoryCommandHandler createOrUpdateHandler,
-        DeleteCategoryCommandHandler deleteHandler)
+    public CategoriesController(IDispatcher dispatcher)
     {
-        _getCategoriesHandler = getCategoriesHandler;
-        _getCategoryByIdHandler = getCategoryByIdHandler;
-        _createOrUpdateHandler = createOrUpdateHandler;
-        _deleteHandler = deleteHandler;
+        _dispatcher = dispatcher;
     }
 
     /// <summary>
@@ -46,7 +37,7 @@ public class CategoriesController : BaseController
             PageSize = pageSize
         };
 
-        var categories = await _getCategoriesHandler.HandleAsync(query);
+        var categories = await _dispatcher.DispatchAsync(query);
         return Ok(categories);
     }
 
@@ -57,7 +48,7 @@ public class CategoriesController : BaseController
     public async Task<IActionResult> GetCategoryById(string id)
     {
         var query = new GetCategoryByIdQuery(id);
-        var category = await _getCategoryByIdHandler.HandleAsync(query);
+        var category = await _dispatcher.DispatchAsync(query);
 
         if (category == null)
         {
@@ -73,7 +64,7 @@ public class CategoriesController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateCategory([FromBody] CreateOrUpdateCategoryCommand command)
     {
-        var categoryId = await _createOrUpdateHandler.HandleAsync(command);
+        var categoryId = await _dispatcher.DispatchAsync(command);
         return Created($"/api/v1/categories/{categoryId}", new { id = categoryId });
     }
 
@@ -84,7 +75,7 @@ public class CategoriesController : BaseController
     public async Task<IActionResult> UpdateCategory(string id, [FromBody] CreateOrUpdateCategoryCommand command)
     {
         var updateCommand = command with { Id = id };
-        var categoryId = await _createOrUpdateHandler.HandleAsync(updateCommand);
+        var categoryId = await _dispatcher.DispatchAsync(updateCommand);
         return Ok(new { id = categoryId });
     }
 
@@ -95,7 +86,7 @@ public class CategoriesController : BaseController
     public async Task<IActionResult> DeleteCategory(string id)
     {
         var command = new DeleteCategoryCommand(id);
-        var result = await _deleteHandler.HandleAsync(command);
+        var result = await _dispatcher.DispatchAsync(command);
 
         if (!result)
         {
