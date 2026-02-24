@@ -18,8 +18,11 @@ public class UserLogoutCommandHandler : ICommandHandler<UserLogoutCommand, bool>
 
     public async Task<bool> HandleAsync(UserLogoutCommand command, CancellationToken cancellationToken = default)
     {
-        // TODO: Create ClaimsPrincipal from context
-        var principal = new ClaimsPrincipal();
+        var identity = new ClaimsIdentity(new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, command.UserId)
+        });
+        var principal = new ClaimsPrincipal(identity);
         await _identityRepository.LogoutAsync(principal, cancellationToken);
         return true;
     }

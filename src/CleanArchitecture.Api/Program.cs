@@ -2,6 +2,7 @@ using Serilog;
 using Catalog.Api.Extensions;
 using Identity.Api.Extensions;
 using Auditing.Api.Extensions;
+using CleanArchitecture.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandlingMiddleware();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 app.UseAuthorization();
@@ -63,3 +65,6 @@ finally
 {
     await Log.CloseAndFlushAsync();
 }
+
+// Make Program class accessible for integration tests
+public partial class Program { }

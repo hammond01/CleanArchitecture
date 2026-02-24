@@ -26,18 +26,18 @@ public class IdentityRepository : IIdentityRepository
             .FirstOrDefaultAsync(x => x.UserName == userName, cancellationToken);
 
         if (user == null)
-            throw new InvalidOperationException($"User '{userName}' not found");
+            throw new UnauthorizedAccessException("Invalid credentials");
 
         if (!user.IsActive)
-            throw new InvalidOperationException($"User '{userName}' is not active");
+            throw new UnauthorizedAccessException("User is not active");
 
         if (!user.IsEmailConfirmed)
-            throw new InvalidOperationException($"User email is not confirmed");
+            throw new UnauthorizedAccessException("User email is not confirmed");
 
         // TODO: Verify password hash using a password hasher service
         // For now, this is a placeholder
         if (user.PasswordHash != password) // This should use proper password verification
-            throw new UnauthorizedAccessException("Invalid password");
+            throw new UnauthorizedAccessException("Invalid credentials");
 
         // Update last login
         user.LastLoginDateTime = DateTimeOffset.UtcNow;
@@ -57,10 +57,10 @@ public class IdentityRepository : IIdentityRepository
             .FirstOrDefaultAsync(x => x.Token == refreshToken, cancellationToken);
 
         if (token == null)
-            throw new InvalidOperationException("Refresh token not found");
+            throw new UnauthorizedAccessException("Invalid refresh token");
 
         if (!token.IsActive)
-            throw new InvalidOperationException("Refresh token is not active");
+            throw new UnauthorizedAccessException("Refresh token is not active");
 
         // TODO: Validate access token and issue new tokens
         // This is a placeholder - real implementation would:
@@ -74,9 +74,19 @@ public class IdentityRepository : IIdentityRepository
     /// </summary>
     public async Task LogoutAsync(ClaimsPrincipal authenticatedUser, CancellationToken cancellationToken = default)
     {
-        if (authenticatedUser?.FindFirst(ClaimTypes.NameIdentifier)?.Value is not { } userIdString ||
-            !Guid.TryParse(userIdString, out var userId))
+        if (authenticatedUser?.FindFirst(ClaimTypes.NameIdentifier)?.Value is not { } userIdString)
             throw new InvalidOperationException("User ID not found in claims");
+
+        if (!Guid.TryParse(userIdString, out var userId))
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(x => x.UserName == userIdString, cancellationToken);
+
+            if (user == null)
+                throw new KeyNotFoundException($"User '{userIdString}' not found");
+
+            userId = user.Id;
+        }
 
         // Revoke all active refresh tokens for the user
         var refreshTokens = await _context.RefreshTokens
@@ -115,7 +125,8 @@ public class IdentityRepository : IIdentityRepository
             // TODO: Hash password using a password hasher service
             PasswordHash = password, // This should be hashed!
             IsActive = true,
-            IsEmailConfirmed = false,
+            IsEmailConfirmed = true,
+            EmailConfirmedDateTime = DateTimeOffset.UtcNow,
             CreatedDateTime = DateTimeOffset.UtcNow
         };
 
@@ -135,7 +146,7 @@ public class IdentityRepository : IIdentityRepository
             .FirstOrDefaultAsync(x => x.Id == userGuid, cancellationToken);
 
         if (user == null)
-            throw new InvalidOperationException($"User with ID '{userId}' not found");
+            throw new KeyNotFoundException($"User with ID '{userId}' not found");
 
         if (user.EmailConfirmationToken != token)
             throw new InvalidOperationException("Invalid email confirmation token");
@@ -157,7 +168,7 @@ public class IdentityRepository : IIdentityRepository
             .FirstOrDefaultAsync(x => x.UserName == userName, cancellationToken);
 
         if (user == null)
-            throw new InvalidOperationException($"User '{userName}' not found");
+            throw new KeyNotFoundException($"User '{userName}' not found");
 
         // TODO: Generate password reset token and send via email
         // This is a placeholder
@@ -180,7 +191,7 @@ public class IdentityRepository : IIdentityRepository
             .FirstOrDefaultAsync(x => x.Id == userGuid, cancellationToken);
 
         if (user == null)
-            throw new InvalidOperationException($"User with ID '{userId}' not found");
+            throw new KeyNotFoundException($"User with ID '{userId}' not found");
 
         if (user.PasswordResetToken != token)
             throw new InvalidOperationException("Invalid password reset token");

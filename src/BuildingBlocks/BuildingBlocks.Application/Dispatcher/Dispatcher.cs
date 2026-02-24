@@ -190,14 +190,26 @@ public class Dispatcher : IDispatcher
     /// </summary>
     private async Task ValidateAsync<T>(T request, CancellationToken cancellationToken)
     {
-        var validators = _serviceProvider.GetServices<IValidator<T>>().ToList();
+        var validators = new List<IValidator>();
+        validators.AddRange(_serviceProvider.GetServices<IValidator<T>>());
 
-        if (!validators.Any())
+        var concreteType = request?.GetType();
+        if (concreteType != null)
+        {
+            var concreteValidatorType = typeof(IValidator<>).MakeGenericType(concreteType);
+            var concreteValidators = _serviceProvider
+                .GetServices(concreteValidatorType)
+                .Cast<IValidator>();
+            validators.AddRange(concreteValidators);
+        }
+
+        var uniqueValidators = validators.Distinct().ToList();
+        if (!uniqueValidators.Any())
             return;
 
-        var context = new ValidationContext<T>(request);
+        var context = new ValidationContext<object>(request!);
         var validationResults = await Task.WhenAll(
-            validators.Select(v => v.ValidateAsync(context, cancellationToken)));
+            uniqueValidators.Select(v => v.ValidateAsync(context, cancellationToken)));
 
         var failures = validationResults
             .SelectMany(r => r.Errors)
