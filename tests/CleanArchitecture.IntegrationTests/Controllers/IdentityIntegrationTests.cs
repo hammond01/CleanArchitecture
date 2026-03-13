@@ -1,8 +1,12 @@
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using FluentAssertions;
 using CleanArchitecture.IntegrationTests.Infrastructure;
+using Identity.Infrastructure.Services;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace CleanArchitecture.IntegrationTests.Controllers;
 
@@ -12,6 +16,8 @@ namespace CleanArchitecture.IntegrationTests.Controllers;
 /// </summary>
 public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFactory>
 {
+    private sealed record AuthPayload(string UserId, string Token, string RefreshToken);
+
     private readonly HttpClient _client;
     private readonly SqlServerWebApplicationFactory _factory;
 
@@ -23,21 +29,47 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
 
     #region Helper Methods
 
-    private static string? ExtractTokenFromResponse(string jsonContent)
+    private static AuthPayload ExtractAuthPayload(string jsonContent)
     {
         var doc = JsonDocument.Parse(jsonContent);
-        if (doc.RootElement.TryGetProperty("data", out var dataElement) &&
-            dataElement.TryGetProperty("token", out var tokenElement))
-        {
-            return tokenElement.GetString();
-        }
+        var payload = doc.RootElement.TryGetProperty("data", out var dataElement)
+            ? dataElement
+            : doc.RootElement;
 
-        if (doc.RootElement.TryGetProperty("token", out var token))
-        {
-            return token.GetString();
-        }
+        var userId = payload.GetProperty("userId").GetString();
+        var token = payload.GetProperty("token").GetString();
+        var refreshToken = payload.GetProperty("refreshToken").GetString();
 
-        return null;
+        userId.Should().NotBeNullOrEmpty();
+        token.Should().NotBeNullOrEmpty();
+        refreshToken.Should().NotBeNullOrEmpty();
+
+        return new AuthPayload(userId!, token!, refreshToken!);
+    }
+
+    private static (string userId, string token) ExtractUserIdAndTokenFromLastEmail(string recipient)
+    {
+        var message = FakeEmailService.GetLastMessage(recipient);
+        message.Should().NotBeNull("Expected an email to be sent");
+
+        var link = ExtractFirstLink(message!.TextBody);
+        var uri = new Uri(link);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+
+        var userId = query["userId"].ToString();
+        var token = query["token"].ToString();
+
+        userId.Should().NotBeNullOrEmpty();
+        token.Should().NotBeNullOrEmpty();
+
+        return (userId, token);
+    }
+
+    private static string ExtractFirstLink(string text)
+    {
+        var match = Regex.Match(text, @"https?://\S+");
+        match.Success.Should().BeTrue("Expected an email link in the message body");
+        return match.Value.TrimEnd('.', ')', '"');
     }
 
     #endregion
@@ -47,6 +79,7 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
     [Fact]
     public async Task Register_WithValidData_ReturnsCreated()
     {
+        FakeEmailService.Clear();
         // Arrange
         var command = new
         {
@@ -107,6 +140,7 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
     [Fact]
     public async Task Register_WithDuplicateUsername_ReturnsBadRequest()
     {
+        FakeEmailService.Clear();
         // Arrange - Register first user
         var username = $"duplicate_{Guid.NewGuid()}";
         var firstCommand = new
@@ -147,13 +181,15 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
     [Fact]
     public async Task Login_WithValidCredentials_ReturnsOkWithToken()
     {
+        FakeEmailService.Clear();
         // Arrange - Register user first
         var username = $"loginuser_{Guid.NewGuid()}";
         var password = "TestPassword123!";
+        var email = $"{username}@example.com";
         var registerCommand = new
         {
             UserName = username,
-            Email = $"{username}@example.com",
+            Email = email,
             Password = password,
             ConfirmPassword = password,
             FirstName = "Login",
@@ -161,6 +197,9 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
             PhoneNumber = "3333333333"
         };
         await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
+
+        var (userId, confirmationToken) = ExtractUserIdAndTokenFromLastEmail(email);
+        await _client.PostAsJsonAsync("/api/v1/authentication/confirm-email", new { UserId = userId, Token = confirmationToken });
 
         var loginCommand = new
         {
@@ -175,8 +214,9 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var content = await response.Content.ReadAsStringAsync();
-        var token = ExtractTokenFromResponse(content);
-        token.Should().NotBeNullOrEmpty();
+        var authPayload = ExtractAuthPayload(content);
+        authPayload.Token.Should().NotBeNullOrEmpty();
+        authPayload.RefreshToken.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -200,12 +240,14 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
     [Fact]
     public async Task Login_WithInvalidPassword_ReturnsUnauthorized()
     {
+        FakeEmailService.Clear();
         // Arrange - Register user first
         var username = $"passwordtest_{Guid.NewGuid()}";
+        var email = $"{username}@example.com";
         var registerCommand = new
         {
             UserName = username,
-            Email = $"{username}@example.com",
+            Email = email,
             Password = "CorrectPassword123!",
             ConfirmPassword = "CorrectPassword123!",
             FirstName = "Password",
@@ -213,6 +255,9 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
             PhoneNumber = "4444444444"
         };
         await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
+
+        var (userId, confirmationToken) = ExtractUserIdAndTokenFromLastEmail(email);
+        await _client.PostAsJsonAsync("/api/v1/authentication/confirm-email", new { UserId = userId, Token = confirmationToken });
 
         var loginCommand = new
         {
@@ -235,13 +280,15 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
     [Fact]
     public async Task RefreshToken_WithValidToken_ReturnsOkWithNewToken()
     {
+        FakeEmailService.Clear();
         // Arrange - Register and login to get token
         var username = $"refreshtest_{Guid.NewGuid()}";
         var password = "TestPassword123!";
+        var email = $"{username}@example.com";
         var registerCommand = new
         {
             UserName = username,
-            Email = $"{username}@example.com",
+            Email = email,
             Password = password,
             ConfirmPassword = password,
             FirstName = "Refresh",
@@ -250,6 +297,9 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         };
         await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
 
+        var (userId, confirmationToken) = ExtractUserIdAndTokenFromLastEmail(email);
+        await _client.PostAsJsonAsync("/api/v1/authentication/confirm-email", new { UserId = userId, Token = confirmationToken });
+
         var loginCommand = new
         {
             UserName = username,
@@ -258,34 +308,37 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         };
         var loginResponse = await _client.PostAsJsonAsync("/api/v1/authentication/login", loginCommand);
         var loginContent = await loginResponse.Content.ReadAsStringAsync();
-        var token = ExtractTokenFromResponse(loginContent);
-        token.Should().NotBeNullOrEmpty();
+        var loginPayload = ExtractAuthPayload(loginContent);
 
         var refreshCommand = new
         {
-            AccessToken = token,
-            RefreshToken = "dummy_refresh_token" // Note: Real implementation would need valid refresh token
+            AccessToken = loginPayload.Token,
+            RefreshToken = loginPayload.RefreshToken
         };
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/v1/authentication/refresh-token", refreshCommand);
 
         // Assert
-        // This might fail if the implementation requires actual refresh token validation
-        // For now, we just verify the endpoint exists
-        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.Unauthorized, HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var refreshContent = await response.Content.ReadAsStringAsync();
+        var refreshedPayload = ExtractAuthPayload(refreshContent);
+        refreshedPayload.Token.Should().NotBeNullOrEmpty();
+        refreshedPayload.RefreshToken.Should().NotBe(loginPayload.RefreshToken);
     }
 
     [Fact]
     public async Task Logout_WithValidRequest_ReturnsOk()
     {
+        FakeEmailService.Clear();
         // Arrange - Register and login first
         var username = $"logouttest_{Guid.NewGuid()}";
         var password = "TestPassword123!";
+        var email = $"{username}@example.com";
         var registerCommand = new
         {
             UserName = username,
-            Email = $"{username}@example.com",
+            Email = email,
             Password = password,
             ConfirmPassword = password,
             FirstName = "Logout",
@@ -294,6 +347,9 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         };
         await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
 
+        var (userId, confirmationToken) = ExtractUserIdAndTokenFromLastEmail(email);
+        await _client.PostAsJsonAsync("/api/v1/authentication/confirm-email", new { UserId = userId, Token = confirmationToken });
+
         var loginCommand = new
         {
             UserName = username,
@@ -302,20 +358,15 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         };
         var loginResponse = await _client.PostAsJsonAsync("/api/v1/authentication/login", loginCommand);
         var loginContent = await loginResponse.Content.ReadAsStringAsync();
-        var token = ExtractTokenFromResponse(loginContent);
-        token.Should().NotBeNullOrEmpty();
-
-        var logoutCommand = new
-        {
-            UserId = username,
-            AccessToken = token
-        };
+        var loginPayload = ExtractAuthPayload(loginContent);
+        loginPayload.Token.Should().NotBeNullOrEmpty();
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginPayload.Token);
 
         // Act
-        var response = await _client.PostAsJsonAsync("/api/v1/authentication/logout", logoutCommand);
+        var response = await _client.PostAsync("/api/v1/authentication/logout", content: null);
 
         // Assert
-        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.BadRequest);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     #endregion
@@ -325,20 +376,53 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
     [Fact]
     public async Task ConfirmEmail_WithValidToken_ReturnsOk()
     {
-        // Arrange
-        var command = new
+        FakeEmailService.Clear();
+        var username = $"confirm_{Guid.NewGuid()}";
+        var email = $"{username}@example.com";
+        var registerCommand = new
         {
-            UserId = "test-user-id",
-            Token = "test-confirmation-token"
+            UserName = username,
+            Email = email,
+            Password = "TestPassword123!",
+            ConfirmPassword = "TestPassword123!",
+            FirstName = "Confirm",
+            LastName = "Test",
+            PhoneNumber = "9999999999"
         };
+        await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
+
+        var (userId, confirmationToken) = ExtractUserIdAndTokenFromLastEmail(email);
+        var command = new { UserId = userId, Token = confirmationToken };
 
         // Act
         var response = await _client.PostAsJsonAsync("/api/v1/authentication/confirm-email", command);
 
         // Assert
-        // This will likely fail without a real confirmation token
-        // Testing that endpoint exists and accepts the format
-        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.BadRequest, HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task ResendConfirmation_WithValidUser_ReturnsOk()
+    {
+        FakeEmailService.Clear();
+        var username = $"resend_{Guid.NewGuid()}";
+        var registerCommand = new
+        {
+            UserName = username,
+            Email = $"{username}@example.com",
+            Password = "TestPassword123!",
+            ConfirmPassword = "TestPassword123!",
+            FirstName = "Resend",
+            LastName = "Test",
+            PhoneNumber = "1212121212"
+        };
+        await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
+
+        var response = await _client.PostAsJsonAsync(
+            "/api/v1/authentication/resend-confirmation",
+            new { UserNameOrEmail = username });
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     #endregion
@@ -348,6 +432,7 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
     [Fact]
     public async Task RequestPasswordReset_WithValidEmail_ReturnsOk()
     {
+        FakeEmailService.Clear();
         // Arrange - Register user first
         var username = $"resettest_{Guid.NewGuid()}";
         var email = $"{username}@example.com";
@@ -372,17 +457,64 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         var response = await _client.PostAsJsonAsync("/api/v1/authentication/request-password-reset", resetCommand);
 
         // Assert
-        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+    }
+
+    [Fact]
+    public async Task RequestPasswordReset_RepeatedRequest_ReturnsBadRequest()
+    {
+        FakeEmailService.Clear();
+        var username = $"reset_throttle_{Guid.NewGuid()}";
+        var email = $"{username}@example.com";
+        var registerCommand = new
+        {
+            UserName = username,
+            Email = email,
+            Password = "TestPassword123!",
+            ConfirmPassword = "TestPassword123!",
+            FirstName = "Reset",
+            LastName = "Throttle",
+            PhoneNumber = "7777770000"
+        };
+        await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
+
+        var first = await _client.PostAsJsonAsync(
+            "/api/v1/authentication/request-password-reset",
+            new { UserName = username });
+
+        var second = await _client.PostAsJsonAsync(
+            "/api/v1/authentication/request-password-reset",
+            new { UserName = username });
+
+        first.StatusCode.Should().Be(HttpStatusCode.OK);
+        second.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task ResetPassword_WithValidToken_ReturnsOk()
     {
-        // Arrange
+        FakeEmailService.Clear();
+        var username = $"reset_{Guid.NewGuid()}";
+        var email = $"{username}@example.com";
+        var registerCommand = new
+        {
+            UserName = username,
+            Email = email,
+            Password = "TestPassword123!",
+            ConfirmPassword = "TestPassword123!",
+            FirstName = "Reset",
+            LastName = "Flow",
+            PhoneNumber = "8888888888"
+        };
+        await _client.PostAsJsonAsync("/api/v1/authentication/register", registerCommand);
+
+        await _client.PostAsJsonAsync("/api/v1/authentication/request-password-reset", new { UserName = username });
+        var (userId, resetToken) = ExtractUserIdAndTokenFromLastEmail(email);
+
         var command = new
         {
-            UserId = "test-user-id",
-            Token = "test-reset-token",
+            UserId = userId,
+            Token = resetToken,
             Password = "NewPassword123!",
             ConfirmPassword = "NewPassword123!"
         };
@@ -391,9 +523,7 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         var response = await _client.PostAsJsonAsync("/api/v1/authentication/reset-password", command);
 
         // Assert
-        // This will likely fail without a real reset token
-        // Testing that endpoint exists and accepts the format
-        response.StatusCode.Should().BeOneOf(HttpStatusCode.OK, HttpStatusCode.BadRequest, HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     #endregion
