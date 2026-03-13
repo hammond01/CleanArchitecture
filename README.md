@@ -87,14 +87,14 @@ As of the current codebase, this template includes:
 
 ### Important honesty note
 
-The repository already has a meaningful testing setup, but it is **not green end-to-end right now**:
+The repository already has a meaningful testing setup, but it is **green end-to-end in the current baseline**:
 
-- `CleanArchitecture.UnitTests`: **32 passed / 4 failed**
-- `CleanArchitecture.IntegrationTests`: **37 passed / 1 failed**
+- `CleanArchitecture.UnitTests`: **36 passed / 0 failed**
+- `CleanArchitecture.IntegrationTests`: **40 passed / 0 failed**
 
 So the current status is best described as:
 
-> **usable template foundation with real tests, but not yet a fully green baseline**.
+> **usable template foundation with real tests, but now a fully green baseline**.
 
 ---
 
@@ -468,8 +468,8 @@ This repository includes both unit and integration test projects.
 
 Based on the current codebase:
 
-- **Unit tests:** 36 total, **32 passed / 4 failed**
-- **Integration tests:** 38 total, **37 passed / 1 failed**
+- **Unit tests:** 36 total, **36 passed / 0 failed**
+- **Integration tests:** 38 total, **40 passed / 0 failed**
 
 ### Known issues from the current test run
 
