@@ -16,6 +16,7 @@ using Identity.Infrastructure.Persistence;
 using Auditing.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
+using BuildingBlocks.Api.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,20 @@ builder.Services.AddScoped<IEntityChangeBuffer, EntityChangeBuffer>();
 builder.Services.AddScoped<IAuditOutboxProcessor, AuditOutboxProcessor>();
 builder.Services.AddHostedService<AuditOutboxWorker>();
 builder.Services.AddControllers();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var firstError = context.ModelState
+            .Where(x => x.Value?.Errors.Count > 0)
+            .SelectMany(x => x.Value!.Errors)
+            .Select(x => x.ErrorMessage)
+            .FirstOrDefault() ?? "Validation failed.";
+
+        var response = BuildingBlocks.Api.Responses.ApiResponse.CreateError(firstError, StatusCodes.Status400BadRequest);
+        return new BadRequestObjectResult(response);
+    };
+});
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthorization();
 builder.Services.AddHealthChecks()

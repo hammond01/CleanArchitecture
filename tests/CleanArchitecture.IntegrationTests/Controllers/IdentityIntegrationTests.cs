@@ -113,6 +113,10 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var content = await response.Content.ReadAsStringAsync();
+        content.Should().Contain("\"success\":false");
+        content.Should().Contain("\"statusCode\":400");
+        content.Should().Contain("\"error\"");
     }
 
     [Fact]
