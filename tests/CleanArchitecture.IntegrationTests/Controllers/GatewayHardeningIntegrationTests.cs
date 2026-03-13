@@ -31,6 +31,23 @@ public class GatewayHardeningIntegrationTests : IClassFixture<SqlServerWebApplic
     }
 
     [Fact]
+    public async Task SecurityHeaders_ArePresentOnResponses()
+    {
+        var response = await _client.GetAsync("/health/live");
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.Headers.TryGetValues("X-Content-Type-Options", out var contentTypeOptions).Should().BeTrue();
+        response.Headers.TryGetValues("X-Frame-Options", out var frameOptions).Should().BeTrue();
+        response.Headers.TryGetValues("Referrer-Policy", out var referrerPolicy).Should().BeTrue();
+        response.Headers.TryGetValues("Content-Security-Policy", out var csp).Should().BeTrue();
+
+        contentTypeOptions!.Single().Should().Be("nosniff");
+        frameOptions!.Single().Should().Be("DENY");
+        referrerPolicy!.Single().Should().Be("no-referrer");
+        csp!.Single().Should().Contain("default-src 'none'");
+    }
+
+    [Fact]
     public async Task LoginEndpoint_WhenFlooded_ReturnsTooManyRequests()
     {
         HttpResponseMessage? lastResponse = null;
