@@ -43,8 +43,8 @@ public class DispatcherTests
 
         // No validators for query (validation passes)
         _serviceProviderMock
-            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<IQuery<string>>>)))
-            .Returns(Enumerable.Empty<IValidator<IQuery<string>>>());
+            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<TestQuery>>)))
+            .Returns(Enumerable.Empty<IValidator<TestQuery>>());
 
         var dispatcher = new BuildingBlocks.Application.Dispatcher.Dispatcher(
             _serviceProviderMock.Object,
@@ -76,8 +76,8 @@ public class DispatcherTests
 
         // No validators (validation passes)
         _serviceProviderMock
-            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<ICommand<int>>>)))
-            .Returns(Enumerable.Empty<IValidator<ICommand<int>>>());
+            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<TestCommand>>)))
+            .Returns(Enumerable.Empty<IValidator<TestCommand>>());
 
         var dispatcher = new BuildingBlocks.Application.Dispatcher.Dispatcher(
             _serviceProviderMock.Object,
@@ -96,19 +96,9 @@ public class DispatcherTests
     {
         // Arrange
         var query = new TestQuery { Value = string.Empty };
-        var validatorMock = new Mock<IValidator<IQuery<string>>>();
-        var validationResult = new ValidationResult(new[]
-        {
-            new ValidationFailure("Value", "Value is required")
-        });
-
-        validatorMock
-            .Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<IQuery<string>>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(validationResult);
-
         _serviceProviderMock
-            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<IQuery<string>>>)))
-            .Returns(new[] { validatorMock.Object });
+            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<TestQuery>>)))
+            .Returns(new IValidator<TestQuery>[] { new TestQueryValidator() });
 
         var dispatcher = new BuildingBlocks.Application.Dispatcher.Dispatcher(
             _serviceProviderMock.Object,
@@ -116,9 +106,6 @@ public class DispatcherTests
 
         // Act & Assert
         await Assert.ThrowsAsync<ValidationException>(() => dispatcher.DispatchAsync(query));
-        validatorMock.Verify(
-            v => v.ValidateAsync(It.IsAny<ValidationContext<IQuery<string>>>(), It.IsAny<CancellationToken>()),
-            Times.Once);
     }
 
     [Fact]
@@ -126,20 +113,9 @@ public class DispatcherTests
     {
         // Arrange
         var command = new TestCommand { Value = "" };
-        var validatorMock = new Mock<IValidator<ICommand<int>>>();
-        var validationResult = new ValidationResult(new[]
-        {
-            new ValidationFailure("Value", "Value is required")
-        });
-
-        validatorMock
-            .Setup(v => v.ValidateAsync(It.IsAny<ValidationContext<ICommand<int>>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(validationResult);
-
-        // Setup validators collection
         _serviceProviderMock
-            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<ICommand<int>>>)))
-            .Returns(new[] { validatorMock.Object });
+            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<TestCommand>>)))
+            .Returns(new IValidator<TestCommand>[] { new TestCommandValidator() });
 
         var dispatcher = new BuildingBlocks.Application.Dispatcher.Dispatcher(
             _serviceProviderMock.Object,
@@ -147,9 +123,6 @@ public class DispatcherTests
 
         // Act & Assert
         await Assert.ThrowsAsync<ValidationException>(() => dispatcher.DispatchAsync(command));
-        validatorMock.Verify(
-            v => v.ValidateAsync(It.IsAny<ValidationContext<ICommand<int>>>(), It.IsAny<CancellationToken>()),
-            Times.Once);
     }
 
     [Fact]
@@ -164,8 +137,8 @@ public class DispatcherTests
 
         // No validators
         _serviceProviderMock
-            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<IQuery<string>>>)))
-            .Returns(Enumerable.Empty<IValidator<IQuery<string>>>());
+            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<TestQuery>>)))
+            .Returns(Enumerable.Empty<IValidator<TestQuery>>());
 
         var dispatcher = new BuildingBlocks.Application.Dispatcher.Dispatcher(
             _serviceProviderMock.Object,
@@ -183,8 +156,8 @@ public class DispatcherTests
 
         // No validators
         _serviceProviderMock
-            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<ICommand<int>>>)))
-            .Returns(Enumerable.Empty<IValidator<ICommand<int>>>());
+            .Setup(sp => sp.GetService(typeof(IEnumerable<IValidator<TestCommand>>)))
+            .Returns(Enumerable.Empty<IValidator<TestCommand>>());
 
         // No handler
         _serviceProviderMock
@@ -274,6 +247,22 @@ public class DispatcherTests
     public record TestCommand : ICommand<int>
     {
         public string Value { get; init; } = string.Empty;
+    }
+
+    public sealed class TestQueryValidator : AbstractValidator<TestQuery>
+    {
+        public TestQueryValidator()
+        {
+            RuleFor(x => x.Value).NotEmpty().WithMessage("Value is required");
+        }
+    }
+
+    public sealed class TestCommandValidator : AbstractValidator<TestCommand>
+    {
+        public TestCommandValidator()
+        {
+            RuleFor(x => x.Value).NotEmpty().WithMessage("Value is required");
+        }
     }
 
     private static void ResetEventHandlers(params Type[] handlerTypes)
