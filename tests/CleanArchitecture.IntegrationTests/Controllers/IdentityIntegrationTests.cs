@@ -369,6 +369,16 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
+    [Fact]
+    public async Task Logout_WithoutAuthentication_ReturnsUnauthorized()
+    {
+        _client.DefaultRequestHeaders.Authorization = null;
+
+        var response = await _client.PostAsync("/api/v1/authentication/logout", content: null);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
     #endregion
 
     #region Email Confirmation Tests
