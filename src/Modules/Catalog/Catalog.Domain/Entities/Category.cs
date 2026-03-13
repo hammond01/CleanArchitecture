@@ -31,10 +31,10 @@ public class Category : Entity<string>
         {
             Id = Guid.NewGuid().ToString(),
             CategoryName = categoryName,
-            Description = description,
-            PictureLink = pictureLink
+            Description = description
         };
 
+        category.SetPictureLink(pictureLink);
         category.Validate();
         return category;
     }
@@ -65,6 +65,11 @@ public class Category : Entity<string>
 
     public void SetPictureLink(string? pictureLink)
     {
+        if (!string.IsNullOrWhiteSpace(pictureLink) && pictureLink.Length > 100)
+        {
+            throw new CategoryDomainException("Picture link cannot exceed 100 characters");
+        }
+
         if (!string.IsNullOrWhiteSpace(pictureLink) && !Uri.IsWellFormedUriString(pictureLink, UriKind.Absolute))
         {
             throw new CategoryDomainException("Picture link must be a valid URL");
@@ -97,14 +102,14 @@ public class Category : Entity<string>
             throw new CategoryDomainException("Category name is required");
         }
 
-        if (CategoryName.Length > 100)
+        if (CategoryName.Length > 150)
         {
-            throw new CategoryDomainException("Category name cannot exceed 100 characters");
+            throw new CategoryDomainException("Category name cannot exceed 150 characters");
         }
 
-        if (!string.IsNullOrWhiteSpace(Description) && Description.Length > 500)
+        if (!string.IsNullOrWhiteSpace(Description) && Description.Length > 250)
         {
-            throw new CategoryDomainException("Description cannot exceed 500 characters");
+            throw new CategoryDomainException("Description cannot exceed 250 characters");
         }
     }
 

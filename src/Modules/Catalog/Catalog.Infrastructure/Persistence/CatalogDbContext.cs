@@ -1,19 +1,34 @@
-using BuildingBlocks.Domain.Repositories;
+using BuildingBlocks.Application.Auditing;
+using BuildingBlocks.Application.Dispatcher;
+using BuildingBlocks.Application.Security;
+using BuildingBlocks.Infrastructure.Persistence;
 using Catalog.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Persistence;
 
-public class CatalogDbContext : DbContext, IUnitOfWork
+public class CatalogDbContext : ModuleDbContextBase
 {
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options)
-        : base(options)
+        : this(options, null, null, null)
     {
     }
+
+    public CatalogDbContext(
+        DbContextOptions<CatalogDbContext> options,
+        IDispatcher? dispatcher,
+        IEntityChangeBuffer? entityChangeBuffer,
+        ICurrentUserAccessor? currentUserAccessor)
+        : base(options, dispatcher, entityChangeBuffer, currentUserAccessor)
+    {
+    }
+
+    protected override string ModuleName => "Catalog";
 
     // DbSets
     public DbSet<Product> Products { get; set; } = null!;
     public DbSet<Category> Categories { get; set; } = null!;
+    public DbSet<AuditOutboxMessage> AuditOutboxMessages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,47 +39,5 @@ public class CatalogDbContext : DbContext, IUnitOfWork
         
         // Set default schema (optional)
         modelBuilder.HasDefaultSchema("catalog");
-    }
-
-    // IUnitOfWork implementation
-    Task<int> IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken)
-    {
-        return base.SaveChangesAsync(cancellationToken);
-    }
-
-    async Task<IDisposable> IUnitOfWork.BeginTransactionAsync(
-        System.Data.IsolationLevel isolationLevel,
-        CancellationToken cancellationToken)
-    {
-        return await Database.BeginTransactionAsync(isolationLevel, cancellationToken);
-    }
-
-    async Task<IDisposable> IUnitOfWork.BeginTransactionAsync(
-        System.Data.IsolationLevel isolationLevel,
-        string? lockName,
-        CancellationToken cancellationToken)
-    {
-        // For now, ignore lockName (can be implemented with distributed locks later)
-        return await Database.BeginTransactionAsync(isolationLevel, cancellationToken);
-    }
-
-    async Task IUnitOfWork.CommitTransactionAsync(CancellationToken cancellationToken)
-    {
-        var transaction = Database.CurrentTransaction;
-        if (transaction == null)
-        {
-            throw new InvalidOperationException("No transaction in progress.");
-        }
-
-        try
-        {
-            await SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-        }
-        catch
-        {
-            await transaction.RollbackAsync(cancellationToken);
-            throw;
-        }
     }
 }

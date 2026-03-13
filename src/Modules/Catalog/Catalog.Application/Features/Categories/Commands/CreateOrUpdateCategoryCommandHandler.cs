@@ -1,6 +1,7 @@
 using BuildingBlocks.Application.CQRS;
 using BuildingBlocks.Domain.Repositories;
 using Catalog.Domain.Entities;
+using Catalog.Domain.Events;
 using Catalog.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,7 @@ public class CreateOrUpdateCategoryCommandHandler : ICommandHandler<CreateOrUpda
                 command.Description,
                 command.PictureLink);
 
+            category.AddDomainEvent(new CategoryCreatedEvent(category.Id, category.CategoryName));
             await _categoryRepository.AddAsync(category, cancellationToken);
         }
         else
@@ -56,6 +58,9 @@ public class CreateOrUpdateCategoryCommandHandler : ICommandHandler<CreateOrUpda
                 existingCategory.SetPictureLink(command.PictureLink);
             }
 
+            existingCategory.AddDomainEvent(new CategoryUpdatedEvent(
+                existingCategory.Id,
+                existingCategory.CategoryName));
             await _categoryRepository.UpdateAsync(existingCategory, cancellationToken);
             category = existingCategory;
         }

@@ -23,7 +23,7 @@ public class AuditLogEntryConfiguration : IEntityTypeConfiguration<AuditLogEntry
 
         builder.Property(x => x.Action)
             .IsRequired()
-            .HasMaxLength(50);
+            .HasMaxLength(256);
 
         builder.Property(x => x.ObjectId)
             .IsRequired()

@@ -1,5 +1,6 @@
 using BuildingBlocks.Application.CQRS;
 using BuildingBlocks.Domain.Repositories;
+using Catalog.Domain.Events;
 using Catalog.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,13 +12,16 @@ namespace Catalog.Application.Features.Categories.Commands;
 public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryCommand, bool>
 {
     private readonly ICategoryRepository _categoryRepository;
+    private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public DeleteCategoryCommandHandler(
         ICategoryRepository categoryRepository,
+        IProductRepository productRepository,
         IUnitOfWork unitOfWork)
     {
         _categoryRepository = categoryRepository;
+        _productRepository = productRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -32,6 +36,16 @@ public class DeleteCategoryCommandHandler : ICommandHandler<DeleteCategoryComman
             return false;
         }
 
+        var hasProducts = await _productRepository
+            .GetQueryableSet()
+            .AnyAsync(p => p.CategoryId == command.Id, cancellationToken);
+
+        if (hasProducts)
+        {
+            throw new InvalidOperationException("Cannot delete a category that still contains products");
+        }
+
+        category.AddDomainEvent(new CategoryDeletedEvent(category.Id, category.CategoryName));
         _categoryRepository.Delete(category);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -12,14 +12,14 @@ public class CreateOrUpdateCategoryCommandValidator : AbstractValidator<CreateOr
     {
         RuleFor(x => x.CategoryName)
             .NotEmpty().WithMessage("Category name is required")
-            .MaximumLength(15).WithMessage("Category name must not exceed 15 characters");
+            .MaximumLength(150).WithMessage("Category name must not exceed 150 characters");
 
         RuleFor(x => x.Description)
-            .MaximumLength(500).WithMessage("Description must not exceed 500 characters")
+            .MaximumLength(250).WithMessage("Description must not exceed 250 characters")
             .When(x => !string.IsNullOrEmpty(x.Description));
 
         RuleFor(x => x.PictureLink)
-            .MaximumLength(500).WithMessage("Picture link must not exceed 500 characters")
+            .MaximumLength(100).WithMessage("Picture link must not exceed 100 characters")
             .Must(BeAValidUrl).WithMessage("Picture link must be a valid URL")
             .When(x => !string.IsNullOrEmpty(x.PictureLink));
     }
