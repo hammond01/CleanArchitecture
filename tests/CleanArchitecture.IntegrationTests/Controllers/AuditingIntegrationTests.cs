@@ -37,4 +37,29 @@ public class AuditingIntegrationTests : IClassFixture<SqlServerWebApplicationFac
         content.Should().Contain("\"data\"");
         content.Should().Contain("POST /api/v1/categories");
     }
+
+    [Fact]
+    public async Task GetAuditEntries_WithoutAuthentication_ReturnsUnauthorized()
+    {
+        // Act
+        var response = await _client.GetAsync("/api/v1/auditlogs");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
+    public async Task GetAuditEntries_WithPaginationQuery_ReturnsOk()
+    {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
+        // Act
+        var response = await _client.GetAsync("/api/v1/auditlogs?pageNumber=1&pageSize=5");
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var content = await response.Content.ReadAsStringAsync();
+        content.Should().Contain("\"success\"");
+        content.Should().Contain("\"data\"");
+    }
 }
