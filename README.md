@@ -509,6 +509,7 @@ Module extension guides:
 
 - `docs/ADDING_A_MODULE.md`
 - `docs/UI_INTEGRATION_PLAN.md`
+- `docs/API_RELEASE_CHECKLIST.md`
 
 ---
 
