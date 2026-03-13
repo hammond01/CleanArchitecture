@@ -74,6 +74,9 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        var content = await response.Content.ReadAsStringAsync();
+        content.Should().Contain("\"success\":false");
+        content.Should().Contain("\"error\"");
     }
 
     #region Category Tests
