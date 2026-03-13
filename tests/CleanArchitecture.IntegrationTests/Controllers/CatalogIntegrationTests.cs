@@ -79,6 +79,17 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     #region Category Tests
 
     [Fact]
+    public async Task CreateCategory_WithoutAuthentication_ReturnsUnauthorized()
+    {
+        var response = await _client.PostAsJsonAsync("/api/v1/categories", new
+        {
+            CategoryName = "Unauthorized Category"
+        });
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
+
+    [Fact]
     public async Task CreateCategory_WithValidData_ReturnsCreated()
     {
         await AuthenticationTestHelper.AuthenticateAsync(_client);
@@ -253,6 +264,18 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     #endregion
 
     #region Product Tests
+
+    [Fact]
+    public async Task CreateProduct_WithoutAuthentication_ReturnsUnauthorized()
+    {
+        var response = await _client.PostAsJsonAsync("/api/v1/products", new
+        {
+            ProductName = "Unauthorized Product",
+            CategoryId = Guid.NewGuid().ToString()
+        });
+
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
 
     [Fact]
     public async Task CreateProduct_WithValidData_ReturnsCreated()
