@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using BuildingBlocks.Application.CQRS;
 using Identity.Domain.Repositories;
 
@@ -18,12 +17,7 @@ public class UserLogoutCommandHandler : ICommandHandler<UserLogoutCommand, bool>
 
     public async Task<bool> HandleAsync(UserLogoutCommand command, CancellationToken cancellationToken = default)
     {
-        var identity = new ClaimsIdentity(new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, command.UserId)
-        });
-        var principal = new ClaimsPrincipal(identity);
-        await _identityRepository.LogoutAsync(principal, cancellationToken);
+        await _identityRepository.LogoutAsync(command.UserId, cancellationToken);
         return true;
     }
 }

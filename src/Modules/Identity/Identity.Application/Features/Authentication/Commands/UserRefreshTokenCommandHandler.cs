@@ -1,4 +1,5 @@
 using BuildingBlocks.Application.CQRS;
+using Identity.Domain.DTOs;
 using Identity.Domain.Repositories;
 
 namespace Identity.Application.Features.Authentication.Commands;
@@ -6,7 +7,7 @@ namespace Identity.Application.Features.Authentication.Commands;
 /// <summary>
 /// Handler for UserRefreshTokenCommand
 /// </summary>
-public class UserRefreshTokenCommandHandler : ICommandHandler<UserRefreshTokenCommand, string>
+public class UserRefreshTokenCommandHandler : ICommandHandler<UserRefreshTokenCommand, LoginResponseDto>
 {
     private readonly IIdentityRepository _identityRepository;
 
@@ -15,9 +16,11 @@ public class UserRefreshTokenCommandHandler : ICommandHandler<UserRefreshTokenCo
         _identityRepository = identityRepository;
     }
 
-    public async Task<string> HandleAsync(UserRefreshTokenCommand command, CancellationToken cancellationToken = default)
+    public async Task<LoginResponseDto> HandleAsync(UserRefreshTokenCommand command, CancellationToken cancellationToken = default)
     {
-        await _identityRepository.RefreshTokenAsync(command.AccessToken, command.RefreshToken, cancellationToken);
-        return command.AccessToken; // TODO: Return actual new token from repo
+        return await _identityRepository.RefreshTokenAsync(
+            command.AccessToken,
+            command.RefreshToken,
+            cancellationToken);
     }
 }

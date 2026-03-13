@@ -1,4 +1,5 @@
 using BuildingBlocks.Application.CQRS;
+using Identity.Domain.DTOs;
 using Identity.Domain.Repositories;
 
 namespace Identity.Application.Features.Authentication.Commands;
@@ -6,7 +7,7 @@ namespace Identity.Application.Features.Authentication.Commands;
 /// <summary>
 /// Handler for UserLoginCommand
 /// </summary>
-public class UserLoginCommandHandler : ICommandHandler<UserLoginCommand, string>
+public class UserLoginCommandHandler : ICommandHandler<UserLoginCommand, LoginResponseDto>
 {
     private readonly IIdentityRepository _identityRepository;
 
@@ -15,9 +16,12 @@ public class UserLoginCommandHandler : ICommandHandler<UserLoginCommand, string>
         _identityRepository = identityRepository;
     }
 
-    public async Task<string> HandleAsync(UserLoginCommand command, CancellationToken cancellationToken = default)
+    public async Task<LoginResponseDto> HandleAsync(UserLoginCommand command, CancellationToken cancellationToken = default)
     {
-        await _identityRepository.LoginAsync(command.UserName, command.Password, cancellationToken);
-        return command.UserName; // TODO: Return actual JWT token from repo
+        return await _identityRepository.LoginAsync(
+            command.UserName,
+            command.Password,
+            command.RememberMe,
+            cancellationToken);
     }
 }
