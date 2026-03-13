@@ -5,6 +5,7 @@
 [![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20Modular%20Monolith-brightgreen.svg)](#architecture-overview)
 [![Status](https://img.shields.io/badge/status-template%20starter%20kit-blue.svg)](#roadmap)
+[![CI Tests](https://github.com/hammond01/CleanArchitecture/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/hammond01/CleanArchitecture/actions/workflows/ci-tests.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
