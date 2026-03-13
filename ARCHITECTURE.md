@@ -1,21 +1,24 @@
-# ARCHITECTURE
+# Architecture
 
 ## Overview
 
-This repository implements an **Enterprise Backend System** using a  
-**Modular Monolith architecture combined with Clean Architecture**.
+This repository implements a **Clean Architecture Modular Monolith template** for .NET 8.
 
-The system is designed to support **complex business workflows** such as:
-- ERP
-- OMS
-- Payment / Financial systems
+It is intended to be a **starter kit** for backend-first application development, with:
 
-while keeping:
-- Deployment simple
-- Operations predictable
-- Long-term maintenance sustainable
+- explicit module boundaries
+- reusable building blocks
+- production-minded API defaults
+- real sample modules
+- a migration path toward a future UI layer
 
-This project is intentionally **NOT** a microservices system.
+This project is intentionally **not** a microservices system and is also **not** positioned as a full business product.
+
+The current repository demonstrates architecture and extension patterns through three sample modules:
+
+- **Identity**
+- **Catalog**
+- **Auditing**
 
 ---
 
@@ -23,54 +26,90 @@ This project is intentionally **NOT** a microservices system.
 
 ### Modular Monolith
 
-The application is deployed as a **single runtime**, but internally structured into
-**isolated business modules**.
+The application is deployed as a **single runtime**, but internally structured into **isolated business modules**.
 
 Each module represents a **business capability**, not a technical concern.
 
 Key characteristics:
-- One deployable unit
-- One operational surface (logging, monitoring, alerting)
-- Explicit internal boundaries
-- Strong ownership per module
 
-This approach minimizes operational complexity while still allowing
-the system to **evolve toward microservices when justified**.
+- one deployable unit
+- one operational surface
+- explicit internal boundaries
+- lower ops complexity than microservices
+- easier local development and debugging
 
----
+This approach is meant to keep complexity controlled while still allowing the system to **evolve later if extraction becomes justified**.
 
 ### Clean Architecture
 
-Each module follows Clean Architecture principles with strict dependency rules.
+Each module follows Clean Architecture principles with inward dependency flow.
 
 Dependency direction:
 
-- **Domain**: Business rules and invariants
-- **Application**: Use case orchestration
-- **Infrastructure**: Technical implementation details
+- **Domain** → business rules and invariants
+- **Application** → use cases, commands, queries, orchestration
+- **Infrastructure** → technical implementations
+- **API** → HTTP entry points and composition wiring
 
-The Domain layer is fully isolated from frameworks, persistence, and external services.
+The Domain layer stays isolated from frameworks, persistence, and delivery concerns.
 
 ---
 
-## Project Structure
+## Actual Repository Structure
 
-/src
-├── Api
-│ └── Application entry point & composition root
-│
-├── Modules
-│ ├── {ModuleName}
-│ │ ├── Domain
-│ │ ├── Application
-│ │ ├── Infrastructure
-│ │ └── Api
-│
-├── BuildingBlocks
-│ └── Shared technical abstractions (NO business logic)
-│
-├── .copilot-context.md
-└── ARCHITECTURE.md
+```text
+src/
+├── BuildingBlocks/
+├── CleanArchitecture.Api/
+├── DbMigrator/
+└── Modules/
+    ├── Auditing/
+    ├── Catalog/
+    └── Identity/
+
+tests/
+├── CleanArchitecture.IntegrationTests/
+└── CleanArchitecture.UnitTests/
+```
+
+### BuildingBlocks
+
+`BuildingBlocks/` contains shared technical abstractions and reusable infrastructure pieces.
+
+This is where cross-cutting concerns live, such as:
+
+- dispatcher abstractions/implementation
+- shared domain/application contracts
+- common API/controller infrastructure
+- security and auditing abstractions
+
+### API Host
+
+`src/CleanArchitecture.Api/` is the composition root.
+
+It is responsible for:
+
+- module registration
+- middleware pipeline setup
+- health checks
+- security defaults
+- CORS setup
+- rate limiting
+- logging setup
+
+### DbMigrator
+
+`src/DbMigrator/` provides a dedicated migration entry point so schema updates can be run separately from the API host.
+
+### Modules
+
+Each module is structured with separate layers.
+
+Current modules:
+
+- `Identity`
+- `Catalog`
+- `Auditing`
 
 ---
 
@@ -78,196 +117,219 @@ The Domain layer is fully isolated from frameworks, persistence, and external se
 
 ### What Is a Module
 
-A **module** represents a **business capability**, for example:
-- Purchasing
-- Payment
-- Inventory
-- Identity
+A module represents a **business capability**.
 
-Each module:
-- Owns its business rules
-- Owns its persistence model
-- Can be reasoned about independently
-- Is a candidate for future extraction
+In the current repository, modules are also used as **reference implementations** for how new capabilities should be added to the template.
 
----
+Each module should:
 
-### Internal Layers
+- own its business rules
+- own its application workflows
+- own its persistence model
+- expose its own API endpoints
+- remain understandable in isolation
+
+### Internal Layers per Module
 
 #### Domain Layer
 
 Contains:
-- Aggregate Roots
-- Entities
-- Value Objects
-- Domain Events
-- Business invariants
+
+- entities
+- value objects
+- domain events
+- invariants
+- business rules
+- repository contracts
 
 Rules:
-- No framework dependencies
-- No persistence concerns
-- No HTTP or external service calls
 
-**Example: Aggregate enforcing invariants**
+- no infrastructure concerns
+- no HTTP concerns
+- no framework-driven business logic
 
-```csharp
-public class PurchaseOrder : AggregateRoot
-{
-    public void Approve(UserId approver)
-    {
-        if (Status != PurchaseOrderStatus.Pending)
-            throw new DomainException("Only pending orders can be approved.");
-
-        Status = PurchaseOrderStatus.Approved;
-        AddDomainEvent(new PurchaseOrderApprovedEvent(Id, approver));
-    }
-}
-
-* Application Layer
-
-Responsibilities:
-
-- Use case orchestration
-- Transaction coordination
-- Authorization checks
-- Calling domain behavior
-
-Rules:
-- No infrastructure-specific code
-- Business rules remain in Domain
-- Depends only on Domain abstractions
-
-Example: Application use case
-public class ApprovePurchaseOrderCommandHandler
-{
-    public async Task Handle(ApprovePurchaseOrderCommand command)
-    {
-        var order = await _repository.GetByIdAsync(command.OrderId);
-
-        order.Approve(command.ApproverId);
-
-        await _unitOfWork.CommitAsync();
-    }
-}
-
-* Infrastructure Layer
+#### Application Layer
 
 Contains:
-- EF Core / database access
-- External API integrations
-- Messaging / Outbox pattern
-- Repository implementations
+
+- commands and queries
+- handlers
+- validators
+- DTOs
+- orchestration logic
 
 Rules:
-- Implements interfaces defined in Domain/Application
-- Contains no business rules
-- Fully replaceable
 
-Example: Repository implementation
-public class PurchaseOrderRepository : IPurchaseOrderRepository
-{
-    public Task<PurchaseOrder?> GetByIdAsync(Guid id)
-        => _dbContext.PurchaseOrders.FindAsync(id).AsTask();
-}
+- coordinates use cases
+- calls domain behavior
+- should not contain persistence implementation details
 
-* Module API Layer
+#### Infrastructure Layer
 
 Contains:
-- HTTP Controllers
-- Request / Response contracts
+
+- EF Core persistence
+- repository implementations
+- external/service integrations
+- auth/persistence related technical code
 
 Rules:
-- Thin layer
-- No business logic
-- Delegates directly to Application layer
 
-** Module Contracts & Communication
+- implements interfaces/contracts defined elsewhere
+- should not become a home for business rules
 
-- Modules MUST NOT reference each other’s internal layers.
+#### API Layer
 
-Allowed communication mechanisms
+Contains:
 
-- Domain Events
-- Application-level interfaces
-- Explicit DTO contracts
+- controllers
+- request/response exposure
+- authorization attributes
+- thin delivery logic over the application layer
 
-Example: Application-level contract
-public interface IPaymentService
-{
-    Task<PaymentResult> CaptureAsync(PaymentRequest request);
-}
-This ensures:
-- Loose coupling
-- Clear ownership
-- Safe refactoring
-- Future extractability
+Rules:
 
-** Persistence Strategy
+- no business logic
+- keep controllers thin
+- delegate into application handlers via dispatcher
 
-- Each module owns its database schema
-- No shared DbContext across modules
-- No cross-module foreign keys
+---
 
-This avoids:
+## Current Module Responsibilities
 
-- Hidden coupling
-- Accidental schema dependencies
-- Unsafe cross-module changes
+### Identity
 
-** Migration Strategy
+The Identity module currently demonstrates:
 
-The system supports incremental architectural evolution.
+- user registration
+- login
+- refresh token flow
+- logout
+- email confirmation
+- resend confirmation
+- password reset request
+- password reset execution
 
-Typical migration path
+This module acts as the template's primary reference for authentication-related behavior.
 
-- Start with a Modular Monolith
-- Strengthen module boundaries
-- Introduce domain events for decoupling
+### Catalog
 
-- Extract a module into a microservice only when justified
+The Catalog module currently demonstrates:
 
-Extraction criteria
+- categories CRUD
+- products CRUD
+- paginated and filtered reads
+- CSV export
+- command/query separation via dispatcher
 
-- A module may be extracted when:
+This is the main business sample module in the repository.
 
-- Independent scaling is required
-- Independent deployment becomes necessary
-- Team ownership grows significantly
+### Auditing
 
-Until then, modular monolith provides:
+The Auditing module currently demonstrates:
 
-- Strong consistency
-- Simpler debugging
+- audit log persistence
+- audit querying
+- background audit outbox processing
 
-Lower operational cost
+This module exists primarily to show how a cross-cutting capability can still live as a bounded module rather than a loose shared concern.
 
-** Design Principles
+---
 
-- Business problems over patterns
-- Explicit boundaries over shared abstractions
-- Simplicity over premature optimization
+## Module Communication Rules
 
-Evolutionary architecture over upfront complexity
+Modules should **not** reference each other's internals casually.
 
-** Forbidden Anti-Patterns
+Preferred communication mechanisms:
 
-- Shared business logic folders
-- Cross-module DbContext usage
-- Infrastructure code inside Domain
-- God services or shared repositories
-- Pattern-driven over-engineering
+- explicit contracts
+- shared abstractions in BuildingBlocks when truly cross-cutting
+- domain/application events where appropriate
+- DTO-based interaction boundaries
 
-** Interview Talking Points
+This keeps the template aligned with its core goals:
 
-When explaining this architecture:
+- loose coupling
+- clean ownership
+- safe refactoring
+- future extractability if needed
 
-- Emphasize business boundaries
-- Explain trade-offs, not just patterns
-- Highlight operational simplicity
-- Position microservices as an evolution path
+---
 
-** Final Note
+## Persistence Strategy
 
-- This architecture prioritizes clarity, discipline, and pragmatism.
-- Architecture exists to serve the business,
-not to showcase patterns or trends.
+The repository is organized so modules can maintain clear persistence boundaries.
+
+Current architecture intent:
+
+- modules own their persistence concerns
+- schemas and contexts should reflect module boundaries
+- cross-module coupling through persistence should be minimized
+
+This helps avoid:
+
+- hidden schema coupling
+- accidental shared data ownership
+- unsafe changes across modules
+
+---
+
+## Operational Baseline in the Current API Host
+
+The current API host already includes several production-minded concerns:
+
+- Serilog logging to console and rolling files
+- forwarded headers support
+- CORS policy configuration
+- HSTS outside development
+- custom security headers middleware
+- exception handling middleware
+- health checks at `/health/live` and `/health/ready`
+- auth endpoint rate limiting
+- request auditing middleware
+
+This is an important part of the template's value: it is not only structured well, it also starts with a more realistic API baseline than a toy sample.
+
+---
+
+## UI Direction
+
+A dedicated UI layer is planned, but it is **not part of the current repository yet**.
+
+The intended sequence is:
+
+1. stabilize the backend/API template
+2. tighten tests and documentation
+3. define the UI technology and integration strategy
+4. add a UI layer that consumes the API cleanly
+
+This keeps the repository focused on a strong backend/template core before committing to a frontend stack.
+
+---
+
+## Design Principles
+
+- business boundaries over framework convenience
+- clarity over pattern theater
+- reusable starter-kit structure over domain sprawl
+- honest documentation over inflated claims
+- evolutionary architecture over premature distribution
+
+---
+
+## Anti-Patterns to Avoid
+
+- shared business logic folders with unclear ownership
+- cross-module persistence shortcuts
+- infrastructure concerns leaking into domain code
+- controllers containing business logic
+- adding modules just to increase feature count
+- documenting aspirational architecture as if it already exists
+
+---
+
+## Final Note
+
+This architecture is meant to be **pragmatic, extensible, and teachable**.
+
+The goal is not to showcase every enterprise buzzword. The goal is to provide a backend foundation that people can actually clone, understand, and extend.
