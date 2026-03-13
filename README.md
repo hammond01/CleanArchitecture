@@ -505,10 +505,10 @@ This template is strongest when used as a foundation for:
 - preserving boundaries between domain, application, infrastructure, and API
 - later integrating a UI layer on top of the API
 
-Recommended next documentation step:
+Module extension guides:
 
-- add a dedicated `docs/ADDING_A_MODULE.md`
-- explain module registration, persistence, migrations, handlers, validators, controllers, and tests
+- `docs/ADDING_A_MODULE.md`
+- `docs/UI_INTEGRATION_PLAN.md`
 
 ---
 
