@@ -1,5 +1,5 @@
+using BuildingBlocks.Api.Responses;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace CleanArchitecture.Api.Middleware;
@@ -33,15 +33,7 @@ public class ExceptionHandlingMiddleware
     {
         context.Response.ContentType = "application/json";
 
-        var response = new ProblemDetails
-        {
-            Title = "An error occurred while processing your request.",
-            Status = context.Response.StatusCode,
-            Detail = exception.Message,
-            Instance = context.Request.Path
-        };
-
-        context.Response.StatusCode = exception switch
+        var statusCode = exception switch
         {
             ArgumentException => StatusCodes.Status400BadRequest,
             InvalidOperationException => StatusCodes.Status400BadRequest,
@@ -51,7 +43,13 @@ public class ExceptionHandlingMiddleware
             _ => StatusCodes.Status500InternalServerError
         };
 
-        response.Status = context.Response.StatusCode;
+        context.Response.StatusCode = statusCode;
+
+        var errorMessage = statusCode == StatusCodes.Status500InternalServerError
+            ? "An internal server error occurred"
+            : exception.Message;
+
+        var response = ApiResponse.CreateError(errorMessage, statusCode);
 
         return context.Response.WriteAsJsonAsync(response);
     }
