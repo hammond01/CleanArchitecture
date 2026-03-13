@@ -196,7 +196,13 @@ public class Dispatcher : IDispatcher
     private async Task ValidateAsync<T>(T request, CancellationToken cancellationToken)
     {
         var validators = new List<IValidator>();
-        validators.AddRange(_serviceProvider.GetServices<IValidator<T>>());
+
+        var declaredValidatorServiceType = typeof(IEnumerable<>).MakeGenericType(typeof(IValidator<>).MakeGenericType(typeof(T)));
+        var declaredValidators = _serviceProvider.GetService(declaredValidatorServiceType) as System.Collections.IEnumerable;
+        if (declaredValidators != null)
+        {
+            validators.AddRange(declaredValidators.Cast<IValidator>());
+        }
 
         var concreteType = request?.GetType();
         if (concreteType != null)
