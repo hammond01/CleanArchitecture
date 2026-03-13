@@ -3,6 +3,7 @@ using BuildingBlocks.Application.Dispatcher;
 using Catalog.Application.DTOs;
 using Catalog.Application.Features.Categories.Commands;
 using Catalog.Application.Features.Categories.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Api.Controllers;
@@ -62,6 +63,7 @@ public class CategoriesController : BaseController
     /// Create a new category
     /// </summary>
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateCategory([FromBody] CreateOrUpdateCategoryCommand command)
     {
         var categoryId = await _dispatcher.DispatchAsync(command);
@@ -72,6 +74,7 @@ public class CategoriesController : BaseController
     /// Update an existing category
     /// </summary>
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateCategory(string id, [FromBody] CreateOrUpdateCategoryCommand command)
     {
         var updateCommand = command with { Id = id };
@@ -83,6 +86,7 @@ public class CategoriesController : BaseController
     /// Delete a category
     /// </summary>
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteCategory(string id)
     {
         var command = new DeleteCategoryCommand(id);

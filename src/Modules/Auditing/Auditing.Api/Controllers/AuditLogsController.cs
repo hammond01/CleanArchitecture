@@ -2,12 +2,14 @@ using Auditing.Application.Features.AuditLogEntries.Queries;
 using Auditing.Application.DTOs;
 using BuildingBlocks.Api.Controllers;
 using BuildingBlocks.Application.Dispatcher;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Auditing.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/v1/[controller]")]
 public class AuditLogsController : BaseController
 {

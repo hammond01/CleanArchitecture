@@ -1,5 +1,6 @@
 using BuildingBlocks.Application.CQRS;
 using BuildingBlocks.Domain.Repositories;
+using Catalog.Domain.Events;
 using Catalog.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,7 @@ public class DeleteProductCommandHandler : ICommandHandler<DeleteProductCommand,
             return false;
         }
 
+        product.AddDomainEvent(new ProductDeletedEvent(product.Id, product.ProductName));
         _productRepository.Delete(product);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

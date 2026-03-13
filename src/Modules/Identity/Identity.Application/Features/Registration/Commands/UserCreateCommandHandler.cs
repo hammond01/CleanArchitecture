@@ -17,7 +17,7 @@ public class UserCreateCommandHandler : ICommandHandler<UserCreateCommand, strin
 
     public async Task<string> HandleAsync(UserCreateCommand command, CancellationToken cancellationToken = default)
     {
-        await _identityRepository.RegisterAsync(
+        var userId = await _identityRepository.RegisterAsync(
             command.UserName,
             command.Email,
             command.Password,
@@ -25,6 +25,6 @@ public class UserCreateCommandHandler : ICommandHandler<UserCreateCommand, strin
             command.LastName,
             cancellationToken);
 
-        return command.UserName; // TODO: Return actual UserId from repo
+        return userId.ToString();
     }
 }

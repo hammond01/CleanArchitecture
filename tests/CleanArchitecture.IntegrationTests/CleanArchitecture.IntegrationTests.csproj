@@ -33,6 +33,8 @@
     <ProjectReference Include="..\..\src\BuildingBlocks\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
     <ProjectReference Include="..\..\src\Modules\Catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Modules\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Auditing\Auditing.Infrastructure\Auditing.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\DbMigrator\DbMigrator.csproj" />
   </ItemGroup>
 
 </Project>

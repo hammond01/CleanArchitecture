@@ -1,5 +1,7 @@
-using System.Data;
-using BuildingBlocks.Domain.Repositories;
+using BuildingBlocks.Application.Auditing;
+using BuildingBlocks.Application.Dispatcher;
+using BuildingBlocks.Application.Security;
+using BuildingBlocks.Infrastructure.Persistence;
 using Identity.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,16 +10,28 @@ namespace Identity.Infrastructure.Persistence;
 /// <summary>
 /// DbContext for Identity module
 /// </summary>
-public class IdentityDbContext : DbContext, IUnitOfWork
+public class IdentityDbContext : ModuleDbContextBase
 {
     public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
-        : base(options)
+        : this(options, null, null, null)
     {
     }
+
+    public IdentityDbContext(
+        DbContextOptions<IdentityDbContext> options,
+        IDispatcher? dispatcher,
+        IEntityChangeBuffer? entityChangeBuffer,
+        ICurrentUserAccessor? currentUserAccessor)
+        : base(options, dispatcher, entityChangeBuffer, currentUserAccessor)
+    {
+    }
+
+    protected override string ModuleName => "Identity";
 
     // DbSets
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+    public DbSet<AuditOutboxMessage> AuditOutboxMessages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,32 +42,5 @@ public class IdentityDbContext : DbContext, IUnitOfWork
 
         // Set default schema
         modelBuilder.HasDefaultSchema("identity");
-    }
-
-    // IUnitOfWork implementation
-    async Task<int> IUnitOfWork.SaveChangesAsync(CancellationToken cancellationToken)
-    {
-        return await base.SaveChangesAsync(cancellationToken);
-    }
-
-    async Task<IDisposable> IUnitOfWork.BeginTransactionAsync(
-        IsolationLevel isolationLevel,
-        CancellationToken cancellationToken)
-    {
-        return await Database.BeginTransactionAsync(isolationLevel, cancellationToken);
-    }
-
-    async Task<IDisposable> IUnitOfWork.BeginTransactionAsync(
-        IsolationLevel isolationLevel,
-        string? lockName,
-        CancellationToken cancellationToken)
-    {
-        // For now, ignore lockName (can be implemented with distributed locks later)
-        return await Database.BeginTransactionAsync(isolationLevel, cancellationToken);
-    }
-
-    async Task IUnitOfWork.CommitTransactionAsync(CancellationToken cancellationToken)
-    {
-        await SaveChangesAsync(cancellationToken);
     }
 }

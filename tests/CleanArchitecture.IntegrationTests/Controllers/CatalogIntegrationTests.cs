@@ -81,6 +81,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task CreateCategory_WithValidData_ReturnsCreated()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange
         var command = new
         {
@@ -102,6 +104,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task CreateCategory_WithInvalidData_ReturnsBadRequest()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - missing required CategoryName
         var command = new
         {
@@ -118,6 +122,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task UpdateCategory_WithValidId_ReturnsOk()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create a category first
         var createCommand = new
         {
@@ -144,6 +150,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task UpdateCategory_WithInvalidId_ReturnsError()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange
         var invalidId = Guid.NewGuid().ToString();
         var command = new
@@ -161,6 +169,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task DeleteCategory_WithValidId_ReturnsOk()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create a category first
         var createCommand = new
         {
@@ -180,6 +190,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task DeleteCategory_WithInvalidId_ReturnsNotFound()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange
         var invalidId = Guid.NewGuid().ToString();
 
@@ -191,8 +203,33 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     }
 
     [Fact]
+    public async Task DeleteCategory_WithExistingProducts_ReturnsBadRequest()
+    {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
+        var createCategoryResponse = await _client.PostAsJsonAsync("/api/v1/categories", new
+        {
+            CategoryName = "Protected Category"
+        });
+        var createCategoryContent = await createCategoryResponse.Content.ReadAsStringAsync();
+        var categoryId = ExtractIdFromResponse(createCategoryContent);
+
+        await _client.PostAsJsonAsync("/api/v1/products", new
+        {
+            ProductName = "Attached Product",
+            CategoryId = categoryId
+        });
+
+        var response = await _client.DeleteAsync($"/api/v1/categories/{categoryId}");
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
     public async Task GetCategoryById_WithValidId_ReturnsOk()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create a category first
         var createCommand = new
         {
@@ -220,6 +257,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task CreateProduct_WithValidData_ReturnsCreated()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create category first for FK constraint
         var categoryCommand = new
         {
@@ -253,6 +292,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task CreateProduct_WithInvalidData_ReturnsBadRequest()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - missing required ProductName and CategoryId
         var command = new
         {
@@ -269,6 +310,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task UpdateProduct_WithValidId_ReturnsOk()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create category and product first
         var categoryCommand = new { CategoryName = "Dairy" };
         var categoryResponse = await _client.PostAsJsonAsync("/api/v1/categories", categoryCommand);
@@ -303,6 +346,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task UpdateProduct_WithInvalidId_ReturnsError()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create category for valid FK
         var categoryCommand = new { CategoryName = "Test" };
         var categoryResponse = await _client.PostAsJsonAsync("/api/v1/categories", categoryCommand);
@@ -326,6 +371,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task DeleteProduct_WithValidId_ReturnsOk()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create category and product first
         var categoryCommand = new { CategoryName = "Condiments" };
         var categoryResponse = await _client.PostAsJsonAsync("/api/v1/categories", categoryCommand);
@@ -351,6 +398,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task DeleteProduct_WithInvalidId_ReturnsNotFound()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange
         var invalidId = Guid.NewGuid().ToString();
 
@@ -364,6 +413,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task GetProductById_WithValidId_ReturnsOk()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create category and product first
         var categoryCommand = new { CategoryName = "Snacks" };
         var categoryResponse = await _client.PostAsJsonAsync("/api/v1/categories", categoryCommand);
@@ -393,6 +444,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task GetProducts_WithCategoryFilter_ReturnsFilteredProducts()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create category and multiple products
         var categoryCommand = new { CategoryName = "Seafood" };
         var categoryResponse = await _client.PostAsJsonAsync("/api/v1/categories", categoryCommand);
@@ -420,6 +473,8 @@ public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFact
     [Fact]
     public async Task ExportProducts_ReturnsCsvFile()
     {
+        await AuthenticationTestHelper.AuthenticateAsync(_client);
+
         // Arrange - Create some test data
         var categoryCommand = new { CategoryName = "Export Test" };
         var categoryResponse = await _client.PostAsJsonAsync("/api/v1/categories", categoryCommand);

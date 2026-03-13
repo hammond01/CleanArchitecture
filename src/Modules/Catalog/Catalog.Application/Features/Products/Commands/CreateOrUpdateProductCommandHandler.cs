@@ -1,6 +1,7 @@
 using BuildingBlocks.Application.CQRS;
 using BuildingBlocks.Domain.Repositories;
 using Catalog.Domain.Entities;
+using Catalog.Domain.Events;
 using Catalog.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,11 @@ public class CreateOrUpdateProductCommandHandler : ICommandHandler<CreateOrUpdat
                 command.ReorderLevel,
                 command.Discontinued);
 
+            product.AddDomainEvent(new ProductCreatedEvent(
+                product.Id,
+                product.ProductName,
+                product.CategoryId,
+                product.UnitPrice));
             await _productRepository.AddAsync(product, cancellationToken);
         }
         else
@@ -60,9 +66,12 @@ public class CreateOrUpdateProductCommandHandler : ICommandHandler<CreateOrUpdat
                 command.UnitPrice,
                 command.ReorderLevel);
 
-            existingProduct.UpdateStock(
-                command.UnitsInStock ?? 0,
-                command.UnitsOnOrder ?? 0);
+            if (command.UnitsInStock.HasValue || command.UnitsOnOrder.HasValue)
+            {
+                existingProduct.UpdateStock(
+                    command.UnitsInStock ?? existingProduct.UnitsInStock ?? 0,
+                    command.UnitsOnOrder ?? existingProduct.UnitsOnOrder ?? 0);
+            }
 
             if (command.Discontinued)
             {
@@ -73,6 +82,10 @@ public class CreateOrUpdateProductCommandHandler : ICommandHandler<CreateOrUpdat
                 existingProduct.Reactivate();
             }
 
+            existingProduct.AddDomainEvent(new ProductUpdatedEvent(
+                existingProduct.Id,
+                existingProduct.ProductName,
+                existingProduct.UnitPrice));
             await _productRepository.UpdateAsync(existingProduct, cancellationToken);
             product = existingProduct;
         }

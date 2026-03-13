@@ -100,6 +100,50 @@ public class ProductCommandHandlerTests : IClassFixture<CatalogDbContextFixture>
     }
 
     [Fact]
+    public async Task HandleAsync_Update_WithoutStockValues_PreservesExistingStock()
+    {
+        await using var context = _fixture.CreateDbContext();
+        var category = Category.Create("Beverages");
+        var product = Product.Create(
+            productName: "Tea",
+            categoryId: category.Id,
+            quantityPerUnit: "10 bags",
+            unitPrice: 3.5m,
+            unitsInStock: 12,
+            unitsOnOrder: 4,
+            reorderLevel: 6,
+            discontinued: false);
+
+        await context.Categories.AddAsync(category);
+        await context.Products.AddAsync(product);
+        await context.SaveChangesAsync();
+
+        IProductRepository repository = new ProductRepository(context);
+        IUnitOfWork unitOfWork = context;
+
+        var handler = new CreateOrUpdateProductCommandHandler(repository, unitOfWork);
+        var command = new CreateOrUpdateProductCommand
+        {
+            Id = product.Id,
+            ProductName = "Premium Tea",
+            CategoryId = category.Id,
+            QuantityPerUnit = "12 bags",
+            UnitPrice = 4.25m,
+            ReorderLevel = 7,
+            Discontinued = false
+        };
+
+        var result = await handler.HandleAsync(command);
+
+        result.Should().Be(product.Id);
+        var updated = await context.Products.FindAsync(product.Id);
+        updated!.UnitsInStock.Should().Be(12);
+        updated.UnitsOnOrder.Should().Be(4);
+        updated.ProductName.Should().Be("Premium Tea");
+        updated.UnitPrice.Should().Be(4.25m);
+    }
+
+    [Fact]
     public async Task HandleAsync_Update_WithMissingProduct_Throws()
     {
         await using var context = _fixture.CreateDbContext();

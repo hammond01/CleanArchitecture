@@ -3,6 +3,7 @@ using BuildingBlocks.Application.Dispatcher;
 using Catalog.Application.DTOs;
 using Catalog.Application.Features.Products.Commands;
 using Catalog.Application.Features.Products.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.Api.Controllers;
@@ -47,6 +48,7 @@ public class ProductsController : BaseController
     /// Export all products as a CSV file
     /// </summary>
     [HttpGet("export")]
+    [Authorize]
     public async Task<IActionResult> ExportProducts(CancellationToken cancellationToken = default)
     {
         var csvBytes = await _dispatcher.DispatchAsync(new ExportProductsQuery(), cancellationToken);
@@ -74,6 +76,7 @@ public class ProductsController : BaseController
     /// Create a new product
     /// </summary>
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateProduct([FromBody] CreateOrUpdateProductCommand command)
     {
         var productId = await _dispatcher.DispatchAsync(command);
@@ -84,6 +87,7 @@ public class ProductsController : BaseController
     /// Update an existing product
     /// </summary>
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateProduct(string id, [FromBody] CreateOrUpdateProductCommand command)
     {
         var updateCommand = command with { Id = id };
@@ -95,6 +99,7 @@ public class ProductsController : BaseController
     /// Delete a product
     /// </summary>
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteProduct(string id)
     {
         var command = new DeleteProductCommand(id);

@@ -9,7 +9,9 @@ public record LoginRequestDto
 
 public record LoginResponseDto
 {
+    public string UserId { get; init; } = null!;
     public string Token { get; init; } = null!;
     public string RefreshToken { get; init; } = null!;
     public bool RequiresTwoFactor { get; init; }
+    public DateTimeOffset ExpiresAtUtc { get; init; }
 }

@@ -1,6 +1,7 @@
 using Identity.Application.Features.Authentication.Commands;
 using Identity.Application.Features.PasswordManagement.Commands;
 using Identity.Application.Features.Registration.Commands;
+using Identity.Domain.DTOs;
 using Identity.Domain.Repositories;
 using FluentAssertions;
 using Moq;
@@ -17,38 +18,61 @@ public class IdentityCommandHandlerTests
     }
 
     [Fact]
-    public async Task HandleAsync_UserLogin_ReturnsUserName()
+    public async Task HandleAsync_UserLogin_ReturnsLoginResponse()
     {
         var command = new UserLoginCommand
         {
             UserName = "alice",
-            Password = "password"
+            Password = "password",
+            RememberMe = true
         };
+        var loginResponse = new LoginResponseDto
+        {
+            UserId = Guid.NewGuid().ToString(),
+            Token = "access-token",
+            RefreshToken = "refresh-token",
+            ExpiresAtUtc = DateTimeOffset.UtcNow.AddHours(1)
+        };
+
+        _identityRepositoryMock
+            .Setup(repo => repo.LoginAsync("alice", "password", true, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(loginResponse);
 
         var handler = new UserLoginCommandHandler(_identityRepositoryMock.Object);
 
         var result = await handler.HandleAsync(command);
 
-        result.Should().Be("alice");
+        result.Should().BeEquivalentTo(loginResponse);
         _identityRepositoryMock.Verify(
-            repo => repo.LoginAsync("alice", "password", It.IsAny<CancellationToken>()),
+            repo => repo.LoginAsync("alice", "password", true, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
     [Fact]
-    public async Task HandleAsync_UserRefreshToken_ReturnsAccessToken()
+    public async Task HandleAsync_UserRefreshToken_ReturnsLoginResponse()
     {
         var command = new UserRefreshTokenCommand
         {
             AccessToken = "access",
             RefreshToken = "refresh"
         };
+        var loginResponse = new LoginResponseDto
+        {
+            UserId = Guid.NewGuid().ToString(),
+            Token = "new-access",
+            RefreshToken = "new-refresh",
+            ExpiresAtUtc = DateTimeOffset.UtcNow.AddHours(1)
+        };
+
+        _identityRepositoryMock
+            .Setup(repo => repo.RefreshTokenAsync("access", "refresh", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(loginResponse);
 
         var handler = new UserRefreshTokenCommandHandler(_identityRepositoryMock.Object);
 
         var result = await handler.HandleAsync(command);
 
-        result.Should().Be("access");
+        result.Should().BeEquivalentTo(loginResponse);
         _identityRepositoryMock.Verify(
             repo => repo.RefreshTokenAsync("access", "refresh", It.IsAny<CancellationToken>()),
             Times.Once);
@@ -64,12 +88,12 @@ public class IdentityCommandHandlerTests
 
         result.Should().BeTrue();
         _identityRepositoryMock.Verify(
-            repo => repo.LogoutAsync(It.IsAny<System.Security.Claims.ClaimsPrincipal>(), It.IsAny<CancellationToken>()),
+            repo => repo.LogoutAsync("user-1", It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
     [Fact]
-    public async Task HandleAsync_UserCreate_ReturnsUserName()
+    public async Task HandleAsync_UserCreate_ReturnsUserId()
     {
         var command = new UserCreateCommand
         {
@@ -81,12 +105,23 @@ public class IdentityCommandHandlerTests
             LastName = "Builder",
             PhoneNumber = "123"
         };
+        var userId = Guid.NewGuid();
+
+        _identityRepositoryMock
+            .Setup(repo => repo.RegisterAsync(
+                "bob",
+                "bob@example.com",
+                "password",
+                "Bob",
+                "Builder",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(userId);
 
         var handler = new UserCreateCommandHandler(_identityRepositoryMock.Object);
 
         var result = await handler.HandleAsync(command);
 
-        result.Should().Be("bob");
+        result.Should().Be(userId.ToString());
         _identityRepositoryMock.Verify(
             repo => repo.RegisterAsync(
                 "bob",

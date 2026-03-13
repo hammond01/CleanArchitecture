@@ -1,4 +1,4 @@
-using System.Security.Claims;
+using Identity.Domain.DTOs;
 
 namespace Identity.Domain.Repositories;
 
@@ -10,22 +10,35 @@ public interface IIdentityRepository
     /// <summary>
     /// Login user with username and password
     /// </summary>
-    Task LoginAsync(string userName, string password, CancellationToken cancellationToken = default);
+    Task<LoginResponseDto> LoginAsync(
+        string userName,
+        string password,
+        bool rememberMe,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Refresh JWT token using refresh token
     /// </summary>
-    Task RefreshTokenAsync(string accessToken, string refreshToken, CancellationToken cancellationToken = default);
+    Task<LoginResponseDto> RefreshTokenAsync(
+        string accessToken,
+        string refreshToken,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Logout authenticated user
     /// </summary>
-    Task LogoutAsync(ClaimsPrincipal authenticatedUser, CancellationToken cancellationToken = default);
+    Task LogoutAsync(string userId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Register new user with email and password
     /// </summary>
-    Task RegisterAsync(string userName, string email, string password, string firstName, string lastName, CancellationToken cancellationToken = default);
+    Task<Guid> RegisterAsync(
+        string userName,
+        string email,
+        string password,
+        string firstName,
+        string lastName,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Confirm user email with token
@@ -41,4 +54,9 @@ public interface IIdentityRepository
     /// Reset password with reset token
     /// </summary>
     Task ResetPasswordAsync(string userId, string token, string newPassword, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Resend confirmation email
+    /// </summary>
+    Task ResendEmailConfirmationAsync(string userName, CancellationToken cancellationToken = default);
 }

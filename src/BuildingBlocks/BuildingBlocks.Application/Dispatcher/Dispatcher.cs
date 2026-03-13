@@ -35,6 +35,11 @@ public class Dispatcher : IDispatcher
 
         foreach (var type in types)
         {
+            if (_eventHandlers.Contains(type))
+            {
+                continue;
+            }
+
             services.AddTransient(type);
             _eventHandlers.Add(type);
         }

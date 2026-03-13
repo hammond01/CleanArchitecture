@@ -1,702 +1,575 @@
-# Clean Architecture with Domain-Driven Design (DDD)
+# Clean Architecture Modular Monolith Template for .NET 8
+
+> A production-minded Clean Architecture starter kit for .NET 8 with modular monolith boundaries, authentication, catalog and auditing sample modules, database migration tooling, and a clear path toward future UI integration.
 
 [![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](CHANGELOG.md)
+[![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20Modular%20Monolith-brightgreen.svg)](#architecture-overview)
+[![Status](https://img.shields.io/badge/status-template%20starter%20kit-blue.svg)](#roadmap)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-brightgreen.svg)](#clean-architecture)
-[![DDD](https://img.shields.io/badge/Design-Domain%20Driven-blue.svg)](#domain-driven-design)
-[![CQRS](https://img.shields.io/badge/Pattern-CQRS-orange.svg)](#custom-dispatcher)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](#)
-[![Completion](https://img.shields.io/badge/completion-75%25-yellow.svg)](#status)
-
-A comprehensive implementation of **Clean Architecture** combined with **Domain-Driven Design (DDD)** using **.NET 8**. This v1.0.0 release showcases a production-ready **Modular Monolith** architecture with **Custom CQRS Dispatcher**, **Central Package Management**, and **DbMigrator** tooling for enterprise applications.
-
-![Clean Architecture with DDD](/docs/imgs/CleanArchitecture-DDD.png)
-
-[_(Open on draw.io)_](https://drive.google.com/file/d/1M1YRKcPkgmJCbUcSuJTkMa2N8wAqQrNp/view?usp=sharing)
-
-## 📋 Table of Contents
-
-- [Overview](#-overview)
-- [Architecture](#️-architecture-overview)
-- [Project Structure](#-project-structure)
-- [Technologies](#️-technologies-used)
-- [Features](#-key-features)
-- [Getting Started](#-getting-started)
-- [Development Guide](#-development-guide)
-- [Testing](#-testing)
-- [Contributing](#-contributing)
-
-## 🚀 Overview
-
-This project is a comprehensive implementation of **Clean Architecture** combined with **Domain-Driven Design (DDD)** using **.NET 8**.
-
-**v1.0.0 represents a production-ready foundation** featuring:
-
-- **Modular Monolith Architecture** - 3 business modules (Identity, Catalog, Auditing) with isolated schemas
-- **Custom CQRS Dispatcher** - Unique implementation replacing MediatR with automatic validation and performance monitoring
-- **DbMigrator Tool** - Production-ready database migration orchestrator for CI/CD pipelines
-- **Central Package Management** - Unified dependency versioning across 18 projects
-- **19 Working API Endpoints** - Fully functional REST APIs with Swagger documentation
-
-The implementation showcases enterprise architecture principles with patterns like **CQRS**, **Repository Pattern**, **Unit of Work**, **Specification Pattern**, **Domain Events**, and **Modular Monolith** design.
-
-> **📅 Current Status (February 2026) - v1.0.0 Released**:
->
-> - **✅ Custom CQRS Dispatcher**: Complete replacement of MediatR - automatic validation, performance monitoring, structured logging with emojis (🔍⚡📢)
-> - **✅ DbMigrator Tool**: Multi-DbContext orchestration, health checks, idempotent execution, Serilog logging
-> - **✅ Central Package Management**: Directory.Packages.props managing all 18 projects
-> - **✅ 3 Business Modules**: Identity (8 endpoints), Catalog (11 endpoints), Auditing (1 endpoint)
-> - **✅ BuildingBlocks**: 5 shared projects providing domain base classes, CQRS infrastructure, API components
-> - **🔄 Completion**: ~75% - Production foundation complete, testing infrastructure and advanced auth workflows planned for v1.1.0
-
-### ✨ Key Highlights
-
-- 🏗️ **Clean Architecture**: Clear separation of layers and dependencies with modular monolith structure
-- 🎯 **Custom Dispatcher**: Unique CQRS implementation with built-in validation, logging, and performance monitoring (replaces MediatR)
-- 🔄 **CQRS Pattern**: Complete Command Query Responsibility Segregation with automatic handler registration
-- 🗄️ **DbMigrator**: Professional database migration tool orchestrating multiple DbContexts with health checks
-- 📦 **Central Package Management**: Unified dependency versioning via Directory.Packages.props
-- 🎯 **Domain-Driven Design**: Focus on business logic and domain model
-- � **Repository & Unit of Work**: Enterprise-grade data access patterns with Specification Pattern
-- 📊 **19 Working API Endpoints**: Identity (8), Catalog (11), Auditing (1)
-- 🔒 **Security Foundation**: JWT authentication infrastructure, CORS configuration
-- 📝 **Interactive Swagger UI**: Comprehensive API documentation with live testing
-- 🚀 **Production Tooling**: DbMigrator for CI/CD, structured logging with Serilog
-
-## 🏛️ Architecture Overview
-
-This repository demonstrates **Clean Architecture** principles by Uncle Bob implemented across different architectural patterns. Currently, it includes:
-
-### 🎯 Current Implementation: Monolithic Architecture
-
-A complete monolithic application following Clean Architecture with 4 main layers:
-
-### 1. Domain Layer (Core)
-
-- **Entities**: Core business objects
-- **Value Objects**: Immutable objects
-- **Domain Events**: Business events
-- **Repository Interfaces**: Data access contracts
-- **Domain Services**: Business logic services
-
-### 2. Application Layer
-
-- **Use Cases**: Application business rules
-- **Commands & Queries**: CQRS implementation
-- **Handlers**: Command/Query handlers
-- **DTOs**: Data transfer objects
-- **Validators**: Input validation
-- **Mappers**: Object mapping
-
-### 3. Infrastructure Layer
-
-- **Persistence**: Entity Framework Core implementation
-- **External Services**: Third-party integrations
-- **Caching**: In-memory and distributed caching
-- **Logging**: Structured logging with Serilog
-- **Authentication**: Identity management
-- **Configuration**: Application settings
-
-### 4. Presentation Layer
-
-- **Web API**: RESTful APIs with ASP.NET Core
-- **Controllers**: API endpoints
-- **Middleware**: Request/Response pipeline
-- **API Documentation**: Swagger/OpenAPI integration
-
-### 🚀 Future Implementations
-
-- **Microservices Architecture** - Distributed services with API Gateway (Partially Implemented)
-- **Event-Driven Architecture** - Message-driven communication (Planned)
-- **CQRS with Event Sourcing** - Advanced CQRS implementation (Planned)
-- **Serverless Architecture** - Cloud-native serverless approach (Planned)
-
-## 📁 Project Structure
-
-```
-CleanArchitecture/
-├── src/
-│   ├── BuildingBlocks/                    # 🧱 Shared Building Blocks
-│   │   ├── BuildingBlocks.Domain/         # Base entities, domain events
-│   │   │   ├── Entities/                  # Entity.cs, IHasKey, ITrackable
-│   │   │   ├── Events/                    # IDomainEvent
-│   │   │   ├── Repositories/              # IRepository, IUnitOfWork
-│   │   │   └── Specifications/            # Specification Pattern
-│   │   │
-│   │   ├── BuildingBlocks.Application/    # 🎯 Custom Dispatcher & CQRS
-│   │   │   ├── CQRS/                      # ICommand, IQuery, ICommandHandler, IQueryHandler
-│   │   │   ├── Dispatcher/                # ⭐ Custom Dispatcher (v1.0)
-│   │   │   │   ├── IDispatcher.cs         # Main dispatcher interface
-│   │   │   │   ├── Dispatcher.cs          # Implementation with validation
-│   │   │   │   └── IDomainEventHandler.cs # Domain event handler
-│   │   │   ├── DTOs/                      # BaseDto
-│   │   │   ├── Results/                   # Result pattern
-│   │   │   └── Validation/                # IValidator interface
-│   │   │
-│   │   ├── BuildingBlocks.Infrastructure/ # Common infrastructure
-│   │   │   └── Persistence/               # Base repositories
-│   │   │
-│   │   ├── BuildingBlocks.Api/            # API base components
-│   │   │   ├── Controllers/               # BaseController
-│   │   │   ├── Filters/                   # ApiExceptionFilter
-│   │   │   └── Responses/                 # ApiResponse
-│   │   │
-│   │   └── BuildingBlocks.Shared/         # Shared utilities
-│   │
-│   ├── Modules/                           # 📦 Business Modules
-│   │   ├── Identity/                      # 👤 Authentication & User Management
-│   │   │   ├── Identity.Domain/           # User, Role entities
-│   │   │   ├── Identity.Application/      # 8 Command/Query handlers
-│   │   │   │   ├── Commands/              # Register, Login, ConfirmEmail, etc.
-│   │   │   │   └── Queries/               # GetUser, ValidateToken
-│   │   │   ├── Identity.Infrastructure/   # EF Core, IdentityDbContext
-│   │   │   │   ├── Data/                  # DbContext, Migrations
-│   │   │   │   └── Repositories/          # User repositories
-│   │   │   └── Identity.Api/              # 8 API endpoints
-│   │   │       └── Controllers/           # AuthenticationController
-│   │   │
-│   │   ├── Catalog/                       # 📦 Product & Category Management
-│   │   │   ├── Catalog.Domain/            # Product, Category entities
-│   │   │   │   ├── Entities/              # Domain models
-│   │   │   │   └── Repositories/          # Repository interfaces
-│   │   │   ├── Catalog.Application/       # CQRS handlers & Specifications
-│   │   │   │   ├── Features/
-│   │   │   │   │   ├── Products/          # Product commands & queries
-│   │   │   │   │   └── Categories/        # Category commands & queries
-│   │   │   │   └── Specifications/        # LowStockProducts, ProductsByPrice, etc.
-│   │   │   ├── Catalog.Infrastructure/    # EF Core, CatalogDbContext
-│   │   │   │   ├── Data/                  # DbContext, Migrations
-│   │   │   │   └── Repositories/          # Repository implementations
-│   │   │   └── Catalog.Api/               # 11 API endpoints
-│   │   │       └── Controllers/           # ProductsController, CategoriesController
-│   │   │
-│   │   └── Auditing/                      # 📝 Audit Logging
-│   │       ├── Auditing.Domain/           # AuditLog entity
-│   │       ├── Auditing.Application/      # Audit query handlers
-│   │       ├── Auditing.Infrastructure/   # AuditingDbContext
-│   │       │   └── Data/                  # Separate audit schema
-│   │       └── Auditing.Api/              # 1 API endpoint
-│   │           └── Controllers/           # AuditLogsController
-│   │
-│   ├── DbMigrator/                        # 🗄️ Database Migration Tool
-│   │   ├── DbMigrationService.cs          # Orchestrates 3 DbContexts
-│   │   ├── MigrationSettings.cs           # Configuration model
-│   │   ├── Program.cs                     # Console app entry point
-│   │   ├── appsettings.json               # Migration settings
-│   │   ├── README.md                      # Migration guide
-│   │   └── DbMigrator.csproj
-│   │
-│   └── CleanArchitecture.Api/             # 🚀 Main API Gateway
-│       ├── Extensions/                    # Module registration
-│       │   ├── IdentityModuleExtensions.cs
-│       │   ├── CatalogModuleExtensions.cs
-│       │   └── AuditingModuleExtensions.cs
-│       ├── Program.cs                     # Application entry point
-│       ├── appsettings.json               # Configuration
-│       └── CleanArchitecture.Api.csproj
-│
-├── docs/                                  # 📚 Documentation
-│   └── imgs/
-│       └── CleanArchitecture-DDD.png
-│
-├── Directory.Packages.props               # 📦 Central package management
-├── CHANGELOG.md                           # Version history
-├── RELEASE_NOTES_v1.0.0.md               # v1.0.0 release notes
-├── QUICK_START_v1.0.0.md                 # Quick start guide
-├── ARCHITECTURE.md                        # Architecture documentation
-└── README.md                              # This file
-```
-
-### 🎯 Architecture Highlights
-
-**Modular Monolith with Clean Architecture** (v1.0.0):
-
-- **18 Projects** total across BuildingBlocks, Modules, DbMigrator, and API
-- **3 Business Modules** (Identity, Catalog, Auditing) with separate schemas
-- **Custom Dispatcher** replacing MediatR for unique identity
-- **Central Package Management** for unified versioning
-- **Production Tooling** with DbMigrator for CI/CD pipelines
-
-## 🛠️ Technologies Used
-
-### Backend Technologies
-
-- **.NET 8** - Latest .NET framework
-- **ASP.NET Core** - Web framework
-- **Entity Framework Core 8.0.10** - ORM
-- **Custom Dispatcher** - CQRS implementation (replaces MediatR)
-- **FluentValidation 11.9.0** - Input validation
-- **Serilog 4.2.0** - Structured logging
-- **Mapster** - Object mapping
-- **Swagger/Swashbuckle 7.0.0** - API documentation
-
-### Database & Caching
-
-- **SQL Server** - Primary database
-- **In-Memory Database** - Testing
-- **IMemoryCache** - In-memory caching
-- **Redis** (Optional) - Distributed caching
-
-### DevOps & Tools
-
-- **Docker** - Containerization
-- **docker-compose** - Multi-container deployment
-- **xUnit** - Testing framework
-- **Moq** - Mocking framework
-- **GitHub Actions** - CI/CD pipeline
-
-## 🎯 Key Features
-
-### 🏛️ Modular Monolith Architecture (v1.0.0 - Production Foundation)
-
-#### Business Modules (3 Modules Implemented)
-
-- ✅ **Identity Module** - Authentication & User Management (8 API endpoints)
-    - User registration and login
-    - JWT token generation & refresh token support
-    - Email confirmation workflow
-    - Password reset functionality
-    - Full CQRS implementation with Custom Dispatcher
-
-- ✅ **Catalog Module** - Product & Category Management (11 API endpoints)
-    - Product CRUD with category relationships
-    - Category management with hierarchical support
-    - CSV export functionality
-    - Specification Pattern for complex queries
-    - Full CQRS implementation with Custom Dispatcher
-
-- ✅ **Auditing Module** - Audit Logging (1 API endpoint)
-    - Centralized audit log storage
-    - Query with pagination support
-    - Separate database schema for isolation
-
-#### Enterprise Technical Features Implemented
-
-- 🔐 **Authentication & Authorization** - Complete JWT-based security
-    - User login and registration with Identity framework
-    - Refresh token support
-    - Role-based authorization ready
-    - Password validation and security
-
-- 🛡️ **Security Middleware** - 8 middleware components:
-    - GlobalExceptionHandlerMiddleware - Centralized exception handling
-    - ApiRequestLoggingMiddleware - Request/response logging
-    - RateLimitingMiddleware - Request throttling (100 req/min default)
-    - AutoEntityLockMiddleware - Automatic entity locking
-    - ActionLoggingFilter - Action-level logging
-    - LoggingStatusCodeMiddleware - Status code logging
-    - CORS Configuration - Environment-specific policies
-    - Response Compression - Gzip and Brotli support
-
-- � **API Features**:
-    - API Versioning (v1.0, v2.0) with Asp.Versioning
-    - OData support for advanced querying
-    - Swagger/OpenAPI with enhanced UI
-    - Health checks (Database & Application)
-    - XML documentation support
-
-- 🗄️ **Data Access**:
-    - Entity Framework Core with SQL Server
-    - Repository pattern implementation
-    - Unit of Work pattern
-    - Generic repository with CRUD operations
-    - Audit logging and entity tracking
-
-- � **Logging & Monitoring**:
-    - Serilog for structured logging
-    - File and console logging
-    - Request/response logging
-    - Performance monitoring
-    - Audit log entries tracking
-
-- 🧪 **Testing Infrastructure** (17 test files):
-    - **Product Tests** (6 files): AddOrUpdate, Delete, GetById, Gets, CommandQuery, FeatureSummary
-    - **Category Tests** (6 files): AddOrUpdate, Delete, GetById, Gets, CommandQuery, FeatureSummary
-    - **Integration Tests** (5 files): Category, Product, Health, Identity, Logs Controllers
-
-### 🎯 Custom Dispatcher System (v1.0.0 - Unique Identity)
-
-#### Core Features
-
-- 🎯 **IDispatcher Interface** - Main dispatcher with Query, Command, and DomainEvent methods
-    - Generic Query<TResponse> for read operations
-    - Generic Command<TResponse> for write operations
-    - PublishDomainEvent<TEvent> for domain events
-
-- ⚡ **Automatic Validation** - FluentValidation integration in pipeline:
-    - Validates all commands and queries before execution
-    - Returns detailed validation errors
-    - No need for manual validation in handlers
-
-- 📊 **Performance Monitoring** - Built-in Stopwatch:
-    - Measures execution time for all operations
-    - Structured logging with performance metrics
-    - Helps identify slow queries/commands
-
-- 📢 **Structured Logging** - Emoji-based log indicators:
-    - 🔍 Query execution logs
-    - ⚡ Command execution logs
-    - 📢 Domain event publication logs
-    - Detailed error logging with stack traces
-
-- 🔧 **Automatic Handler Registration** - Reflection-based discovery:
-    - AddHandlersFromAssembly() extension method
-    - Registers all ICommandHandler<,> and IQueryHandler<,>
-    - Registers all IDomainEventHandler<> implementations
-    - No manual registration needed
-
-### 🗄️ DbMigrator Tool (Production-Ready)
-
-#### Features
-
-- 📦 **Multi-DbContext Support** - Orchestrates 3 separate contexts:
-    - IdentityDbContext (identity schema)
-    - CatalogDbContext (catalog schema)
-    - AuditingDbContext (auditing schema)
-
-- 🏥 **Health Checks** - Pre-migration validation:
-    - Database connectivity tests
-    - Schema existence verification
-    - Detailed error reporting
-
-- 📝 **Structured Logging** - Serilog integration:
-    - Console output with color-coded levels
-    - File logging (logs/dbmigrator-.txt)
-    - Detailed migration progress tracking
-
-- 🔄 **Idempotent Execution** - Safe to run multiple times:
-    - Applies only pending migrations
-    - Skips already-applied migrations
-    - Transaction support
-
-- 🚀 **CI/CD Ready** - Production deployment support:
-    - Exit codes for automation (0=success, 1=failure)
-    - Configuration via appsettings.json
-    - Seed data infrastructure ready
-
-### 📦 Central Package Management
-
-- **Directory.Packages.props** - Single source of truth for all package versions
-- **ManagePackageVersionsCentrally** - Enabled across all 18 projects
-- **Organized Groups** - Core, EF Core, ASP.NET, Serilog, Testing, Tools
-- **Version Consistency** - No version conflicts between projects
-
-## 🚀 Getting Started
-
-### 📋 Prerequisites
-
-- **.NET 8 SDK** - [Download](https://dotnet.microsoft.com/download/dotnet/8.0)
-- **SQL Server** or **SQL Server Express** - [Download](https://www.microsoft.com/sql-server/sql-server-downloads)
-- **Visual Studio 2022** or **VS Code** with C# extension
-- **Git** for version control
-
-### 🎯 Quick Start (v1.0.0)
-
-```bash
-# Clone the repository
-git clone https://github.com/hammond01/CleanArchitecture.git
-cd CleanArchitecture
-
-# Update connection string in appsettings.json
-# Edit: src/CleanArchitecture.Api/appsettings.json
-# ConnectionStrings:DefaultConnection = "Server=YOUR_SERVER;..."
-
-# Run database migrations
-dotnet run --project src/DbMigrator
-
-# Or migrate manually for each module:
-dotnet ef database update --project src/Modules/Identity/Identity.Infrastructure --startup-project src/CleanArchitecture.Api --context IdentityDbContext
-dotnet ef database update --project src/Modules/Catalog/Catalog.Infrastructure --startup-project src/CleanArchitecture.Api --context CatalogDbContext
-dotnet ef database update --project src/Modules/Auditing/Auditing.Infrastructure --startup-project src/CleanArchitecture.Api --context AuditingDbContext
-
-# Run the API
-dotnet run --project src/CleanArchitecture.Api
-
-# Access Swagger UI
-# Open: http://localhost:5000/swagger
-```
-
-### 📚 Documentation Links
-
-- **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
-- **[RELEASE_NOTES_v1.0.0.md](RELEASE_NOTES_v1.0.0.md)** - Complete v1.0.0 release notes (282 lines)
-- **[QUICK_START_v1.0.0.md](QUICK_START_v1.0.0.md)** - Quick reference guide
-- **[DbMigrator README](src/DbMigrator/README.md)** - Database migration guide
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Architecture documentation
-
-### 📋 System Requirements
-
-All implementations share these common requirements:
-
-- **.NET 8 SDK** or later
-- **Visual Studio 2022** or **VS Code** with C# extension
-- **SQL Server** or **SQL Server Express** (for database)
-- **Git** for version control
-- **Docker** (optional, for containerized deployments)
-- **Postman** or similar (for API testing)
-
-### � API Endpoints (19 Total)
-
-**Identity Module (8 endpoints)**:
-
-- POST `/api/authentication/register` - User registration
-- POST `/api/authentication/login` - User login
-- POST `/api/authentication/refresh-token` - Refresh JWT token
-- POST `/api/authentication/confirm-email` - Email confirmation
-- POST `/api/authentication/forgot-password` - Initiate password reset
-- POST `/api/authentication/reset-password` - Complete password reset
-- GET `/api/authentication/user` - Get user profile
-- POST `/api/authentication/logout` - User logout
-
-**Catalog Module (11 endpoints)**:
-
-- GET `/api/products` - List all products
-- GET `/api/products/{id}` - Get product by ID
-- POST `/api/products` - Create product
-- PUT `/api/products/{id}` - Update product
-- DELETE `/api/products/{id}` - Delete product
-- GET `/api/products/export` - Export products to CSV
-- GET `/api/categories` - List all categories
-- GET `/api/categories/{id}` - Get category by ID
-- POST `/api/categories` - Create category
-- PUT `/api/categories/{id}` - Update category
-- DELETE `/api/categories/{id}` - Delete category
-
-**Auditing Module (1 endpoint)**:
-
-- GET `/api/auditlogs` - Query audit logs with pagination
-
-## 👨‍💻 Development Guide
-
-### Adding New Module
-
-1. **Create Module Structure** in `src/Modules/YourModule/`
-
-    ```
-    YourModule/
-    ├── YourModule.Domain/
-    ├── YourModule.Application/
-    ├── YourModule.Infrastructure/
-    └── YourModule.Api/
-    ```
-
-2. **Create Domain Entities** in `YourModule.Domain/Entities/`
-    - Inherit from `Entity` base class from BuildingBlocks.Domain
-    - Implement business rules and domain events
-
-3. **Create Repository Interfaces** in `YourModule.Domain/Repositories/`
-    - Inherit from `IRepository<T>` from BuildingBlocks.Domain
-
-4. **Create Commands/Queries** in `YourModule.Application/Features/`
-    - Commands implement `ICommand<TResponse>`
-    - Queries implement `IQuery<TResponse>`
-    - Add FluentValidation validators
-
-5. **Create Handlers** in `YourModule.Application/Features/`
-    - Command handlers implement `ICommandHandler<TCommand, TResponse>`
-    - Query handlers implement `IQueryHandler<TQuery, TResponse>`
-    - Use Custom Dispatcher (no MediatR!)
-
-6. **Implement Infrastructure** in `YourModule.Infrastructure/`
-    - Create DbContext inheriting from DbContext
-    - Implement repositories
-    - Add migrations: `dotnet ef migrations add InitialCreate`
-
-7. **Create API Controllers** in `YourModule.Api/Controllers/`
-    - Inject `IDispatcher` from BuildingBlocks.Application
-    - Use `dispatcher.Query()` or `dispatcher.Command()`
-
-8. **Register Module** in `src/CleanArchitecture.Api/Extensions/`
-    - Create `YourModuleExtensions.cs`
-    - Register DbContext, repositories, and handlers
-    - Call `services.AddHandlersFromAssembly(typeof(YourHandler).Assembly)`
-
-### Adding New Entity to Existing Module
-
-1. **Create Domain Entity** in `ModuleName.Domain/Entities/`
-2. **Create Repository Interface** in `ModuleName.Domain/Repositories/`
-3. **Implement Repository** in `ModuleName.Infrastructure/Repositories/`
-4. **Create Commands/Queries** in `ModuleName.Application/Features/EntityName/`
-5. **Create Handlers** for Commands/Queries (use `IDispatcher`)
-6. **Update DbContext** to include new `DbSet<Entity>`
-7. **Create Migration**: `dotnet ef migrations add AddEntityName`
-8. **Create Controller** in `ModuleName.Api/Controllers/`
-9. **Write Tests** (if test infrastructure exists)
-
-### Code Standards
-
-- Use **C# naming conventions**
-- Follow **Clean Code principles**
-- Implement **proper error handling**
-- Add **comprehensive logging** (use Serilog)
-- Use **Custom Dispatcher** (not MediatR)
-- Write **FluentValidation** validators for all commands/queries
-- Document **public APIs** with XML comments
-- Follow **Modular Monolith** principles - keep modules isolated
-
-## 🧪 Testing
-
-> **⚠️ Note**: Testing infrastructure is currently in planning phase for v1.0.0. The focus has been on building solid foundation with Custom Dispatcher, DbMigrator, and core business modules.
-
-### 🔮 Planned Testing Strategy (v1.1.0+)
-
-**Unit Testing** (Planned):
-
-- Test Custom Dispatcher with mock handlers
-- Test CQRS handlers in isolation
-- Test domain entities and business rules
-- Test FluentValidation validators
-- Test Specification Pattern implementations
-
-**Integration Testing** (Planned):
-
-- Test API endpoints end-to-end
-- Test database operations with TestContainers
-- Test Custom Dispatcher with real handlers
-- Test module integration
-
-**Test Infrastructure** (To Be Implemented):
-
-- **xUnit** - Testing framework
-- **Moq** or **NSubstitute** - Mocking framework
-- **FluentAssertions** - Assertion library
-- **Testcontainers** - Docker-based integration tests
-- **WebApplicationFactory** - API integration tests
-
-### 🔧 Running Tests (Future)
-
-```bash
-# Run all tests
-dotnet test
-
-# Run with detailed output
-dotnet test --verbosity normal
-
-# Run with coverage report
-dotnet test --collect:"XPlat Code Coverage"
-
-# Run specific module tests
-dotnet test --filter "FullyQualifiedName~Catalog"
-```
-
-### 📋 Test Coverage Goals (v1.1.0)
-
-- **Unit Tests**: 80%+ code coverage
-- **Integration Tests**: All API endpoints
-- **E2E Tests**: Critical user flows
-- **Performance Tests**: DbMigrator and Dispatcher benchmarks
-
-## 📚 Documentation
-
-- [Clean Architecture Guide](docs/CleanArchitecture.md)
-- [Domain-Driven Design](docs/DDD.md)
-- [API Documentation](docs/API.md)
-- [Database Schema](docs/Database.md)
-- [Development Guide](docs/Development.md)
-- [Deployment Guide](docs/Deployment.md)
-
-## 🤝 Contributing
-
-We welcome all contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-### How to contribute:
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) by Uncle Bob
-- [Domain-Driven Design](https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215) by Eric Evans
-- [.NET Community](https://dotnetfoundation.org/)
-
-## 📞 Contact
-
-- **Author**: hammond01
-- **GitHub**: [https://github.com/hammond01](https://github.com/hammond01)
-- **Project Link**: [https://github.com/hammond01/CleanArchitecture](https://github.com/hammond01/CleanArchitecture)
-- **LinkedIn**: [Connect with me on LinkedIn](https://linkedin.com/in/hammond01)
-
-### 🎯 Project Roadmap
-
-**v1.0.0** (February 2026) - ✅ **RELEASED**:
-
-- ✅ Custom CQRS Dispatcher replacing MediatR
-- ✅ DbMigrator production tool
-- ✅ Central Package Management
-- ✅ 3 business modules (Identity, Catalog, Auditing)
-- ✅ 19 working API endpoints
-- ✅ Complete documentation (CHANGELOG, RELEASE_NOTES, QUICK_START)
-
-**v1.1.0** (Q2 2026) - 🚧 **Planned**:
-
-- 🔄 Complete authentication workflows (email verification, password reset)
-- 🔄 Comprehensive testing infrastructure (Unit + Integration tests)
-- 🔄 API health checks and monitoring endpoints
-- 🔄 Docker Compose for complete environment
-- 🔄 CI/CD pipeline with GitHub Actions
-
-**v1.2.0** (Q3 2026) - 📋 **Planned**:
-
-- 📋 Additional business modules (Orders, Inventory, Customers)
-- 📋 Advanced querying with Specification Pattern expansion
-- 📋 Caching layer (Redis integration)
-- 📋 Background job processing
-- 📋 API rate limiting and throttling
-
-**v2.0.0** (Q4 2026) - 💡 **Future**:
-
-- 💡 Event Sourcing implementation
-- 💡 CQRS with separate read/write databases
-- 💡 Real-time features with SignalR
-- 💡 Advanced security (OAuth2, OpenID Connect)
-- 💡 Multi-tenancy support
-
-### 🔄 Architecture Journey
-
-This project demonstrates **Modular Monolith** architecture with a clear path to distributed systems:
-
-1. **✅ Modular Monolith Foundation** (v1.0.0 - Current)
-    - 3 business modules with separate schemas
-    - Custom Dispatcher for CQRS
-    - Production tooling (DbMigrator)
-    - Clean Architecture with DDD principles
-
-2. **🔄 Enhanced Modular Monolith** (v1.x Future)
-    - Additional business modules
-    - Complete testing coverage
-    - Advanced observability
-    - Performance optimizations
-
-3. **💡 Future Evolution Options** (v2.0+)
-    - **Option A**: Event-Driven Modular Monolith (event sourcing within modules)
-    - **Option B**: Microservices decomposition (when scaling demands require it)
-    - **Option C**: Hybrid approach (some modules as microservices)
-
-### 📊 Current Implementation Status (v1.0.0)
-
-| Component             | Status      | Progress | Details                                       |
-| --------------------- | ----------- | -------- | --------------------------------------------- |
-| **Custom Dispatcher** | ✅ Complete | 100%     | CQRS, Validation, Logging, Perf Monitoring    |
-| **DbMigrator**        | ✅ Complete | 100%     | Multi-DbContext, Health Checks, CI/CD         |
-| **Central Packages**  | ✅ Complete | 100%     | 18 projects, unified versioning               |
-| **Identity Module**   | 🟡 Partial  | 70%      | 8 endpoints, workflows need completion        |
-| **Catalog Module**    | ✅ Complete | 100%     | 11 endpoints, full CRUD + Specifications      |
-| **Auditing Module**   | ✅ Complete | 100%     | 1 endpoint, separate schema                   |
-| **Testing**           | 🔴 Planned  | 0%       | Infrastructure planned for v1.1.0             |
-| **Documentation**     | ✅ Complete | 100%     | README, CHANGELOG, RELEASE_NOTES, QUICK_START |
-| **Overall Project**   | 🟡 v1.0.0   | **75%**  | Production foundation ready                   |
 
 ---
 
-⭐ **If this project helped you learn Clean Architecture and modern .NET development, please give it a star!** ⭐
+## Table of Contents
 
-🚀 **Follow the project for updates on new architecture implementations!** 🚀
+- [What This Project Is](#what-this-project-is)
+- [Current State](#current-state)
+- [Vision](#vision)
+- [What's Included Today](#whats-included-today)
+- [Why Modular Monolith](#why-modular-monolith)
+- [Architecture Overview](#architecture-overview)
+- [Project Structure](#project-structure)
+- [Current Modules](#current-modules)
+- [API Surface](#api-surface)
+- [Planned UI Layer](#planned-ui-layer)
+- [Quick Start](#quick-start)
+- [Testing](#testing)
+- [Extending the Template](#extending-the-template)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## What This Project Is
+
+This repository is a **Clean Architecture modular monolith template / starter kit** for building maintainable .NET 8 applications.
+
+It is aimed at:
+
+- developers who want a strong backend foundation for new projects
+- teams that prefer a modular monolith before taking on distributed-system complexity
+- engineers learning Clean Architecture through a non-trivial codebase
+- portfolio/demo use cases where structure and trade-offs matter more than feature count
+
+This project focuses on:
+
+- clear module boundaries
+- reusable building blocks
+- production-minded API defaults
+- sample modules that demonstrate how to structure business capabilities
+- a foundation that can later support a dedicated UI layer
+
+### What this project is not
+
+This project is **not**:
+
+- a full ERP or e-commerce application
+- a feature-maximized business product
+- a microservices system
+- a repo trying to model every possible domain up front
+
+The goal is to provide a **trustworthy, extensible starting point**, not to ship every possible module.
+
+---
+
+## Current State
+
+As of the current codebase, this template includes:
+
+- **.NET 8** solution using central package management
+- **Modular Monolith + Clean Architecture** structure
+- **3 sample modules**:
+  - Identity
+  - Catalog
+  - Auditing
+- **Shared BuildingBlocks** for cross-cutting concerns
+- **API host** in `src/CleanArchitecture.Api`
+- **DbMigrator** in `src/DbMigrator`
+- **4 API controllers / 20 HTTP endpoints** across the sample modules
+- **unit and integration test projects**
+- **security middleware baseline** including:
+  - CORS policy
+  - forwarded headers
+  - HSTS outside development
+  - custom security headers middleware
+  - auth endpoint rate limiting
+  - health checks (`/health/live`, `/health/ready`)
+
+### Important honesty note
+
+The repository already has a meaningful testing setup, but it is **not green end-to-end right now**:
+
+- `CleanArchitecture.UnitTests`: **32 passed / 4 failed**
+- `CleanArchitecture.IntegrationTests`: **37 passed / 1 failed**
+
+So the current status is best described as:
+
+> **usable template foundation with real tests, but not yet a fully green baseline**.
+
+---
+
+## Vision
+
+The long-term vision of this project is to serve as a **full application foundation** with:
+
+- a clean and extensible backend core
+- modular business boundaries
+- a stable API layer
+- a future UI layer integrated on top of the API
+- a development workflow suitable for real-world project bootstrapping
+
+### Current focus
+
+The current focus is on strengthening the backend/API starter kit:
+
+- architecture clarity
+- module boundaries
+- authentication foundation
+- auditing
+- migrations
+- testing reliability
+- production baseline concerns
+
+### Next-stage focus
+
+Once the API foundation is stable enough, the next step is to evaluate and implement the **UI/frontend layer**, including:
+
+- frontend technology selection
+- API integration strategy
+- authentication flow integration
+- frontend project structure
+- developer experience across backend + UI
+
+---
+
+## What's Included Today
+
+### Core Architecture
+
+- Clean Architecture layering
+- Modular Monolith structure
+- DDD-inspired module boundaries
+- Custom dispatcher for command/query execution
+- Shared building blocks for common concerns
+
+### Platform Features
+
+- JWT-based authentication flows
+- email confirmation and password reset flows
+- auditing support with background processing
+- database migration tooling
+- health checks
+- Serilog logging to console and rolling files
+- security middleware baseline
+- rate limiting for auth endpoints
+- central package management via `Directory.Packages.props`
+
+### Sample Modules
+
+- **Identity** — authentication and user lifecycle flows
+- **Catalog** — sample business CRUD/query module with categories and products
+- **Auditing** — audit trail and cross-cutting observability support
+
+---
+
+## Why Modular Monolith
+
+This template uses a **modular monolith** because it offers a strong balance between:
+
+- architectural discipline
+- lower operational complexity
+- easier debugging
+- simpler deployment
+- clear separation of business capabilities
+- future extraction options if scaling needs change later
+
+Instead of starting with microservices too early, this template favors:
+
+- explicit module boundaries
+- clear ownership
+- pragmatic evolution
+- maintainable complexity
+
+---
+
+## Architecture Overview
+
+This project follows **Clean Architecture** inside a **Modular Monolith**.
+
+### Layers
+
+#### Domain
+
+Contains:
+
+- entities
+- value objects
+- domain events
+- business rules and invariants
+- repository contracts
+
+#### Application
+
+Contains:
+
+- commands and queries
+- handlers
+- validators
+- DTOs
+- orchestration logic
+
+#### Infrastructure
+
+Contains:
+
+- EF Core persistence
+- repository implementations
+- technical services
+- auth and persistence integrations
+- migration-related setup
+
+#### API
+
+Contains:
+
+- controllers
+- middleware configuration
+- authentication/authorization entry points
+- health endpoints
+- composition root wiring
+
+#### Shared Building Blocks
+
+Contains reusable cross-cutting components such as:
+
+- base abstractions
+- dispatcher infrastructure
+- common API utilities
+- shared domain/application helpers
+- security and auditing abstractions
+
+### Architectural principles
+
+- business modules remain isolated by default
+- dependencies point inward
+- infrastructure does not leak into domain logic
+- modules communicate through explicit contracts/events rather than shared internals
+- the architecture stays pragmatic rather than pattern-driven for its own sake
+
+---
+
+## Project Structure
+
+```text
+src/
+├── BuildingBlocks/
+├── CleanArchitecture.Api/
+├── DbMigrator/
+└── Modules/
+    ├── Auditing/
+    ├── Catalog/
+    └── Identity/
+
+tests/
+├── CleanArchitecture.IntegrationTests/
+└── CleanArchitecture.UnitTests/
+```
+
+### Notes
+
+- `BuildingBlocks/` contains reusable cross-cutting abstractions and infrastructure
+- `Modules/` contains business capabilities organized by module
+- `CleanArchitecture.Api/` is the API host and composition root
+- `DbMigrator/` handles database migration orchestration
+- `tests/` contains unit and integration test coverage for current behavior
+- a future UI project may be introduced once the frontend direction is finalized
+
+---
+
+## Current Modules
+
+### Identity
+
+Purpose:
+
+- provide authentication and user account workflows
+
+Currently demonstrates:
+
+- register
+- login
+- refresh token
+- logout
+- email confirmation
+- resend confirmation
+- password reset request
+- password reset execution
+
+### Catalog
+
+Purpose:
+
+- serve as the main sample business module for CRUD/query workflows
+
+Currently demonstrates:
+
+- categories CRUD
+- products CRUD
+- paginated queries
+- filtered product/category reads
+- CSV export
+- module-level validation and command/query handling
+
+### Auditing
+
+Purpose:
+
+- provide audit logging and cross-cutting observability support
+
+Currently demonstrates:
+
+- audit log persistence
+- background audit outbox processing
+- authenticated audit log querying
+
+---
+
+## API Surface
+
+The current API is organized into **4 controllers / 20 endpoints**.
+
+### Identity API
+
+`/api/v1/authentication`
+
+- `POST /login`
+- `POST /refresh-token`
+- `POST /logout`
+- `POST /register`
+- `POST /confirm-email`
+- `POST /resend-confirmation`
+- `POST /request-password-reset`
+- `POST /reset-password`
+
+### Catalog API
+
+`/api/v1/categories`
+
+- `GET /`
+- `GET /{id}`
+- `POST /`
+- `PUT /{id}`
+- `DELETE /{id}`
+
+`/api/v1/products`
+
+- `GET /`
+- `GET /export`
+- `GET /{id}`
+- `POST /`
+- `PUT /{id}`
+- `DELETE /{id}`
+
+### Auditing API
+
+`/api/v1/auditlogs`
+
+- `GET /`
+
+### Health Endpoints
+
+- `GET /health/live`
+- `GET /health/ready`
+
+---
+
+## Planned UI Layer
+
+This project is being built with a **future UI layer in mind**.
+
+The current implementation focuses on establishing a strong backend/API foundation first. Once that foundation is stable, the project can move into UI planning and implementation.
+
+### UI goals
+
+The future UI layer should aim to provide:
+
+- a maintainable frontend architecture
+- clean API integration
+- authentication flow support
+- a good developer experience
+- alignment with the modular philosophy of the backend
+
+### UI decisions intentionally deferred
+
+The following decisions are intentionally deferred until the API baseline is stronger:
+
+- frontend framework choice
+- SPA vs SSR strategy
+- frontend project structure
+- API client generation strategy
+- authentication/session handling approach
+- monorepo vs separate frontend repository strategy
+
+This keeps the current phase focused on making the backend/template baseline trustworthy first.
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- .NET 8 SDK
+- SQL Server / SQL Server Express
+- Git
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repository-url>
+cd <your-project-folder>
+```
+
+### 2. Configure the database connection
+
+Update the appropriate configuration file, for example:
+
+- `src/CleanArchitecture.Api/appsettings.json`
+- `src/DbMigrator/appsettings.json`
+
+Set:
+
+- `ConnectionStrings:DefaultConnection`
+
+### 3. Run database migrations
+
+```bash
+dotnet run --project src/DbMigrator
+```
+
+### 4. Run the API
+
+```bash
+dotnet run --project src/CleanArchitecture.Api
+```
+
+### 5. Open Swagger (Development)
+
+Swagger is enabled in Development:
+
+```text
+https://localhost:<port>/swagger
+```
+
+### 6. Run tests
+
+```bash
+dotnet test ModularMonolith.sln
+```
+
+> Note: the current test baseline is not fully green yet. See [Testing](#testing).
+
+---
+
+## Testing
+
+This repository includes both unit and integration test projects.
+
+### Current observed status
+
+Based on the current codebase:
+
+- **Unit tests:** 36 total, **32 passed / 4 failed**
+- **Integration tests:** 38 total, **37 passed / 1 failed**
+
+### Known issues from the current test run
+
+#### Unit test failures
+
+The failing unit tests are currently centered around `DispatcherTests`, where validator enumeration is not registered and the tests throw `InvalidOperationException` instead of the expected validation behavior.
+
+#### Integration test failure
+
+The integration suite is close to green but still has **1 failing test** and should not currently be documented as fully passing.
+
+### What the tests already cover
+
+- command/query dispatching
+- catalog handlers and queries
+- identity command handlers
+- authentication flows
+- catalog API flows
+- gateway hardening/security behavior
+- health/security middleware behavior through integration tests
+
+---
+
+## Extending the Template
+
+One of the main goals of this project is to make it easier to add new business capabilities without breaking architectural clarity.
+
+This template is strongest when used as a foundation for:
+
+- adding a new module
+- extending an existing module
+- reusing shared building blocks
+- preserving boundaries between domain, application, infrastructure, and API
+- later integrating a UI layer on top of the API
+
+Module extension guides:
+
+- `docs/ADDING_A_MODULE.md`
+- `docs/UI_INTEGRATION_PLAN.md`
+
+---
+
+## Roadmap
+
+### v1.1 — Trustworthy API Starter Kit
+
+Focus areas:
+
+- align docs with code
+- fix the current failing test baseline
+- polish quick start
+- improve extension guidance
+- stabilize API baseline
+- establish CI baseline
+
+### v1.2 — Better Extension & Dev Experience
+
+Focus areas:
+
+- better module scaffolding guidance
+- local/dev environment polish
+- Docker/dev infra improvements
+- stronger testing/reporting workflow
+- improved operational baseline
+
+### Future — UI Integration Phase
+
+Focus areas:
+
+- UI technology selection
+- frontend architecture
+- API-to-UI integration patterns
+- authentication integration for UI
+- improved full-stack developer experience
+
+---
+
+## Contributing
+
+Contributions are welcome, especially those that improve:
+
+- architectural clarity
+- documentation accuracy
+- testing reliability
+- developer experience
+- extension guidance
+- production-minded defaults
+
+### Contribution expectations
+
+- keep docs aligned with code
+- respect module boundaries
+- avoid unnecessary architectural complexity
+- prefer clarity over pattern-chasing
+- keep the template reusable
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+See [LICENSE](LICENSE) for details.

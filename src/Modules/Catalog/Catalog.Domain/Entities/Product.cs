@@ -123,14 +123,19 @@ public class Product : Entity<string>
             throw new ProductDomainException("Product name is required");
         }
 
-        if (ProductName.Length > 100)
+        if (ProductName.Length > 40)
         {
-            throw new ProductDomainException("Product name cannot exceed 100 characters");
+            throw new ProductDomainException("Product name cannot exceed 40 characters");
         }
 
         if (string.IsNullOrWhiteSpace(CategoryId))
         {
             throw new ProductDomainException("Category ID is required");
+        }
+
+        if (!string.IsNullOrWhiteSpace(QuantityPerUnit) && QuantityPerUnit.Length > 20)
+        {
+            throw new ProductDomainException("Quantity per unit cannot exceed 20 characters");
         }
 
         if (UnitPrice.HasValue && UnitPrice < 0)

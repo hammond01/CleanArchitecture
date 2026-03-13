@@ -1,10 +1,14 @@
+using System.Security.Claims;
 using BuildingBlocks.Api.Controllers;
 using BuildingBlocks.Application.Dispatcher;
 using Identity.Application.Features.Authentication.Commands;
+using Identity.Domain.DTOs;
 using Identity.Application.Features.PasswordManagement.Commands;
 using Identity.Application.Features.Registration.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Identity.Api.Controllers;
 
@@ -23,33 +27,40 @@ public class AuthenticationController : BaseController
     /// Login user with credentials
     /// </summary>
     [HttpPost("login")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [EnableRateLimiting("AuthEndpoints")]
+    [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login([FromBody] UserLoginCommand command, CancellationToken cancellationToken)
     {
         var result = await _dispatcher.DispatchAsync(command, cancellationToken);
-        return Ok(new { token = result });
+        return Ok(result);
     }
 
     /// <summary>
     /// Refresh JWT token
     /// </summary>
     [HttpPost("refresh-token")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [EnableRateLimiting("AuthEndpoints")]
+    [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> RefreshToken([FromBody] UserRefreshTokenCommand command, CancellationToken cancellationToken)
     {
         var result = await _dispatcher.DispatchAsync(command, cancellationToken);
-        return Ok(new { token = result });
+        return Ok(result);
     }
 
     /// <summary>
     /// Logout user
     /// </summary>
     [HttpPost("logout")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> Logout([FromBody] UserLogoutCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            ?? throw new UnauthorizedAccessException("User identity is missing");
+
+        var command = new UserLogoutCommand { UserId = userId };
         await _dispatcher.DispatchAsync(command, cancellationToken);
         return Ok();
     }
@@ -58,6 +69,7 @@ public class AuthenticationController : BaseController
     /// Register new user
     /// </summary>
     [HttpPost("register")]
+    [EnableRateLimiting("AuthEndpoints")]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] UserCreateCommand command, CancellationToken cancellationToken)
@@ -79,9 +91,23 @@ public class AuthenticationController : BaseController
     }
 
     /// <summary>
+    /// Resend email confirmation
+    /// </summary>
+    [HttpPost("resend-confirmation")]
+    [EnableRateLimiting("AuthEndpoints")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ResendConfirmation([FromBody] ResendEmailConfirmationCommand command, CancellationToken cancellationToken)
+    {
+        await _dispatcher.DispatchAsync(command, cancellationToken);
+        return Ok();
+    }
+
+    /// <summary>
     /// Request password reset
     /// </summary>
     [HttpPost("request-password-reset")]
+    [EnableRateLimiting("AuthEndpoints")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetCommand command, CancellationToken cancellationToken)

@@ -96,9 +96,10 @@ public class CategoryCommandHandlerTests : IClassFixture<CatalogDbContextFixture
         await context.SaveChangesAsync();
 
         ICategoryRepository repository = new CategoryRepository(context);
+        IProductRepository productRepository = new ProductRepository(context);
         IUnitOfWork unitOfWork = context;
 
-        var handler = new DeleteCategoryCommandHandler(repository, unitOfWork);
+        var handler = new DeleteCategoryCommandHandler(repository, productRepository, unitOfWork);
         var command = new DeleteCategoryCommand(category.Id);
 
         var result = await handler.HandleAsync(command);
@@ -112,13 +113,35 @@ public class CategoryCommandHandlerTests : IClassFixture<CatalogDbContextFixture
     {
         await using var context = _fixture.CreateDbContext();
         ICategoryRepository repository = new CategoryRepository(context);
+        IProductRepository productRepository = new ProductRepository(context);
         IUnitOfWork unitOfWork = context;
 
-        var handler = new DeleteCategoryCommandHandler(repository, unitOfWork);
+        var handler = new DeleteCategoryCommandHandler(repository, productRepository, unitOfWork);
         var command = new DeleteCategoryCommand(Guid.NewGuid().ToString());
 
         var result = await handler.HandleAsync(command);
 
         result.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task HandleAsync_Delete_WithExistingProducts_ThrowsInvalidOperationException()
+    {
+        await using var context = _fixture.CreateDbContext();
+        var category = Category.Create("Protected");
+        var product = Product.Create("Attached Product", category.Id);
+
+        await context.Categories.AddAsync(category);
+        await context.Products.AddAsync(product);
+        await context.SaveChangesAsync();
+
+        ICategoryRepository repository = new CategoryRepository(context);
+        IProductRepository productRepository = new ProductRepository(context);
+        IUnitOfWork unitOfWork = context;
+
+        var handler = new DeleteCategoryCommandHandler(repository, productRepository, unitOfWork);
+        var command = new DeleteCategoryCommand(category.Id);
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => handler.HandleAsync(command));
     }
 }
