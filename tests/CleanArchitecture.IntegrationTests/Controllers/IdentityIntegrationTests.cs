@@ -542,3 +542,4 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
 
     #endregion
 }
+
