@@ -89,6 +89,7 @@ jobs:
       API_REGISTRY_USERNAME: ${{ secrets.API_REGISTRY_USERNAME }}
       API_REGISTRY_TOKEN: ${{ secrets.API_REGISTRY_TOKEN }}
       API_JWT_SECRET_KEY: ${{ secrets.API_JWT_SECRET_KEY }}
+      API_SQLSERVER_SA_PASSWORD: ${{ secrets.API_SQLSERVER_SA_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -103,6 +104,7 @@ jobs:
           test -n "$DEPLOY_HOST" || (echo "Missing API_DEPLOY_HOST" && exit 1)
           test -n "$DEPLOY_USER" || (echo "Missing API_DEPLOY_USER" && exit 1)
           test -n "$API_JWT_SECRET_KEY" || (echo "Missing API_JWT_SECRET_KEY" && exit 1)
+          test -n "$API_SQLSERVER_SA_PASSWORD" || (echo "Missing API_SQLSERVER_SA_PASSWORD" && exit 1)
 
       - name: Add server to known_hosts
         run: |
@@ -134,7 +136,7 @@ jobs:
             ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "echo '$API_REGISTRY_TOKEN' | docker login ghcr.io -u '$API_REGISTRY_USERNAME' --password-stdin"
           fi
 
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' \"services:\" \"  cleanarchitecture.api:\" \"    image: $IMAGE\" \"    container_name: $CONTAINER\" \"    restart: always\" \"    ports:\" \"      - '$HOST_PORT:8080'\" \"    environment:\" \"      ASPNETCORE_ENVIRONMENT: Production\" \"      JwtSettings__SecretKey: $API_JWT_SECRET_KEY\" > '$TARGET_PATH/docker-compose.deploy.yml'"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' \"services:\" \"  cleanarchitecture.api:\" \"    image: $IMAGE\" \"    container_name: $CONTAINER\" \"    restart: always\" \"    ports:\" \"      - '$HOST_PORT:8080'\" \"    environment:\" \"      ASPNETCORE_ENVIRONMENT: Production\" \"      JwtSettings__SecretKey: $API_JWT_SECRET_KEY\" \"      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=$API_SQLSERVER_SA_PASSWORD;TrustServerCertificate=True;Encrypt=False\" \"  sqlserver:\" \"    restart: always\" \"    environment:\" \"      ACCEPT_EULA: Y\" \"      MSSQL_SA_PASSWORD: $API_SQLSERVER_SA_PASSWORD\" > '$TARGET_PATH/docker-compose.deploy.yml'"
 
           ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull"
           ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d --remove-orphans) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d --remove-orphans"

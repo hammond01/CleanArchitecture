@@ -4,3 +4,19 @@ services:
     build:
       context: .
       dockerfile: src/ModularMonolith/CleanArchitecture.Api/Dockerfile
+    depends_on:
+      - sqlserver
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=${SQLSERVER_SA_PASSWORD:-Your_strong_password_123};TrustServerCertificate=True;Encrypt=False
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: cleanarchitecture-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${SQLSERVER_SA_PASSWORD:-Your_strong_password_123}
+    volumes:
+      - cleanarchitecture-sqldata:/var/opt/mssql
+
+volumes:
+  cleanarchitecture-sqldata:
