@@ -46,6 +46,9 @@ jobs:
       - name: Integration tests
         run: dotnet test tests/CleanArchitecture.IntegrationTests/CleanArchitecture.IntegrationTests.csproj --configuration Release --no-build --verbosity minimal
 
+      - name: Validate Docker Compose
+        run: docker compose -f docker-compose.yml -f docker-compose.override.yml config > /tmp/docker-compose.resolved.yml
+
       - name: Compute image name
         run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-api" >> "$GITHUB_ENV"
 
@@ -86,6 +89,9 @@ jobs:
       API_REGISTRY_USERNAME: ${{ secrets.API_REGISTRY_USERNAME }}
       API_REGISTRY_TOKEN: ${{ secrets.API_REGISTRY_TOKEN }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Setup SSH key
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -102,6 +108,18 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p "$PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
+      - name: Ensure deploy directory exists
+        run: |
+          PORT="${DEPLOY_PORT:-22}"
+          TARGET_PATH="${DEPLOY_PATH:-/home/$DEPLOY_USER/cleanarchitecture-api}"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "mkdir -p '$TARGET_PATH'"
+
+      - name: Upload Docker Compose base file
+        run: |
+          PORT="${DEPLOY_PORT:-22}"
+          TARGET_PATH="${DEPLOY_PATH:-/home/$DEPLOY_USER/cleanarchitecture-api}"
+          scp -P "$PORT" docker-compose.yml "$DEPLOY_USER@$DEPLOY_HOST:$TARGET_PATH/docker-compose.yml"
+
       - name: Deploy docker compose on remote server
         run: |
           PORT="${DEPLOY_PORT:-22}"
@@ -110,13 +128,11 @@ jobs:
           HOST_PORT="${API_DOCKER_HOST_PORT:-5000}"
           TARGET_PATH="${DEPLOY_PATH:-/home/$DEPLOY_USER/cleanarchitecture-api}"
 
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "mkdir -p '$TARGET_PATH'"
-
           if [ -n "$API_REGISTRY_USERNAME" ] && [ -n "$API_REGISTRY_TOKEN" ]; then
             ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "echo '$API_REGISTRY_TOKEN' | docker login ghcr.io -u '$API_REGISTRY_USERNAME' --password-stdin"
           fi
 
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' \"services:\" \"  api:\" \"    image: $IMAGE\" \"    container_name: $CONTAINER\" \"    restart: always\" \"    ports:\" \"      - '$HOST_PORT:8080'\" \"    environment:\" \"      ASPNETCORE_ENVIRONMENT: Production\" > '$TARGET_PATH/docker-compose.yml'"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' \"services:\" \"  cleanarchitecture.api:\" \"    image: $IMAGE\" \"    container_name: $CONTAINER\" \"    restart: always\" \"    ports:\" \"      - '$HOST_PORT:8080'\" \"    environment:\" \"      ASPNETCORE_ENVIRONMENT: Production\" > '$TARGET_PATH/docker-compose.deploy.yml'"
 
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' pull) || docker-compose -f '$TARGET_PATH/docker-compose.yml' pull"
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' up -d --remove-orphans) || docker-compose -f '$TARGET_PATH/docker-compose.yml' up -d --remove-orphans"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d --remove-orphans) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d --remove-orphans"

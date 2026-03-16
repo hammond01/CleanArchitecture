@@ -16,7 +16,6 @@ using Identity.Infrastructure.Persistence;
 using Auditing.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
-using BuildingBlocks.Api.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 
