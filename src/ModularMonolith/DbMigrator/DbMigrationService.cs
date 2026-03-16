@@ -145,8 +145,9 @@ public class DbMigrationService
         }
     }
 
-    private async Task SeedDataAsync(CancellationToken cancellationToken)
+    private Task SeedDataAsync(CancellationToken cancellationToken)
     {
+        _ = cancellationToken;
         _logger.LogInformation("🌱 Seeding initial data...");
 
         try
@@ -163,5 +164,7 @@ public class DbMigrationService
             _logger.LogWarning(ex, "⚠️ Data seeding failed (non-critical): {ErrorMessage}", ex.Message);
             // Don't throw - seeding failures are non-critical
         }
+
+        return Task.CompletedTask;
     }
 }
