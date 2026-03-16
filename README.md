@@ -5,7 +5,7 @@
 [![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2B%20Modular%20Monolith-brightgreen.svg)](#architecture-overview)
 [![Status](https://img.shields.io/badge/status-template%20starter%20kit-blue.svg)](#roadmap)
-[![CI Tests](https://github.com/hammond01/CleanArchitecture/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/hammond01/CleanArchitecture/actions/workflows/ci-tests.yml)
+[![API CI/CD](https://github.com/hammond01/CleanArchitecture/actions/workflows/api-ci-cd.yml/badge.svg)](https://github.com/hammond01/CleanArchitecture/actions/workflows/api-ci-cd.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
@@ -74,8 +74,8 @@ As of the current codebase, this template includes:
   - Catalog
   - Auditing
 - **Shared BuildingBlocks** for cross-cutting concerns
-- **API host** in `src/CleanArchitecture.Api`
-- **DbMigrator** in `src/DbMigrator`
+- **API host** in `src/ModularMonolith/CleanArchitecture.Api`
+- **DbMigrator** in `src/ModularMonolith/DbMigrator`
 - **4 API controllers / 20 HTTP endpoints** across the sample modules
 - **unit and integration test projects**
 - **security middleware baseline** including:
@@ -424,8 +424,8 @@ cd <your-project-folder>
 
 Update the appropriate configuration file, for example:
 
-- `src/CleanArchitecture.Api/appsettings.json`
-- `src/DbMigrator/appsettings.json`
+- `src/ModularMonolith/CleanArchitecture.Api/appsettings.json`
+- `src/ModularMonolith/DbMigrator/appsettings.json`
 
 Set:
 
@@ -434,13 +434,13 @@ Set:
 ### 3. Run database migrations
 
 ```bash
-dotnet run --project src/DbMigrator
+dotnet run --project src/ModularMonolith/DbMigrator
 ```
 
 ### 4. Run the API
 
 ```bash
-dotnet run --project src/CleanArchitecture.Api
+dotnet run --project src/ModularMonolith/CleanArchitecture.Api
 ```
 
 ### 5. Open Swagger (Development)
