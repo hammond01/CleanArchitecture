@@ -53,7 +53,7 @@ This is the first major release featuring a custom CQRS Dispatcher system, profe
 - Idempotent execution - safe to run multiple times
 - Seed data infrastructure (foundation ready)
 - CI/CD friendly with exit codes and detailed logs
-- Comprehensive documentation in [DbMigrator/README.md](src/DbMigrator/README.md)
+- Comprehensive documentation in [DbMigrator/README.md](src/ModularMonolith/DbMigrator/README.md)
 
 #### 📦 Central Package Management
 

@@ -85,7 +85,7 @@ This is where cross-cutting concerns live, such as:
 
 ### API Host
 
-`src/CleanArchitecture.Api/` is the composition root.
+`src/ModularMonolith/CleanArchitecture.Api/` is the composition root.
 
 It is responsible for:
 
@@ -99,7 +99,7 @@ It is responsible for:
 
 ### DbMigrator
 
-`src/DbMigrator/` provides a dedicated migration entry point so schema updates can be run separately from the API host.
+`src/ModularMonolith/DbMigrator/` provides a dedicated migration entry point so schema updates can be run separately from the API host.
 
 ### Modules
 

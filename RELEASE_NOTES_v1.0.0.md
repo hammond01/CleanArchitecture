@@ -55,7 +55,7 @@ Production-ready console application for database migrations:
 **Usage:**
 
 ```powershell
-cd src/DbMigrator
+cd src/ModularMonolith/DbMigrator
 dotnet run
 ```
 
@@ -223,14 +223,14 @@ Clean Architecture (Modular Monolith)
 2. **Run Database Migrations**
 
     ```bash
-    cd src/DbMigrator
+    cd src/ModularMonolith/DbMigrator
     dotnet run
     ```
 
 3. **Start API**
 
     ```bash
-    dotnet run --project src/CleanArchitecture.Api
+    dotnet run --project src/ModularMonolith/CleanArchitecture.Api
     ```
 
 4. **Open Swagger UI**
@@ -290,7 +290,7 @@ MIT License - See [LICENSE](LICENSE) file for details.
 
 - **Documentation:** [README.md](README.md)
 - **Changelog:** [CHANGELOG.md](CHANGELOG.md)
-- **DbMigrator Guide:** [src/DbMigrator/README.md](src/DbMigrator/README.md)
+- **DbMigrator Guide:** [src/ModularMonolith/DbMigrator/README.md](src/ModularMonolith/DbMigrator/README.md)
 - **Architecture Diagram:** [docs/imgs/CleanArchitecture-DDD.png](docs/imgs/CleanArchitecture-DDD.png)
 
 ---

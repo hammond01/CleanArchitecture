@@ -8,7 +8,7 @@ The goal is consistency, not ceremony.
 
 ## 1) Create module structure
 
-Create a new folder under `src/Modules/<ModuleName>/` with these projects:
+Create a new folder under `src/ModularMonolith/Modules/<ModuleName>/` with these projects:
 
 - `<ModuleName>.Domain`
 - `<ModuleName>.Application`
@@ -71,7 +71,7 @@ Follow the same pattern used by existing modules:
 
 1. add module registration extension in `<ModuleName>.Api/Extensions`
 2. register Application + Infrastructure dependencies there
-3. call `builder.Services.Add<ModuleName>Module(...)` from `src/CleanArchitecture.Api/Program.cs`
+3. call `builder.Services.Add<ModuleName>Module(...)` from `src/ModularMonolith/CleanArchitecture.Api/Program.cs`
 
 ---
 

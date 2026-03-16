@@ -6,49 +6,49 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{A1E2F3G4-H5I6-47J8-K9L0-M1N2O3P4Q5R6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Domain", "src\BuildingBlocks\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj", "{B2F3G4H5-I6J7-48K9-L0M1-N2O3P4Q5R6S7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Domain", "src\ModularMonolith\BuildingBlocks\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj", "{B2F3G4H5-I6J7-48K9-L0M1-N2O3P4Q5R6S7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Application", "src\BuildingBlocks\BuildingBlocks.Application\BuildingBlocks.Application.csproj", "{C3G4H5I6-J7K8-49L0-M1N2-O3P4Q5R6S7T8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Application", "src\ModularMonolith\BuildingBlocks\BuildingBlocks.Application\BuildingBlocks.Application.csproj", "{C3G4H5I6-J7K8-49L0-M1N2-O3P4Q5R6S7T8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Infrastructure", "src\BuildingBlocks\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj", "{D4H5I6J7-K8L9-50M1-N2O3-P4Q5R6S7T8U9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Infrastructure", "src\ModularMonolith\BuildingBlocks\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj", "{D4H5I6J7-K8L9-50M1-N2O3-P4Q5R6S7T8U9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Api", "src\BuildingBlocks\BuildingBlocks.Api\BuildingBlocks.Api.csproj", "{E5I6J7K8-L9M0-51N2-O3P4-Q5R6S7T8U9V0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Api", "src\ModularMonolith\BuildingBlocks\BuildingBlocks.Api\BuildingBlocks.Api.csproj", "{E5I6J7K8-L9M0-51N2-O3P4-Q5R6S7T8U9V0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Shared", "src\BuildingBlocks\BuildingBlocks.Shared\BuildingBlocks.Shared.csproj", "{F6J7K8L9-M0N1-52O3-P4Q5-R6S7T8U9V0W1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Shared", "src\ModularMonolith\BuildingBlocks\BuildingBlocks.Shared\BuildingBlocks.Shared.csproj", "{F6J7K8L9-M0N1-52O3-P4Q5-R6S7T8U9V0W1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{S7K8L9M0-N1O2-53P4-Q5R6-S7T8U9V0W1X2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{T8L9M0N1-O2P3-54Q5-R6S7-T8U9V0W1X2Y3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Domain", "src\Modules\Catalog\Catalog.Domain\Catalog.Domain.csproj", "{U9M0N1O2-P3Q4-55R6-S7T8-U9V0W1X2Y3Z4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Domain", "src\ModularMonolith\Modules\Catalog\Catalog.Domain\Catalog.Domain.csproj", "{U9M0N1O2-P3Q4-55R6-S7T8-U9V0W1X2Y3Z4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Application", "src\Modules\Catalog\Catalog.Application\Catalog.Application.csproj", "{V0N1O2P3-Q4R5-56S7-T8U9-V0W1X2Y3Z4A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Application", "src\ModularMonolith\Modules\Catalog\Catalog.Application\Catalog.Application.csproj", "{V0N1O2P3-Q4R5-56S7-T8U9-V0W1X2Y3Z4A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Infrastructure", "src\Modules\Catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj", "{W1O2P3Q4-R5S6-57T8-U9V0-W1X2Y3Z4A5B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Infrastructure", "src\ModularMonolith\Modules\Catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj", "{W1O2P3Q4-R5S6-57T8-U9V0-W1X2Y3Z4A5B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Api", "src\Modules\Catalog\Catalog.Api\Catalog.Api.csproj", "{X2P3Q4R5-S6T7-58U9-V0W1-X2Y3Z4A5B6C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Api", "src\ModularMonolith\Modules\Catalog\Catalog.Api\Catalog.Api.csproj", "{X2P3Q4R5-S6T7-58U9-V0W1-X2Y3Z4A5B6C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{Y3Q4R5S6-T7U8-59V0-W1X2-Y3Z4A5B6C7D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Domain", "src\Modules\Identity\Identity.Domain\Identity.Domain.csproj", "{Z4R5S6T7-U8V9-60W0-X1Y2-Z4A5B6C7D8E9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Domain", "src\ModularMonolith\Modules\Identity\Identity.Domain\Identity.Domain.csproj", "{Z4R5S6T7-U8V9-60W0-X1Y2-Z4A5B6C7D8E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "src\Modules\Identity\Identity.Application\Identity.Application.csproj", "{A5S6T7U8-V9W0-61X1-Y2Z3-A5B6C7D8E9F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Application", "src\ModularMonolith\Modules\Identity\Identity.Application\Identity.Application.csproj", "{A5S6T7U8-V9W0-61X1-Y2Z3-A5B6C7D8E9F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "src\Modules\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj", "{B6T7U8V9-W0X1-62Y2-Z3A4-B6C7D8E9F0G1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "src\ModularMonolith\Modules\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj", "{B6T7U8V9-W0X1-62Y2-Z3A4-B6C7D8E9F0G1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "src\Modules\Identity\Identity.Api\Identity.Api.csproj", "{C7U8V9W0-X1Y2-63Z3-A4B5-C7D8E9F0G1H2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "src\ModularMonolith\Modules\Identity\Identity.Api\Identity.Api.csproj", "{C7U8V9W0-X1Y2-63Z3-A4B5-C7D8E9F0G1H2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auditing", "Auditing", "{D8V9W0X1-Y2Z3-64A4-B5C6-D8E9F0G1H2I3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Domain", "src\Modules\Auditing\Auditing.Domain\Auditing.Domain.csproj", "{E9W0X1Y2-Z3A4-65B5-C6D7-E9F0G1H2I3J4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Domain", "src\ModularMonolith\Modules\Auditing\Auditing.Domain\Auditing.Domain.csproj", "{E9W0X1Y2-Z3A4-65B5-C6D7-E9F0G1H2I3J4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Application", "src\Modules\Auditing\Auditing.Application\Auditing.Application.csproj", "{F0X1Y2Z3-A4B5-66C6-D7E8-F0G1H2I3J4K5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Application", "src\ModularMonolith\Modules\Auditing\Auditing.Application\Auditing.Application.csproj", "{F0X1Y2Z3-A4B5-66C6-D7E8-F0G1H2I3J4K5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Infrastructure", "src\Modules\Auditing\Auditing.Infrastructure\Auditing.Infrastructure.csproj", "{G1Y2Z3A4-B5C6-67D7-E8F9-G1H2I3J4K5L6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Infrastructure", "src\ModularMonolith\Modules\Auditing\Auditing.Infrastructure\Auditing.Infrastructure.csproj", "{G1Y2Z3A4-B5C6-67D7-E8F9-G1H2I3J4K5L6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Api", "src\Modules\Auditing\Auditing.Api\Auditing.Api.csproj", "{H2Z3A4B5-C6D7-68E8-F9G0-H2I3J4K5L6M7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auditing.Api", "src\ModularMonolith\Modules\Auditing\Auditing.Api\Auditing.Api.csproj", "{H2Z3A4B5-C6D7-68E8-F9G0-H2I3J4K5L6M7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Api", "src\CleanArchitecture.Api\CleanArchitecture.Api.csproj", "{I3A4B5C6-D7E8-69F9-G0H1-I3J4K5L6M7N8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Api", "src\ModularMonolith\CleanArchitecture.Api\CleanArchitecture.Api.csproj", "{I3A4B5C6-D7E8-69F9-G0H1-I3J4K5L6M7N8}"
 EndProject
 
 Global

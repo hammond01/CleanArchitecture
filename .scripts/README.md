@@ -28,7 +28,7 @@ This directory contains PowerShell scripts to help with the Modular Monolith ref
 
 **Output**:
 ```
-src/Modules/Catalog/
+src/ModularMonolith/Modules/Catalog/
 ├── Catalog.Domain/
 │   ├── Entities/
 │   ├── ValueObjects/
@@ -131,7 +131,7 @@ $modules = @("Catalog", "Sales", "Customers", "Suppliers", "Geography")
 foreach ($module in $modules) {
     Write-Host "Processing $module module..." -ForegroundColor Cyan
     
-    $infraProject = "src/Modules/$module/$module.Infrastructure"
+    $infraProject = "src/ModularMonolith/Modules/$module/$module.Infrastructure"
     $apiProject = "src/Api/ProductManager.Api"
     $context = "${module}DbContext"
     
@@ -235,15 +235,15 @@ $modules = @("Catalog", "Sales", "Customers", "Suppliers", "Geography")
 $buildFailed = $false
 
 Write-Host "Building BuildingBlocks..." -ForegroundColor Cyan
-dotnet build src/BuildingBlocks/BuildingBlocks.Domain
-dotnet build src/BuildingBlocks/BuildingBlocks.Application
-dotnet build src/BuildingBlocks/BuildingBlocks.Infrastructure
-dotnet build src/BuildingBlocks/BuildingBlocks.Api
+dotnet build src/ModularMonolith/BuildingBlocks/BuildingBlocks.Domain
+dotnet build src/ModularMonolith/BuildingBlocks/BuildingBlocks.Application
+dotnet build src/ModularMonolith/BuildingBlocks/BuildingBlocks.Infrastructure
+dotnet build src/ModularMonolith/BuildingBlocks/BuildingBlocks.Api
 
 foreach ($module in $modules) {
     Write-Host "`nBuilding $module module..." -ForegroundColor Cyan
     
-    $modulePath = "src/Modules/$module"
+    $modulePath = "src/ModularMonolith/Modules/$module"
     
     if (Test-Path $modulePath) {
         dotnet build "$modulePath/$module.Domain"
@@ -291,17 +291,17 @@ if ($buildFailed) {
 .\.scripts\validate-architecture.ps1 -ModuleName "Catalog"
 
 # 4. Build the module
-dotnet build src/Modules/Catalog
+dotnet build src/ModularMonolith/Modules/Catalog
 
 # 5. Add database migration
 dotnet ef migrations add InitialCreate `
-    --project src/Modules/Catalog/Catalog.Infrastructure `
+    --project src/ModularMonolith/Modules/Catalog/Catalog.Infrastructure `
     --startup-project src/Api/ProductManager.Api `
     --context CatalogDbContext
 
 # 6. Update database
 dotnet ef database update `
-    --project src/Modules/Catalog/Catalog.Infrastructure `
+    --project src/ModularMonolith/Modules/Catalog/Catalog.Infrastructure `
     --startup-project src/Api/ProductManager.Api `
     --context CatalogDbContext
 

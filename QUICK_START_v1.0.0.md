@@ -57,7 +57,7 @@ dotnet ef database update -p Catalog.Infrastructure -s API ...
 **NEW WAY (1 command):**
 
 ```bash
-cd src/DbMigrator
+cd src/ModularMonolith/DbMigrator
 dotnet run
 ```
 
@@ -128,7 +128,7 @@ dotnet run
 ### If You Run Migrations:
 
 - [ ] Stop using manual `dotnet ef database update` commands
-- [ ] Use `DbMigrator` tool: `cd src/DbMigrator && dotnet run`
+- [ ] Use `DbMigrator` tool: `cd src/ModularMonolith/DbMigrator && dotnet run`
 - [ ] Configure seed data in `MigrationSettings` if needed
 
 ---
@@ -139,11 +139,11 @@ dotnet run
 
 ```bash
 # Run all migrations
-cd src/DbMigrator
+cd src/ModularMonolith/DbMigrator
 dotnet run
 
 # Start API
-dotnet run --project src/CleanArchitecture.Api
+dotnet run --project src/ModularMonolith/CleanArchitecture.Api
 
 # Build solution
 dotnet build
@@ -214,7 +214,7 @@ When you call `_dispatcher.DispatchAsync()`, you'll see:
 
 - **Full Release Notes:** [RELEASE_NOTES_v1.0.0.md](RELEASE_NOTES_v1.0.0.md)
 - **Changelog:** [CHANGELOG.md](CHANGELOG.md)
-- **DbMigrator Guide:** [src/DbMigrator/README.md](src/DbMigrator/README.md)
+- **DbMigrator Guide:** [src/ModularMonolith/DbMigrator/README.md](src/ModularMonolith/DbMigrator/README.md)
 - **Main README:** [README.md](README.md)
 
 ---

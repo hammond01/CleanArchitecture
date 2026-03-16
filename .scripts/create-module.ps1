@@ -10,14 +10,14 @@
     The name of the module to create (e.g., "Catalog", "Sales")
 
 .PARAMETER BasePath
-    The base path where modules are created (default: "src/Modules")
+    The base path where modules are created (default: "src/ModularMonolith/Modules")
 
 .EXAMPLE
     .\create-module.ps1 -ModuleName "Catalog"
     Creates a new Catalog module with all layers
 
 .EXAMPLE
-    .\create-module.ps1 -ModuleName "Sales" -BasePath "src/Modules"
+    .\create-module.ps1 -ModuleName "Sales" -BasePath "src/ModularMonolith/Modules"
     Creates a new Sales module at the specified path
 #>
 
@@ -27,7 +27,7 @@ param(
     [string]$ModuleName,
 
     [Parameter(Mandatory=$false)]
-    [string]$BasePath = "src/Modules"
+    [string]$BasePath = "src/ModularMonolith/Modules"
 )
 
 # Color output functions
@@ -255,12 +255,12 @@ Add connection string to appsettings.json:
 \`\`\`bash
 # Add migration
 dotnet ef migrations add InitialCreate \\
-    --project src/Modules/$ModuleName/$ModuleName.Infrastructure \\
+    --project src/ModularMonolith/Modules/$ModuleName/$ModuleName.Infrastructure \\
     --context ${ModuleName}DbContext
 
 # Update database
 dotnet ef database update \\
-    --project src/Modules/$ModuleName/$ModuleName.Infrastructure \\
+    --project src/ModularMonolith/Modules/$ModuleName/$ModuleName.Infrastructure \\
     --context ${ModuleName}DbContext
 \`\`\`
 "@

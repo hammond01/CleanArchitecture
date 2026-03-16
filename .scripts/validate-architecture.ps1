@@ -57,7 +57,7 @@ function Test-ModuleStructure {
     
     Write-Header "Validating $Module Module Structure"
     
-    $modulePath = "src/Modules/$Module"
+    $modulePath = "src/ModularMonolith/Modules/$Module"
     
     if (-not (Test-Path $modulePath)) {
         Add-Violation "Module directory not found: $modulePath"
@@ -86,7 +86,7 @@ function Test-DomainLayer {
     
     Write-Header "Validating $Module Domain Layer"
     
-    $domainPath = "src/Modules/$Module/$Module.Domain"
+    $domainPath = "src/ModularMonolith/Modules/$Module/$Module.Domain"
     
     # Check for required folders
     $requiredFolders = @("Entities", "Repositories")
@@ -119,7 +119,7 @@ function Test-ApplicationLayer {
     
     Write-Header "Validating $Module Application Layer"
     
-    $applicationPath = "src/Modules/$Module/$Module.Application"
+    $applicationPath = "src/ModularMonolith/Modules/$Module/$Module.Application"
     
     # Check for required folders
     $requiredFolders = @("Features", "DTOs")
@@ -158,7 +158,7 @@ function Test-InfrastructureLayer {
     
     Write-Header "Validating $Module Infrastructure Layer"
     
-    $infrastructurePath = "src/Modules/$Module/$Module.Infrastructure"
+    $infrastructurePath = "src/ModularMonolith/Modules/$Module/$Module.Infrastructure"
     
     # Check for DbContext
     $dbContextPath = "$infrastructurePath/Persistence/${Module}DbContext.cs"
@@ -203,7 +203,7 @@ function Test-ApiLayer {
     
     Write-Header "Validating $Module Api Layer"
     
-    $apiPath = "src/Modules/$Module/$Module.Api"
+    $apiPath = "src/ModularMonolith/Modules/$Module/$Module.Api"
     
     # Check for Controllers folder
     $controllersPath = "$apiPath/Controllers"
@@ -249,7 +249,7 @@ function Test-CrossModuleDependencies {
     
     Write-Header "Validating $Module Cross-Module Dependencies"
     
-    $modulePath = "src/Modules/$Module"
+    $modulePath = "src/ModularMonolith/Modules/$Module"
     
     # Get all .cs files in the module
     $csFiles = Get-ChildItem -Path $modulePath -Filter "*.cs" -Recurse
@@ -278,7 +278,7 @@ function Test-CrossModuleDependencies {
 function Test-BuildingBlocks {
     Write-Header "Validating BuildingBlocks"
     
-    $buildingBlocksPath = "src/BuildingBlocks"
+    $buildingBlocksPath = "src/ModularMonolith/BuildingBlocks"
     
     if (-not (Test-Path $buildingBlocksPath)) {
         Add-Violation "BuildingBlocks directory not found"

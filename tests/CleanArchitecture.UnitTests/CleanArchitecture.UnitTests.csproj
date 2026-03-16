@@ -26,11 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\BuildingBlocks\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Catalog\Catalog.Application\Catalog.Application.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Catalog\Catalog.Domain\Catalog.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Identity\Identity.Application\Identity.Application.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\ModularMonolith\BuildingBlocks\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+    <ProjectReference Include="..\..\src\ModularMonolith\Modules\Catalog\Catalog.Application\Catalog.Application.csproj" />
+    <ProjectReference Include="..\..\src\ModularMonolith\Modules\Catalog\Catalog.Domain\Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\src\ModularMonolith\Modules\Identity\Identity.Application\Identity.Application.csproj" />
+    <ProjectReference Include="..\..\src\ModularMonolith\Modules\Catalog\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

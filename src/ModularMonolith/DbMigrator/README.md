@@ -21,7 +21,7 @@ DbMigrator là console application tự động hóa việc apply database migra
 
 ```powershell
 # Từ thư mục root của solution
-cd src/DbMigrator
+cd src/ModularMonolith/DbMigrator
 dotnet run
 ```
 
@@ -29,10 +29,10 @@ dotnet run
 
 ```powershell
 # Build release
-dotnet build -c Release src/DbMigrator/DbMigrator.csproj
+dotnet build -c Release src/ModularMonolith/DbMigrator/DbMigrator.csproj
 
 # Run với custom config
-cd src/DbMigrator/bin/Release/net8.0
+cd src/ModularMonolith/DbMigrator/bin/Release/net8.0
 ./DbMigrator --environment Production
 ```
 
@@ -42,7 +42,7 @@ cd src/DbMigrator/bin/Release/net8.0
 # Trong Dockerfile của bạn
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 COPY . .
-RUN dotnet publish src/DbMigrator/DbMigrator.csproj -c Release -o /app
+RUN dotnet publish src/ModularMonolith/DbMigrator/DbMigrator.csproj -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0
 COPY --from=build /app .
@@ -163,7 +163,7 @@ private async Task MigrateNewModuleAsync(CancellationToken ct)
 ```yaml
 - name: Run Database Migrations
   run: |
-      cd src/DbMigrator
+      cd src/ModularMonolith/DbMigrator
       dotnet run --environment Production
   env:
       ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
@@ -176,7 +176,7 @@ private async Task MigrateNewModuleAsync(CancellationToken ct)
   displayName: "Run DB Migrations"
   inputs:
       command: "run"
-      projects: "src/DbMigrator/DbMigrator.csproj"
+      projects: "src/ModularMonolith/DbMigrator/DbMigrator.csproj"
       arguments: "--environment $(Environment)"
 ```
 
