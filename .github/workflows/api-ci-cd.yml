@@ -52,6 +52,9 @@ jobs:
       - name: Compute image name
         run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-api" >> "$GITHUB_ENV"
 
+      - name: Compute migrator image name
+        run: echo "MIGRATOR_IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-dbmigrator" >> "$GITHUB_ENV"
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -73,6 +76,16 @@ jobs:
             ${{ env.IMAGE_NAME }}:develop
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
+      - name: Build and push DB migrator image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: src/ModularMonolith/DbMigrator/Dockerfile
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
+          tags: |
+            ${{ env.MIGRATOR_IMAGE_NAME }}:develop
+            ${{ env.MIGRATOR_IMAGE_NAME }}:${{ github.sha }}
+
   api-deploy:
     name: Deploy API to Docker server
     runs-on: ubuntu-latest
@@ -86,6 +99,7 @@ jobs:
       API_DOCKER_IMAGE: ${{ secrets.API_DOCKER_IMAGE }}
       API_DOCKER_CONTAINER: ${{ secrets.API_DOCKER_CONTAINER }}
       API_DOCKER_HOST_PORT: ${{ secrets.API_DOCKER_HOST_PORT }}
+      API_DBMIGRATOR_IMAGE: ${{ secrets.API_DBMIGRATOR_IMAGE }}
       API_REGISTRY_USERNAME: ${{ secrets.API_REGISTRY_USERNAME }}
       API_REGISTRY_TOKEN: ${{ secrets.API_REGISTRY_TOKEN }}
       API_JWT_SECRET_KEY: ${{ secrets.API_JWT_SECRET_KEY }}
@@ -128,6 +142,7 @@ jobs:
         run: |
           PORT="${DEPLOY_PORT:-22}"
           IMAGE="${API_DOCKER_IMAGE:-ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-api:develop}"
+          MIGRATOR_IMAGE="${API_DBMIGRATOR_IMAGE:-ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-dbmigrator:develop}"
           CONTAINER="${API_DOCKER_CONTAINER:-cleanarchitecture-api}"
           HOST_PORT="${API_DOCKER_HOST_PORT:-5000}"
           TARGET_PATH="${DEPLOY_PATH:-/home/$DEPLOY_USER/cleanarchitecture-api}"
@@ -136,7 +151,9 @@ jobs:
             ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "echo '$API_REGISTRY_TOKEN' | docker login ghcr.io -u '$API_REGISTRY_USERNAME' --password-stdin"
           fi
 
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' \"services:\" \"  cleanarchitecture.api:\" \"    image: $IMAGE\" \"    container_name: $CONTAINER\" \"    restart: always\" \"    ports:\" \"      - '$HOST_PORT:8080'\" \"    environment:\" \"      ASPNETCORE_ENVIRONMENT: Production\" \"      JwtSettings__SecretKey: $API_JWT_SECRET_KEY\" \"      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=$API_SQLSERVER_SA_PASSWORD;TrustServerCertificate=True;Encrypt=False\" \"  sqlserver:\" \"    restart: always\" \"    environment:\" \"      ACCEPT_EULA: Y\" \"      MSSQL_SA_PASSWORD: $API_SQLSERVER_SA_PASSWORD\" > '$TARGET_PATH/docker-compose.deploy.yml'"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' \"services:\" \"  cleanarchitecture.api:\" \"    image: $IMAGE\" \"    container_name: $CONTAINER\" \"    restart: always\" \"    ports:\" \"      - '$HOST_PORT:8080'\" \"    environment:\" \"      ASPNETCORE_ENVIRONMENT: Production\" \"      JwtSettings__SecretKey: $API_JWT_SECRET_KEY\" \"      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=$API_SQLSERVER_SA_PASSWORD;TrustServerCertificate=True;Encrypt=False\" \"  sqlserver:\" \"    restart: always\" \"    environment:\" \"      ACCEPT_EULA: Y\" \"      MSSQL_SA_PASSWORD: $API_SQLSERVER_SA_PASSWORD\" \"  db-migrator:\" \"    image: $MIGRATOR_IMAGE\" \"    environment:\" \"      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=$API_SQLSERVER_SA_PASSWORD;TrustServerCertificate=True;Encrypt=False\" \"      MigrationSettings__SeedData: false\" \"    depends_on:\" \"      - sqlserver\" > '$TARGET_PATH/docker-compose.deploy.yml'"
 
           ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull"
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d --remove-orphans) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d --remove-orphans"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d sqlserver) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d sqlserver"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d cleanarchitecture.api sqlserver --remove-orphans) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d cleanarchitecture.api sqlserver --remove-orphans"
