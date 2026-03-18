@@ -10,16 +10,17 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Catalog.Infrastructure.Persistence;
 using Identity.Infrastructure.Persistence;
 using Auditing.Infrastructure.Persistence;
-using Testcontainers.MsSql;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 
 namespace CleanArchitecture.IntegrationTests.Infrastructure;
 
 /// <summary>
-/// WebApplicationFactory using SQL Server Testcontainers for integration tests
+/// WebApplicationFactory using PostgreSQL Testcontainers for integration tests
 /// </summary>
 public class SqlServerWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private MsSqlContainer? _container;
+    private IContainer? _container;
     private bool _useTestcontainers;
     private string? _connectionString;
 
@@ -35,7 +36,7 @@ public class SqlServerWebApplicationFactory : WebApplicationFactory<Program>, IA
     {
         if (_useTestcontainers && TryEnsureContainer())
         {
-            _connectionString = _container!.GetConnectionString();
+            _connectionString = BuildConnectionString(_container!);
 
             builder.ConfigureAppConfiguration((context, config) =>
             {
@@ -57,13 +58,16 @@ public class SqlServerWebApplicationFactory : WebApplicationFactory<Program>, IA
             if (_useTestcontainers && _connectionString != null)
             {
                 services.AddDbContext<CatalogDbContext>(options =>
-                    options.UseSqlServer(_connectionString));
+                    options.UseNpgsql(_connectionString,
+                        b => b.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")));
 
                 services.AddDbContext<IdentityDbContext>(options =>
-                    options.UseSqlServer(_connectionString));
+                    options.UseNpgsql(_connectionString,
+                        b => b.MigrationsHistoryTable("__EFMigrationsHistory", "identity")));
 
                 services.AddDbContext<AuditingDbContext>(options =>
-                    options.UseSqlServer(_connectionString));
+                    options.UseNpgsql(_connectionString,
+                        b => b.MigrationsHistoryTable("__EFMigrationsHistory", "auditing")));
             }
             else
             {
@@ -131,8 +135,15 @@ public class SqlServerWebApplicationFactory : WebApplicationFactory<Program>, IA
 
         try
         {
-            _container = new MsSqlBuilder()
-                .WithPassword("yourStrong(!)Password")
+            _container = new ContainerBuilder()
+                .WithImage("postgres:16")
+                .WithName($"cleanarchitecture-api-tests-{Guid.NewGuid():N}")
+                .WithEnvironment("POSTGRES_DB", "CleanArchitectureTests")
+                .WithEnvironment("POSTGRES_USER", "postgres")
+                .WithEnvironment("POSTGRES_PASSWORD", "postgres")
+                .WithPortBinding(5432, true)
+                .WithCleanUp(true)
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
                 .Build();
             return true;
         }
@@ -141,5 +152,11 @@ public class SqlServerWebApplicationFactory : WebApplicationFactory<Program>, IA
             _useTestcontainers = false;
             return false;
         }
+    }
+
+    private static string BuildConnectionString(IContainer container)
+    {
+        var port = container.GetMappedPublicPort(5432);
+        return $"Host=localhost;Port={port};Database=CleanArchitectureTests;Username=postgres;Password=postgres";
     }
 }
