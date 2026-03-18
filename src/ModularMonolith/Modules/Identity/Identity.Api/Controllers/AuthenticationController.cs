@@ -62,7 +62,7 @@ public class AuthenticationController : BaseController
 
         var command = new UserLogoutCommand { UserId = userId };
         await _dispatcher.DispatchAsync(command, cancellationToken);
-        return Ok();
+        return Success();
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public class AuthenticationController : BaseController
     public async Task<IActionResult> ConfirmEmail([FromBody] UserConfirmEmailCommand command, CancellationToken cancellationToken)
     {
         await _dispatcher.DispatchAsync(command, cancellationToken);
-        return Ok();
+        return Success();
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class AuthenticationController : BaseController
     public async Task<IActionResult> ResendConfirmation([FromBody] ResendEmailConfirmationCommand command, CancellationToken cancellationToken)
     {
         await _dispatcher.DispatchAsync(command, cancellationToken);
-        return Ok();
+        return Success();
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class AuthenticationController : BaseController
     public async Task<IActionResult> RequestPasswordReset([FromBody] RequestPasswordResetCommand command, CancellationToken cancellationToken)
     {
         await _dispatcher.DispatchAsync(command, cancellationToken);
-        return Ok();
+        return Success();
     }
 
     /// <summary>
@@ -125,6 +125,6 @@ public class AuthenticationController : BaseController
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command, CancellationToken cancellationToken)
     {
         await _dispatcher.DispatchAsync(command, cancellationToken);
-        return Ok();
+        return Success();
     }
 }

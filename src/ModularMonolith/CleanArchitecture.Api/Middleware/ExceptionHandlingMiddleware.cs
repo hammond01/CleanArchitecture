@@ -1,5 +1,5 @@
-using BuildingBlocks.Api.Responses;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 namespace CleanArchitecture.Api.Middleware;
@@ -31,7 +31,7 @@ public class ExceptionHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        context.Response.ContentType = "application/json";
+        context.Response.ContentType = "application/problem+json";
 
         var statusCode = exception switch
         {
@@ -45,13 +45,58 @@ public class ExceptionHandlingMiddleware
 
         context.Response.StatusCode = statusCode;
 
-        var errorMessage = statusCode == StatusCodes.Status500InternalServerError
+        var detail = statusCode == StatusCodes.Status500InternalServerError
             ? "An internal server error occurred"
             : exception.Message;
 
-        var response = ApiResponse.CreateError(errorMessage, statusCode);
+        var problemDetails = CreateProblemDetails(context, exception, statusCode, detail);
 
-        return context.Response.WriteAsJsonAsync(response);
+        return context.Response.WriteAsJsonAsync(
+            problemDetails,
+            options: null,
+            contentType: "application/problem+json");
+    }
+
+    private static ProblemDetails CreateProblemDetails(
+        HttpContext context,
+        Exception exception,
+        int statusCode,
+        string detail)
+    {
+        var problemDetails = new ProblemDetails
+        {
+            Status = statusCode,
+            Title = GetTitle(statusCode),
+            Detail = detail,
+            Instance = context.Request.Path
+        };
+
+        // Compatibility extensions for clients currently reading the legacy fields.
+        problemDetails.Extensions["success"] = false;
+        problemDetails.Extensions["statusCode"] = statusCode;
+        problemDetails.Extensions["error"] = detail;
+        problemDetails.Extensions["traceId"] = context.TraceIdentifier;
+
+        if (exception is ValidationException validationException)
+        {
+            problemDetails.Extensions["errors"] = validationException.Errors
+                .Select(x => x.ErrorMessage)
+                .ToArray();
+        }
+
+        return problemDetails;
+    }
+
+    private static string GetTitle(int statusCode)
+    {
+        return statusCode switch
+        {
+            StatusCodes.Status400BadRequest => "Bad Request",
+            StatusCodes.Status401Unauthorized => "Unauthorized",
+            StatusCodes.Status404NotFound => "Not Found",
+            StatusCodes.Status500InternalServerError => "Internal Server Error",
+            _ => "Request Failed"
+        };
     }
 }
 
