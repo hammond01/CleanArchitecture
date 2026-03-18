@@ -164,6 +164,19 @@ jobs:
           ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "printf '%s\\n' \"services:\" \"  cleanarchitecture.api:\" \"    image: $IMAGE\" \"    container_name: $CONTAINER\" \"    restart: always\" \"    ports:\" \"      - '$HOST_PORT:8080'\" \"    environment:\" \"      ASPNETCORE_ENVIRONMENT: Production\" \"      JwtSettings__SecretKey: $API_JWT_SECRET_KEY\" \"      JwtSettings__Issuer: $API_JWT_ISSUER\" \"      JwtSettings__Audience: $API_JWT_AUDIENCE\" \"      ApiSecurity__AllowedOrigins__0: $API_ALLOWED_ORIGINS\" \"      ApiSecurity__AllowCredentials: $ALLOW_CREDENTIALS\" \"      ApiSecurity__KnownProxies__0: $KNOWN_PROXIES\" \"      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=$API_SQLSERVER_SA_PASSWORD;TrustServerCertificate=True;Encrypt=False\" \"  sqlserver:\" \"    restart: always\" \"    environment:\" \"      ACCEPT_EULA: Y\" \"      MSSQL_SA_PASSWORD: $API_SQLSERVER_SA_PASSWORD\" \"  db-migrator:\" \"    image: $MIGRATOR_IMAGE\" \"    environment:\" \"      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=$API_SQLSERVER_SA_PASSWORD;TrustServerCertificate=True;Encrypt=False\" \"      MigrationSettings__SeedData: false\" \"    depends_on:\" \"      - sqlserver\" > '$TARGET_PATH/docker-compose.deploy.yml'"
 
           ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "docker rm -f cleanarchitecture-sqlserver 2>/dev/null || true"
           ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d sqlserver) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d sqlserver"
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator"
+          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "for i in {1..30}; do if docker logs cleanarchitecture-sqlserver 2>&1 | grep -q 'SQL Server is now ready for client connections'; then exit 0; fi; sleep 5; done; echo 'SQL Server did not become ready in time'; docker logs cleanarchitecture-sqlserver --tail 200; exit 1"
+
+          MIGRATION_EXIT=1
+          for attempt in 1 2 3; do
+            ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator" && MIGRATION_EXIT=0 && break
+            echo "db-migrator attempt $attempt failed; retrying in 15s..."
+            sleep 15
+          done
+          if [ "$MIGRATION_EXIT" -ne 0 ]; then
+            echo "db-migrator failed after retries"
+            exit 1
+          fi
+
           ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d cleanarchitecture.api sqlserver --remove-orphans) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d cleanarchitecture.api sqlserver --remove-orphans"
