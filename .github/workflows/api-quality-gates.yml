@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
-          cache: true
+
 
       - name: Guard dispatcher layer against dynamic keyword
         run: pwsh ./.scripts/guard-dispatcher-no-dynamic.ps1
@@ -46,7 +46,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
-          cache: true
+
 
       - name: Restore API project
         run: dotnet restore src/ModularMonolith/CleanArchitecture.Api/CleanArchitecture.Api.csproj --configfile NuGet.Config
@@ -65,7 +65,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
-          cache: true
+
 
       - name: Restore unit test project
         run: dotnet restore tests/CleanArchitecture.UnitTests/CleanArchitecture.UnitTests.csproj --configfile NuGet.Config
@@ -84,7 +84,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
-          cache: true
+
 
       - name: Restore integration test project
         run: dotnet restore tests/CleanArchitecture.IntegrationTests/CleanArchitecture.IntegrationTests.csproj --configfile NuGet.Config
