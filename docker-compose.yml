@@ -1,6 +1,6 @@
 services:
   cleanarchitecture.api:
-    image: ${DOCKER_REGISTRY-}cleanarchitectureapi
+    image: ${DOCKER_REGISTRY:-}cleanarchitectureapi
     build:
       context: .
       dockerfile: src/ModularMonolith/CleanArchitecture.Api/Dockerfile
