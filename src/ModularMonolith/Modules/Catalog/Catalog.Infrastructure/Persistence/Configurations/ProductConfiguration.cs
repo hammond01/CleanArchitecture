@@ -24,7 +24,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMaxLength(20);
 
         builder.Property(p => p.UnitPrice)
-            .HasColumnType("money");
+            .HasColumnType("numeric(18,2)");
 
         builder.Property(p => p.Discontinued)
             .IsRequired();

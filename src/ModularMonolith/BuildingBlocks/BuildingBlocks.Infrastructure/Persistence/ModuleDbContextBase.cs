@@ -272,7 +272,7 @@ public abstract class ModuleDbContextBase : DbContext, IUnitOfWork
 
         builder.Property(x => x.Log)
             .IsRequired()
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
         builder.Property(x => x.OccurredAtUtc)
             .IsRequired();

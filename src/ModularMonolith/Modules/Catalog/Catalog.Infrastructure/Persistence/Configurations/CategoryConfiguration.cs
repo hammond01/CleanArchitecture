@@ -20,7 +20,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasMaxLength(250);
 
         builder.Property(c => c.Picture)
-            .HasColumnType("image");
+            .HasColumnType("bytea");
 
         builder.Property(c => c.PictureLink)
             .HasMaxLength(100);

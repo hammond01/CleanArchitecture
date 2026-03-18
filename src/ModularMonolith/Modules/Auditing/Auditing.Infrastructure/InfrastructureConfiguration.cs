@@ -16,7 +16,8 @@ public static class InfrastructureConfiguration
     {
         // Register DbContext
         services.AddDbContext<AuditingDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseNpgsql(connectionString,
+                builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "auditing")));
 
         // Register repository
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();

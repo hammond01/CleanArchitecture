@@ -183,7 +183,7 @@ builder.Services.AddApplicationServices();
 
 // Register modules
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? "Server=.;Database=CleanArchitecture;Integrated Security=true;TrustServerCertificate=true;";
+    ?? "Host=localhost;Port=5432;Database=CleanArchitecture;Username=postgres;Password=postgres;";
 
 builder.Services.AddCatalogModule(builder.Configuration);
 builder.Services.AddIdentityModule(builder.Configuration, builder.Environment, connectionString);

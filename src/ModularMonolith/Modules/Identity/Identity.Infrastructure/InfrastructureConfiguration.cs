@@ -29,7 +29,8 @@ public static class InfrastructureConfiguration
     {
         // Register DbContext
         services.AddDbContext<IdentityDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseNpgsql(connectionString,
+                builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "identity")));
 
         // Register repository
         services.AddScoped<IIdentityRepository, IdentityRepository>();

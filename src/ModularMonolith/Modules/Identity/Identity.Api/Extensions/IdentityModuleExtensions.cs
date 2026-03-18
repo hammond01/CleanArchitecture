@@ -21,7 +21,7 @@ public static class IdentityModuleExtensions
         services.AddIdentityApplicationServices();
 
         // Add infrastructure services
-        var connString = connectionString ?? "Server=.;Database=CleanArchitectureIdentity;Integrated Security=true;TrustServerCertificate=true;";
+        var connString = connectionString ?? "Host=localhost;Port=5432;Database=CleanArchitectureIdentity;Username=postgres;Password=postgres;";
         services.AddIdentityInfrastructureServices(configuration, environment, connString);
 
         return services;

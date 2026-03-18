@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Auditing.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialAuditing : Migration
+    public partial class InitialAuditing_PostgresBaseline : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,13 +19,13 @@ namespace Auditing.Infrastructure.Persistence.Migrations
                 schema: "auditing",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Action = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ObjectId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Log = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedDateTime = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true)
+                    Id = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    UserId = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Action = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    ObjectId = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Log = table.Column<string>(type: "text", nullable: false),
+                    CreatedDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDateTime = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

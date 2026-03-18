@@ -20,7 +20,8 @@ public static class CatalogModuleExtensions
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
         services.AddDbContext<CatalogDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseNpgsql(connectionString,
+                builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")));
 
         // Register UnitOfWork
         services.AddScoped<BuildingBlocks.Domain.Repositories.IUnitOfWork>(provider =>

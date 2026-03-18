@@ -31,7 +31,7 @@ public class AuditLogEntryConfiguration : IEntityTypeConfiguration<AuditLogEntry
 
         builder.Property(x => x.Log)
             .IsRequired()
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
         builder.Property(x => x.CreatedDateTime).IsRequired();
 

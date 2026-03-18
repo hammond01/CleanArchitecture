@@ -45,15 +45,15 @@ try
 
             // Register DbContexts
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(connectionString,
+                options.UseNpgsql(connectionString,
                     b => b.MigrationsHistoryTable("__EFMigrationsHistory", "identity")));
 
             services.AddDbContext<CatalogDbContext>(options =>
-                options.UseSqlServer(connectionString,
+                options.UseNpgsql(connectionString,
                     b => b.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")));
 
             services.AddDbContext<AuditingDbContext>(options =>
-                options.UseSqlServer(connectionString,
+                options.UseNpgsql(connectionString,
                     b => b.MigrationsHistoryTable("__EFMigrationsHistory", "auditing")));
 
             // Register Migration Service
