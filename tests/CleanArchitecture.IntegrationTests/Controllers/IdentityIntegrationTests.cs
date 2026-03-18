@@ -502,6 +502,18 @@ public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFac
 
         first.StatusCode.Should().Be(HttpStatusCode.OK);
         second.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        second.Content.Headers.ContentType?.MediaType.Should().Be("application/problem+json");
+
+        var errorContent = await second.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(errorContent);
+        var root = doc.RootElement;
+
+        root.GetProperty("title").GetString().Should().Be("Bad Request");
+        root.GetProperty("status").GetInt32().Should().Be(400);
+        root.GetProperty("detail").GetString().Should().NotBeNullOrWhiteSpace();
+        root.GetProperty("success").GetBoolean().Should().BeFalse();
+        root.GetProperty("statusCode").GetInt32().Should().Be(400);
+        root.GetProperty("error").GetString().Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
