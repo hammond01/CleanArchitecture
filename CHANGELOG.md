@@ -9,15 +9,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- (Future features will be listed here)
+- `global.json` to pin SDK feature band to .NET 8 (`8.0.100` + `latestFeature`) for consistent local/CI toolchain selection.
+- API quality-gate workflow: `.github/workflows/api-quality-gates.yml` with independent required checks:
+  - `dispatcher-dynamic-guard`
+  - `api-build`
+  - `api-unit-tests`
+  - `api-integration-tests`
+- Dispatcher-layer dynamic guard script: `.scripts/guard-dispatcher-no-dynamic.ps1`.
+- Response and contract documentation:
+  - `docs/API_RESPONSE_GUIDELINES.md`
+  - `docs/OPENAPI_CONTRACT_REVIEW_PHASE2.md`
 
 ### Changed
 
-- (Future changes will be listed here)
+- Standardized middleware-generated `ProblemDetails` creation through `ApiProblemDetailsFactory`.
+- Rate-limit (`429`) responses now include the same compatibility extensions already used in exception middleware (`success`, `statusCode`, `error`, `traceId`).
+- Release/test documentation baselines updated (unit: `36/36`, integration: `44/44`).
+- API release checklist tightened for required quality-gate checks and response-contract requirements.
 
 ### Fixed
 
-- (Future fixes will be listed here)
+- Removed inconsistency between exception and throttling error payload extension fields.
+
+### Client Migration Notes
+
+- No breaking response-contract change is introduced in this stabilization pass.
+- `429` payloads now include additional compatibility fields (`success`, `statusCode`, `error`, `traceId`); this is additive and backward compatible.
+- Existing endpoint success-body shapes and model-validation error envelope behavior remain unchanged.
 
 ---
 

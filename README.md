@@ -91,7 +91,7 @@ As of the current codebase, this template includes:
 The repository already has a meaningful testing setup, but it is **green end-to-end in the current baseline**:
 
 - `CleanArchitecture.UnitTests`: **36 passed / 0 failed**
-- `CleanArchitecture.IntegrationTests`: **40 passed / 0 failed**
+- `CleanArchitecture.IntegrationTests`: **44 passed / 0 failed**
 
 So the current status is best described as:
 
@@ -458,7 +458,7 @@ https://localhost:<port>/swagger
 dotnet test ModularMonolith.sln
 ```
 
-> Note: the current test baseline is not fully green yet. See [Testing](#testing).
+> Current baseline is green in repository test docs. See [Testing](#testing).
 
 ---
 
@@ -471,17 +471,7 @@ This repository includes both unit and integration test projects.
 Based on the current codebase:
 
 - **Unit tests:** 36 total, **36 passed / 0 failed**
-- **Integration tests:** 38 total, **40 passed / 0 failed**
-
-### Known issues from the current test run
-
-#### Unit test failures
-
-The failing unit tests are currently centered around `DispatcherTests`, where validator enumeration is not registered and the tests throw `InvalidOperationException` instead of the expected validation behavior.
-
-#### Integration test failure
-
-The integration suite is close to green but still has **1 failing test** and should not currently be documented as fully passing.
+- **Integration tests:** 44 total, **44 passed / 0 failed**
 
 ### What the tests already cover
 
@@ -512,6 +502,8 @@ Module extension guides:
 - `docs/ADDING_A_MODULE.md`
 - `docs/UI_INTEGRATION_PLAN.md`
 - `docs/API_RELEASE_CHECKLIST.md`
+- `docs/API_RESPONSE_GUIDELINES.md`
+- `docs/OPENAPI_CONTRACT_REVIEW_PHASE2.md`
 
 ---
 
@@ -522,7 +514,6 @@ Module extension guides:
 Focus areas:
 
 - align docs with code
-- fix the current failing test baseline
 - polish quick start
 - improve extension guidance
 - stabilize API baseline

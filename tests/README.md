@@ -12,7 +12,7 @@ This directory contains the automated tests for the Clean Architecture modular m
 ## Current Status (latest baseline)
 
 - **Unit tests:** 36 total, **36 passed / 0 failed**
-- **Integration tests:** 40 total, **40 passed / 0 failed**
+- **Integration tests:** 44 total, **44 passed / 0 failed**
 
 The baseline is currently **fully green**.
 

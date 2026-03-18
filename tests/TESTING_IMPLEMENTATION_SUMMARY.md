@@ -7,7 +7,7 @@ Testing is fully implemented and currently stable in this repository.
 Latest observed baseline:
 
 - **Unit tests:** 36 total, **36 passed / 0 failed**
-- **Integration tests:** 40 total, **40 passed / 0 failed**
+- **Integration tests:** 44 total, **44 passed / 0 failed**
 
 This gives the template a reliable quality signal for portfolio/starter-kit usage.
 
