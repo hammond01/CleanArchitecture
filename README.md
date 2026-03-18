@@ -504,6 +504,7 @@ Module extension guides:
 - `docs/API_RELEASE_CHECKLIST.md`
 - `docs/API_RESPONSE_GUIDELINES.md`
 - `docs/OPENAPI_CONTRACT_REVIEW_PHASE2.md`
+- `docs/DEPLOY_DOCKER_APACHE_GITHUB.md`
 
 ---
 
