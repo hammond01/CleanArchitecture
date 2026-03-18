@@ -7,6 +7,7 @@ using Auditing.Api.Extensions;
 using BuildingBlocks.Application;
 using BuildingBlocks.Application.Auditing;
 using BuildingBlocks.Application.Security;
+using BuildingBlocks.Api.Responses;
 using Catalog.Infrastructure.Persistence;
 using CleanArchitecture.Api.Auditing;
 using CleanArchitecture.Api.Configuration;
@@ -126,13 +127,11 @@ builder.Services.AddRateLimiter(options =>
     options.OnRejected = async (context, token) =>
     {
         context.HttpContext.Response.ContentType = "application/problem+json";
-        var problem = new ProblemDetails
-        {
-            Title = "Too many requests.",
-            Status = StatusCodes.Status429TooManyRequests,
-            Detail = "The request rate limit for this endpoint has been exceeded.",
-            Instance = context.HttpContext.Request.Path
-        };
+        var problem = ApiProblemDetailsFactory.Create(
+            context.HttpContext,
+            StatusCodes.Status429TooManyRequests,
+            "Too many requests.",
+            "The request rate limit for this endpoint has been exceeded.");
 
         await context.HttpContext.Response.WriteAsJsonAsync(problem, cancellationToken: token);
     };

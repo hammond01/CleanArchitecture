@@ -1,3 +1,4 @@
+using BuildingBlocks.Api.Responses;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -63,28 +64,16 @@ public class ExceptionHandlingMiddleware
         int statusCode,
         string detail)
     {
-        var problemDetails = new ProblemDetails
-        {
-            Status = statusCode,
-            Title = GetTitle(statusCode),
-            Detail = detail,
-            Instance = context.Request.Path
-        };
+        var validationErrors = exception is ValidationException validationException
+            ? validationException.Errors.Select(x => x.ErrorMessage)
+            : null;
 
-        // Compatibility extensions for clients currently reading the legacy fields.
-        problemDetails.Extensions["success"] = false;
-        problemDetails.Extensions["statusCode"] = statusCode;
-        problemDetails.Extensions["error"] = detail;
-        problemDetails.Extensions["traceId"] = context.TraceIdentifier;
-
-        if (exception is ValidationException validationException)
-        {
-            problemDetails.Extensions["errors"] = validationException.Errors
-                .Select(x => x.ErrorMessage)
-                .ToArray();
-        }
-
-        return problemDetails;
+        return ApiProblemDetailsFactory.Create(
+            context,
+            statusCode,
+            GetTitle(statusCode),
+            detail,
+            validationErrors);
     }
 
     private static string GetTitle(int statusCode)
