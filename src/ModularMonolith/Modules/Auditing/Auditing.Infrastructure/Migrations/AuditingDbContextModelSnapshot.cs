@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Auditing.Infrastructure.Persistence.Migrations
+namespace Auditing.Infrastructure.Migrations
 {
     [DbContext(typeof(AuditingDbContext))]
     partial class AuditingDbContextModelSnapshot : ModelSnapshot
@@ -27,41 +27,51 @@ namespace Auditing.Infrastructure.Persistence.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("id");
 
                     b.Property<string>("Action")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("action");
 
                     b.Property<DateTimeOffset>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date_time");
 
                     b.Property<string>("Log")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("log");
 
                     b.Property<string>("ObjectId")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("object_id");
 
                     b.Property<DateTimeOffset?>("UpdatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_date_time");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_audit_log_entries");
 
-                    b.HasIndex("Action");
+                    b.HasIndex("Action")
+                        .HasDatabaseName("ix_audit_log_entries_action");
 
                     b.HasIndex("UserId", "CreatedDateTime")
-                        .IsDescending(false, true);
+                        .IsDescending(false, true)
+                        .HasDatabaseName("ix_audit_log_entries_user_id_created_date_time");
 
-                    b.ToTable("AuditLogEntries", "auditing");
+                    b.ToTable("audit_log_entries", "auditing");
                 });
 #pragma warning restore 612, 618
         }

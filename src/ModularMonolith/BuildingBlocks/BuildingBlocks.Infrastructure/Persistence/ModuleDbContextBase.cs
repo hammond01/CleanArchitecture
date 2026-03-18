@@ -238,7 +238,7 @@ public abstract class ModuleDbContextBase : DbContext, IUnitOfWork
 
     private void ConfigureAuditOutbox(EntityTypeBuilder<AuditOutboxMessage> builder)
     {
-        builder.ToTable("AuditOutboxMessages", ModuleSchema);
+        builder.ToTable("audit_outbox_messages", ModuleSchema);
 
         builder.HasKey(x => x.Id);
 

@@ -12,7 +12,8 @@ public sealed class CatalogDbContextFactory : IDesignTimeDbContextFactory<Catalo
 
         optionsBuilder.UseNpgsql(
             connectionString,
-            builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "catalog"));
+            builder => builder.MigrationsHistoryTable("__ef_migrations_history", "catalog"))
+            .UseSnakeCaseNamingConvention();
 
         return new CatalogDbContext(optionsBuilder.Options);
     }
@@ -32,3 +33,4 @@ public sealed class CatalogDbContextFactory : IDesignTimeDbContextFactory<Catalo
             ?? "Host=localhost;Port=5432;Database=CleanArchitecture;Username=postgres;Password=postgres";
     }
 }
+

@@ -159,7 +159,7 @@ public static class ${ModuleName}ModuleExtensions
             ?? configuration.GetConnectionString("Default");
             
         services.AddDbContext<${ModuleName}DbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseNpgsql(connectionString));
 
         // Register repositories
         // services.AddScoped<IRepository, Repository>();

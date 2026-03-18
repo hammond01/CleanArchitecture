@@ -21,7 +21,8 @@ public static class CatalogModuleExtensions
 
         services.AddDbContext<CatalogDbContext>(options =>
             options.UseNpgsql(connectionString,
-                builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")));
+                builder => builder.MigrationsHistoryTable("__ef_migrations_history", "catalog"))
+                .UseSnakeCaseNamingConvention());
 
         // Register UnitOfWork
         services.AddScoped<BuildingBlocks.Domain.Repositories.IUnitOfWork>(provider =>
@@ -40,3 +41,4 @@ public static class CatalogModuleExtensions
         return services;
     }
 }
+

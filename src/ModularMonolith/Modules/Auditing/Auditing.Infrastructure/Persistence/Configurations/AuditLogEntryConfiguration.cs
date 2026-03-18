@@ -44,7 +44,7 @@ public class AuditLogEntryConfiguration : IEntityTypeConfiguration<AuditLogEntry
         builder.HasIndex(x => x.Action);
 
         // Table name
-        builder.ToTable("AuditLogEntries", "auditing");
+        builder.ToTable("audit_log_entries", "auditing");
     }
 }
 

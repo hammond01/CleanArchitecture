@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Catalog.Infrastructure.Persistence.Migrations
+namespace Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20260318132428_InitialCatalog_PostgresBaseline")]
-    partial class InitialCatalog_PostgresBaseline
+    [Migration("20260318164001_InitialCatalog_PostgresSnakeCase")]
+    partial class InitialCatalog_PostgresSnakeCase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,158 +30,193 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
+                        .HasColumnType("character varying(32)")
+                        .HasColumnName("id");
 
                     b.Property<string>("Action")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("action");
 
                     b.Property<int>("AttemptCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("attempt_count");
 
                     b.Property<string>("ChangeType")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("change_type");
 
                     b.Property<string>("EntityId")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("entity_id");
 
                     b.Property<string>("EntityName")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("entity_name");
 
                     b.Property<string>("LastError")
                         .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("last_error");
 
                     b.Property<string>("Log")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("log");
 
                     b.Property<string>("ModuleName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("module_name");
 
                     b.Property<DateTimeOffset>("OccurredAtUtc")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("occurred_at_utc");
 
                     b.Property<DateTimeOffset?>("ProcessedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("processed_date_time");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_audit_outbox_messages");
 
-                    b.HasIndex("ProcessedDateTime", "OccurredAtUtc");
+                    b.HasIndex("ProcessedDateTime", "OccurredAtUtc")
+                        .HasDatabaseName("ix_audit_outbox_messages_processed_date_time_occurred_at_utc");
 
-                    b.ToTable("AuditOutboxMessages", "catalog");
+                    b.ToTable("audit_outbox_messages", "catalog");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.Category", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("id");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("category_name");
 
                     b.Property<DateTimeOffset>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date_time");
 
                     b.Property<string>("Description")
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("description");
 
                     b.Property<byte[]>("Picture")
-                        .HasColumnType("bytea");
+                        .HasColumnType("bytea")
+                        .HasColumnName("picture");
 
                     b.Property<string>("PictureLink")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("picture_link");
 
                     b.Property<int>("RowId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("row_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RowId"));
 
                     b.Property<DateTimeOffset?>("UpdatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_date_time");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_categories");
 
                     b.HasIndex("CategoryName")
-                        .HasDatabaseName("CategoryName");
+                        .HasDatabaseName("ix_categories_category_name");
 
-                    b.ToTable("Categories", "catalog");
+                    b.ToTable("categories", "catalog");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.Product", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("id");
 
                     b.Property<string>("CategoryId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("CategoryID");
+                        .HasColumnName("category_id");
 
                     b.Property<DateTimeOffset>("CreatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date_time");
 
                     b.Property<bool>("Discontinued")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("discontinued");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasMaxLength(40)
-                        .HasColumnType("character varying(40)");
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("product_name");
 
                     b.Property<string>("QuantityPerUnit")
                         .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("quantity_per_unit");
 
                     b.Property<short?>("ReorderLevel")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("reorder_level");
 
                     b.Property<int>("RowId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("row_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RowId"));
 
                     b.Property<decimal?>("UnitPrice")
-                        .HasColumnType("numeric(18,2)");
+                        .HasColumnType("numeric(18,2)")
+                        .HasColumnName("unit_price");
 
                     b.Property<short?>("UnitsInStock")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("units_in_stock");
 
                     b.Property<short?>("UnitsOnOrder")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("units_on_order");
 
                     b.Property<DateTimeOffset?>("UpdatedDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_date_time");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_products");
 
                     b.HasIndex("CategoryId")
-                        .HasDatabaseName("CategoryID");
+                        .HasDatabaseName("ix_products_category_id");
 
                     b.HasIndex("ProductName")
-                        .HasDatabaseName("ProductName");
+                        .HasDatabaseName("ix_products_product_name");
 
-                    b.ToTable("Products", "catalog");
+                    b.ToTable("products", "catalog");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Entities.Product", b =>
@@ -190,7 +225,8 @@ namespace Catalog.Infrastructure.Persistence.Migrations
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_products_categories_category_id");
 
                     b.Navigation("Category");
                 });

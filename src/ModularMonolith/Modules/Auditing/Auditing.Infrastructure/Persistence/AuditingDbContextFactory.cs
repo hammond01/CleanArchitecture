@@ -12,7 +12,8 @@ public sealed class AuditingDbContextFactory : IDesignTimeDbContextFactory<Audit
 
         optionsBuilder.UseNpgsql(
             connectionString,
-            builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "auditing"));
+            builder => builder.MigrationsHistoryTable("__ef_migrations_history", "auditing"))
+            .UseSnakeCaseNamingConvention();
 
         return new AuditingDbContext(optionsBuilder.Options);
     }
@@ -32,3 +33,4 @@ public sealed class AuditingDbContextFactory : IDesignTimeDbContextFactory<Audit
             ?? "Host=localhost;Port=5432;Database=CleanArchitecture;Username=postgres;Password=postgres";
     }
 }
+

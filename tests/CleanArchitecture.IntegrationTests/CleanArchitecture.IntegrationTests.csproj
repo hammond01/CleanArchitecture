@@ -19,7 +19,6 @@
     <PackageReference Include="AutoFixture.AutoMoq" />
     <PackageReference Include="Bogus" />
     <PackageReference Include="Testcontainers" />
-    <PackageReference Include="Testcontainers.MsSql" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
   </ItemGroup>

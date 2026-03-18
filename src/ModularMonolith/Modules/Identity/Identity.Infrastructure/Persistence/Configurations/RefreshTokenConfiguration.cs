@@ -35,6 +35,6 @@ public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
         builder.HasIndex(x => x.UserId);
 
         // Table name
-        builder.ToTable("RefreshTokens");
+        builder.ToTable("refresh_tokens");
     }
 }

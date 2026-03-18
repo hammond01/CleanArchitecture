@@ -12,7 +12,8 @@ public sealed class IdentityDbContextFactory : IDesignTimeDbContextFactory<Ident
 
         optionsBuilder.UseNpgsql(
             connectionString,
-            builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "identity"));
+            builder => builder.MigrationsHistoryTable("__ef_migrations_history", "identity"))
+            .UseSnakeCaseNamingConvention();
 
         return new IdentityDbContext(optionsBuilder.Options);
     }
@@ -32,3 +33,4 @@ public sealed class IdentityDbContextFactory : IDesignTimeDbContextFactory<Ident
             ?? "Host=localhost;Port=5432;Database=CleanArchitecture;Username=postgres;Password=postgres";
     }
 }
+

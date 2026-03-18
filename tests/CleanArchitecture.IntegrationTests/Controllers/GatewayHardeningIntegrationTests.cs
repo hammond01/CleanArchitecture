@@ -5,11 +5,11 @@ using FluentAssertions;
 
 namespace CleanArchitecture.IntegrationTests.Controllers;
 
-public class GatewayHardeningIntegrationTests : IClassFixture<SqlServerWebApplicationFactory>
+public class GatewayHardeningIntegrationTests : IClassFixture<PostgresWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public GatewayHardeningIntegrationTests(SqlServerWebApplicationFactory factory)
+    public GatewayHardeningIntegrationTests(PostgresWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
     }

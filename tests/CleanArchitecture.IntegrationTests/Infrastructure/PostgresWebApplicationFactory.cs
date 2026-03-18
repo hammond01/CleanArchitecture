@@ -18,13 +18,13 @@ namespace CleanArchitecture.IntegrationTests.Infrastructure;
 /// <summary>
 /// WebApplicationFactory using PostgreSQL Testcontainers for integration tests
 /// </summary>
-public class SqlServerWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
+public class PostgresWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
     private IContainer? _container;
     private bool _useTestcontainers;
     private string? _connectionString;
 
-    public SqlServerWebApplicationFactory()
+    public PostgresWebApplicationFactory()
     {
         _useTestcontainers = string.Equals(
             Environment.GetEnvironmentVariable("USE_TESTCONTAINERS"),

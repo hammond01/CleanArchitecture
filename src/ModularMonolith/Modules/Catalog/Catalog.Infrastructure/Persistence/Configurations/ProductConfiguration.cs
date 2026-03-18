@@ -8,7 +8,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.ToTable("Products", "catalog");
+        builder.ToTable("products", "catalog");
 
         builder.HasKey(p => p.Id);
 
@@ -17,8 +17,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMaxLength(40);
 
         builder.Property(p => p.CategoryId)
-            .IsRequired()
-            .HasColumnName("CategoryID");
+            .IsRequired();
 
         builder.Property(p => p.QuantityPerUnit)
             .HasMaxLength(20);
@@ -30,8 +29,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRequired();
 
         // Indexes
-        builder.HasIndex(p => p.ProductName).HasDatabaseName("ProductName");
-        builder.HasIndex(p => p.CategoryId).HasDatabaseName("CategoryID");
+        builder.HasIndex(p => p.ProductName);
+        builder.HasIndex(p => p.CategoryId);
 
         // Relationships
         builder.HasOne(p => p.Category)

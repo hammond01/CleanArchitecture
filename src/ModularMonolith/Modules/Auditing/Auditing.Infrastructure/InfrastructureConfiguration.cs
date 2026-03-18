@@ -17,7 +17,8 @@ public static class InfrastructureConfiguration
         // Register DbContext
         services.AddDbContext<AuditingDbContext>(options =>
             options.UseNpgsql(connectionString,
-                builder => builder.MigrationsHistoryTable("__EFMigrationsHistory", "auditing")));
+                builder => builder.MigrationsHistoryTable("__ef_migrations_history", "auditing"))
+                .UseSnakeCaseNamingConvention());
 
         // Register repository
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
@@ -25,3 +26,4 @@ public static class InfrastructureConfiguration
         return services;
     }
 }
+

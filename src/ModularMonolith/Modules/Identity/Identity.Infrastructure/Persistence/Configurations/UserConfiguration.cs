@@ -49,6 +49,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(x => x.Email).IsUnique();
 
         // Table name
-        builder.ToTable("Users");
+        builder.ToTable("users");
     }
 }

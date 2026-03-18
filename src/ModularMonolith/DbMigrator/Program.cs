@@ -1,4 +1,4 @@
-﻿using Auditing.Infrastructure.Persistence;
+using Auditing.Infrastructure.Persistence;
 using Catalog.Infrastructure.Persistence;
 using DbMigrator;
 using Identity.Infrastructure.Persistence;
@@ -46,15 +46,18 @@ try
             // Register DbContexts
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(connectionString,
-                    b => b.MigrationsHistoryTable("__EFMigrationsHistory", "identity")));
+                    b => b.MigrationsHistoryTable("__ef_migrations_history", "identity"))
+                    .UseSnakeCaseNamingConvention());
 
             services.AddDbContext<CatalogDbContext>(options =>
                 options.UseNpgsql(connectionString,
-                    b => b.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")));
+                    b => b.MigrationsHistoryTable("__ef_migrations_history", "catalog"))
+                    .UseSnakeCaseNamingConvention());
 
             services.AddDbContext<AuditingDbContext>(options =>
                 options.UseNpgsql(connectionString,
-                    b => b.MigrationsHistoryTable("__EFMigrationsHistory", "auditing")));
+                    b => b.MigrationsHistoryTable("__ef_migrations_history", "auditing"))
+                    .UseSnakeCaseNamingConvention());
 
             // Register Migration Service
             services.Configure<MigrationSettings>(configuration.GetSection("MigrationSettings"));
@@ -82,4 +85,5 @@ finally
 {
     await Log.CloseAndFlushAsync();
 }
+
 
