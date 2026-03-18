@@ -83,6 +83,16 @@ This is where cross-cutting concerns live, such as:
 - common API/controller infrastructure
 - security and auditing abstractions
 
+#### Dispatcher and Handler Registration
+
+The dispatcher in `BuildingBlocks.Application` now uses typed handler invocation for commands/queries and resolves domain-event handlers directly from DI as `IEnumerable<IDomainEventHandler<TEvent>>`.
+
+Registration model:
+
+- `AddApplicationServices()` is called once in `CleanArchitecture.Api` (composition root)
+- each module registers only module-specific handlers/validators via `AddHandlersFromAssembly(...)` and FluentValidation assembly scanning
+- no static mutable domain-event handler registry is used
+
 ### API Host
 
 `src/ModularMonolith/CleanArchitecture.Api/` is the composition root.

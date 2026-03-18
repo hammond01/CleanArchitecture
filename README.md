@@ -140,8 +140,9 @@ Once the API foundation is stable enough, the next step is to evaluate and imple
 - Clean Architecture layering
 - Modular Monolith structure
 - DDD-inspired module boundaries
-- Custom dispatcher for command/query execution
+- Custom dispatcher for command/query execution with DI-resolved domain-event handlers
 - Shared building blocks for common concerns
+- Single composition-root registration of `AddApplicationServices()` in API host
 
 ### Platform Features
 
