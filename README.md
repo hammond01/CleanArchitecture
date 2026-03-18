@@ -411,7 +411,7 @@ This keeps the current phase focused on making the backend/template baseline tru
 ### Prerequisites
 
 - .NET 8 SDK
-- SQL Server / SQL Server Express
+- PostgreSQL 16+ (or Docker)
 - Git
 
 ### 1. Clone the repository
@@ -431,11 +431,18 @@ Update the appropriate configuration file, for example:
 Set:
 
 - `ConnectionStrings:DefaultConnection`
+- format: `Host=<host>;Port=5432;Database=CleanArchitecture;Username=<user>;Password=<password>`
 
 ### 3. Run database migrations
 
 ```bash
 dotnet run --project src/ModularMonolith/DbMigrator
+```
+
+Or run everything with Docker Compose (PostgreSQL + DbMigrator + API):
+
+```bash
+docker compose up --build
 ```
 
 ### 4. Run the API
@@ -459,6 +466,13 @@ dotnet test ModularMonolith.sln
 ```
 
 > Current baseline is green in repository test docs. See [Testing](#testing).
+
+### PostgreSQL Migration Notes
+
+- Baseline migrations are now PostgreSQL-specific for Identity, Catalog, and Auditing modules.
+- The previous SQL Server migration files were replaced on branch `feat/postgres-migration`.
+- Migration history is isolated per schema via `__EFMigrationsHistory` in `identity`, `catalog`, and `auditing`.
+- See [docs/POSTGRES_MIGRATION_NOTES.md](docs/POSTGRES_MIGRATION_NOTES.md) for local/staging run steps.
 
 ---
 

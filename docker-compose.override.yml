@@ -13,6 +13,6 @@ services:
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
 
-  sqlserver:
+  postgres:
     ports:
-      - "1433:1433"
+      - "5432:5432"
