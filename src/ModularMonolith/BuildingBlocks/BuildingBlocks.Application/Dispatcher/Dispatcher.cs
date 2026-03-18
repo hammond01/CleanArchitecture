@@ -185,6 +185,17 @@ public class Dispatcher : IDispatcher
 
     private static TResult CastResult<TResult>(object? result, string requestName, string requestType)
     {
+        if (result is null)
+        {
+            if (default(TResult) is null)
+            {
+                return default!;
+            }
+
+            throw new InvalidOperationException(
+                $"❌ Handler for {requestType} '{requestName}' returned null for non-nullable result type.");
+        }
+
         if (result is TResult typedResult)
         {
             return typedResult;

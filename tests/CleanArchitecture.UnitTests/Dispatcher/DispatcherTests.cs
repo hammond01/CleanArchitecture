@@ -80,6 +80,23 @@ public class DispatcherTests
     }
 
     [Fact]
+    public async Task DispatchAsync_WithNullQueryResult_ReturnsNull()
+    {
+        // Arrange
+        var query = new NullableResultQuery { Value = "missing" };
+        var dispatcher = CreateDispatcher(services =>
+        {
+            services.AddScoped<IQueryHandler<NullableResultQuery, string?>, NullableResultQueryHandler>();
+        });
+
+        // Act
+        var result = await dispatcher.DispatchAsync(query);
+
+        // Assert
+        result.Should().BeNull();
+    }
+
+    [Fact]
     public async Task DispatchAsync_WithMissingQueryHandler_ThrowsInvalidOperationException()
     {
         // Arrange
@@ -184,6 +201,11 @@ public class DispatcherTests
         public string Value { get; init; } = string.Empty;
     }
 
+    public record NullableResultQuery : IQuery<string?>
+    {
+        public string Value { get; init; } = string.Empty;
+    }
+
     public sealed class TestQueryHandler : IQueryHandler<TestQuery, string>
     {
         public Task<string> HandleAsync(TestQuery query, CancellationToken cancellationToken = default)
@@ -197,6 +219,14 @@ public class DispatcherTests
         public Task<int> HandleAsync(TestCommand command, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(42);
+        }
+    }
+
+    public sealed class NullableResultQueryHandler : IQueryHandler<NullableResultQuery, string?>
+    {
+        public Task<string?> HandleAsync(NullableResultQuery query, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult<string?>(null);
         }
     }
 
