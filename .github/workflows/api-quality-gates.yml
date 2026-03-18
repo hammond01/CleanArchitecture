@@ -1,0 +1,93 @@
+name: API Quality Gates
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+    paths-ignore:
+      - "src/UI/**"
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths-ignore:
+      - "src/UI/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dispatcher-dynamic-guard:
+    name: dispatcher-dynamic-guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+          cache: true
+
+      - name: Guard dispatcher layer against dynamic keyword
+        run: pwsh ./.scripts/guard-dispatcher-no-dynamic.ps1
+
+  api-build:
+    name: api-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+          cache: true
+
+      - name: Restore API project
+        run: dotnet restore src/ModularMonolith/CleanArchitecture.Api/CleanArchitecture.Api.csproj --configfile NuGet.Config
+
+      - name: Build API project (Release)
+        run: dotnet build src/ModularMonolith/CleanArchitecture.Api/CleanArchitecture.Api.csproj --configuration Release --no-restore
+
+  api-unit-tests:
+    name: api-unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+          cache: true
+
+      - name: Restore unit test project
+        run: dotnet restore tests/CleanArchitecture.UnitTests/CleanArchitecture.UnitTests.csproj --configfile NuGet.Config
+
+      - name: Run unit tests (Release)
+        run: dotnet test tests/CleanArchitecture.UnitTests/CleanArchitecture.UnitTests.csproj --configuration Release --no-restore --verbosity minimal
+
+  api-integration-tests:
+    name: api-integration-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+          cache: true
+
+      - name: Restore integration test project
+        run: dotnet restore tests/CleanArchitecture.IntegrationTests/CleanArchitecture.IntegrationTests.csproj --configfile NuGet.Config
+
+      - name: Run integration tests (Release)
+        run: dotnet test tests/CleanArchitecture.IntegrationTests/CleanArchitecture.IntegrationTests.csproj --configuration Release --no-restore --verbosity minimal

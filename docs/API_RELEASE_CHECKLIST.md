@@ -9,15 +9,17 @@ Use this checklist before tagging a release or publishing this template state.
 - [ ] `dotnet build ModularMonolith.sln --no-restore` passes
 - [ ] `dotnet test ModularMonolith.sln --no-restore` passes
 - [ ] integration tests pass on a clean environment
-- [ ] CI workflow is green on the target branch
+- [ ] `API Quality Gates` workflow is green (`dispatcher-dynamic-guard`, `api-build`, `api-unit-tests`, `api-integration-tests`)
+- [ ] branch protection requires the 4 API Quality Gates checks on the target branch
 
 ---
 
 ## 2) API contract consistency
 
-- [ ] success responses are consistently wrapped (`success`, `data`)
-- [ ] validation errors return consistent error contract
-- [ ] exception middleware returns consistent error contract
+- [ ] each endpoint declares success + non-success `ProducesResponseType` contracts
+- [ ] response shapes follow [`docs/API_RESPONSE_GUIDELINES.md`](API_RESPONSE_GUIDELINES.md)
+- [ ] validation errors return the currently documented contract (no silent shape changes)
+- [ ] exception middleware returns `ProblemDetails` with compatibility extensions (`success`, `statusCode`, `error`, `traceId`)
 - [ ] unauthorized/forbidden behavior is expected and tested
 - [ ] rate-limit behavior is expected and tested
 
