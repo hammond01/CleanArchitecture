@@ -30,8 +30,7 @@ public static class CatalogModuleExtensions
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-        // Register custom Dispatcher and all handlers from Catalog.Application
-        services.AddApplicationServices();
+        // Register Catalog module handlers from Catalog.Application
         services.AddHandlersFromAssembly(typeof(Application.Features.Products.Queries.GetProductsQuery).Assembly);
 
         // Register FluentValidation validators

@@ -1,6 +1,8 @@
 using System.Reflection;
 using BuildingBlocks.Application.Dispatcher;
+using BuildingBlocks.Domain.Events;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace BuildingBlocks.Application;
 
@@ -36,11 +38,14 @@ public static class ApplicationConfiguration
 
         foreach (var handlerType in commandHandlerTypes)
         {
-            var interfaceType = handlerType.GetInterfaces()
-                .First(i => i.IsGenericType &&
-                           i.GetGenericTypeDefinition() == typeof(CQRS.ICommandHandler<,>));
+            var interfaceTypes = handlerType.GetInterfaces()
+                .Where(i => i.IsGenericType &&
+                            i.GetGenericTypeDefinition() == typeof(CQRS.ICommandHandler<,>));
 
-            services.AddScoped(interfaceType, handlerType);
+            foreach (var interfaceType in interfaceTypes)
+            {
+                services.TryAddScoped(interfaceType, handlerType);
+            }
         }
 
         // Register all query handlers
@@ -52,15 +57,30 @@ public static class ApplicationConfiguration
 
         foreach (var handlerType in queryHandlerTypes)
         {
-            var interfaceType = handlerType.GetInterfaces()
-                .First(i => i.IsGenericType &&
-                           i.GetGenericTypeDefinition() == typeof(CQRS.IQueryHandler<,>));
+            var interfaceTypes = handlerType.GetInterfaces()
+                .Where(i => i.IsGenericType &&
+                            i.GetGenericTypeDefinition() == typeof(CQRS.IQueryHandler<,>));
 
-            services.AddScoped(interfaceType, handlerType);
+            foreach (var interfaceType in interfaceTypes)
+            {
+                services.TryAddScoped(interfaceType, handlerType);
+            }
         }
 
-        // Register all domain event handlers
-        Dispatcher.Dispatcher.RegisterEventHandlers(assembly, services);
+        // Register all domain event handlers for DI enumeration
+        var domainEventHandlerTypes = assembly.GetTypes()
+            .Where(t => !t.IsAbstract && !t.IsInterface)
+            .SelectMany(t => t.GetInterfaces()
+                .Where(i => i.IsGenericType &&
+                            i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>))
+                .Select(i => new { ServiceType = i, ImplementationType = t }));
+
+        foreach (var registration in domainEventHandlerTypes)
+        {
+            services.TryAddEnumerable(ServiceDescriptor.Transient(
+                registration.ServiceType,
+                registration.ImplementationType));
+        }
 
         return services;
     }

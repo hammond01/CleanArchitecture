@@ -3,7 +3,9 @@ using BuildingBlocks.Domain.Events;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace BuildingBlocks.Application.Dispatcher;
 
@@ -13,7 +15,17 @@ namespace BuildingBlocks.Application.Dispatcher;
 /// </summary>
 public class Dispatcher : IDispatcher
 {
-    private static readonly List<Type> _eventHandlers = new();
+    private static readonly MethodInfo InvokeQueryHandlerMethod = typeof(Dispatcher)
+        .GetMethod(nameof(InvokeQueryHandlerAsync), BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo InvokeCommandHandlerMethod = typeof(Dispatcher)
+        .GetMethod(nameof(InvokeCommandHandlerAsync), BindingFlags.NonPublic | BindingFlags.Static)!;
+    private static readonly MethodInfo InvokeDomainEventHandlerMethod = typeof(Dispatcher)
+        .GetMethod(nameof(InvokeDomainEventHandlerAsync), BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static readonly ConcurrentDictionary<(Type RequestType, Type ResultType), Func<object, object, CancellationToken, Task<object?>>> QueryInvokers = new();
+    private static readonly ConcurrentDictionary<(Type RequestType, Type ResultType), Func<object, object, CancellationToken, Task<object?>>> CommandInvokers = new();
+    private static readonly ConcurrentDictionary<Type, Func<object, IDomainEvent, CancellationToken, Task>> DomainEventInvokers = new();
+
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<Dispatcher> _logger;
 
@@ -21,28 +33,6 @@ public class Dispatcher : IDispatcher
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
-    }
-
-    /// <summary>
-    /// Register domain event handlers từ assembly
-    /// </summary>
-    public static void RegisterEventHandlers(System.Reflection.Assembly assembly, IServiceCollection services)
-    {
-        var types = assembly.GetTypes()
-            .Where(x => x.GetInterfaces().Any(y => y.IsGenericType &&
-                   y.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)))
-            .ToList();
-
-        foreach (var type in types)
-        {
-            if (_eventHandlers.Contains(type))
-            {
-                continue;
-            }
-
-            services.AddTransient(type);
-            _eventHandlers.Add(type);
-        }
     }
 
     /// <summary>
@@ -72,14 +62,17 @@ public class Dispatcher : IDispatcher
             }
 
             // Step 3: Execute handler
-            dynamic dynamicHandler = handler;
-            TResult result = await dynamicHandler.HandleAsync((dynamic)query, cancellationToken);
+            var invoker = QueryInvokers.GetOrAdd(
+                (queryType, typeof(TResult)),
+                static key => BuildQueryInvoker(key.RequestType, key.ResultType));
+
+            var result = await invoker(handler, query, cancellationToken);
 
             stopwatch.Stop();
             _logger.LogInformation("✅ Query {QueryName} completed in {ElapsedMs}ms",
                 queryName, stopwatch.ElapsedMilliseconds);
 
-            return result;
+            return CastResult<TResult>(result, queryName, "query");
         }
         catch (Exception ex)
         {
@@ -117,14 +110,17 @@ public class Dispatcher : IDispatcher
             }
 
             // Step 3: Execute handler with transaction
-            dynamic dynamicHandler = handler;
-            TResult result = await dynamicHandler.HandleAsync((dynamic)command, cancellationToken);
+            var invoker = CommandInvokers.GetOrAdd(
+                (commandType, typeof(TResult)),
+                static key => BuildCommandInvoker(key.RequestType, key.ResultType));
+
+            var result = await invoker(handler, command, cancellationToken);
 
             stopwatch.Stop();
             _logger.LogInformation("✅ Command {CommandName} completed in {ElapsedMs}ms",
                 commandName, stopwatch.ElapsedMilliseconds);
 
-            return result;
+            return CastResult<TResult>(result, commandName, "command");
         }
         catch (ValidationException validationEx)
         {
@@ -157,22 +153,19 @@ public class Dispatcher : IDispatcher
             _logger.LogInformation("📢 Dispatching Domain Event: {EventName}", eventName);
 
             var handlerCount = 0;
-            foreach (var handlerType in _eventHandlers)
+            var handlerServiceType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
+            var enumerableType = typeof(IEnumerable<>).MakeGenericType(handlerServiceType);
+            var handlers = _serviceProvider.GetService(enumerableType) as System.Collections.IEnumerable;
+
+            if (handlers != null)
             {
-                var canHandleEvent = handlerType.GetInterfaces()
-                    .Any(x => x.IsGenericType
-                             && x.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
-                             && x.GenericTypeArguments != null
-                             && x.GenericTypeArguments.Length > 0
-                             && x.GenericTypeArguments[0] == eventType);
+                var invoker = DomainEventInvokers.GetOrAdd(
+                    eventType,
+                    static type => BuildDomainEventInvoker(type));
 
-                if (!canHandleEvent)
-                    continue;
-
-                var handler = _serviceProvider.GetService(handlerType);
-                if (handler != null)
+                foreach (var handler in handlers.Cast<object>())
                 {
-                    await ((dynamic)handler).HandleAsync((dynamic)domainEvent, cancellationToken);
+                    await invoker(handler, domainEvent, cancellationToken);
                     handlerCount++;
                 }
             }
@@ -188,6 +181,71 @@ public class Dispatcher : IDispatcher
                 eventName, stopwatch.ElapsedMilliseconds);
             throw;
         }
+    }
+
+    private static TResult CastResult<TResult>(object? result, string requestName, string requestType)
+    {
+        if (result is TResult typedResult)
+        {
+            return typedResult;
+        }
+
+        throw new InvalidOperationException(
+            $"❌ Handler for {requestType} '{requestName}' returned an unexpected result type.");
+    }
+
+    private static Func<object, object, CancellationToken, Task<object?>> BuildQueryInvoker(Type queryType, Type resultType)
+    {
+        var method = InvokeQueryHandlerMethod.MakeGenericMethod(queryType, resultType);
+
+        return (handler, query, cancellationToken) =>
+            (Task<object?>)method.Invoke(null, [handler, query, cancellationToken])!;
+    }
+
+    private static Func<object, object, CancellationToken, Task<object?>> BuildCommandInvoker(Type commandType, Type resultType)
+    {
+        var method = InvokeCommandHandlerMethod.MakeGenericMethod(commandType, resultType);
+
+        return (handler, command, cancellationToken) =>
+            (Task<object?>)method.Invoke(null, [handler, command, cancellationToken])!;
+    }
+
+    private static Func<object, IDomainEvent, CancellationToken, Task> BuildDomainEventInvoker(Type eventType)
+    {
+        var method = InvokeDomainEventHandlerMethod.MakeGenericMethod(eventType);
+
+        return (handler, domainEvent, cancellationToken) =>
+            (Task)method.Invoke(null, [handler, domainEvent, cancellationToken])!;
+    }
+
+    private static async Task<object?> InvokeQueryHandlerAsync<TQuery, TResult>(
+        object handler,
+        object query,
+        CancellationToken cancellationToken)
+        where TQuery : IQuery<TResult>
+    {
+        return await ((IQueryHandler<TQuery, TResult>)handler)
+            .HandleAsync((TQuery)query, cancellationToken);
+    }
+
+    private static async Task<object?> InvokeCommandHandlerAsync<TCommand, TResult>(
+        object handler,
+        object command,
+        CancellationToken cancellationToken)
+        where TCommand : ICommand<TResult>
+    {
+        return await ((ICommandHandler<TCommand, TResult>)handler)
+            .HandleAsync((TCommand)command, cancellationToken);
+    }
+
+    private static Task InvokeDomainEventHandlerAsync<TDomainEvent>(
+        object handler,
+        IDomainEvent domainEvent,
+        CancellationToken cancellationToken)
+        where TDomainEvent : IDomainEvent
+    {
+        return ((IDomainEventHandler<TDomainEvent>)handler)
+            .HandleAsync((TDomainEvent)domainEvent, cancellationToken);
     }
 
     /// <summary>

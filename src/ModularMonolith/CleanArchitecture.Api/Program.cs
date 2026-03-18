@@ -4,6 +4,7 @@ using Serilog;
 using Catalog.Api.Extensions;
 using Identity.Api.Extensions;
 using Auditing.Api.Extensions;
+using BuildingBlocks.Application;
 using BuildingBlocks.Application.Auditing;
 using BuildingBlocks.Application.Security;
 using Catalog.Infrastructure.Persistence;
@@ -177,6 +178,9 @@ builder.Services.AddCors(options =>
         }
     });
 });
+
+// Register shared application services once at composition root.
+builder.Services.AddApplicationServices();
 
 // Register modules
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
