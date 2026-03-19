@@ -193,7 +193,8 @@ services:
       POSTGRES_DB: $DB_NAME
       POSTGRES_USER: $DB_USER
       POSTGRES_PASSWORD: $DB_PASSWORD
-  db-migrator:
+  cleanarchitecture.dbmigrator:
+    build: null
     image: $MIGRATOR_IMAGE
     environment:
       ConnectionStrings__DefaultConnection: $CONNECTION_STRING
@@ -210,7 +211,7 @@ EOF
 
           MIGRATION_EXIT=1
           for attempt in 1 2 3; do
-            ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm db-migrator" && MIGRATION_EXIT=0 && break
+            ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm cleanarchitecture.dbmigrator) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm cleanarchitecture.dbmigrator" && MIGRATION_EXIT=0 && break
             echo "db-migrator attempt $attempt failed; retrying in 15s..."
             sleep 15
           done

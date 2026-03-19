@@ -100,7 +100,7 @@ Settings: SeedData=True, CreateDb=True, Timeout=300s
 ✅ Auditing is up to date (no pending migrations)
 
 📦 Migrating Catalog module (schema: catalog)...
-⏳ Applying 1 pending migrations: 20260318132428_InitialCatalog_PostgresBaseline
+⏳ Applying 1 pending migrations: 20260318164001_InitialCatalog_PostgresSnakeCase
 ✅ Catalog migrations applied
 
 🌱 Seeding initial data...

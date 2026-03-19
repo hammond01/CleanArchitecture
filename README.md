@@ -471,7 +471,7 @@ dotnet test ModularMonolith.sln
 
 - Baseline migrations are now PostgreSQL-specific for Identity, Catalog, and Auditing modules.
 - The previous SQL Server migration files were replaced on branch `feat/postgres-migration`.
-- Migration history is isolated per schema via `__EFMigrationsHistory` in `identity`, `catalog`, and `auditing`.
+- Migration history is isolated per schema via `__ef_migrations_history` in `identity`, `catalog`, and `auditing`.
 - See [docs/POSTGRES_MIGRATION_NOTES.md](docs/POSTGRES_MIGRATION_NOTES.md) for local/staging run steps.
 
 ---

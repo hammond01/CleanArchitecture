@@ -108,7 +108,7 @@ public class PostgresWebApplicationFactory : WebApplicationFactory<Program>, IAs
 
     public Task InitializeAsync()
     {
-        if (!_useTestcontainers || _container == null)
+        if (!_useTestcontainers || !TryEnsureContainer() || _container == null)
         {
             return Task.CompletedTask;
         }

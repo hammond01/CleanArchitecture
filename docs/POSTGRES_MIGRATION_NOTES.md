@@ -4,13 +4,13 @@
 
 - Provider target is PostgreSQL (`Npgsql`) for API modules and DbMigrator.
 - Fresh baseline migrations were generated with Postgres markers:
-  - `InitialIdentity_PostgresBaseline`
-  - `InitialCatalog_PostgresBaseline`
-  - `InitialAuditing_PostgresBaseline`
+  - `InitialIdentity_PostgresSnakeCase`
+  - `InitialCatalog_PostgresSnakeCase`
+  - `InitialAuditing_PostgresSnakeCase`
 - Migration history is scoped per schema:
-  - `identity.__EFMigrationsHistory`
-  - `catalog.__EFMigrationsHistory`
-  - `auditing.__EFMigrationsHistory`
+  - `identity.__ef_migrations_history`
+  - `catalog.__ef_migrations_history`
+  - `auditing.__ef_migrations_history`
 
 ## Local Run
 
