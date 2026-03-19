@@ -60,15 +60,18 @@ public class PostgresWebApplicationFactory : WebApplicationFactory<Program>, IAs
             {
                 services.AddDbContext<CatalogDbContext>(options =>
                     options.UseNpgsql(_connectionString,
-                        b => b.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")));
+                        b => b.MigrationsHistoryTable("__ef_migrations_history", "catalog"))
+                        .UseSnakeCaseNamingConvention());
 
                 services.AddDbContext<IdentityDbContext>(options =>
                     options.UseNpgsql(_connectionString,
-                        b => b.MigrationsHistoryTable("__EFMigrationsHistory", "identity")));
+                        b => b.MigrationsHistoryTable("__ef_migrations_history", "identity"))
+                        .UseSnakeCaseNamingConvention());
 
                 services.AddDbContext<AuditingDbContext>(options =>
                     options.UseNpgsql(_connectionString,
-                        b => b.MigrationsHistoryTable("__EFMigrationsHistory", "auditing")));
+                        b => b.MigrationsHistoryTable("__ef_migrations_history", "auditing"))
+                        .UseSnakeCaseNamingConvention());
             }
             else
             {
