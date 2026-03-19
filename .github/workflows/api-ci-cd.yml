@@ -171,37 +171,37 @@ jobs:
           fi
 
           cat > /tmp/docker-compose.deploy.yml <<EOF
-services:
-  cleanarchitecture.api:
-    image: $IMAGE
-    container_name: $CONTAINER
-    restart: always
-    ports:
-      - '$HOST_PORT:8080'
-    environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      JwtSettings__SecretKey: $API_JWT_SECRET_KEY
-      JwtSettings__Issuer: $API_JWT_ISSUER
-      JwtSettings__Audience: $API_JWT_AUDIENCE
-      ApiSecurity__AllowedOrigins__0: $API_ALLOWED_ORIGINS
-      ApiSecurity__AllowCredentials: $ALLOW_CREDENTIALS
-      ApiSecurity__KnownProxies__0: $KNOWN_PROXIES
-      ConnectionStrings__DefaultConnection: $CONNECTION_STRING
-  postgres:
-    restart: always
-    environment:
-      POSTGRES_DB: $DB_NAME
-      POSTGRES_USER: $DB_USER
-      POSTGRES_PASSWORD: $DB_PASSWORD
-  cleanarchitecture.dbmigrator:
-    build: null
-    image: $MIGRATOR_IMAGE
-    environment:
-      ConnectionStrings__DefaultConnection: $CONNECTION_STRING
-      MigrationSettings__SeedData: false
-    depends_on:
-      - postgres
-EOF
+          services:
+            cleanarchitecture.api:
+              image: $IMAGE
+              container_name: $CONTAINER
+              restart: always
+              ports:
+                - '$HOST_PORT:8080'
+              environment:
+                ASPNETCORE_ENVIRONMENT: Production
+                JwtSettings__SecretKey: $API_JWT_SECRET_KEY
+                JwtSettings__Issuer: $API_JWT_ISSUER
+                JwtSettings__Audience: $API_JWT_AUDIENCE
+                ApiSecurity__AllowedOrigins__0: $API_ALLOWED_ORIGINS
+                ApiSecurity__AllowCredentials: $ALLOW_CREDENTIALS
+                ApiSecurity__KnownProxies__0: $KNOWN_PROXIES
+                ConnectionStrings__DefaultConnection: $CONNECTION_STRING
+            postgres:
+              restart: always
+              environment:
+                POSTGRES_DB: $DB_NAME
+                POSTGRES_USER: $DB_USER
+                POSTGRES_PASSWORD: $DB_PASSWORD
+            cleanarchitecture.dbmigrator:
+              build: null
+              image: $MIGRATOR_IMAGE
+              environment:
+                ConnectionStrings__DefaultConnection: $CONNECTION_STRING
+                MigrationSettings__SeedData: false
+              depends_on:
+                - postgres
+          EOF
 
           scp -P "$PORT" /tmp/docker-compose.deploy.yml "$DEPLOY_USER@$DEPLOY_HOST:$TARGET_PATH/docker-compose.deploy.yml"
 
