@@ -42,7 +42,8 @@ public class PostgresWebApplicationFactory : WebApplicationFactory<Program>, IAs
             {
                 var settings = new Dictionary<string, string?>
                 {
-                    ["ConnectionStrings:DefaultConnection"] = _connectionString
+                    ["ConnectionStrings:DefaultConnection"] = _connectionString,
+                    ["EmailSettings:UseFakeEmail"] = "true"
                 };
 
                 config.AddInMemoryCollection(settings);
