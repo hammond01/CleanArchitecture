@@ -5,18 +5,40 @@ services:
       context: .
       dockerfile: src/ModularMonolith/CleanArchitecture.Api/Dockerfile
     depends_on:
-      - sqlserver
+      postgres:
+        condition: service_healthy
+      cleanarchitecture.dbmigrator:
+        condition: service_completed_successfully
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=CleanArchitecture;User Id=sa;Password=${SQLSERVER_SA_PASSWORD:-Your_strong_password_123};TrustServerCertificate=True;Encrypt=False
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${POSTGRES_DB:-CleanArchitecture};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: cleanarchitecture-sqlserver
+  cleanarchitecture.dbmigrator:
+    image: ${DOCKER_REGISTRY:-}cleanarchitecturedbmigrator
+    build:
+      context: .
+      dockerfile: src/ModularMonolith/DbMigrator/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${SQLSERVER_SA_PASSWORD:-Your_strong_password_123}
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=${POSTGRES_DB:-CleanArchitecture};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
+      - MigrationSettings__SeedData=${MIGRATOR_SEED_DATA:-true}
+      - MigrationSettings__CreateDatabaseIfNotExists=true
+
+  postgres:
+    image: postgres:16
+    container_name: cleanarchitecture-postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-CleanArchitecture}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-CleanArchitecture}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     volumes:
-      - cleanarchitecture-sqldata:/var/opt/mssql
+      - cleanarchitecture-pgdata:/var/lib/postgresql/data
 
 volumes:
-  cleanarchitecture-sqldata:
+  cleanarchitecture-pgdata:

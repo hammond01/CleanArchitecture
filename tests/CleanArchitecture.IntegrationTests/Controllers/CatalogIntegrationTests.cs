@@ -11,12 +11,12 @@ namespace CleanArchitecture.IntegrationTests.Controllers;
 /// Tests the complete request/response flow
 /// NOTE: API returns responses wrapped in { success,  data } format
 /// </summary>
-public class CatalogIntegrationTests : IClassFixture<SqlServerWebApplicationFactory>
+public class CatalogIntegrationTests : IClassFixture<PostgresWebApplicationFactory>
 {
     private readonly HttpClient _client;
-    private readonly SqlServerWebApplicationFactory _factory;
+    private readonly PostgresWebApplicationFactory _factory;
 
-    public CatalogIntegrationTests(SqlServerWebApplicationFactory factory)
+    public CatalogIntegrationTests(PostgresWebApplicationFactory factory)
     {
         _factory = factory;
         _client = factory.CreateClient();

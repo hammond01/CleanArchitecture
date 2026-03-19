@@ -29,7 +29,9 @@ public static class InfrastructureConfiguration
     {
         // Register DbContext
         services.AddDbContext<IdentityDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseNpgsql(connectionString,
+                builder => builder.MigrationsHistoryTable("__ef_migrations_history", "identity"))
+                .UseSnakeCaseNamingConvention());
 
         // Register repository
         services.AddScoped<IIdentityRepository, IdentityRepository>();
@@ -92,3 +94,4 @@ public static class InfrastructureConfiguration
         return services;
     }
 }
+

@@ -6,18 +6,20 @@ using Identity.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Testcontainers.MsSql;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 
 namespace CleanArchitecture.IntegrationTests.Infrastructure;
 
 /// <summary>
-/// Database integration tests using SQL Server Testcontainers
+/// Database integration tests using PostgreSQL Testcontainers
 /// Set USE_TESTCONTAINERS=true to enable these tests.
 /// </summary>
 public class DbMigratorIntegrationTests : IAsyncLifetime
 {
     private readonly bool _useTestcontainers;
-    private MsSqlContainer? _container;
+    private IContainer? _container;
+    private string? _connectionString;
 
     public DbMigratorIntegrationTests()
     {
@@ -28,8 +30,15 @@ public class DbMigratorIntegrationTests : IAsyncLifetime
 
         if (_useTestcontainers)
         {
-            _container = new MsSqlBuilder()
-                .WithPassword("yourStrong(!)Password")
+            _container = new ContainerBuilder()
+                .WithImage("postgres:16")
+                .WithName($"cleanarchitecture-dbmigrator-tests-{Guid.NewGuid():N}")
+                .WithEnvironment("POSTGRES_DB", "CleanArchitectureTests")
+                .WithEnvironment("POSTGRES_USER", "postgres")
+                .WithEnvironment("POSTGRES_PASSWORD", "postgres")
+                .WithPortBinding(5432, true)
+                .WithCleanUp(true)
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
                 .Build();
         }
     }
@@ -39,6 +48,7 @@ public class DbMigratorIntegrationTests : IAsyncLifetime
         if (_useTestcontainers && _container != null)
         {
             await _container.StartAsync();
+            _connectionString = BuildConnectionString(_container);
         }
     }
 
@@ -58,7 +68,7 @@ public class DbMigratorIntegrationTests : IAsyncLifetime
             return;
         }
 
-        var connectionString = _container.GetConnectionString();
+        var connectionString = _connectionString!;
         var services = new ServiceCollection();
 
         services.AddLogging(builder => builder.AddConsole());
@@ -70,16 +80,19 @@ public class DbMigratorIntegrationTests : IAsyncLifetime
         });
 
         services.AddDbContext<IdentityDbContext>(options =>
-            options.UseSqlServer(connectionString,
-                b => b.MigrationsHistoryTable("__EFMigrationsHistory", "identity")));
+            options.UseNpgsql(connectionString,
+                b => b.MigrationsHistoryTable("__ef_migrations_history", "identity"))
+                .UseSnakeCaseNamingConvention());
 
         services.AddDbContext<CatalogDbContext>(options =>
-            options.UseSqlServer(connectionString,
-                b => b.MigrationsHistoryTable("__EFMigrationsHistory", "catalog")));
+            options.UseNpgsql(connectionString,
+                b => b.MigrationsHistoryTable("__ef_migrations_history", "catalog"))
+                .UseSnakeCaseNamingConvention());
 
         services.AddDbContext<AuditingDbContext>(options =>
-            options.UseSqlServer(connectionString,
-                b => b.MigrationsHistoryTable("__EFMigrationsHistory", "auditing")));
+            options.UseNpgsql(connectionString,
+                b => b.MigrationsHistoryTable("__ef_migrations_history", "auditing"))
+                .UseSnakeCaseNamingConvention());
 
         services.AddScoped<DbMigrationService>();
 
@@ -100,5 +113,11 @@ public class DbMigratorIntegrationTests : IAsyncLifetime
         (await identityDb.Database.GetPendingMigrationsAsync()).Should().BeEmpty();
         (await catalogDb.Database.GetPendingMigrationsAsync()).Should().BeEmpty();
         (await auditingDb.Database.GetPendingMigrationsAsync()).Should().BeEmpty();
+    }
+
+    private static string BuildConnectionString(IContainer container)
+    {
+        var port = container.GetMappedPublicPort(5432);
+        return $"Host=localhost;Port={port};Database=CleanArchitectureTests;Username=postgres;Password=postgres";
     }
 }

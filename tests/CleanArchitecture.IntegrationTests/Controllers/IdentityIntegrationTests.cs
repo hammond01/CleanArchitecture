@@ -14,14 +14,14 @@ namespace CleanArchitecture.IntegrationTests.Controllers;
 /// Integration tests for Identity/Authentication API endpoints
 /// Tests the complete authentication and registration flow
 /// </summary>
-public class IdentityIntegrationTests : IClassFixture<SqlServerWebApplicationFactory>
+public class IdentityIntegrationTests : IClassFixture<PostgresWebApplicationFactory>
 {
     private sealed record AuthPayload(string UserId, string Token, string RefreshToken);
 
     private readonly HttpClient _client;
-    private readonly SqlServerWebApplicationFactory _factory;
+    private readonly PostgresWebApplicationFactory _factory;
 
-    public IdentityIntegrationTests(SqlServerWebApplicationFactory factory)
+    public IdentityIntegrationTests(PostgresWebApplicationFactory factory)
     {
         _factory = factory;
         _client = factory.CreateClient();

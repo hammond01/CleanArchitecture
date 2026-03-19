@@ -56,7 +56,7 @@ ENTRYPOINT ["dotnet", "DbMigrator.dll"]
 ```json
 {
     "ConnectionStrings": {
-        "DefaultConnection": "Server=.;Database=CleanArchitecture;Trusted_Connection=True;..."
+        "DefaultConnection": "Host=localhost;Port=5432;Database=CleanArchitecture;Username=postgres;Password=postgres"
     },
     "MigrationSettings": {
         "SeedData": true, // Có seed data sau migrations
@@ -70,7 +70,7 @@ ENTRYPOINT ["dotnet", "DbMigrator.dll"]
 
 ```bash
 # Override connection string
-ConnectionStrings__DefaultConnection="Server=prod.database;..."
+ConnectionStrings__DefaultConnection="Host=prod.database;Port=5432;Database=CleanArchitecture;Username=app;Password=secret"
 
 # Override migration settings
 MigrationSettings__SeedData=false
@@ -93,14 +93,14 @@ Settings: SeedData=True, CreateDb=True, Timeout=300s
 ✅ Database connection successful
 
 📦 Migrating Identity module (schema: identity)...
-⏳ Applying 1 pending migrations: 20260223070220_InitialIdentity
+⏳ Applying 1 pending migrations: 20260318132414_InitialIdentity_PostgresBaseline
 ✅ Identity migrations applied
 
 📦 Migrating Auditing module (schema: auditing)...
 ✅ Auditing is up to date (no pending migrations)
 
 📦 Migrating Catalog module (schema: catalog)...
-⏳ Applying 2 pending migrations: 20260223070838_InitialCatalog, 20260223080000_AddIndexes
+⏳ Applying 1 pending migrations: 20260318164001_InitialCatalog_PostgresSnakeCase
 ✅ Catalog migrations applied
 
 🌱 Seeding initial data...
@@ -190,7 +190,8 @@ private async Task MigrateNewModuleAsync(CancellationToken ct)
 
 ```powershell
 # Option 1: Drop và recreate database (Development only!)
-sqlcmd -S "." -Q "DROP DATABASE CleanArchitecture; CREATE DATABASE CleanArchitecture;"
+psql -h localhost -U postgres -d postgres -c "DROP DATABASE IF EXISTS \"CleanArchitecture\";"
+psql -h localhost -U postgres -d postgres -c "CREATE DATABASE \"CleanArchitecture\";"
 
 # Option 2: Manually insert migration records vào __EFMigrationsHistory
 ```
@@ -200,7 +201,7 @@ sqlcmd -S "." -Q "DROP DATABASE CleanArchitecture; CREATE DATABASE CleanArchitec
 **Kiểm tra:**
 
 - Connection string trong `appsettings.json`
-- SQL Server service đang chạy
+- PostgreSQL service đang chạy
 - Firewall rules
 - User permissions
 
@@ -222,6 +223,7 @@ sqlcmd -S "." -Q "DROP DATABASE CleanArchitecture; CREATE DATABASE CleanArchitec
 ## 📚 Related Documentation
 
 - [Entity Framework Core Migrations](https://learn.microsoft.com/ef/core/managing-schemas/migrations/)
+- [PostgreSQL Migration Notes](../../../docs/POSTGRES_MIGRATION_NOTES.md)
 - [Clean Architecture Project Structure](../../ARCHITECTURE.md)
 - [Module Development Guide](../../README.md#-development-guide)
 

@@ -8,11 +8,11 @@ namespace CleanArchitecture.IntegrationTests.Controllers;
 /// <summary>
 /// Integration tests for Auditing API endpoints
 /// </summary>
-public class AuditingIntegrationTests : IClassFixture<SqlServerWebApplicationFactory>
+public class AuditingIntegrationTests : IClassFixture<PostgresWebApplicationFactory>
 {
     private readonly HttpClient _client;
 
-    public AuditingIntegrationTests(SqlServerWebApplicationFactory factory)
+    public AuditingIntegrationTests(PostgresWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
     }

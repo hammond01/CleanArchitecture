@@ -105,7 +105,7 @@ function Test-DomainLayer {
         $content = Get-Content $csprojPath -Raw
         
         if ($content -match "EntityFrameworkCore" -or 
-            $content -match "SqlServer" -or 
+            $content -match "Npgsql" -or 
             $content -match "Infrastructure") {
             Add-Violation "Domain layer has infrastructure dependencies (violates Clean Architecture)"
         } else {

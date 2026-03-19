@@ -8,7 +8,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
     public void Configure(EntityTypeBuilder<Category> builder)
     {
-        builder.ToTable("Categories", "catalog");
+        builder.ToTable("categories", "catalog");
 
         builder.HasKey(c => c.Id);
 
@@ -20,13 +20,13 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasMaxLength(250);
 
         builder.Property(c => c.Picture)
-            .HasColumnType("image");
+            .HasColumnType("bytea");
 
         builder.Property(c => c.PictureLink)
             .HasMaxLength(100);
 
         // Indexes
-        builder.HasIndex(c => c.CategoryName).HasDatabaseName("CategoryName");
+        builder.HasIndex(c => c.CategoryName);
 
         // Relationships configured in Product
     }

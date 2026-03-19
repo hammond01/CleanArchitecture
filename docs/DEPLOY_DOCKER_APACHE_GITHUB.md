@@ -4,7 +4,7 @@ Tài liệu này dùng cho flow deploy tự động từ `.github/workflows/api-
 
 ## 1) Mô hình triển khai
 
-- API + SQL Server chạy bằng Docker Compose trên server
+- API + PostgreSQL chạy bằng Docker Compose trên server
 - Apache chạy trên host server để reverse proxy vào API container
 - GitHub Actions build/push image và SSH vào server để deploy
 
@@ -30,7 +30,9 @@ Vào: **Repo → Settings → Secrets and variables → Actions → New reposito
 - `API_REGISTRY_TOKEN` (PAT có `read:packages`)
 
 ### App settings (bắt buộc production)
-- `API_SQLSERVER_SA_PASSWORD`
+- `API_POSTGRES_DB` (VD: `CleanArchitecture`)
+- `API_POSTGRES_USER` (VD: `postgres`)
+- `API_POSTGRES_PASSWORD` (mật khẩu PostgreSQL production)
 - `API_JWT_SECRET_KEY` (>= 32 ký tự)
 - `API_JWT_ISSUER` (VD: `cleanarchitecture-api`)
 - `API_JWT_AUDIENCE` (VD: `cleanarchitecture-clients`)
@@ -85,7 +87,7 @@ sudo certbot --apache -d api.example.com
 - `https://api.example.com/health/live`
 - `https://api.example.com/health/ready`
 
-Nếu `/health/ready` fail, kiểm tra SQL Server container và log migrator.
+Nếu `/health/ready` fail, kiểm tra PostgreSQL container và log migrator.
 
 ---
 

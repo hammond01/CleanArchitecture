@@ -31,7 +31,7 @@ public class AuditLogEntryConfiguration : IEntityTypeConfiguration<AuditLogEntry
 
         builder.Property(x => x.Log)
             .IsRequired()
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("text");
 
         builder.Property(x => x.CreatedDateTime).IsRequired();
 
@@ -44,7 +44,7 @@ public class AuditLogEntryConfiguration : IEntityTypeConfiguration<AuditLogEntry
         builder.HasIndex(x => x.Action);
 
         // Table name
-        builder.ToTable("AuditLogEntries", "auditing");
+        builder.ToTable("audit_log_entries", "auditing");
     }
 }
 

@@ -159,7 +159,9 @@ public static class ${ModuleName}ModuleExtensions
             ?? configuration.GetConnectionString("Default");
             
         services.AddDbContext<${ModuleName}DbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseNpgsql(connectionString,
+                b => b.MigrationsHistoryTable("__ef_migrations_history", "$($ModuleName.ToLower())"))
+                .UseSnakeCaseNamingConvention());
 
         // Register repositories
         // services.AddScoped<IRepository, Repository>();
