@@ -34,21 +34,21 @@ public class PostgresWebApplicationFactory : WebApplicationFactory<Program>, IAs
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        if (_useTestcontainers && TryEnsureContainer())
+        builder.ConfigureAppConfiguration((context, config) =>
         {
-            _connectionString = BuildConnectionString(_container!);
-
-            builder.ConfigureAppConfiguration((context, config) =>
+            var settings = new Dictionary<string, string?>
             {
-                var settings = new Dictionary<string, string?>
-                {
-                    ["ConnectionStrings:DefaultConnection"] = _connectionString,
-                    ["EmailSettings:UseFakeEmail"] = "true"
-                };
+                ["EmailSettings:UseFakeEmail"] = "true"
+            };
 
-                config.AddInMemoryCollection(settings);
-            });
-        }
+            if (_useTestcontainers && TryEnsureContainer())
+            {
+                _connectionString = BuildConnectionString(_container!);
+                settings["ConnectionStrings:DefaultConnection"] = _connectionString;
+            }
+
+            config.AddInMemoryCollection(settings);
+        });
 
         builder.ConfigureTestServices(services =>
         {
