@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
@@ -5,6 +6,8 @@ namespace CleanArchitecture.Api.HealthChecks;
 
 public static class HealthCheckResponseWriter
 {
+    private static readonly string ApplicationVersion = ResolveApplicationVersion();
+
     public static Task WriteJsonAsync(HttpContext context, HealthReport report)
     {
         context.Response.ContentType = "application/json";
@@ -12,6 +15,7 @@ public static class HealthCheckResponseWriter
         var payload = new
         {
             status = report.Status.ToString(),
+            version = ApplicationVersion,
             totalDuration = report.TotalDuration.TotalMilliseconds,
             checks = report.Entries.Select(entry => new
             {
@@ -24,5 +28,19 @@ public static class HealthCheckResponseWriter
         };
 
         return context.Response.WriteAsync(JsonSerializer.Serialize(payload));
+    }
+
+    private static string ResolveApplicationVersion()
+    {
+        var runtimeVersion = Environment.GetEnvironmentVariable("APP_BUILD_VERSION");
+        if (!string.IsNullOrWhiteSpace(runtimeVersion))
+        {
+            return runtimeVersion;
+        }
+
+        var assembly = Assembly.GetExecutingAssembly();
+        return assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+               ?? assembly.GetName().Version?.ToString()
+               ?? "unknown";
     }
 }
