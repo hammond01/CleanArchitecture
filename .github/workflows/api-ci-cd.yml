@@ -168,6 +168,7 @@ jobs:
           DB_USER="${API_POSTGRES_USER:-postgres}"
           DB_PASSWORD="${API_POSTGRES_PASSWORD:-postgres}"
           CONNECTION_STRING="Host=postgres;Port=5432;Database=$DB_NAME;Username=$DB_USER;Password=$DB_PASSWORD"
+          BUILD_VERSION="${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}-${GITHUB_SHA::7}"
 
           if [ -n "$API_REGISTRY_USERNAME" ] && [ -n "$API_REGISTRY_TOKEN" ]; then
             ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "echo '$API_REGISTRY_TOKEN' | docker login ghcr.io -u '$API_REGISTRY_USERNAME' --password-stdin"
@@ -190,6 +191,7 @@ jobs:
                 ApiSecurity__AllowCredentials: $ALLOW_CREDENTIALS
                 ApiSecurity__KnownProxies__0: $KNOWN_PROXIES
                 ConnectionStrings__DefaultConnection: $CONNECTION_STRING
+                APP_BUILD_VERSION: $BUILD_VERSION
             postgres:
               restart: always
               environment:
