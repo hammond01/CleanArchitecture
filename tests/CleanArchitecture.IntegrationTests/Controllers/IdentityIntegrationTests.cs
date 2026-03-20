@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using CleanArchitecture.IntegrationTests.Infrastructure;
+using Identity.Application.Services;
 using Identity.Infrastructure.Services;
 using Microsoft.AspNetCore.WebUtilities;
 
@@ -49,7 +50,7 @@ public class IdentityIntegrationTests : IClassFixture<PostgresWebApplicationFact
 
     private static (string userId, string token) ExtractUserIdAndTokenFromLastEmail(string recipient)
     {
-        var message = FakeEmailService.GetLastMessage(recipient);
+        var message = WaitForLastMessage(recipient, timeoutMs: 3000, pollMs: 100);
         message.Should().NotBeNull("Expected an email to be sent");
 
         var link = ExtractFirstLink(message!.TextBody);
@@ -63,6 +64,23 @@ public class IdentityIntegrationTests : IClassFixture<PostgresWebApplicationFact
         token.Should().NotBeNullOrEmpty();
 
         return (userId, token);
+    }
+
+    private static EmailMessage? WaitForLastMessage(string recipient, int timeoutMs, int pollMs)
+    {
+        var start = DateTime.UtcNow;
+        while ((DateTime.UtcNow - start).TotalMilliseconds < timeoutMs)
+        {
+            var message = FakeEmailService.GetLastMessage(recipient);
+            if (message != null)
+            {
+                return message;
+            }
+
+            Thread.Sleep(pollMs);
+        }
+
+        return null;
     }
 
     private static string ExtractFirstLink(string text)
