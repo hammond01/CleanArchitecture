@@ -485,3 +485,6 @@ $RECYCLE.BIN/
 *.swp
 PaymentGatewaySystem.sln.DotSettings
 .dotnet/
+
+# C# language server cache files
+*.lscache
