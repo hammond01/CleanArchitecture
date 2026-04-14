@@ -1,228 +1,90 @@
-name: API CI/CD
+name: API CI
 
 on:
-  push:
-    branches:
-      - develop
-    paths-ignore:
-      - "src/UI/**"
-  pull_request:
-    branches:
-      - develop
-    paths-ignore:
-      - "src/UI/**"
-  workflow_dispatch:
+    push:
+        branches:
+            - develop
+        paths-ignore:
+            - "src/UI/**"
+    pull_request:
+        branches:
+            - develop
+        paths-ignore:
+            - "src/UI/**"
+    workflow_dispatch:
 
 concurrency:
-  group: api-ci-cd-${{ github.ref }}
-  cancel-in-progress: true
+    group: api-ci-cd-${{ github.ref }}
+    cancel-in-progress: true
 
 permissions:
-  contents: read
-  packages: write
+    contents: read
+    packages: write
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  api-ci:
-    name: Build, Test, Docker Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    api-ci:
+        name: Build, Test, Docker Image
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.x"
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: "8.0.x"
 
-      - name: Restore
-        run: dotnet restore ModularMonolith.sln
+            - name: Restore
+              run: dotnet restore ModularMonolith.sln
 
-      - name: Build (Release)
-        run: dotnet build ModularMonolith.sln --configuration Release --no-restore
+            - name: Build (Release)
+              run: dotnet build ModularMonolith.sln --configuration Release --no-restore
 
-      - name: Unit tests
-        run: dotnet test tests/CleanArchitecture.UnitTests/CleanArchitecture.UnitTests.csproj --configuration Release --no-build --verbosity minimal
+            - name: Unit tests
+              run: dotnet test tests/CleanArchitecture.UnitTests/CleanArchitecture.UnitTests.csproj --configuration Release --no-build --verbosity minimal
 
-      - name: Integration tests
-        run: dotnet test tests/CleanArchitecture.IntegrationTests/CleanArchitecture.IntegrationTests.csproj --configuration Release --no-build --verbosity minimal
+            - name: Integration tests
+              run: dotnet test tests/CleanArchitecture.IntegrationTests/CleanArchitecture.IntegrationTests.csproj --configuration Release --no-build --verbosity minimal
 
-      - name: Validate Docker Compose
-        run: docker compose -f docker-compose.yml -f docker-compose.override.yml config > /tmp/docker-compose.resolved.yml
+            - name: Validate Docker Compose
+              run: docker compose -f docker-compose.yml -f docker-compose.override.yml config > /tmp/docker-compose.resolved.yml
 
-      - name: Compute image name
-        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-api" >> "$GITHUB_ENV"
+            - name: Compute image name
+              run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-api" >> "$GITHUB_ENV"
 
-      - name: Compute migrator image name
-        run: echo "MIGRATOR_IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-dbmigrator" >> "$GITHUB_ENV"
+            - name: Compute migrator image name
+              run: echo "MIGRATOR_IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-dbmigrator" >> "$GITHUB_ENV"
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
+            - name: Setup Docker Buildx
+              uses: docker/setup-buildx-action@v3
 
-      - name: Login to GHCR
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Login to GHCR
+              if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: src/ModularMonolith/CleanArchitecture.Api/Dockerfile
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
-          tags: |
-            ${{ env.IMAGE_NAME }}:develop
-            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v6
+              with:
+                  context: .
+                  file: src/ModularMonolith/CleanArchitecture.Api/Dockerfile
+                  push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
+                  tags: |
+                      ${{ env.IMAGE_NAME }}:develop
+                      ${{ env.IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Build and push DB migrator image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: src/ModularMonolith/DbMigrator/Dockerfile
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
-          tags: |
-            ${{ env.MIGRATOR_IMAGE_NAME }}:develop
-            ${{ env.MIGRATOR_IMAGE_NAME }}:${{ github.sha }}
-
-  api-deploy:
-    name: Deploy API to Docker server
-    runs-on: ubuntu-latest
-    needs: api-ci
-    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
-    env:
-      DEPLOY_HOST: ${{ secrets.API_DEPLOY_HOST }}
-      DEPLOY_PORT: ${{ secrets.API_DEPLOY_PORT }}
-      DEPLOY_USER: ${{ secrets.API_DEPLOY_USER }}
-      DEPLOY_PATH: ${{ secrets.API_DEPLOY_PATH }}
-      API_DOCKER_IMAGE: ${{ secrets.API_DOCKER_IMAGE }}
-      API_DOCKER_CONTAINER: ${{ secrets.API_DOCKER_CONTAINER }}
-      API_DOCKER_HOST_PORT: ${{ secrets.API_DOCKER_HOST_PORT }}
-      API_DBMIGRATOR_IMAGE: ${{ secrets.API_DBMIGRATOR_IMAGE }}
-      API_REGISTRY_USERNAME: ${{ secrets.API_REGISTRY_USERNAME }}
-      API_REGISTRY_TOKEN: ${{ secrets.API_REGISTRY_TOKEN }}
-      API_JWT_SECRET_KEY: ${{ secrets.API_JWT_SECRET_KEY }}
-      API_JWT_ISSUER: ${{ secrets.API_JWT_ISSUER }}
-      API_JWT_AUDIENCE: ${{ secrets.API_JWT_AUDIENCE }}
-      API_ALLOWED_ORIGINS: ${{ secrets.API_ALLOWED_ORIGINS }}
-      API_ALLOW_CREDENTIALS: ${{ secrets.API_ALLOW_CREDENTIALS }}
-      API_KNOWN_PROXIES: ${{ secrets.API_KNOWN_PROXIES }}
-      API_POSTGRES_DB: ${{ secrets.API_POSTGRES_DB }}
-      API_POSTGRES_USER: ${{ secrets.API_POSTGRES_USER }}
-      API_POSTGRES_PASSWORD: ${{ secrets.API_POSTGRES_PASSWORD }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup SSH key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.API_DEPLOY_SSH_KEY }}
-
-      - name: Validate required deploy secrets
-        run: |
-          test -n "$DEPLOY_HOST" || (echo "Missing API_DEPLOY_HOST" && exit 1)
-          test -n "$DEPLOY_USER" || (echo "Missing API_DEPLOY_USER" && exit 1)
-          test -n "$API_JWT_SECRET_KEY" || (echo "Missing API_JWT_SECRET_KEY" && exit 1)
-          test -n "$API_JWT_ISSUER" || (echo "Missing API_JWT_ISSUER" && exit 1)
-          test -n "$API_JWT_AUDIENCE" || (echo "Missing API_JWT_AUDIENCE" && exit 1)
-          test -n "$API_ALLOWED_ORIGINS" || (echo "Missing API_ALLOWED_ORIGINS" && exit 1)
-          test -n "$API_POSTGRES_DB" || (echo "Missing API_POSTGRES_DB" && exit 1)
-          test -n "$API_POSTGRES_USER" || (echo "Missing API_POSTGRES_USER" && exit 1)
-          test -n "$API_POSTGRES_PASSWORD" || (echo "Missing API_POSTGRES_PASSWORD" && exit 1)
-
-      - name: Add server to known_hosts
-        run: |
-          PORT="${DEPLOY_PORT:-22}"
-          mkdir -p ~/.ssh
-          ssh-keyscan -p "$PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
-
-      - name: Ensure deploy directory exists
-        run: |
-          PORT="${DEPLOY_PORT:-22}"
-          TARGET_PATH="${DEPLOY_PATH:-/home/$DEPLOY_USER/cleanarchitecture-api}"
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "mkdir -p '$TARGET_PATH'"
-
-      - name: Upload Docker Compose base file
-        run: |
-          PORT="${DEPLOY_PORT:-22}"
-          TARGET_PATH="${DEPLOY_PATH:-/home/$DEPLOY_USER/cleanarchitecture-api}"
-          scp -P "$PORT" docker-compose.yml "$DEPLOY_USER@$DEPLOY_HOST:$TARGET_PATH/docker-compose.yml"
-
-      - name: Deploy docker compose on remote server
-        run: |
-          # Generate runtime compose override from deploy secrets.
-          PORT="${DEPLOY_PORT:-22}"
-          IMAGE="${API_DOCKER_IMAGE:-ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-api:develop}"
-          MIGRATOR_IMAGE="${API_DBMIGRATOR_IMAGE:-ghcr.io/${GITHUB_REPOSITORY,,}/cleanarchitecture-dbmigrator:develop}"
-          CONTAINER="${API_DOCKER_CONTAINER:-cleanarchitecture-api}"
-          HOST_PORT="${API_DOCKER_HOST_PORT:-5000}"
-          ALLOW_CREDENTIALS="${API_ALLOW_CREDENTIALS:-false}"
-          KNOWN_PROXIES="${API_KNOWN_PROXIES:-127.0.0.1}"
-          TARGET_PATH="${DEPLOY_PATH:-/home/$DEPLOY_USER/cleanarchitecture-api}"
-          DB_NAME="${API_POSTGRES_DB:-CleanArchitecture}"
-          DB_USER="${API_POSTGRES_USER:-postgres}"
-          DB_PASSWORD="${API_POSTGRES_PASSWORD:-postgres}"
-          CONNECTION_STRING="Host=postgres;Port=5432;Database=$DB_NAME;Username=$DB_USER;Password=$DB_PASSWORD"
-          BUILD_VERSION="${GITHUB_RUN_NUMBER}.${GITHUB_RUN_ATTEMPT}-${GITHUB_SHA::7}"
-
-          if [ -n "$API_REGISTRY_USERNAME" ] && [ -n "$API_REGISTRY_TOKEN" ]; then
-            ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "echo '$API_REGISTRY_TOKEN' | docker login ghcr.io -u '$API_REGISTRY_USERNAME' --password-stdin"
-          fi
-
-          cat > /tmp/docker-compose.deploy.yml <<EOF
-          services:
-            cleanarchitecture.api:
-              image: $IMAGE
-              container_name: $CONTAINER
-              restart: always
-              ports:
-                - '$HOST_PORT:8080'
-              environment:
-                ASPNETCORE_ENVIRONMENT: Production
-                JwtSettings__SecretKey: $API_JWT_SECRET_KEY
-                JwtSettings__Issuer: $API_JWT_ISSUER
-                JwtSettings__Audience: $API_JWT_AUDIENCE
-                ApiSecurity__AllowedOrigins__0: $API_ALLOWED_ORIGINS
-                ApiSecurity__AllowCredentials: $ALLOW_CREDENTIALS
-                ApiSecurity__KnownProxies__0: $KNOWN_PROXIES
-                ConnectionStrings__DefaultConnection: $CONNECTION_STRING
-                APP_BUILD_VERSION: $BUILD_VERSION
-            postgres:
-              restart: always
-              environment:
-                POSTGRES_DB: $DB_NAME
-                POSTGRES_USER: $DB_USER
-                POSTGRES_PASSWORD: $DB_PASSWORD
-            cleanarchitecture.dbmigrator:
-              build: null
-              image: $MIGRATOR_IMAGE
-              environment:
-                ConnectionStrings__DefaultConnection: $CONNECTION_STRING
-                MigrationSettings__SeedData: false
-              depends_on:
-                - postgres
-          EOF
-
-          scp -P "$PORT" /tmp/docker-compose.deploy.yml "$DEPLOY_USER@$DEPLOY_HOST:$TARGET_PATH/docker-compose.deploy.yml"
-
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' pull"
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d postgres) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d postgres"
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "for i in {1..30}; do if docker exec cleanarchitecture-postgres pg_isready -U '$DB_USER' -d '$DB_NAME' >/dev/null 2>&1; then exit 0; fi; sleep 5; done; echo 'PostgreSQL did not become ready in time'; docker logs cleanarchitecture-postgres --tail 200; exit 1"
-
-          MIGRATION_EXIT=1
-          for attempt in 1 2 3; do
-            ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm cleanarchitecture.dbmigrator) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' run --rm cleanarchitecture.dbmigrator" && MIGRATION_EXIT=0 && break
-            echo "db-migrator attempt $attempt failed; retrying in 15s..."
-            sleep 15
-          done
-          if [ "$MIGRATION_EXIT" -ne 0 ]; then
-            echo "db-migrator failed after retries"
-            exit 1
-          fi
-
-          ssh -p "$PORT" "$DEPLOY_USER@$DEPLOY_HOST" "(docker compose version >/dev/null 2>&1 && docker compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d cleanarchitecture.api postgres --remove-orphans) || docker-compose -f '$TARGET_PATH/docker-compose.yml' -f '$TARGET_PATH/docker-compose.deploy.yml' up -d cleanarchitecture.api postgres --remove-orphans"
+            - name: Build and push DB migrator image
+              uses: docker/build-push-action@v6
+              with:
+                  context: .
+                  file: src/ModularMonolith/DbMigrator/Dockerfile
+                  push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
+                  tags: |
+                      ${{ env.MIGRATOR_IMAGE_NAME }}:develop
+                      ${{ env.MIGRATOR_IMAGE_NAME }}:${{ github.sha }}
